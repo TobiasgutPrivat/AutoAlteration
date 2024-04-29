@@ -22,17 +22,27 @@ List<Block> stagedBlocks = new List<Block>();
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atModelId)){//blocks
       Block block = new Block(ctnBlock);
       block.relativeOffset(relativOffset);
-      block.model = newModelId;
+      if (newModelId != ""){
+        block.model = newModelId;
+      }
       block.blockType = newBlockType;
       stagedBlocks.Add(block);
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atModelId)){//items
       Block block = new Block(ctnItem);
       block.relativeOffset(relativOffset);
-      block.model = newModelId;
+      if (newModelId != ""){
+        block.model = newModelId;
+      }
       block.blockType = newBlockType;
       stagedBlocks.Add(block);
     }
+  }
+
+  public void replace(string oldModel, string newModel, BlockType newBlockType)
+  {
+    placeRelative(oldModel,newModel,newBlockType,new(0,0,0));
+    deleteBlock(oldModel);
   }
 
   public void placeStagedBlocks(){
@@ -46,8 +56,7 @@ List<Block> stagedBlocks = new List<Block>();
           newBlock.PitchYawRoll = block.pitchYawRoll;
           break;
         case BlockType.Item:
-          // map.PlaceAnchoredObject(block.model,block.absolutePosition,block.pitchYawRoll);
-          Console.WriteLine("Not yet implemented");
+          map.PlaceAnchoredObject(new Ident(block.model, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
           break;
         default:
           Console.WriteLine("Invalid Blocktype");
