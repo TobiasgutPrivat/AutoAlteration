@@ -10,7 +10,8 @@
         "dependencies": {
           "GBX.NET": "2.0.0",
           "GBX.NET.LZO": "2.0.0",
-          "Newtonsoft.Json": "13.0.3"
+          "Newtonsoft.Json": "13.0.3",
+          "glm": "1.0.1"
         },
         "runtime": {
           "AutoAlteration.dll": {}
@@ -39,6 +40,7 @@
           }
         }
       },
+      "glm/1.0.1": {},
       "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.1": {
         "runtime": {
           "lib/net7.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
@@ -95,6 +97,13 @@
       "sha512": "sha512-p0pQODoRT+kX1dCtosxMkXYGoIlgOL86eoqiMIHSMFhxf7fMEQe/hmGxay21jVb7q94VfmuaYbxzKTVw4AcasQ==",
       "path": "gbx.net.lzo/2.0.0",
       "hashPath": "gbx.net.lzo.2.0.0.nupkg.sha512"
+    },
+    "glm/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gHZuAncmcCsgT2zTUSP18tWU0F9SMKadgm5fCJPfkrN3XHBI8ofoypQwq8F3k2TC8H8Armp2aw3Qq5J+afgrFA==",
+      "path": "glm/1.0.1",
+      "hashPath": "glm.1.0.1.nupkg.sha512"
     },
     "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.1": {
       "type": "package",

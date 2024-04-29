@@ -18,24 +18,32 @@ List<Block> stagedBlocks = new List<Block>();
     gbx.Save(Path);
   }
 
-  public void placeAtBlocks(string atBlockModel, string newBlockModel,Int3 offset){
-        foreach (var block in map.GetBlocks().Where(x => x.BlockModel.Id == atBlockModel)){
-          stagedBlocks.Add(new Block(newBlockModel,block.Coord + offset,block.Direction));
-        }
+  public void placeRelative(string atModelId, string newModelId,BlockType newBlockType,Vec3 relativOffset){
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atModelId)){//blocks
+      Block block = new Block(ctnBlock);
+      block.relativeOffset(relativOffset);
+      block.model = newModelId;
+      block.blockType = newBlockType;
+      stagedBlocks.Add(block);
+    }
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atModelId)){//items
+      Block block = new Block(ctnItem);
+      block.relativeOffset(relativOffset);
+      block.model = newModelId;
+      block.blockType = newBlockType;
+      stagedBlocks.Add(block);
+    }
   }
-
-  // public void placeAtItems(string itemId){
-  //   foreach (var item in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == itemId)){
-  //     // stagedPlacements.Add(new StagedBlock(block.BlockModel.Id,block.Coord + new Int3(1,2,3),block.Direction));
-  //   }
-  // }
 
   public void placeStagedBlocks(){
     foreach (var block in stagedBlocks){
       switch (block.blockType)
       {
         case BlockType.Block:
-          map.PlaceBlock(block.model,block.coord,block.direction);
+          CGameCtnBlock newBlock = map.PlaceBlock(block.model,new(0,0,0),Direction.North);
+          newBlock.IsFree = true;
+          newBlock.AbsolutePositionInMap = block.absolutePosition;
+          newBlock.PitchYawRoll = block.pitchYawRoll;
           break;
         case BlockType.Item:
           // map.PlaceAnchoredObject(block.model,block.absolutePosition,block.pitchYawRoll);
@@ -49,15 +57,22 @@ List<Block> stagedBlocks = new List<Block>();
     stagedBlocks = new List<Block>();
   }
 
-  public void deleteBlock(string blockName){
-    if (map.Blocks is List<CGameCtnBlock> blocks){
-      // blocks.RemoveAll() RemoveWhere(x => x.Name == blockName);
+  public void deleteBlock(string modelId){
+    List<int> indexes;
+    List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
+    indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == modelId).Select(block => modifiedblocks.IndexOf(block)).ToList();
+    indexes.Reverse();
+    foreach(int index in indexes){
+      modifiedblocks.RemoveAt(index);
     }
-  }
+    map.Blocks = modifiedblocks;
 
-  // public void runStagedActions(){
-  //   foreach(var stagedPlacement in stagedPlacements){
-  //     map.PlaceBlock(stagedPlacement.blockModel,stagedPlacement.coord,stagedPlacement.direction);
-  //   }
-  // }
+    List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
+    indexes = modifiedItems.FindAll(block => block.ItemModel.Id == modelId).Select(block => modifiedItems.IndexOf(block)).ToList();
+    indexes.Reverse();
+    foreach(int index in indexes){
+      modifiedItems.RemoveAt(index);
+    }
+    map.AnchoredObjects = modifiedItems;
+  }
 }
