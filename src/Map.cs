@@ -4,13 +4,14 @@ using GBX.NET.LZO;
 class Map
 {
 Gbx<CGameCtnChallenge> gbx;
-CGameCtnChallenge map;
+public CGameCtnChallenge map;
 List<Block> stagedBlocks = new List<Block>();
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
+    map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
   }
 
   public void save(string Path)
@@ -36,6 +37,11 @@ List<Block> stagedBlocks = new List<Block>();
       }
       block.blockType = newBlockType;
       stagedBlocks.Add(block);
+    }
+  }
+  public void placeRelative(string[] atBlocks, string newModelId,BlockType newBlockType,Vec3 relativOffset){
+    foreach(var atBlock in atBlocks){
+      placeRelative(atBlock,newModelId,newBlockType,relativOffset);
     }
   }
 
