@@ -22,29 +22,34 @@ class Block {
     public Block(CGameCtnBlock block){
         blockType = BlockType.Block;
         model = block.BlockModel.Id;
-        switch (block.Direction){
-            case Direction.North:
-                pitchYawRoll = new Vec3(0,0,0);
-                absolutePosition = new (-32,0,-32);
-                break;
-            case Direction.East:
-                pitchYawRoll = new Vec3(3.141528f * 1.5f,0,0);
-                absolutePosition = new (0,0,-32);
-                break;
-            case Direction.South:
-                pitchYawRoll = new Vec3(3.141528f,0,0);
-                absolutePosition = new (0,0,0);
-                break;
-            case Direction.West:
-                pitchYawRoll = new Vec3(3.141528f * 0.5f,0,0);
-                absolutePosition = new (-32,0,0);
-                break;
-            default:
-                pitchYawRoll = new Vec3(0,0,0);
-                absolutePosition = new(0,0,0);
-                break;
+        if (block.IsFree){
+            absolutePosition = (Vec3)block.AbsolutePositionInMap;
+            pitchYawRoll = (Vec3)block.PitchYawRoll;
+        }else{
+            switch (block.Direction){
+                case Direction.North:
+                    pitchYawRoll = new Vec3(0,0,0);
+                    absolutePosition = new (-32,0,-32);
+                    break;
+                case Direction.East:
+                    pitchYawRoll = new Vec3(3.141528f * 1.5f,0,0);
+                    absolutePosition = new (0,0,-32);
+                    break;
+                case Direction.South:
+                    pitchYawRoll = new Vec3(3.141528f,0,0);
+                    absolutePosition = new (0,0,0);
+                    break;
+                case Direction.West:
+                    pitchYawRoll = new Vec3(3.141528f * 0.5f,0,0);
+                    absolutePosition = new (-32,0,0);
+                    break;
+                default:
+                    pitchYawRoll = new Vec3(0,0,0);
+                    absolutePosition = new(0,0,0);
+                    break;
+            }
+            absolutePosition = absolutePosition + new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
         }
-        absolutePosition = absolutePosition + new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
     }
     public Block(CGameCtnAnchoredObject item){
         blockType = BlockType.Item;
