@@ -5,7 +5,7 @@ class Map
 {
 Gbx<CGameCtnChallenge> gbx;
 public CGameCtnChallenge map;
-List<Block> stagedBlocks = new List<Block>();
+public List<Block> stagedBlocks = new List<Block>();
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
@@ -19,6 +19,24 @@ List<Block> stagedBlocks = new List<Block>();
     gbx.Save(Path);
   }
 
+  public void placeRelative(string atModelId, string newModelId,BlockType newBlockType){
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atModelId)){//blocks
+      Block block = new Block(ctnBlock);
+      if (newModelId != ""){
+        block.model = newModelId;
+      }
+      block.blockType = newBlockType;
+      stagedBlocks.Add(block);
+    }
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atModelId)){//items
+      Block block = new Block(ctnItem);
+      if (newModelId != ""){
+        block.model = newModelId;
+      }
+      block.blockType = newBlockType;
+      stagedBlocks.Add(block);
+    }
+  }
   public void placeRelative(string atModelId, string newModelId,BlockType newBlockType,Vec3 relativOffset){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atModelId)){//blocks
       Block block = new Block(ctnBlock);
