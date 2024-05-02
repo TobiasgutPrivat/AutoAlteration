@@ -18,8 +18,6 @@ class EffectAlterations {
         map.placeRelative(MultilapBlock,"GateSpecialNoBrake",BlockType.Block,new Int3(0,-16,1));
         map.placeRelative(CheckpointRoadBlock,"GateSpecialNoBrake",BlockType.Block,new Int3(0,-16,1));
         map.placeRelative(CheckpointPlatformBlock,"GateSpecialNoBrake",BlockType.Block,new Int3(0,-16,1));
-        // map.placeDiagRelative(DiagRight,"GateSpecialNoBrake",BlockType.Block,new Vec3(0,0,0),new Vec3(0,0,0));
-        // map.placeDiagRelative(DiagLeft,"GateSpecialNoBrake",BlockType.Block,new Vec3(0,0,0),new Vec3(0,0,0));
         map.placeDiagRelative(DiagRight,"GateSpecialNoBrake",BlockType.Block,new Vec3(-23.9f,-16,11.2f),new Vec3(PI * -0.1454f,0f,0));
         map.placeDiagRelative(DiagLeft,"GateSpecialNoBrake",BlockType.Block,new Vec3(-37.2f,-16,25.1f),new Vec3(PI * 0.1454f,0,0));
 
@@ -29,15 +27,13 @@ class EffectAlterations {
         map.placeStagedBlocks();
     }
 
-    public static void NoSteer(Map map){
+    public static void NoSteer(EffectMapHelper map){
         map.placeRelative(StartBlock,"GateSpecialNoSteering",BlockType.Block,new Int3(0,-16,1));
         map.placeRelative(MultilapBlock,"GateSpecialNoSteering",BlockType.Block,new Int3(0,-16,1));
         map.placeRelative(CheckpointRoadBlock,"GateSpecialNoSteering",BlockType.Block,new Int3(0,-16,1));
         map.placeRelative(CheckpointPlatformBlock,"GateSpecialNoSteering",BlockType.Block,new Int3(0,-16,1));
-        map.placeRelative(DiagRight,"GateSpecialNoSteering",BlockType.Block,new Vec3(0,0,0),new Vec3(0,0,0));
-        map.placeRelative(DiagLeft,"GateSpecialNoSteering",BlockType.Block,new Vec3(0,0,0),new Vec3(0,0,0));
-        // map.placeRelative(DiagRight,"GateSpecialNoSteering",BlockType.Block,new Vec3(-23.9f,-16,-20.8f),new Vec3(PI * -0.1454f,0f,0));
-        // map.placeRelative(DiagLeft,"GateSpecialNoSteering",BlockType.Block,new Vec3(-37.2f,-16,25.1f),new Vec3(PI * 0.1454f,0,0));
+        map.placeDiagRelative(DiagRight,"GateSpecialNoSteering",BlockType.Block,new Vec3(-23.9f,-16,11.2f),new Vec3(PI * -0.1454f,0f,0));
+        map.placeDiagRelative(DiagLeft,"GateSpecialNoSteering",BlockType.Block,new Vec3(-37.2f,-16,25.1f),new Vec3(PI * 0.1454f,0,0));
 
         map.placeRelative(GateCPStart32m,"GateSpecial32mNoSteering",BlockType.Item,new Int3(0,0,1));
         map.placeRelative(GateCPStart16m,"GateSpecial16mNoSteering",BlockType.Item,new Int3(0,0,1));
