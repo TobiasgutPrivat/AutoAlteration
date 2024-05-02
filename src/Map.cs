@@ -39,9 +39,38 @@ List<Block> stagedBlocks = new List<Block>();
       stagedBlocks.Add(block);
     }
   }
+
+  public void placeRelative(string atModelId, string newModelId,BlockType newBlockType,Vec3 relativOffset,Vec3 rotation){
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atModelId)){//blocks
+      Block block = new Block(ctnBlock);
+      block.relativeOffset(relativOffset);
+      block.pitchYawRoll += rotation;
+      if (newModelId != ""){
+        block.model = newModelId;
+      }
+      block.blockType = newBlockType;
+      stagedBlocks.Add(block);
+    }
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atModelId)){//items
+      Block block = new Block(ctnItem);
+      block.relativeOffset(relativOffset);
+      block.pitchYawRoll += rotation;
+      if (newModelId != ""){
+        block.model = newModelId;
+      }
+      block.blockType = newBlockType;
+      stagedBlocks.Add(block);
+    }
+  }
+
   public void placeRelative(string[] atBlocks, string newModelId,BlockType newBlockType,Vec3 relativOffset){
     foreach(var atBlock in atBlocks){
       placeRelative(atBlock,newModelId,newBlockType,relativOffset);
+    }
+  }
+  public void placeRelative(string[] atBlocks, string newModelId,BlockType newBlockType,Vec3 relativOffset,Vec3 rotation){
+    foreach(var atBlock in atBlocks){
+      placeRelative(atBlock,newModelId,newBlockType,relativOffset,rotation);
     }
   }
 

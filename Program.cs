@@ -1,4 +1,4 @@
-﻿string sourcefolder = "C:\\Users\\Tobias\\Documents\\Trackmania2020\\Maps\\Nadeo Maps\\Fall 2020\\";
+﻿string sourcefolder = "C:\\Users\\Tobias\\Documents\\Trackmania2020\\Maps\\Nadeo Maps\\Spring 2020 alpha\\";
 string[] files = Directory.GetFiles(sourcefolder);
 
 foreach (string file in files)
