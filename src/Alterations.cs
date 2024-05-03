@@ -143,6 +143,9 @@ class Alterations{
         map.replace("GateSpecialTurboRight8m",new BlockChange(BlockType.Item,"GateCheckpointRight8m"));
         map.placeStagedBlocks();
     }
+
+    void CPLess(Map map){
+    }
 }
 
 class DiagBlockChange : BlockChange{
