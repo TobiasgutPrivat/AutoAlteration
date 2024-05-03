@@ -19,6 +19,10 @@ public List<Block> stagedBlocks = new List<Block>();
     gbx.Save(Path);
   }
 
+  public void embedBlock(){//TODO Embeddings
+    // map.UpdateEmbeddedZipData();
+  }
+
   public void placeRelative(string atModelId, BlockChange blockChange){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atModelId)){//blocks
       Block block = new Block(ctnBlock);
@@ -38,9 +42,9 @@ public List<Block> stagedBlocks = new List<Block>();
     }
   }
 
-  public void replace(string oldModel, string newModel, BlockType newBlockType)
+  public void replace(string oldModel, BlockChange blockChange)
   {
-    placeRelative(oldModel,new BlockChange(newBlockType, newModel));
+    placeRelative(oldModel,blockChange);
     deleteBlock(oldModel);
   }
 

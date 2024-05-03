@@ -1,6 +1,5 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
-using GBX.NET.LZO;
 class EffectAlterations {
     static float PI = (float)Math.PI;
     static string[] StartBlock = new string[] {"PlatformTechStart","RoadTechStart","RoadDirtStart","RoadBumpStart","RoadIceStart","RoadWaterStart","PlatformTechStart","PlatformDirtStart","PlatformIceStart","PlatformGrassStart","PlatformPlasticStart","PlatformWaterStart"};
@@ -26,8 +25,8 @@ class EffectAlterations {
         map.placeRelative(CPRoadBlock, GateSpecial);
         map.placeRelative(CPPlatformBlock, GateSpecial);
         map.placeRelative(CPPlatformBlockTilt, new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-12,forwardOffset),rotation));
-        map.placeRelative(DiagRight,new DiagBlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
-        map.placeRelative(DiagLeft,new DiagBlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
+        map.placeRelative(DiagRight,new EffectDiagBlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
+        map.placeRelative(DiagLeft,new EffectDiagBlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
         map.placeRelative(GateCPStart32m,new BlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(0,0,forwardOffset),rotation));
         map.placeRelative(GateCPStart16m,new BlockChange(BlockType.Item,"GateSpecial16m" + Effect,new Vec3(0,0,forwardOffset),rotation));
         map.placeRelative(GateCPStart8m,new BlockChange(BlockType.Item,"GateSpecial8m" + Effect,new Vec3(0,0,forwardOffset),rotation));
@@ -37,15 +36,15 @@ class EffectAlterations {
         map.placeRelative(IceWallLeft,new BlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
         map.placeRelative(IceWallLeft,new BlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation));
 
-        map.placeRelative(DiagIceWallsRightRight,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
-        map.placeRelative(DiagIceWallsRightRight,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Right));
-        map.placeRelative(DiagIceWallsRightLeft,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
-        map.placeRelative(DiagIceWallsRightLeft,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Right));
+        map.placeRelative(DiagIceWallsRightRight,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
+        map.placeRelative(DiagIceWallsRightRight,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Right));
+        map.placeRelative(DiagIceWallsRightLeft,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
+        map.placeRelative(DiagIceWallsRightLeft,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Right));
 
-        map.placeRelative(DiagIceWallsLeftRight,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
-        map.placeRelative(DiagIceWallsLeftRight,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Left));
-        map.placeRelative(DiagIceWallsLeftLeft,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
-        map.placeRelative(DiagIceWallsLeftLeft,new DiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Left));
+        map.placeRelative(DiagIceWallsLeftRight,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
+        map.placeRelative(DiagIceWallsLeftRight,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Left));
+        map.placeRelative(DiagIceWallsLeftLeft,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
+        map.placeRelative(DiagIceWallsLeftLeft,new EffectDiagBlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Left));
 
         map.placeStagedBlocks();
     }
@@ -92,15 +91,15 @@ enum LeftRight
     Right
 }
 
-class DiagBlockChange : BlockChange{
+class EffectDiagBlockChange : BlockChange{
 
     static float PI = (float)Math.PI;
     LeftRight side;
-    public DiagBlockChange(BlockType blockType, string model,LeftRight side) : base(blockType,model){this.side = side;}
-    public DiagBlockChange(BlockType blockType, string model, Vec3 absolutePosition,LeftRight side) : base(blockType,model,absolutePosition){this.side = side;}
-    public DiagBlockChange(BlockType blockType, string model, Vec3 absolutePosition, Vec3 pitchYawRoll,LeftRight side) : base(blockType,model,absolutePosition,pitchYawRoll){this.side = side;}
-    public DiagBlockChange(Vec3 absolutePosition,LeftRight side) : base(absolutePosition){this.side = side;}
-    public DiagBlockChange(Vec3 absolutePosition, Vec3 pitchYawRoll,LeftRight side) : base(absolutePosition,pitchYawRoll){this.side = side;}
+    public EffectDiagBlockChange(BlockType blockType, string model,LeftRight side) : base(blockType,model){this.side = side;}
+    public EffectDiagBlockChange(BlockType blockType, string model, Vec3 absolutePosition,LeftRight side) : base(blockType,model,absolutePosition){this.side = side;}
+    public EffectDiagBlockChange(BlockType blockType, string model, Vec3 absolutePosition, Vec3 pitchYawRoll,LeftRight side) : base(blockType,model,absolutePosition,pitchYawRoll){this.side = side;}
+    public EffectDiagBlockChange(Vec3 absolutePosition,LeftRight side) : base(absolutePosition){this.side = side;}
+    public EffectDiagBlockChange(Vec3 absolutePosition, Vec3 pitchYawRoll,LeftRight side) : base(absolutePosition,pitchYawRoll){this.side = side;}
 
     public override void changeBlock(CGameCtnBlock ctnBlock,Block @block){
         switch (ctnBlock.Direction){
