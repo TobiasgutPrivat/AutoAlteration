@@ -13,11 +13,6 @@ class Block {
     public string model;
     public Vec3 absolutePosition;
     public Vec3 pitchYawRoll;
-    public Block(string model, Vec3 absolutePosition, Vec3 pitchYawRoll){
-        this.model = model;
-        this.absolutePosition = absolutePosition;
-        this.pitchYawRoll = pitchYawRoll;
-    }
 
     public Block(CGameCtnBlock block){
         blockType = BlockType.Block;
