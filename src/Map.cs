@@ -16,6 +16,11 @@ public List<Block> stagedBlocks = new List<Block>();
 
   public void save(string Path)
   { 
+    map.AuthorTime = null;
+    map.GoldTime = null;
+    map.SilverTime = null;
+    map.BronzeTime = null;
+    map.AuthorScore = 0;
     gbx.Save(Path);
   }
 
