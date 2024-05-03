@@ -72,14 +72,14 @@ class Alterations{
         map.replace("GateCheckpointCenter8mv2",new BlockChange(BlockType.Item,"GateSpecialTurboCenter8mv2"));
         map.replace("GateCheckpointRight8m",new BlockChange(BlockType.Item,"GateSpecialTurboRight8m"));
 
-        //Turbo -> CP
+        // //Turbo -> CP
         map.replace("RoadIceWithWallSpecialTurboRight",new BlockChange(BlockType.Block,"RoadIceWithWallCheckpointRight"));
         map.replace("RoadIceWithWallSpecialTurboLeft",new BlockChange(BlockType.Block,"RoadIceWithWallCheckpointLeft"));
         map.replace("RoadIceWithWallSpecialTurboDiagRightRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointRight"));
         map.replace("RoadIceWithWallSpecialTurboDiagLeftRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointRight"));
         map.replace("RoadIceWithWallSpecialTurboDiagRightLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointLeft"));
         map.replace("RoadIceWithWallSpecialTurboDiagLeftLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointLeft"));
-        map.replace("RoadTechSpecialTurbo",new BlockChange(BlockType.Block,"RoadTechCheckpoint"));
+        map.replace("RoadTechSpecialTurbo",new BlockChange(BlockType.Block,"RoadTechCheckpoint"));//TODO Issue here removing Boost
         map.replace("RoadTechSpecialTurboSlopeUp",new BlockChange(BlockType.Block,"RoadTechCheckpointSlopeUp"));
         map.replace("RoadTechSpecialTurboSlopeDown",new BlockChange(BlockType.Block,"RoadTechCheckpointSlopeDown"));
         map.replace("RoadDirtSpecialTurbo",new BlockChange(BlockType.Block,"RoadDirtCheckpoint"));
@@ -153,19 +153,19 @@ class DiagBlockChange : BlockChange{
     public DiagBlockChange(Vec3 absolutePosition, Vec3 pitchYawRoll) : base(absolutePosition,pitchYawRoll){}
 
     public override void changeBlock(CGameCtnBlock ctnBlock,Block @block){
-        Console.WriteLine(ctnBlock.Direction);
+        //TODO correct offset
         switch (ctnBlock.Direction){
             case Direction.North:
-                block.relativeOffset(new Vec3(64,0,0));
+                block.relativeOffset(new Vec3(0,0,0));
                 break;
             case Direction.East:
-                block.relativeOffset(new Vec3(64,0,-32));
-                break;
-            case Direction.South:
                 block.relativeOffset(new Vec3(0,0,-32));
                 break;
+            case Direction.South:
+                block.relativeOffset(new Vec3(-64,0,-32));
+                break;
             case Direction.West:
-                block.relativeOffset(new Vec3(0,0,0));
+                block.relativeOffset(new Vec3(-64,0,0));
                 break;
         }
         
