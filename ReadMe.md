@@ -16,6 +16,7 @@ If your having troubles jsut contact me, contact me on discord (Tobias2g#5288)
 ## Known Issues
 - Embedded Blocks/Items are not yet implemented.
 - The Map stays validated which can result in impossible Authertimes
+- A weird Problem when deleting boosters causing the map to not be loadable
 ## Contribution
 You are welcome to contribute to the Project.
 - Alterations: you can create your own Alterations in the Alteration Folder, please also submit them per Pull Request on Github.

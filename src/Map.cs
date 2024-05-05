@@ -1,6 +1,7 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
+using NationsConverter.Stages;
 class Map
 {
 Gbx<CGameCtnChallenge> gbx;
@@ -16,7 +17,37 @@ public List<Block> stagedBlocks = new List<Block>();
 
   public void save(string Path)
   { 
+    cleanDupes();
+    newMapUid();
+    map.RemovePassword();
     gbx.Save(Path);
+  }
+
+  private void cleanDupes()
+  {
+    if (map.Blocks is List<CGameCtnBlock> blocks){
+      blocks.RemoveAll(x =>
+      {
+        if (x.Name == "PlatformTechBase")
+          foreach (var block in map.Blocks)
+            if (block.Coord == x.Coord && block.Name == "DecoWallBasePillar")
+              return true;
+        return false;
+      });
+    }
+  }
+
+  private void newMapUid()
+  {
+    var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
+    var stringChars = new char[27];
+    var random = new Random();
+
+    for (int i = 0; i < stringChars.Length; i++)
+    {
+      stringChars[i] = chars[random.Next(chars.Length)];
+    }
+    map.MapUid = new string(stringChars);
   }
 
   // public void embedBlock(){//TODO Embeddings

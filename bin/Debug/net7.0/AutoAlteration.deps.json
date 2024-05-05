@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v7.0": {
       "AutoAlteration/1.0.0": {
         "dependencies": {
-          "GBX.NET": "2.0.0",
+          "GBX.NET": "2.0.2",
           "GBX.NET.LZO": "2.0.0",
           "Newtonsoft.Json": "13.0.3",
           "glm": "1.0.1"
@@ -17,21 +17,21 @@
           "AutoAlteration.dll": {}
         }
       },
-      "GBX.NET/2.0.0": {
+      "GBX.NET/2.0.2": {
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.1",
           "TmEssentials": "2.4.2"
         },
         "runtime": {
           "lib/net6.0/GBX.NET.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.0.0"
+            "assemblyVersion": "2.0.2.0",
+            "fileVersion": "2.0.2.0"
           }
         }
       },
       "GBX.NET.LZO/2.0.0": {
         "dependencies": {
-          "GBX.NET": "2.0.0"
+          "GBX.NET": "2.0.2"
         },
         "runtime": {
           "lib/net6.0/GBX.NET.LZO.dll": {
@@ -84,12 +84,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "GBX.NET/2.0.0": {
+    "GBX.NET/2.0.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KsAPGZ/ZXmTlmzsFoNIIzS/BXlIpEf2bDnLRqa0ZkoJFJvr99I9C2pZSfUr9ICB4Y89x/8L9cSlrBUuKnH8OgQ==",
-      "path": "gbx.net/2.0.0",
-      "hashPath": "gbx.net.2.0.0.nupkg.sha512"
+      "sha512": "sha512-6PPiy0xxCIj60Uw2elSXy5JLKUyvWop1iAzW0h8xhFfjGAy2L/b3CoLmbdVtq72M3B+VnEXgQnz8WxoRje5AFQ==",
+      "path": "gbx.net/2.0.2",
+      "hashPath": "gbx.net.2.0.2.nupkg.sha512"
     },
     "GBX.NET.LZO/2.0.0": {
       "type": "package",

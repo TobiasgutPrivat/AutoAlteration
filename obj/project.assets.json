@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net7.0": {
-      "GBX.NET/2.0.0": {
+      "GBX.NET/2.0.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.1",
@@ -98,15 +98,15 @@
     }
   },
   "libraries": {
-    "GBX.NET/2.0.0": {
-      "sha512": "KsAPGZ/ZXmTlmzsFoNIIzS/BXlIpEf2bDnLRqa0ZkoJFJvr99I9C2pZSfUr9ICB4Y89x/8L9cSlrBUuKnH8OgQ==",
+    "GBX.NET/2.0.2": {
+      "sha512": "6PPiy0xxCIj60Uw2elSXy5JLKUyvWop1iAzW0h8xhFfjGAy2L/b3CoLmbdVtq72M3B+VnEXgQnz8WxoRje5AFQ==",
       "type": "package",
-      "path": "gbx.net/2.0.0",
+      "path": "gbx.net/2.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "gbx.net.2.0.0.nupkg.sha512",
+        "gbx.net.2.0.2.nupkg.sha512",
         "gbx.net.nuspec",
         "lib/net6.0/GBX.NET.dll",
         "lib/net6.0/GBX.NET.xml",
@@ -1694,7 +1694,7 @@
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "GBX.NET >= 2.0.0",
+      "GBX.NET >= 2.0.2",
       "GBX.NET.LZO >= 2.0.0",
       "Newtonsoft.Json >= 13.0.3",
       "glm >= 1.0.1"
@@ -1747,7 +1747,7 @@
         "dependencies": {
           "GBX.NET": {
             "target": "Package",
-            "version": "[2.0.0, )"
+            "version": "[2.0.2, )"
           },
           "GBX.NET.LZO": {
             "target": "Package",
