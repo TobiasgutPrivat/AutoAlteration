@@ -1,7 +1,8 @@
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
 
-This Project is in early development, so there will probably be some Bugs and Problems.
+This Project is in early development, so there will probably be some Bugs and Problems. Contribution to the repository is very welcome, feel free to create pull requests.
+
 ## Usage
 To use this, you need to download/clone the Project to run it localy.
 It requires .NET installed and some way to run the solution (I use VSCode)
