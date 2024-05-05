@@ -1,6 +1,8 @@
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
 
+This Project is based on the GBX.NET Framework from BigBang.
+
 This Project is in early development, so there will probably be some Bugs and Problems. Contribution to the repository is very welcome, feel free to create pull requests.
 
 ## Usage
@@ -14,10 +16,12 @@ The Alterations can be called via the Alteration classes in the src/Alterations/
 Multiple Alterations can be applied to one map.
 
 If your having troubles jsut contact me, contact me on discord (Tobias2g#5288)
-## Known Issues
+## Known Issues/Bugs
 - Embedded Blocks/Items are not yet implemented.
-- The Map stays validated which can result in impossible Authertimes
+- Probably some Alterations have incorrect Configurations
 - A weird Problem when deleting boosters causing the map to not be loadable
+- When deleting Blocks the base Platform stays there. (Good for replacing but bad for CPLess)
+- Everything marked with //TODO in the Project
 ## Contribution
 You are welcome to contribute to the Project.
 - Alterations: you can create your own Alterations in the Alteration Folder, please also submit them per Pull Request on Github.

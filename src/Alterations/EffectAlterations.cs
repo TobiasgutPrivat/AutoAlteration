@@ -21,6 +21,7 @@ class EffectAlterations {
     static string[] GateCP8m = new string[] {"GateCheckpointLeft8m","GateCheckpointCenter8mv2","GateCheckpointRight8m","GateMultilapLeft8m","GateMultilapCenter8m","GateMultilapRight8m"};
     static string[] DiagRight = new string[]{"RoadTechDiagRightMultilap","RoadDirtDiagRightMultilap","RoadBumpDiagRightMultilap","RoadIceDiagRightMultilap","RoadTechDiagRightCheckpoint","RoadDirtDiagRightCheckpoint","RoadBumpDiagRightCheckpoint"};
     static string[] DiagLeft = new string[]{"RoadTechDiagLeftMultilap","RoadDirtDiagLeftMultilap","RoadBumpDiagLeftMultilap","RoadIceDiagLeftMultilap","RoadTechDiagLeftCheckpoint","RoadDirtDiagLeftCheckpoint","RoadBumpDiagLeftCheckpoint"};
+
     private static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         BlockChange GateSpecial = new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation);
         map.placeRelative(MultilapBlock, GateSpecial);
@@ -59,7 +60,7 @@ class EffectAlterations {
     }
 
 
-    public static void NoBrakes(Map map){
+    public static void NoBrake(Map map){
         placeCPEffect(map,"NoBrake",1,Vec3.Zero);
         placeStartEffect(map,"NoBrake",1,Vec3.Zero);
     }

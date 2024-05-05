@@ -1,7 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
-using NationsConverter.Stages;
 class Map
 {
 Gbx<CGameCtnChallenge> gbx;
@@ -19,8 +18,22 @@ public List<Block> stagedBlocks = new List<Block>();
   { 
     cleanDupes();
     newMapUid();
+    removeAuthor();
     map.RemovePassword();
     gbx.Save(Path);
+  }
+
+  private void removeAuthor(){
+    map.AuthorTime = null;
+    map.GoldTime = null;
+    map.SilverTime = null;
+    map.BronzeTime = null;
+    map.AuthorScore = 0;
+    map.AuthorExtraInfo = null;
+    map.AuthorLogin = null;
+    map.AuthorNickname = null;
+    map.AuthorVersion = 0;
+    map.AuthorZone = null;
   }
 
   private void cleanDupes()
@@ -76,7 +89,7 @@ public List<Block> stagedBlocks = new List<Block>();
   public void replace(string oldModel, BlockChange blockChange)
   {
     placeRelative(oldModel,blockChange);
-    deleteBlock(oldModel);
+    delete(oldModel);
   }
 
   public void placeStagedBlocks(){
@@ -100,7 +113,7 @@ public List<Block> stagedBlocks = new List<Block>();
     stagedBlocks = new List<Block>();
   }
 
-  public void deleteBlock(string modelId){
+  public void delete(string modelId){
     List<int> indexes;
     List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
     indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == modelId).Select(block => modifiedblocks.IndexOf(block)).ToList();

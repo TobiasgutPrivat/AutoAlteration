@@ -1,14 +1,16 @@
+using System.Net.NetworkInformation;
 using GBX.NET;
 using GBX.NET.Engines.Game;
-class Alterations{
+class CPAlterations{
+    static float PI = (float)Math.PI;
     public static void CPBoost(Map map){
         //CP -> Turbo
         map.replace("RoadIceWithWallCheckpointRight",new BlockChange(BlockType.Block,"RoadIceWithWallSpecialTurboRight"));
         map.replace("RoadIceWithWallCheckpointLeft",new BlockChange(BlockType.Block,"RoadIceWithWallSpecialTurboLeft"));
-        map.replace("RoadIceWithWallDiagRightCheckpointRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallSpecialTurboDiagRightRight"));
-        map.replace("RoadIceWithWallDiagLeftCheckpointRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallSpecialTurboDiagLeftRight"));
-        map.replace("RoadIceWithWallDiagRightCheckpointLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallSpecialTurboDiagRightLeft"));
-        map.replace("RoadIceWithWallDiagLeftCheckpointLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallSpecialTurboDiagLeftLeft"));
+        map.replace("RoadIceWithWallDiagRightCheckpointRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightSpecialTurboRight"));
+        map.replace("RoadIceWithWallDiagLeftCheckpointRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftSpecialTurboRight"));
+        map.replace("RoadIceWithWallDiagRightCheckpointLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightSpecialTurboLeft"));
+        map.replace("RoadIceWithWallDiagLeftCheckpointLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftSpecialTurboLeft"));
         map.replace("RoadTechCheckpoint",new BlockChange(BlockType.Block,"RoadTechSpecialTurbo"));
         map.replace("RoadTechCheckpointSlopeUp",new BlockChange(BlockType.Block,"RoadTechSpecialTurboSlopeUp"));
         map.replace("RoadTechCheckpointSlopeDown",new BlockChange(BlockType.Block,"RoadTechSpecialTurboSlopeDown"));
@@ -75,10 +77,10 @@ class Alterations{
         // //Turbo -> CP
         map.replace("RoadIceWithWallSpecialTurboRight",new BlockChange(BlockType.Block,"RoadIceWithWallCheckpointRight"));
         map.replace("RoadIceWithWallSpecialTurboLeft",new BlockChange(BlockType.Block,"RoadIceWithWallCheckpointLeft"));
-        map.replace("RoadIceWithWallSpecialTurboDiagRightRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointRight"));
-        map.replace("RoadIceWithWallSpecialTurboDiagLeftRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointRight"));
-        map.replace("RoadIceWithWallSpecialTurboDiagRightLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointLeft"));
-        map.replace("RoadIceWithWallSpecialTurboDiagLeftLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointLeft"));
+        map.replace("RoadIceWithWallDiagRightSpecialTurboRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointRight"));
+        map.replace("RoadIceWithWallDiagLeftSpecialTurboRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointRight"));
+        map.replace("RoadIceWithWallDiagRightSpecialTurboLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointLeft"));
+        map.replace("RoadIceWithWallDiagLeftSpecialTurboLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointLeft"));
         map.replace("RoadTechSpecialTurbo",new BlockChange(BlockType.Block,"RoadTechCheckpoint"));//TODO Issue here removing Boost
         map.replace("RoadTechSpecialTurboSlopeUp",new BlockChange(BlockType.Block,"RoadTechCheckpointSlopeUp"));
         map.replace("RoadTechSpecialTurboSlopeDown",new BlockChange(BlockType.Block,"RoadTechCheckpointSlopeDown"));
@@ -144,7 +146,149 @@ class Alterations{
         map.placeStagedBlocks();
     }
 
-    void CPLess(Map map){
+    public static void CPLess(Map map){//TODO Platform under the CP doesn't get removed
+        map.delete("RoadIceWithWallCheckpointRight");
+        map.delete("RoadIceWithWallCheckpointLeft");
+        map.delete("RoadIceWithWallDiagRightCheckpointRight");
+        map.delete("RoadIceWithWallDiagLeftCheckpointRight");
+        map.delete("RoadIceWithWallDiagRightCheckpointLeft");
+        map.delete("RoadIceWithWallDiagLeftCheckpointLeft");
+        map.delete("RoadTechCheckpoint");
+        map.delete("RoadTechCheckpointSlopeUp");
+        map.delete("RoadTechCheckpointSlopeDown");
+        map.delete("RoadDirtCheckpoint");
+        map.delete("RoadDirtCheckpointSlopeUp");
+        map.delete("RoadDirtCheckpointSlopeDown");
+        map.delete("RoadBumpCheckpoint");
+        map.delete("RoadBumpCheckpointSlopeUp");
+        map.delete("RoadBumpCheckpointSlopeDown");
+        map.delete("RoadIceCheckpoint");
+        map.delete("RoadIceCheckpointSlopeUp");
+        map.delete("RoadIceCheckpointSlopeDown");
+        map.delete("RoadWaterCheckpoint");
+        map.delete("GateCheckpoint");
+        map.delete("PlatformTechCheckpoint");
+        map.delete("PlatformTechCheckpointSlope2Up");
+        map.delete("PlatformTechCheckpointSlope2Down");
+        map.delete("PlatformTechCheckpointSlope2Right");
+        map.delete("PlatformTechCheckpointSlope2Left");
+        map.delete("PlatformPlasticCheckpoint");
+        map.delete("PlatformPlasticCheckpointSlope2Up");
+        map.delete("PlatformPlasticCheckpointSlope2Down");
+        map.delete("PlatformPlasticCheckpointSlope2Right");
+        map.delete("PlatformPlasticCheckpointSlope2Left");
+        map.delete("PlatformDirtCheckpoint");
+        map.delete("PlatformDirtCheckpointSlope2Up");
+        map.delete("PlatformDirtCheckpointSlope2Down");
+        map.delete("PlatformDirtCheckpointSlope2Right");
+        map.delete("PlatformDirtCheckpointSlope2Left");
+        map.delete("PlatformIceCheckpoint");
+        map.delete("PlatformIceCheckpointSlope2Up");
+        map.delete("PlatformIceCheckpointSlope2Down");
+        map.delete("PlatformIceCheckpointSlope2Right");
+        map.delete("PlatformIceCheckpointSlope2Left");
+        map.delete("PlatformGrassCheckpoint");
+        map.delete("PlatformGrassCheckpointSlope2Up");
+        map.delete("PlatformGrassCheckpointSlope2Down");
+        map.delete("PlatformGrassCheckpointSlope2Right");
+        map.delete("PlatformGrassCheckpointSlope2Left");
+        map.delete("PlatformWaterCheckpoint");
+        map.delete("RoadTechCheckpointTiltLeft");
+        map.delete("RoadTechCheckpointTiltRight");
+        map.delete("RoadDirtCheckpointTiltLeft");
+        map.delete("RoadDirtCheckpointTiltRight");
+        map.delete("RoadBumpCheckpointTiltLeft");
+        map.delete("RoadBumpCheckpointTiltRight");
+        map.delete("RoadTechDiagRightCheckpoint");
+        map.delete("RoadDirtDiagRightCheckpoint");
+        map.delete("RoadBumpDiagRightCheckpoint");
+        map.delete("RoadTechDiagLeftCheckpoint");
+        map.delete("RoadDirtDiagLeftCheckpoint");
+        map.delete("RoadBumpDiagLeftCheckpoint");
+        map.delete("GateCheckpointLeft32m");
+        map.delete("GateCheckpointCenter32mv2");
+        map.delete("GateCheckpointRight32m");
+        map.delete("GateCheckpointLeft16m");
+        map.delete("GateCheckpointCenter16mv2");
+        map.delete("GateCheckpointRight16m");
+        map.delete("GateCheckpointLeft8m");
+        map.delete("GateCheckpointCenter8mv2");
+        map.delete("GateCheckpointRight8m");
+    }
+
+    public static void STTF(Map map){
+        map.replace("RoadIceWithWallCheckpointRight",new BlockChange(BlockType.Block,"RoadIceWithWallStraight"));
+        map.replace("RoadIceWithWallCheckpointLeft",new BlockChange(BlockType.Block,"RoadIceWithWallStraight"));
+        map.replace("RoadIceWithWallDiagRightCheckpointRight",new DiagBlockChange(BlockType.Block,"RoadIceDiagLeftWithWallStraight"));
+        map.replace("RoadIceWithWallDiagLeftCheckpointRight",new DiagBlockChange(BlockType.Block,"RoadIceDiagLeftWithWallStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadIceWithWallDiagRightCheckpointLeft",new DiagBlockChange(BlockType.Block,"RoadIceDiagRightWithWallStraight"));
+        map.replace("RoadIceWithWallDiagLeftCheckpointLeft",new DiagBlockChange(BlockType.Block,"RoadIceDiagRightWithWallStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadTechCheckpoint",new BlockChange(BlockType.Block,"RoadTechStraight"));
+        map.replace("RoadTechCheckpointSlopeUp",new BlockChange(BlockType.Block,"RoadTechSlopeUpStraight"));
+        map.replace("RoadTechCheckpointSlopeDown",new BlockChange(BlockType.Block,"RoadTechSlopeDownStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadDirtCheckpoint",new BlockChange(BlockType.Block,"RoadDirtStraight"));
+        map.replace("RoadDirtCheckpointSlopeUp",new BlockChange(BlockType.Block,"RoadDirtSlopeUpStraight"));
+        map.replace("RoadDirtCheckpointSlopeDown",new BlockChange(BlockType.Block,"RoadDirtSlopeUpStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadBumpCheckpoint",new BlockChange(BlockType.Block,"RoadBumpStraight"));
+        map.replace("RoadBumpCheckpointSlopeUp",new BlockChange(BlockType.Block,"RoadBumpSlopeUpStraight"));
+        map.replace("RoadBumpCheckpointSlopeDown",new BlockChange(BlockType.Block,"RoadBumpSlopeUpStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadIceCheckpoint",new BlockChange(BlockType.Block,"RoadIceStraight"));
+        map.replace("RoadIceCheckpointSlopeUp",new BlockChange(BlockType.Block,"RoadIceSlopeUpStraight"));
+        map.replace("RoadIceCheckpointSlopeDown",new BlockChange(BlockType.Block,"RoadIceSlopeUpStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadWaterCheckpoint",new BlockChange(BlockType.Block,"RoadWaterStraight"));
+        map.delete("GateCheckpoint");
+        map.replace("PlatformTechCheckpoint",new BlockChange(BlockType.Block,"PlatformTechBase"));
+        map.replace("PlatformTechCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformTechSlope2Straight"));
+        map.replace("PlatformTechCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformTechSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));//TODO correct Offset
+        map.replace("PlatformTechCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformTechCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformPlasticCheckpoint",new BlockChange(BlockType.Block,"PlatformPlasticBase"));
+        map.replace("PlatformPlasticCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformPlasticSlope2Straight"));
+        map.replace("PlatformPlasticCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformPlasticSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
+        map.replace("PlatformPlasticCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformPlasticCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformDirtCheckpoint",new BlockChange(BlockType.Block,"PlatformDirtBase"));
+        map.replace("PlatformDirtCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformDirtSlope2Straight"));
+        map.replace("PlatformDirtCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformDirtSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
+        map.replace("PlatformDirtCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformDirtCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformIceCheckpoint",new BlockChange(BlockType.Block,"PlatformIceBase"));
+        map.replace("PlatformIceCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformIceSlope2Straight"));
+        map.replace("PlatformIceCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformIceSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
+        map.replace("PlatformIceCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformIceCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformGrassCheckpoint",new BlockChange(BlockType.Block,"PlatformGrassBase"));
+        map.replace("PlatformGrassCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformGrassSlope2Straight"));
+        map.replace("PlatformGrassCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformGrassSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
+        map.replace("PlatformGrassCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformGrassCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformWaterCheckpoint",new BlockChange(BlockType.Block,"PlatformWaterRampBase"));
+        map.replace("RoadTechCheckpointTiltLeft",new BlockChange(BlockType.Block,"RoadTechTiltStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadTechCheckpointTiltRight",new BlockChange(BlockType.Block,"RoadTechTiltStraight"));
+        map.replace("RoadDirtCheckpointTiltLeft",new BlockChange(BlockType.Block,"RoadDirtTiltStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadDirtCheckpointTiltRight",new BlockChange(BlockType.Block,"RoadDirtTiltStraight"));
+        map.replace("RoadBumpCheckpointTiltLeft",new BlockChange(BlockType.Block,"RoadBumpTiltStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("RoadBumpCheckpointTiltRight",new BlockChange(BlockType.Block,"RoadBumpTiltStraight"));
+        map.replace("RoadTechDiagRightCheckpoint",new DiagBlockChange(BlockType.Block,"RoadTechDiagRightStraightX2"));
+        map.replace("RoadDirtDiagRightCheckpoint",new DiagBlockChange(BlockType.Block,"RoadDirtDiagRightStraightX2"));
+        map.replace("RoadBumpDiagRightCheckpoint",new DiagBlockChange(BlockType.Block,"RoadBumpDiagRightStraightX2"));
+        map.replace("RoadTechDiagLeftCheckpoint",new DiagBlockChange(BlockType.Block,"RoadTechDiagLeftStraightX2"));
+        map.replace("RoadDirtDiagLeftCheckpoint",new DiagBlockChange(BlockType.Block,"RoadDirtDiagLeftStraightX2"));
+        map.replace("RoadBumpDiagLeftCheckpoint",new DiagBlockChange(BlockType.Block,"RoadBumpDiagLeftStraightX2"));
+        map.delete("GateCheckpointLeft32m");
+        map.delete("GateCheckpointCenter32mv2");
+        map.delete("GateCheckpointRight32m");
+        map.delete("GateCheckpointLeft16m");
+        map.delete("GateCheckpointCenter16mv2");
+        map.delete("GateCheckpointRight16m");
+        map.delete("GateCheckpointLeft8m");
+        map.delete("GateCheckpointCenter8mv2");
+        map.delete("GateCheckpointRight8m");
+        map.placeStagedBlocks();
+    }
+
+    public static void CPFull(){//STTF mirrord
+
     }
 }
 
@@ -156,7 +300,6 @@ class DiagBlockChange : BlockChange{
     public DiagBlockChange(Vec3 absolutePosition, Vec3 pitchYawRoll) : base(absolutePosition,pitchYawRoll){}
 
     public override void changeBlock(CGameCtnBlock ctnBlock,Block @block){
-        //TODO correct offset
         switch (ctnBlock.Direction){
             case Direction.North:
                 block.relativeOffset(new Vec3(0,0,0));
