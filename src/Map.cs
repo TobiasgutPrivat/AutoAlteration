@@ -1,11 +1,15 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
+using System.IO.Compression;
+using System.Linq.Expressions;
 class Map
 {
-Gbx<CGameCtnChallenge> gbx;
-public CGameCtnChallenge map;
-public List<Block> stagedBlocks = new List<Block>();
+  Gbx<CGameCtnChallenge> gbx;
+  public CGameCtnChallenge map;
+  public List<Block> stagedBlocks = new List<Block>();
+  public string[] embeddedBlocks = Array.Empty<string>();
+  static string BlocksFolder = "C:\\Users\\Tobias\\Documents\\Programmieren\\GBX Test\\AutoAlteration\\Blocks\\";
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
@@ -63,17 +67,27 @@ public List<Block> stagedBlocks = new List<Block>();
     map.MapUid = new string(stringChars);
   }
 
-  // public void embedBlock(){//TODO Embeddings
-  //   map.UpdateEmbeddedZipData();
-  // }
+  public void embedBlock(string path){
+    map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
+    {
+      ZipArchiveEntry entry = zipArchive.CreateEntry(path);
+      using (Stream entryStream = entry.Open())
+      {
+        using (FileStream fileStream = File.OpenRead(BlocksFolder + path))
+        {
+          fileStream.CopyTo(entryStream);
+        }
+      }
+    });
+  }
 
-  public void placeRelative(string atModelId, BlockChange blockChange){
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atModelId)){//blocks
+  public void placeRelative(string atBlock, BlockChange blockChange){
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){//blocks
       Block block = new Block(ctnBlock);
       blockChange.changeBlock(ctnBlock,block);
       stagedBlocks.Add(block);
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atModelId)){//items
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){//items
       Block block = new Block(ctnItem);
       blockChange.changeItem(ctnItem,block);
       stagedBlocks.Add(block);
@@ -84,6 +98,26 @@ public List<Block> stagedBlocks = new List<Block>();
     foreach(var atBlock in atBlocks){
       placeRelative(atBlock,blockChange);
     }
+  }
+
+  public void placeEmbeddedRelative(string atBlock, BlockChange blockChange){
+    try{
+      if (!map.OpenReadEmbeddedZipData().Entries.Any(x => x.FullName == blockChange.model)){
+        embedBlock(blockChange.model);
+      }
+    } catch {
+      embedBlock(blockChange.model);
+    }
+    blockChange.model += "_CustomBlock";
+    placeRelative(atBlock,blockChange);
+  }
+
+  public void placeEmbeddedRelative(string[] atBlocks, BlockChange blockChange){
+    if (!map.OpenReadEmbeddedZipData().Entries.Any(x => x.FullName ==  blockChange.model)){
+      embedBlock(blockChange.model);
+    }
+    blockChange.model += "_CustomBlock";
+    placeRelative(atBlocks,blockChange);
   }
 
   public void replace(string oldModel, BlockChange blockChange)
@@ -119,6 +153,13 @@ public List<Block> stagedBlocks = new List<Block>();
     indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == modelId).Select(block => modifiedblocks.IndexOf(block)).ToList();
     indexes.Reverse();
     foreach(int index in indexes){
+      if (map.BakedBlocks is List<CGameCtnBlock> bakedBlocks){
+        bakedBlocks.Where(x => x.Coord.X == modifiedblocks[index].Coord.X && x.Coord.Z == modifiedblocks[index].Coord.Z && x.Name != "Grass").ToList().ForEach(x =>  Console.WriteLine(x.Name));
+        bakedBlocks.RemoveAll(x => x.Coord.X == modifiedblocks[index].Coord.X && x.Coord.Z == modifiedblocks[index].Coord.Z && x.Name != "Grass");
+      }
+      if (map.BakedBlocks is List<CGameCtnBlock> newbakedBlocks){
+        newbakedBlocks.Where(x => x.Coord.X == modifiedblocks[index].Coord.X && x.Coord.Z == modifiedblocks[index].Coord.Z && x.Name != "Grass").ToList().ForEach(x =>  Console.WriteLine("new" + x.Name));
+      }
       modifiedblocks.RemoveAt(index);
     }
     map.Blocks = modifiedblocks;
@@ -130,5 +171,6 @@ public List<Block> stagedBlocks = new List<Block>();
       modifiedItems.RemoveAt(index);
     }
     map.AnchoredObjects = modifiedItems;
+
   }
 }
