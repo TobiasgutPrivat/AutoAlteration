@@ -113,7 +113,11 @@ class Map
   }
 
   public void placeEmbeddedRelative(string[] atBlocks, BlockChange blockChange){
-    if (!map.OpenReadEmbeddedZipData().Entries.Any(x => x.FullName ==  blockChange.model)){
+    try{
+      if (!map.OpenReadEmbeddedZipData().Entries.Any(x => x.FullName == blockChange.model)){
+        embedBlock(blockChange.model);
+      }
+    } catch {
       embedBlock(blockChange.model);
     }
     blockChange.model += "_CustomBlock";

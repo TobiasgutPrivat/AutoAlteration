@@ -17,7 +17,6 @@ Multiple Alterations can be applied to one map.
 
 If your having troubles jsut contact me, contact me on discord (Tobias2g#5288)
 ## Known Issues/Bugs
-- Embedded Blocks/Items are not yet implemented.
 - Probably some Alterations have incorrect Configurations
 - A weird Problem when deleting boosters causing the map to not be loadable
 - When deleting Blocks the base Platform stays there. (Good for replacing but bad for CPLess)
