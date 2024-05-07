@@ -5,10 +5,10 @@ This Project is based on the GBX.NET Framework from BigBang.
 
 It's still in early development, so there will probably be some Bugs and Problems. Contribution to the repository is very welcome, feel free to create pull requests.
 
+If this Instruction leaves some Questions or you have some ideas contact me on Discord (Tobias2g#5288)
 ## How to use
-Some basic knowledge of development will be usefull.
-\
-If your having troubles jsut contact me, contact me on discord (Tobias2g#5288)
+Some basic knowledge of Coding will be usefull but not required.
+
 ### Installation
 1. Clone this GitHub Repository
 2. You need some form of IDE, I recommend VSCode with C# Dev Kit 
@@ -94,7 +94,9 @@ Example: replace a RoadTechCheckpoint with a Booster
 
 **Helper** 
 \
-I made a Plugin to get the selected BlockModelId in editor (Also there will be more functionality added to it)
+https://github.com/TobiasgutPrivat/Auto-Alteration-Helper
+\
+I also made a Plugin to get the selected BlockModelId in editor (Also there will be more functionality added to it)
 \
 To install: Clone it into your Plugin Folder (Its not released yet)
 
