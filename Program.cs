@@ -1,8 +1,8 @@
 ﻿//Code for Execution (change for your use)
 
 //Folder Processing
-string sourcefolder = "C:\\Users\\Tobias\\Documents\\Trackmania2020\\Maps\\Nadeo Maps\\Spring 2020 alpha\\";
-string destinationFolder = "C:\\Users\\Tobias\\Documents\\Trackmania2020\\Maps\\My-Maps\\Altered Nadeo\\Spring 2020 FreeWheel\\";
+string sourcefolder = "C:/Users\\Tobias\\Documents\\Trackmania2020\\Maps\\Nadeo Maps\\Spring 2020 alpha\\";
+string destinationFolder = "C:/Users\\Tobias\\Documents\\Trackmania2020\\Maps\\My-Maps\\Altered Nadeo\\Spring 2020 FreeWheel\\";
 string[] files = Directory.GetFiles(sourcefolder);
 foreach (string file in files)
 {
