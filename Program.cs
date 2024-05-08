@@ -1,15 +1,15 @@
 ﻿//Code for Execution (change for your use)
 
 //Folder Processing
-string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2020 alpha/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My-Maps/Altered Nadeo/Spring 2020 1-Left/";
+string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2020 FreeWheel/";
 string[] files = Directory.GetFiles(sourcefolder);
 foreach (string file in files)
 {
     Map map = new Map(file);
-    FinishAlterations.OneLeft(map);
-    map.map.MapName = Path.GetFileName(file).Substring(0, Path.GetFileName(file).Length - 8) + " 1-Left";
-    map.save(destinationFolder + Path.GetFileName(file).Substring(0, Path.GetFileName(file).Length - 8) + " 1-Left.map.gbx");
+    EffectAlterations.FreeWheel(map);
+    map.map.MapName = Path.GetFileName(file).Substring(0, Path.GetFileName(file).Length - 8) + " FreeWheel";
+    map.save(destinationFolder + Path.GetFileName(file).Substring(0, Path.GetFileName(file).Length - 8) + " FreeWheel.map.gbx");
 }
 
 // Test Single Map

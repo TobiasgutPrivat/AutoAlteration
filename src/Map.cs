@@ -2,7 +2,7 @@ using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
 using System.IO.Compression;
-using System.Linq.Expressions;
+using GBX.NET.ZLib;
 class Map
 {
   Gbx<CGameCtnChallenge> gbx;
@@ -13,6 +13,7 @@ class Map
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
+    Gbx.ZLib = new ZLib();
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
