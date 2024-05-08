@@ -186,7 +186,6 @@ class Map
     List<int> indexes;
     List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
     indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == modelId).Select(block => modifiedblocks.IndexOf(block)).ToList();
-    indexes.Reverse();
     foreach(int index in indexes){
       //TODO delete Platform underneath
       modifiedblocks.RemoveAt(index);
@@ -195,7 +194,6 @@ class Map
 
     List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
     indexes = modifiedItems.FindAll(block => block.ItemModel.Id == modelId).Select(block => modifiedItems.IndexOf(block)).ToList();
-    indexes.Reverse();
     foreach(int index in indexes){
       modifiedItems.RemoveAt(index);
     }

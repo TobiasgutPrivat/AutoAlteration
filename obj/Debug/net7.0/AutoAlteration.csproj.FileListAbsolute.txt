@@ -20,3 +20,5 @@ c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\obj\Debug\net7.0
 c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\obj\Debug\net7.0\AutoAlteration.genruntimeconfig.cache
 c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\obj\Debug\net7.0\ref\AutoAlteration.dll
 c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\bin\Debug\net7.0\Newtonsoft.Json.dll
+c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\bin\Debug\net7.0\GBX.NET.ZLib.dll
+c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\bin\Debug\net7.0\Iconic.Zlib.Netstandard.dll
