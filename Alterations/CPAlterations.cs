@@ -1,4 +1,3 @@
-using System.Net.NetworkInformation;
 using GBX.NET;
 using GBX.NET.Engines.Game;
 class CPAlterations{
@@ -28,28 +27,28 @@ class CPAlterations{
         map.replace("PlatformTechCheckpoint",new BlockChange(BlockType.Block,"PlatformTechSpecialTurbo"));
         map.replace("PlatformTechCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Up"));
         map.replace("PlatformTechCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Down"));
-        map.replace("PlatformTechCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Right"));
-        map.replace("PlatformTechCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Left"));
+        map.replace("PlatformTechCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboTilt2Right"));
+        map.replace("PlatformTechCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboTilt2Left"));
         map.replace("PlatformPlasticCheckpoint",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurbo"));
         map.replace("PlatformPlasticCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Up"));
         map.replace("PlatformPlasticCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Down"));
-        map.replace("PlatformPlasticCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Right"));
-        map.replace("PlatformPlasticCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Left"));
+        map.replace("PlatformPlasticCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboTilt2Right"));
+        map.replace("PlatformPlasticCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboTilt2Left"));
         map.replace("PlatformDirtCheckpoint",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurbo"));
         map.replace("PlatformDirtCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Up"));
         map.replace("PlatformDirtCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Down"));
-        map.replace("PlatformDirtCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Right"));
-        map.replace("PlatformDirtCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Left"));
+        map.replace("PlatformDirtCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboTilt2Right"));
+        map.replace("PlatformDirtCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboTilt2Left"));
         map.replace("PlatformIceCheckpoint",new BlockChange(BlockType.Block,"PlatformIceSpecialTurbo"));
         map.replace("PlatformIceCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Up"));
         map.replace("PlatformIceCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Down"));
-        map.replace("PlatformIceCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Right"));
-        map.replace("PlatformIceCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Left"));
+        map.replace("PlatformIceCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboTilt2Right"));
+        map.replace("PlatformIceCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboTilt2Left"));
         map.replace("PlatformGrassCheckpoint",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurbo"));
         map.replace("PlatformGrassCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Up"));
         map.replace("PlatformGrassCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Down"));
-        map.replace("PlatformGrassCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Right"));
-        map.replace("PlatformGrassCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Left"));
+        map.replace("PlatformGrassCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboTilt2Right"));
+        map.replace("PlatformGrassCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboTilt2Left"));
         map.replace("PlatformWaterCheckpoint",new BlockChange(BlockType.Block,"PlatformWaterSpecialTurbo"));
         map.replace("RoadTechCheckpointTiltLeft",new BlockChange(BlockType.Block,"RoadTechSpecialTurboTiltLeft"));
         map.replace("RoadTechCheckpointTiltRight",new BlockChange(BlockType.Block,"RoadTechSpecialTurboTiltRight"));
@@ -73,6 +72,12 @@ class CPAlterations{
         map.replace("GateCheckpointLeft8m",new BlockChange(BlockType.Item,"GateSpecialTurboLeft8m"));
         map.replace("GateCheckpointCenter8mv2",new BlockChange(BlockType.Item,"GateSpecialTurboCenter8mv2"));
         map.replace("GateCheckpointRight8m",new BlockChange(BlockType.Item,"GateSpecialTurboRight8m"));
+        //TODO WallCPs
+        // map.replace("PlatformTechWallCheckpointUp",new BlockChange(BlockType.Item,""));
+        // map.replace("PlatformTechWallCheckpointDown",new BlockChange(BlockType.Item,""));
+        // map.replace("PlatformTechWallCheckpointLeft",new BlockChange(BlockType.Item,""));
+        // map.replace("PlatformTechWallCheckpointRight",new BlockChange(BlockType.Item,""));
+
 
         // //Turbo -> CP
         map.replace("RoadIceWithWallSpecialTurboRight",new BlockChange(BlockType.Block,"RoadIceWithWallCheckpointRight"));
@@ -81,7 +86,7 @@ class CPAlterations{
         map.replace("RoadIceWithWallDiagLeftSpecialTurboRight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointRight"));
         map.replace("RoadIceWithWallDiagRightSpecialTurboLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointLeft"));
         map.replace("RoadIceWithWallDiagLeftSpecialTurboLeft",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagLeftCheckpointLeft"));
-        map.replace("RoadTechSpecialTurbo",new BlockChange(BlockType.Block,"RoadTechCheckpoint"));//TODO Issue here removing Boost
+        map.replace("RoadTechSpecialTurbo",new BlockChange(BlockType.Block,"RoadTechCheckpoint"));//TODO Issue here removing Boost (Example Spring 2020 - S15)
         map.replace("RoadTechSpecialTurboSlopeUp",new BlockChange(BlockType.Block,"RoadTechCheckpointSlopeUp"));
         map.replace("RoadTechSpecialTurboSlopeDown",new BlockChange(BlockType.Block,"RoadTechCheckpointSlopeDown"));
         map.replace("RoadDirtSpecialTurbo",new BlockChange(BlockType.Block,"RoadDirtCheckpoint"));
@@ -98,28 +103,28 @@ class CPAlterations{
         map.replace("PlatformTechSpecialTurbo",new BlockChange(BlockType.Block,"PlatformTechCheckpoint"));
         map.replace("PlatformTechSpecialTurboSlope2Up",new BlockChange(BlockType.Block,"PlatformTechCheckpointSlope2Up"));
         map.replace("PlatformTechSpecialTurboSlope2Down",new BlockChange(BlockType.Block,"PlatformTechCheckpointSlope2Down"));
-        map.replace("PlatformTechSpecialTurboSlope2Right",new BlockChange(BlockType.Block,"PlatformTechCheckpointSlope2Right"));
-        map.replace("PlatformTechSpecialTurboSlope2Left",new BlockChange(BlockType.Block,"PlatformTechCheckpointSlope2Left"));
+        map.replace("PlatformTechSpecialTurboTilt2Right",new BlockChange(BlockType.Block,"PlatformTechCheckpointSlope2Right"));
+        map.replace("PlatformTechSpecialTurboTilt2Left",new BlockChange(BlockType.Block,"PlatformTechCheckpointSlope2Left"));
         map.replace("PlatformPlasticSpecialTurbo",new BlockChange(BlockType.Block,"PlatformPlasticCheckpoint"));
         map.replace("PlatformPlasticSpecialTurboSlope2Up",new BlockChange(BlockType.Block,"PlatformPlasticCheckpointSlope2Up"));
         map.replace("PlatformPlasticSpecialTurboSlope2Down",new BlockChange(BlockType.Block,"PlatformPlasticCheckpointSlope2Down"));
-        map.replace("PlatformPlasticSpecialTurboSlope2Right",new BlockChange(BlockType.Block,"PlatformPlasticCheckpointSlope2Right"));
-        map.replace("PlatformPlasticSpecialTurboSlope2Left",new BlockChange(BlockType.Block,"PlatformPlasticCheckpointSlope2Left"));
+        map.replace("PlatformPlasticSpecialTurboTilt2Right",new BlockChange(BlockType.Block,"PlatformPlasticCheckpointSlope2Right"));
+        map.replace("PlatformPlasticSpecialTurboTilt2Left",new BlockChange(BlockType.Block,"PlatformPlasticCheckpointSlope2Left"));
         map.replace("PlatformDirtSpecialTurbo",new BlockChange(BlockType.Block,"PlatformDirtCheckpoint"));
         map.replace("PlatformDirtSpecialTurboSlope2Up",new BlockChange(BlockType.Block,"PlatformDirtCheckpointSlope2Up"));
         map.replace("PlatformDirtSpecialTurboSlope2Down",new BlockChange(BlockType.Block,"PlatformDirtCheckpointSlope2Down"));
-        map.replace("PlatformDirtSpecialTurboSlope2Right",new BlockChange(BlockType.Block,"PlatformDirtCheckpointSlope2Right"));
-        map.replace("PlatformDirtSpecialTurboSlope2Left",new BlockChange(BlockType.Block,"PlatformDirtCheckpointSlope2Left"));
+        map.replace("PlatformDirtSpecialTurboTilt2Right",new BlockChange(BlockType.Block,"PlatformDirtCheckpointSlope2Right"));
+        map.replace("PlatformDirtSpecialTurboTilt2Left",new BlockChange(BlockType.Block,"PlatformDirtCheckpointSlope2Left"));
         map.replace("PlatformIceSpecialTurbo",new BlockChange(BlockType.Block,"PlatformIceCheckpoint"));
         map.replace("PlatformIceSpecialTurboSlope2Up",new BlockChange(BlockType.Block,"PlatformIceCheckpointSlope2Up"));
         map.replace("PlatformIceSpecialTurboSlope2Down",new BlockChange(BlockType.Block,"PlatformIceCheckpointSlope2Down"));
-        map.replace("PlatformIceSpecialTurboSlope2Right",new BlockChange(BlockType.Block,"PlatformIceCheckpointSlope2Right"));
-        map.replace("PlatformIceSpecialTurboSlope2Left",new BlockChange(BlockType.Block,"PlatformIceCheckpointSlope2Left"));
+        map.replace("PlatformIceSpecialTurboTilt2Right",new BlockChange(BlockType.Block,"PlatformIceCheckpointSlope2Right"));
+        map.replace("PlatformIceSpecialTurboTilt2Left",new BlockChange(BlockType.Block,"PlatformIceCheckpointSlope2Left"));
         map.replace("PlatformGrassSpecialTurbo",new BlockChange(BlockType.Block,"PlatformGrassCheckpoint"));
         map.replace("PlatformGrassSpecialTurboSlope2Up",new BlockChange(BlockType.Block,"PlatformGrassCheckpointSlope2Up"));
         map.replace("PlatformGrassSpecialTurboSlope2Down",new BlockChange(BlockType.Block,"PlatformGrassCheckpointSlope2Down"));
-        map.replace("PlatformGrassSpecialTurboSlope2Right",new BlockChange(BlockType.Block,"PlatformGrassCheckpointSlope2Right"));
-        map.replace("PlatformGrassSpecialTurboSlope2Left",new BlockChange(BlockType.Block,"PlatformGrassCheckpointSlope2Left"));
+        map.replace("PlatformGrassSpecialTurboTilt2Right",new BlockChange(BlockType.Block,"PlatformGrassCheckpointSlope2Right"));
+        map.replace("PlatformGrassSpecialTurboTilt2Left",new BlockChange(BlockType.Block,"PlatformGrassCheckpointSlope2Left"));
         map.replace("PlatformWaterSpecialTurbo",new BlockChange(BlockType.Block,"PlatformWaterCheckpoint"));
         map.replace("RoadTechSpecialTurboTiltLeft",new BlockChange(BlockType.Block,"RoadTechCheckpointTiltLeft"));
         map.replace("RoadTechSpecialTurboTiltRight",new BlockChange(BlockType.Block,"RoadTechCheckpointTiltRight"));
@@ -144,9 +149,11 @@ class CPAlterations{
         map.replace("GateSpecialTurboCenter8mv2",new BlockChange(BlockType.Item,"GateCheckpointCenter8mv2"));
         map.replace("GateSpecialTurboRight8m",new BlockChange(BlockType.Item,"GateCheckpointRight8m"));
         map.placeStagedBlocks();
+
+        //TODO same for red boost (Turbo -> Turbo2)
     }
 
-    public static void CPLess(Map map){//TODO Platform under the CP doesn't get removed
+    private static void CPLess(Map map){//TODO Platform under the CP doesn't get removed (public when working)
         map.delete("RoadIceWithWallCheckpointRight");
         map.delete("RoadIceWithWallCheckpointLeft");
         map.delete("RoadIceWithWallDiagRightCheckpointRight");
@@ -239,29 +246,29 @@ class CPAlterations{
         map.delete("GateCheckpoint");
         map.replace("PlatformTechCheckpoint",new BlockChange(BlockType.Block,"PlatformTechBase"));
         map.replace("PlatformTechCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformTechSlope2Straight"));
-        map.replace("PlatformTechCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformTechSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));//TODO correct Offset
-        map.replace("PlatformTechCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
-        map.replace("PlatformTechCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformTechSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformTechCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformTechSlope2Straight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("PlatformTechCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformTechSlope2Straight",new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformTechCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformTechSlope2Straight",new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
         map.replace("PlatformPlasticCheckpoint",new BlockChange(BlockType.Block,"PlatformPlasticBase"));
         map.replace("PlatformPlasticCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformPlasticSlope2Straight"));
-        map.replace("PlatformPlasticCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformPlasticSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
-        map.replace("PlatformPlasticCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
-        map.replace("PlatformPlasticCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformPlasticSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformPlasticCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformPlasticSlope2Straight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("PlatformPlasticCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformPlasticSlope2Straight",new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformPlasticCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformPlasticSlope2Straight",new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
         map.replace("PlatformDirtCheckpoint",new BlockChange(BlockType.Block,"PlatformDirtBase"));
         map.replace("PlatformDirtCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformDirtSlope2Straight"));
-        map.replace("PlatformDirtCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformDirtSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
-        map.replace("PlatformDirtCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
-        map.replace("PlatformDirtCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformDirtSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformDirtCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformDirtSlope2Straight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("PlatformDirtCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformDirtSlope2Straight",new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformDirtCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformDirtSlope2Straight",new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
         map.replace("PlatformIceCheckpoint",new BlockChange(BlockType.Block,"PlatformIceBase"));
         map.replace("PlatformIceCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformIceSlope2Straight"));
-        map.replace("PlatformIceCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformIceSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
-        map.replace("PlatformIceCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
-        map.replace("PlatformIceCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformIceSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformIceCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformIceSlope2Straight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("PlatformIceCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformIceSlope2Straight",new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformIceCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformIceSlope2Straight",new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
         map.replace("PlatformGrassCheckpoint",new BlockChange(BlockType.Block,"PlatformGrassBase"));
         map.replace("PlatformGrassCheckpointSlope2Up",new BlockChange(BlockType.Block,"PlatformGrassSlope2Straight"));
-        map.replace("PlatformGrassCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformGrassSlope2Straight",Vec3.Zero, new Vec3(PI,0,0)));
-        map.replace("PlatformGrassCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Right",new Vec3(32,0,32), new Vec3(PI*0.5f,0,0)));
-        map.replace("PlatformGrassCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformGrassSpecialTurboSlope2Left",Vec3.Zero, new Vec3(PI*1.5f,0,0)));
+        map.replace("PlatformGrassCheckpointSlope2Down",new BlockChange(BlockType.Block,"PlatformGrassSlope2Straight",new Vec3(32,0,32), new Vec3(PI,0,0)));
+        map.replace("PlatformGrassCheckpointSlope2Right",new BlockChange(BlockType.Block,"PlatformGrassSlope2Straight",new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformGrassCheckpointSlope2Left",new BlockChange(BlockType.Block,"PlatformGrassSlope2Straight",new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
         map.replace("PlatformWaterCheckpoint",new BlockChange(BlockType.Block,"PlatformWaterRampBase"));
         map.replace("RoadTechCheckpointTiltLeft",new BlockChange(BlockType.Block,"RoadTechTiltStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
         map.replace("RoadTechCheckpointTiltRight",new BlockChange(BlockType.Block,"RoadTechTiltStraight"));
@@ -269,6 +276,26 @@ class CPAlterations{
         map.replace("RoadDirtCheckpointTiltRight",new BlockChange(BlockType.Block,"RoadDirtTiltStraight"));
         map.replace("RoadBumpCheckpointTiltLeft",new BlockChange(BlockType.Block,"RoadBumpTiltStraight",new Vec3(32,0,32), new Vec3(PI,0,0)));
         map.replace("RoadBumpCheckpointTiltRight",new BlockChange(BlockType.Block,"RoadBumpTiltStraight"));
+        map.replace("PlatformTechWallCheckpointUp",new BlockChange(BlockType.Block,"PlatformTechWallStraight4"));
+        map.replace("PlatformTechWallCheckpointDown",new BlockChange(BlockType.Block,"PlatformTechWallStraight4"));
+        map.replace("PlatformTechWallCheckpointLeft",new BlockChange(BlockType.Block,"PlatformTechWallStraight4"));
+        map.replace("PlatformTechWallCheckpointRight",new BlockChange(BlockType.Block,"PlatformTechWallStraight4"));
+        map.replace("PlatformDirtWallCheckpointUp",new BlockChange(BlockType.Block,"PlatformDirtWallStraight4"));
+        map.replace("PlatformDirtWallCheckpointDown",new BlockChange(BlockType.Block,"PlatformDirtWallStraight4"));
+        map.replace("PlatformDirtWallCheckpointLeft",new BlockChange(BlockType.Block,"PlatformDirtWallStraight4"));
+        map.replace("PlatformDirtWallCheckpointRight",new BlockChange(BlockType.Block,"PlatformDirtWallStraight4"));
+        map.replace("PlatformIceWallCheckpointUp",new BlockChange(BlockType.Block,"PlatformIceWallStraight4"));
+        map.replace("PlatformIceWallCheckpointDown",new BlockChange(BlockType.Block,"PlatformIceWallStraight4"));
+        map.replace("PlatformIceWallCheckpointLeft",new BlockChange(BlockType.Block,"PlatformIceWallStraight4"));
+        map.replace("PlatformIceWallCheckpointRight",new BlockChange(BlockType.Block,"PlatformIceWallStraight4"));
+        map.replace("PlatformPlasticWallCheckpointUp",new BlockChange(BlockType.Block,"PlatformPlasticWallStraight4"));
+        map.replace("PlatformPlasticWallCheckpointDown",new BlockChange(BlockType.Block,"PlatformPlasticWallStraight4"));
+        map.replace("PlatformPlasticWallCheckpointLeft",new BlockChange(BlockType.Block,"PlatformPlasticWallStraight4"));
+        map.replace("PlatformPlasticWallCheckpointRight",new BlockChange(BlockType.Block,"PlatformPlasticWallStraight4"));
+        map.replace("PlatformGrassWallCheckpointUp",new BlockChange(BlockType.Block,"PlatformGrassWallStraight4"));
+        map.replace("PlatformGrassWallCheckpointDown",new BlockChange(BlockType.Block,"PlatformGrassWallStraight4"));
+        map.replace("PlatformGrassWallCheckpointLeft",new BlockChange(BlockType.Block,"PlatformGrassWallStraight4"));
+        map.replace("PlatformGrassWallCheckpointRight",new BlockChange(BlockType.Block,"PlatformGrassWallStraight4"));
         map.replace("RoadTechDiagRightCheckpoint",new DiagBlockChange(BlockType.Block,"RoadTechDiagRightStraightX2"));
         map.replace("RoadDirtDiagRightCheckpoint",new DiagBlockChange(BlockType.Block,"RoadDirtDiagRightStraightX2"));
         map.replace("RoadBumpDiagRightCheckpoint",new DiagBlockChange(BlockType.Block,"RoadBumpDiagRightStraightX2"));
@@ -287,8 +314,46 @@ class CPAlterations{
         map.placeStagedBlocks();
     }
 
-    public static void CPFull(){//STTF mirrord
-
+    public static void CPFull(Map map){//basicly opposite of STTF mirrord, direction is not considered
+        map.replace("RoadIceWithWallStraight",new BlockChange(BlockType.Block,"RoadIceWithWallCheckpointRight"));
+        map.replace("RoadIceWithWallStraight",new BlockChange(BlockType.Block,"RoadIceWithWallCheckpointLeft"));
+        map.replace("RoadIceDiagLeftWithWallStraight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointRight"));
+        map.replace("RoadIceDiagRightWithWallStraight",new DiagBlockChange(BlockType.Block,"RoadIceWithWallDiagRightCheckpointLeft"));
+        map.replace("RoadTechStraight",new BlockChange(BlockType.Block,"RoadTechCheckpoint"));
+        map.replace("RoadTechSlopeUpStraight",new BlockChange(BlockType.Block,"RoadTechCheckpointSlopeUp"));
+        map.replace("RoadDirtStraight",new BlockChange(BlockType.Block,"RoadDirtCheckpoint"));
+        map.replace("RoadDirtSlopeUpStraight",new BlockChange(BlockType.Block,"RoadDirtCheckpointSlopeUp"));
+        map.replace("RoadBumpStraight",new BlockChange(BlockType.Block,"RoadBumpCheckpoint"));
+        map.replace("RoadBumpSlopeUpStraight",new BlockChange(BlockType.Block,"RoadBumpCheckpointSlopeUp"));
+        map.replace("RoadIceStraight",new BlockChange(BlockType.Block,"RoadIceCheckpoint"));
+        map.replace("RoadIceSlopeUpStraight",new BlockChange(BlockType.Block,"RoadIceCheckpointSlopeUp"));
+        map.replace("RoadWaterStraight",new BlockChange(BlockType.Block,"RoadWaterCheckpoint"));
+        map.replace("PlatformTechBase",new BlockChange(BlockType.Block,"PlatformTechCheckpoint"));
+        map.replace("PlatformTechSlope2Straight",new BlockChange(BlockType.Block,"PlatformTechCheckpointSlope2Up"));
+        map.replace("PlatformPlasticBase",new BlockChange(BlockType.Block,"PlatformPlasticCheckpoint"));
+        map.replace("PlatformPlasticSlope2Straight",new BlockChange(BlockType.Block,"PlatformPlasticCheckpointSlope2Up"));
+        map.replace("PlatformDirtBase",new BlockChange(BlockType.Block,"PlatformDirtCheckpoint"));
+        map.replace("PlatformDirtSlope2Straight",new BlockChange(BlockType.Block,"PlatformDirtCheckpointSlope2Up"));
+        map.replace("PlatformIceBase",new BlockChange(BlockType.Block,"PlatformIceCheckpoint"));
+        map.replace("PlatformIceSlope2Straight",new BlockChange(BlockType.Block,"PlatformIceCheckpointSlope2Up"));
+        map.replace("PlatformGrassBase",new BlockChange(BlockType.Block,"PlatformGrassCheckpoint"));
+        map.replace("PlatformGrassSlope2Straight",new BlockChange(BlockType.Block,"PlatformGrassCheckpointSlope2Up"));
+        map.replace("PlatformWaterRampBase",new BlockChange(BlockType.Block,"PlatformWaterCheckpoint"));
+        map.replace("RoadTechTiltStraight",new BlockChange(BlockType.Block,"RoadTechCheckpointTiltRight"));
+        map.replace("RoadDirtTiltStraight",new BlockChange(BlockType.Block,"RoadDirtCheckpointTiltRight"));
+        map.replace("RoadBumpTiltStraight",new BlockChange(BlockType.Block,"RoadBumpCheckpointTiltRight"));
+        map.replace("RoadTechDiagRightStraightX2",new DiagBlockChange(BlockType.Block,"RoadTechDiagRightCheckpoint"));
+        map.replace("RoadDirtDiagRightStraightX2",new DiagBlockChange(BlockType.Block,"RoadDirtDiagRightCheckpoint"));
+        map.replace("RoadBumpDiagRightStraightX2",new DiagBlockChange(BlockType.Block,"RoadBumpDiagRightCheckpoint"));
+        map.replace("RoadTechDiagLeftStraightX2",new DiagBlockChange(BlockType.Block,"RoadTechDiagLeftCheckpoint"));
+        map.replace("RoadDirtDiagLeftStraightX2",new DiagBlockChange(BlockType.Block,"RoadDirtDiagLeftCheckpoint"));
+        map.replace("RoadBumpDiagLeftStraightX2",new DiagBlockChange(BlockType.Block,"RoadBumpDiagLeftCheckpoint"));
+        map.replace("PlatformTechWallStraight4",new BlockChange(BlockType.Block,"PlatformTechWallCheckpointUp",new Vec3(0,0,32),new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformDirtWallStraight4",new BlockChange(BlockType.Block,"PlatformTechWallCheckpointUp",new Vec3(0,0,32),new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformPlasticWallStraight4",new BlockChange(BlockType.Block,"PlatformTechWallCheckpointUp",new Vec3(0,0,32),new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformIceWallStraight4",new BlockChange(BlockType.Block,"PlatformTechWallCheckpointUp",new Vec3(0,0,32),new Vec3(PI*0.5f,0,0)));
+        map.replace("PlatformGrassWallStraight4",new BlockChange(BlockType.Block,"PlatformTechWallCheckpointUp",new Vec3(0,0,32),new Vec3(PI*0.5f,0,0)));
+        map.placeStagedBlocks();
     }
 }
 

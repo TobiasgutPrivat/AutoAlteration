@@ -85,6 +85,10 @@ The Blockchange defines the new Block to be placed.
 Example: place a BoostRing at every RoadTechCheckpoint with an offset of 1m forwards
 > map.placeRelative("RoadTechCheckpoint", new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-12,forwardOffset),rotation));
 
+Any placed Blocks get staged and need to be placed later by calling:
+
+> map.placeStagedBlocks();
+
 **Replace** uses placeRelative and delete to replace the specified Blocks
 
 Example: replace a RoadTechCheckpoint with a Booster

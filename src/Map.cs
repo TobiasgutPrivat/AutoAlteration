@@ -18,13 +18,17 @@ class Map
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
   }
 
-  public void save(string Path)
+  public void save(string path)
   { 
     cleanDupes();
     newMapUid();
     removeAuthor();
     map.RemovePassword();
-    gbx.Save(Path);
+    if (!Directory.Exists(Path.GetDirectoryName(path)))
+      {
+        Directory.CreateDirectory(Path.GetDirectoryName(path));
+      }
+    gbx.Save(path);
   }
 
   private void removeAuthor(){
@@ -129,6 +133,32 @@ class Map
     placeRelative(oldModel,blockChange);
     delete(oldModel);
   }
+  
+  public void moveBlock(string block, Vec3 offset, Vec3 rotation)
+  {
+    placeRelative(block,new BlockChange(BlockType.Block, block, offset, rotation));
+    delete(block);
+  }
+
+  public void moveItem(string item, Vec3 offset, Vec3 rotation)
+  {
+    placeRelative(item,new BlockChange(BlockType.Item, item, offset, rotation));
+    delete(item);
+  }
+
+  public void moveBlock(string[] blocks, Vec3 offset, Vec3 rotation)
+  {
+    foreach(var block in blocks){
+      moveBlock(block, offset, rotation);
+    }
+  }
+
+  public void moveItem(string[] items, Vec3 offset, Vec3 rotation)
+  {
+    foreach(var item in items){
+      moveItem(item, offset, rotation);
+    }
+  }
 
   public void placeStagedBlocks(){
     foreach (var block in stagedBlocks){
@@ -157,13 +187,7 @@ class Map
     indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == modelId).Select(block => modifiedblocks.IndexOf(block)).ToList();
     indexes.Reverse();
     foreach(int index in indexes){
-      if (map.BakedBlocks is List<CGameCtnBlock> bakedBlocks){
-        bakedBlocks.Where(x => x.Coord.X == modifiedblocks[index].Coord.X && x.Coord.Z == modifiedblocks[index].Coord.Z && x.Name != "Grass").ToList().ForEach(x =>  Console.WriteLine(x.Name));
-        bakedBlocks.RemoveAll(x => x.Coord.X == modifiedblocks[index].Coord.X && x.Coord.Z == modifiedblocks[index].Coord.Z && x.Name != "Grass");
-      }
-      if (map.BakedBlocks is List<CGameCtnBlock> newbakedBlocks){
-        newbakedBlocks.Where(x => x.Coord.X == modifiedblocks[index].Coord.X && x.Coord.Z == modifiedblocks[index].Coord.Z && x.Name != "Grass").ToList().ForEach(x =>  Console.WriteLine("new" + x.Name));
-      }
+      //TODO delete Platform underneath
       modifiedblocks.RemoveAt(index);
     }
     map.Blocks = modifiedblocks;
