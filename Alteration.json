@@ -1,0 +1,71 @@
+[
+    {
+        "placeRelative": {
+            "source": "PlatformTechBase",
+            "newBlockType": "Block",
+            "new": "PlatformTechSpecialTurbo",
+            "offset": {
+                "x": 0,
+                "y": -12,
+                "z": 0
+            },
+            "rotation": {
+                "x": 3.141528,
+                "y": 0,
+                "z": 0
+            }
+        }
+    },
+    {
+        "placeRelative": {
+            "source": "PlatformDirtBase",
+            "newBlockType": "Block",
+            "new": "PlatformDirtSpecialTurbo"
+        }
+    },
+    {
+        "delete": {
+            "block": "RoadTechStraight"
+        }
+    },
+    {
+        "replace": {
+            "source": "RoadTechCheckpoint",
+            "new": "RoadTechSpecialTurbo"
+        }
+    },
+    {
+        "replace": {
+            "source": "RoadTechCheckpoint",
+            "new": "RoadTechSpecialTurbo",
+            "offset": {
+                "x": 0,
+                "y": 12,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,     
+                "y": 0,
+                "z": 0
+            }
+        }
+    },
+    {
+        "move": {
+            "source": "RoadTechFinish",
+            "offset": {
+                "x": 0,
+                "y": 12,
+                "z": 0
+            },
+            "rotation": {
+                "x": 0,     
+                "y": 0,
+                "z": 0
+            }
+        }
+    },
+    {
+        "placeStaged": {}
+    }
+]
