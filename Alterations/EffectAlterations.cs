@@ -2,7 +2,7 @@ using GBX.NET;
 using GBX.NET.Engines.Game;
 class EffectAlterations {
     static float PI = (float)Math.PI;
-    static string[] StartBlock = new string[] {"PlatformTechStart","RoadTechStart","RoadDirtStart","RoadBumpStart","RoadIceStart","RoadWaterStart","PlatformTechStart","PlatformDirtStart","PlatformIceStart","PlatformGrassStart","PlatformPlasticStart","PlatformWaterStart"};
+    static string[] StartBlock = new string[] {"PlatformTechStart","RoadTechStart","RoadDirtStart","RoadBumpStart","RoadIceStart","PlatformTechStart","PlatformDirtStart","PlatformIceStart","PlatformGrassStart","PlatformPlasticStart","PlatformWaterStart"};
     static string[] MultilapBlock = new string[] {"PlatformTechMultilap","RoadTechMultilap","RoadDirtMultilap","RoadBumpMultilap","RoadIceMultilap","RoadWaterMultilap","PlatformTechMultilap","PlatformDirtMultilap","PlatformIceMultilap","PlatformGrassMultilap","PlatformPlasticMultilap","PlatformWaterMultilap"};
     static string[] IceWallRight = new string[] {"RoadIceWithWallMultilapRight","RoadIceWithWallCheckpointRight"};
     static string[] IceWallLeft = new string[] {"RoadIceWithWallMultilapLeft","RoadIceWithWallCheckpointLeft"};
@@ -11,8 +11,8 @@ class EffectAlterations {
     static string[] DiagIceWallsRightLeft = new string[] {"RoadIceWithWallDiagRightMultilapLeft","RoadIceWithWallDiagRightCheckpointLeft"};
     static string[] DiagIceWallsLeftLeft = new string[] {"RoadIceWithWallDiagLeftMultilapLeft","RoadIceWithWallDiagLeftCheckpointLeft"};
     static string[] CPRoadBlock = new string[] {"RoadTechCheckpoint","RoadTechCheckpointSlopeUp","RoadTechCheckpointSlopeDown","RoadDirtCheckpoint","RoadDirtCheckpointSlopeUp","RoadDirtCheckpointSlopeDown","RoadBumpCheckpoint","RoadBumpCheckpointSlopeUp","RoadBumpCheckpointSlopeDown","RoadIceCheckpoint","RoadIceCheckpointSlopeUp","RoadIceCheckpointSlopeDown","RoadWaterCheckpoint"};
-    static string[] CPPlatformBlock = new string[] {"PlatformTechCheckpoint","PlatformTechCheckpointSlope2Up","PlatformTechCheckpointSlope2Down","PlatformPlasticCheckpoint","PlatformPlasticCheckpointSlope2Up","PlatformPlasticCheckpointSlope2Down","PlatformDirtCheckpoint","PlatformDirtCheckpointSlope2Up","PlatformDirtCheckpointSlope2Down","PlatformIceCheckpoint","PlatformIceCheckpointSlope2Up","PlatformIceCheckpointSlope2Down","PlatformGrassCheckpoint","PlatformGrassCheckpointSlope2Up","PlatformGrassCheckpointSlope2Down","PlatformWaterCheckpoint","OpenTechRoadCheckpoint","OpenTechRoadCheckpointSlope2Up","OpenTechRoadCheckpointSlope2Down","OpenDirtRoadCheckpoint","OpenDirtRoadCheckpointSlope2Up","OpenDirtRoadCheckpointSlope2Down","OpenIceRoadCheckpoint","OpenIceRoadCheckpointSlope2Up","OpenIceRoadCheckpointSlope2Down","OpenGrassRoadCheckpoint","OpenGrassRoadCheckpointSlope2Up","OpenGrassRoadCheckpointSlope2Down"};
-    static string[] CPPlatformTilt = new string[] {"PlatformTechCheckpointSlope2Right","PlatformPlasticCheckpointSlope2Right","PlatformDirtCheckpointSlope2Right","PlatformIceCheckpointSlope2Right","PlatformGrassCheckpointSlope2Right","OpenTechRoadCheckpointSlope2Right","OpenDirtRoadCheckpointSlope2Right","OpenIceRoadCheckpointSlope2Right","OpenGrassRoadCheckpointSlope2Right","PlatformTechCheckpointSlope2Left","PlatformPlasticCheckpointSlope2Left","PlatformDirtCheckpointSlope2Left","PlatformIceCheckpointSlope2Left","PlatformGrassCheckpointSlope2Left","OpenTechRoadCheckpointSlope2Left","OpenDirtRoadCheckpointSlope2Left","OpenIceRoadCheckpointSlope2Left","OpenGrassRoadCheckpointSlope2Left"};
+    static string[] CPPlatformBlock = new string[] {"PlatformTechCheckpoint","PlatformPlasticCheckpoint","PlatformDirtCheckpoint","PlatformIceCheckpoint","PlatformGrassCheckpoint","PlatformWaterCheckpoint","OpenTechRoadCheckpoint","OpenDirtRoadCheckpoint","OpenIceRoadCheckpoint","OpenGrassRoadCheckpoint"};
+    static string[] CPPlatformTilt = new string[] {"PlatformTechCheckpointSlope2Right","PlatformPlasticCheckpointSlope2Right","PlatformDirtCheckpointSlope2Right","PlatformIceCheckpointSlope2Right","PlatformGrassCheckpointSlope2Right","OpenTechRoadCheckpointSlope2Right","OpenDirtRoadCheckpointSlope2Right","OpenIceRoadCheckpointSlope2Right","OpenGrassRoadCheckpointSlope2Right","PlatformTechCheckpointSlope2Left","PlatformPlasticCheckpointSlope2Left","PlatformDirtCheckpointSlope2Left","PlatformIceCheckpointSlope2Left","PlatformGrassCheckpointSlope2Left","OpenTechRoadCheckpointSlope2Left","OpenDirtRoadCheckpointSlope2Left","OpenIceRoadCheckpointSlope2Left","OpenGrassRoadCheckpointSlope2Left","PlatformTechCheckpointSlope2Up","PlatformPlasticCheckpointSlope2Up","PlatformDirtCheckpointSlope2Up","PlatformIceCheckpointSlope2Up","PlatformGrassCheckpointSlope2Up","OpenTechRoadCheckpointSlope2Up","OpenDirtRoadCheckpointSlope2Up","OpenIceRoadCheckpointSlope2Up","OpenGrassRoadCheckpointSlope2Up","PlatformTechCheckpointSlope2Down","PlatformPlasticCheckpointSlope2Down","PlatformDirtCheckpointSlope2Down","PlatformIceCheckpointSlope2Down","PlatformGrassCheckpointSlope2Down","OpenTechRoadCheckpointSlope2Down","OpenDirtRoadCheckpointSlope2Down","OpenIceRoadCheckpointSlope2Down","OpenGrassRoadCheckpointSlope2Down"};
     static string[] CPRoadBlockTilt = new string[] {"RoadTechCheckpointTiltLeft","RoadTechCheckpointTiltRight","RoadDirtCheckpointTiltLeft","RoadDirtCheckpointTiltRight","RoadBumpCheckpointTiltLeft","RoadBumpCheckpointTiltRight"};
     static string[] GateStart32m = new string[] {"GateStartLeft32m","GateStartCenter32m","GateStartRight32m"};
     static string[] GateStart16m = new string[] {"GateStartLeft16m","GateStartCenter16m","GateStartRight16m"};
@@ -28,7 +28,7 @@ class EffectAlterations {
         map.placeRelative(MultilapBlock, GateSpecial);
         map.placeRelative(CPRoadBlock, GateSpecial);
         map.placeRelative(CPPlatformBlock, GateSpecial);
-        map.placeRelative(CPPlatformTilt, new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-10,forwardOffset),rotation));//TODO fintune offset y
+        map.placeRelative(CPPlatformTilt, new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-8,forwardOffset),rotation));
         map.placeRelative(CPRoadBlockTilt, new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-12,forwardOffset),rotation));
         map.placeRelative(DiagRight,new EffectDiagBlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
         map.placeRelative(DiagLeft,new EffectDiagBlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
@@ -59,12 +59,12 @@ class EffectAlterations {
     }
     private static void placeStartEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         map.placeRelative(StartBlock, new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative("RoadWaterStart", new BlockChange(BlockType.Block,"GateSpecial" + Effect,new Vec3(0,-16,forwardOffset-4),rotation));
         map.placeRelative(GateStart32m,new BlockChange(BlockType.Item,"GateSpecial32m" + Effect,new Vec3(0,0,forwardOffset-10),rotation));
         map.placeRelative(GateStart16m,new BlockChange(BlockType.Item,"GateSpecial16m" + Effect,new Vec3(0,0,forwardOffset-10),rotation));
         map.placeRelative(GateStart8m,new BlockChange(BlockType.Item,"GateSpecial8m" + Effect,new Vec3(0,0,forwardOffset-10),rotation));
         map.placeStagedBlocks();
     }
-
 
     public static void NoBrake(Map map){
         placeCPEffect(map,"NoBrake",1,Vec3.Zero);
