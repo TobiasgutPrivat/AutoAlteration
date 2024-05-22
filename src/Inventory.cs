@@ -1,21 +1,17 @@
 using Newtonsoft.Json;
 class Inventory {
     public List<Article> articles = new List<Article>();
-    // string[] Keywords;
 
     public Inventory(string inventoryPath,string[] Keywords) {
         string json = File.ReadAllText(inventoryPath);
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
-        articles = lines.Select(line => new Article(line.Trim(),Keywords)).ToList<Article>();
+        articles = lines.Select(line => new Article(line.Trim(),Keywords)).ToList();
     }
 
     public List<Article> GetArticlesWithKeywords(string[] keywords) {
         List<Article> articlesWithAllKeywords = new List<Article>();
         foreach (var article in articles) {
             bool hasAllKeywords = true;
-                // if (article.Name == "OpenTechRoadEndSlope2Straight") {
-                //     Console.WriteLine("test");
-                // }
             foreach (var keyword in keywords) {
                 if (keyword == "Dirt" && article.Name == "OpenTechRoadEndSlope2Straight") {
                     Console.WriteLine(!article.Keywords.Any(k => k == keyword));
@@ -46,7 +42,6 @@ class Inventory {
             }
             int totalLength = keywords.Aggregate(0, (sum, keyword) => sum + keyword.Length);
             if (hasAllKeywords && totalLength == article.Name.Length) {
-                // Console.WriteLine(article.Name);
                 return article;
             }
         }

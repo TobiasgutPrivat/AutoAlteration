@@ -1,12 +1,9 @@
 class AutoAlteration {
-    public static string[] Keywords;
     public static Inventory Blocks;
     public static Inventory Items;
-    // private static Inventory Macroblocks; //TODO Embeded
-    // private static Inventory CustomBlocks;
 
     public static void load(string projectFolder) {
-        Keywords = File.ReadAllLines(projectFolder + "src/Inventory/Configuration/Keywords.txt");
+        string[] Keywords = File.ReadAllLines(projectFolder + "src/Inventory/Configuration/Keywords.txt");
         Array.Sort(Keywords, (a, b) => b.Length.CompareTo(a.Length));
         Blocks = new Inventory(projectFolder + "src/Inventory/Configuration/Blocks.json",Keywords);
         Items = new Inventory(projectFolder + "src/Inventory/Configuration/Items.json",Keywords);
