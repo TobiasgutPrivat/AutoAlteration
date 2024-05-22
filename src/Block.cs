@@ -10,13 +10,38 @@ enum BlockType
 
 class Block {
     public BlockType blockType;
-    public string model;
+    public string name;
     public Vec3 absolutePosition;
     public Vec3 pitchYawRoll;
 
     public Block(CGameCtnBlock block){
+        initBlock(block);
+    }
+
+    public Block(CGameCtnBlock block, BlockChange blockChange)
+    {
+        initBlock(block);
+        if (blockChange != null) {
+            blockChange.changeBlock(block, this);
+        }
+    }
+    public Block(CGameCtnBlock block, string name){
+        initBlock(block);
+        this.name = name;
+    }
+
+    public Block(CGameCtnBlock block, string name, BlockChange blockChange)
+    {
+        initBlock(block);
+        this.name = name;
+        if (blockChange != null) {
+            blockChange.changeBlock(block, this);
+        }
+    }
+
+    private void initBlock(CGameCtnBlock block){
         blockType = BlockType.Block;
-        model = block.BlockModel.Id;
+        name = block.BlockModel.Id;
         if (block.IsFree){
             absolutePosition = (Vec3)block.AbsolutePositionInMap;
             pitchYawRoll = (Vec3)block.PitchYawRoll;
@@ -46,9 +71,27 @@ class Block {
             absolutePosition = absolutePosition + new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
         }
     }
+
     public Block(CGameCtnAnchoredObject item){
+        initBlock(item);
+    }
+    public Block(CGameCtnAnchoredObject item,BlockChange blockChange){
+        initBlock(item);
+        blockChange.changeItem(item, this);
+    }
+    public Block(CGameCtnAnchoredObject item, string name){
+        initBlock(item);
+        this.name = name;
+    }
+    public Block(CGameCtnAnchoredObject item, string name,BlockChange blockChange){
+        initBlock(item);
+        this.name = name;
+        blockChange.changeItem(item, this);
+    }
+
+    public void initBlock(CGameCtnAnchoredObject item){
         blockType = BlockType.Item;
-        model = item.ItemModel.Id;
+        name = item.ItemModel.Id;
         absolutePosition = item.AbsolutePositionInMap;
         pitchYawRoll = item.PitchYawRoll;
     }

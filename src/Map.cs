@@ -8,7 +8,7 @@ class Map
   Gbx<CGameCtnChallenge> gbx;
   public CGameCtnChallenge map;
   public List<Block> stagedBlocks = new List<Block>();
-  public string[] embeddedBlocks = Array.Empty<string>();
+  public List<Article> embeddedBlocks = new List<Article>();
   static string BlocksFolder = "C:\\Users\\Tobias\\Documents\\Programmieren\\GBX Test\\AutoAlteration\\Blocks\\";
   public Map(string mapPath)
   { 
@@ -72,7 +72,7 @@ class Map
     map.MapUid = new string(stringChars);
   }
 
-  public void embedBlock(string path){
+  private void embedBlock(string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
       ZipArchiveEntry entry = zipArchive.CreateEntry(path);
@@ -86,65 +86,117 @@ class Map
     });
   }
 
-  public void placeRelative(string atBlock, BlockChange blockChange){
+  public void placeRelative(string atBlock, string newBlock, BlockChange blockChange){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){//blocks
-      Block block = new Block(ctnBlock);
-      blockChange.changeBlock(ctnBlock,block);
-      stagedBlocks.Add(block);
+      stagedBlocks.Add(new Block(ctnBlock,newBlock,blockChange));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){//items
-      Block block = new Block(ctnItem);
-      blockChange.changeItem(ctnItem,block);
-      stagedBlocks.Add(block);
+      stagedBlocks.Add(new Block(ctnItem,newBlock,blockChange));
     }
   }
 
-  public void placeRelative(string[] atBlocks, BlockChange blockChange){
+  public void placeRelative(string[] atBlocks, string newBlock, BlockChange blockChange){
     foreach(var atBlock in atBlocks){
-      placeRelative(atBlock,blockChange);
+      placeRelative(atBlock, newBlock, blockChange);
     }
   }
 
-  public void placeEmbeddedRelative(string atBlock, BlockChange blockChange){
-    try{
-      if (!map.OpenReadEmbeddedZipData().Entries.Any(x => x.FullName == blockChange.model)){
-        embedBlock(blockChange.model);
-      }
-    } catch {
-      embedBlock(blockChange.model);
-    }
-    blockChange.model += "_CustomBlock";
-    placeRelative(atBlock,blockChange);
+  public void placeRelative(string[] atBlocks, string newBlock){
+    placeRelative(atBlocks, newBlock, null);
   }
 
-  public void placeEmbeddedRelative(string[] atBlocks, BlockChange blockChange){
-    try{
-      if (!map.OpenReadEmbeddedZipData().Entries.Any(x => x.FullName == blockChange.model)){
-        embedBlock(blockChange.model);
-      }
-    } catch {
-      embedBlock(blockChange.model);
-    }
-    blockChange.model += "_CustomBlock";
-    placeRelative(atBlocks,blockChange);
+  public void placeRelative(string atBlock, string newBlock){
+    placeRelative(atBlock, newBlock, null);
   }
 
-  public void replace(string oldModel, BlockChange blockChange)
-  {
-    placeRelative(oldModel,blockChange);
-    delete(oldModel);
+  public void placeRelativeKeyword(string oldKeyword, string newKeyword, BlockChange blockChange){
+    foreach (Article block in AutoAlteration.Blocks.GetArticlesWithKeywords(new string[] {oldKeyword})) {
+      string newBlock = AutoAlteration.Blocks.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
+      placeRelative(block.Name, newBlock, blockChange);
+    }
+    foreach (Article block in AutoAlteration.Items.GetArticlesWithKeywords(new string[] {oldKeyword})) {
+      string newBlock = AutoAlteration.Items.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
+      placeRelative(block.Name, newBlock, blockChange);
+    }
   }
-  
+
+  public void placeRelativeKeyword(string oldKeyword, string newKeyword){
+    placeRelativeKeyword(oldKeyword, newKeyword, null);
+  }
+
+  public void placeRelativeGroup(string[] keywords, string block, BlockChange blockChange){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(keywords).ForEach(article => placeRelative(article.Name,block,blockChange));
+    AutoAlteration.Items.GetArticlesWithKeywords(keywords).ForEach(article => placeRelative(article.Name,block,blockChange));
+  }
+  public void placeRelativeGroup(string[] keywords, string block){
+    placeRelativeGroup(keywords, block, null);
+  }
+  public void placeRelativeGroup(string keyword, string block, BlockChange blockChange){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => placeRelative(article.Name,block,blockChange));
+    AutoAlteration.Items.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => placeRelative(article.Name,block,blockChange));
+  }
+  public void placeRelativeGroup(string keyword, string block){
+    placeRelativeGroup(keyword, block, null);
+  }
+  public void replace(string oldBlock, string newBlock, BlockChange blockChange){
+    placeRelative(oldBlock, newBlock, blockChange);
+    delete(oldBlock);
+  }
+
+  public void replace(string[] oldBlocks, string newBlock, BlockChange blockChange){
+    placeRelative(oldBlocks, newBlock, blockChange);
+    delete(oldBlocks);
+  }
+
+  public void replace(string oldBlock, string newBlock){
+    placeRelative(oldBlock, newBlock);
+    delete(oldBlock);
+  }
+
+  public void replace(string[] oldBlocks, string newBlock){
+    placeRelative(oldBlocks, newBlock);
+    delete(oldBlocks);
+  }
+
+  public void replaceKeyword(string oldKeyword, string newKeyword, BlockChange blockChange){
+    foreach (Article block in AutoAlteration.Blocks.GetArticlesWithKeywords(new string[] {oldKeyword})) {
+      string newBlock = AutoAlteration.Blocks.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
+      replace(block.Name, newBlock, blockChange);
+    }
+    foreach (Article block in AutoAlteration.Items.GetArticlesWithKeywords(new string[] {oldKeyword})) {
+      string newBlock = AutoAlteration.Items.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
+      replace(block.Name, newBlock, blockChange);
+    }
+  }
+
+  public void replaceKeyword(string oldKeyword, string newKeyword){
+    replaceKeyword(oldKeyword, newKeyword, null);
+  }
+
+  public void replaceGroup(string[] keywords, string block, BlockChange blockChange){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(keywords).ForEach(article => placeRelative(article.Name,block,blockChange));
+    AutoAlteration.Items.GetArticlesWithKeywords(keywords).ForEach(article => placeRelative(article.Name,block,blockChange));
+  }
+
+  public void replaceGroup(string[] keywords, string block){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(keywords).ForEach(article => placeRelative(article.Name,block));
+    AutoAlteration.Items.GetArticlesWithKeywords(keywords).ForEach(article => placeRelative(article.Name,block));
+  }
+
+  public void replaceGroup(string keyword, string block, BlockChange blockChange){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => placeRelative(article.Name,block,blockChange));
+    AutoAlteration.Items.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => placeRelative(article.Name,block,blockChange));
+  }
+
+  public void replaceGroup(string keyword, string block){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => placeRelative(article.Name,block));
+    AutoAlteration.Items.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => placeRelative(article.Name,block));
+  }
+
   public void moveBlock(string block, Vec3 offset, Vec3 rotation)
   {
-    placeRelative(block,new BlockChange(BlockType.Block, block, offset, rotation));
+    placeRelative(block, block, new BlockChange(offset, rotation));
     delete(block);
-  }
-
-  public void moveItem(string item, Vec3 offset, Vec3 rotation)
-  {
-    placeRelative(item,new BlockChange(BlockType.Item, item, offset, rotation));
-    delete(item);
   }
 
   public void moveBlock(string[] blocks, Vec3 offset, Vec3 rotation)
@@ -154,50 +206,69 @@ class Map
     }
   }
 
-  public void moveItem(string[] items, Vec3 offset, Vec3 rotation)
-  {
-    foreach(var item in items){
-      moveItem(item, offset, rotation);
-    }
+  public void moveGroup(string keyword, Vec3 offset, Vec3 rotation){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => moveBlock(article.Name, offset, rotation));
+    AutoAlteration.Items.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => moveBlock(article.Name, offset, rotation));
+  }
+
+  public void moveGroup(string[] keywords, Vec3 offset, Vec3 rotation){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(keywords).ForEach(article => moveBlock(article.Name, offset, rotation));
+    AutoAlteration.Items.GetArticlesWithKeywords(keywords).ForEach(article => moveBlock(article.Name, offset, rotation));
   }
 
   public void placeStagedBlocks(){
     foreach (var block in stagedBlocks){
-      switch (block.blockType)
-      {
-        case BlockType.Block:
-          CGameCtnBlock newBlock = map.PlaceBlock(block.model,new(0,0,0),Direction.North);
-          newBlock.IsFree = true;
-          newBlock.AbsolutePositionInMap = block.absolutePosition;
-          newBlock.PitchYawRoll = block.pitchYawRoll;
-          break;
-        case BlockType.Item:
-          map.PlaceAnchoredObject(new Ident(block.model, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
-          break;
-        default:
-          Console.WriteLine("Invalid Blocktype");
-          break;
+      if(block.name.Contains("_CustomBlock")){//TODO untested
+        if(embeddedBlocks.Any(x => x.Name == block.name)){
+          embedBlock(block.name.Replace("_CustomBlock",""));
+        }
       }
+      if (AutoAlteration.Blocks.hasArticle(block.name)){
+        CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
+        newBlock.IsFree = true;
+        newBlock.AbsolutePositionInMap = block.absolutePosition;
+        newBlock.PitchYawRoll = block.pitchYawRoll;
+      }
+      if (AutoAlteration.Items.hasArticle(block.name)){
+        map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
+      }
+      //TODO Embedded Blocks
     } 
     stagedBlocks = new List<Block>();
   }
 
-  public void delete(string modelId){
+  public void delete(string block){
     List<int> indexes;
-    List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
-    indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == modelId).Select(block => modifiedblocks.IndexOf(block)).ToList();
-    foreach(int index in indexes){
-      //TODO delete Platform underneath
-      modifiedblocks.RemoveAt(index);
+    if (AutoAlteration.Blocks.hasArticle(block)){
+      List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
+      indexes = modifiedblocks.FindAll(b => b.BlockModel.Id == block).Select(b => modifiedblocks.IndexOf(b)).ToList();
+      foreach(int index in indexes){
+        //TODO delete Platform underneath
+        modifiedblocks.RemoveAt(index);
+      }
+      map.Blocks = modifiedblocks;
     }
-    map.Blocks = modifiedblocks;
 
-    List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
-    indexes = modifiedItems.FindAll(block => block.ItemModel.Id == modelId).Select(block => modifiedItems.IndexOf(block)).ToList();
-    foreach(int index in indexes){
-      modifiedItems.RemoveAt(index);
+    if (AutoAlteration.Items.hasArticle(block)){
+      List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
+      indexes = modifiedItems.FindAll(b => b.ItemModel.Id == block).Select(b => modifiedItems.IndexOf(b)).ToList();
+      foreach(int index in indexes){
+        modifiedItems.RemoveAt(index);
+      }
+      map.AnchoredObjects = modifiedItems;
     }
-    map.AnchoredObjects = modifiedItems;
-
+  }
+  public void delete(string[] blocks){
+    foreach(var block in blocks){
+      delete(block);
+    }
+  }
+  public void deleteGroup(string[] keywords){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(keywords).ForEach(article => delete(article.Name));
+    AutoAlteration.Items.GetArticlesWithKeywords(keywords).ForEach(article => delete(article.Name));
+  }
+  public void deleteGroup(string keyword){
+    AutoAlteration.Blocks.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => delete(article.Name));
+    AutoAlteration.Items.GetArticlesWithKeywords(new string[] {keyword}).ForEach(article => delete(article.Name));
   }
 }

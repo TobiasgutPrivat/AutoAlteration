@@ -9,8 +9,8 @@ class FinishAlterations {
     private static void moveFinish(Map map, Vec3 offset){
         map.moveBlock(FinishBlock, offset, Vec3.Zero);
         map.moveBlock(MultilapBlock, offset, Vec3.Zero);
-        map.moveItem(FinishItem, offset, Vec3.Zero);
-        map.moveItem(MultilapItem, offset, Vec3.Zero);
+        map.moveBlock(FinishItem, offset, Vec3.Zero);
+        map.moveBlock(MultilapItem, offset, Vec3.Zero);
 
         map.moveBlock("GateFinish", offset, Vec3.Zero);
         map.moveBlock("GateExpandableFinish", offset, Vec3.Zero);
