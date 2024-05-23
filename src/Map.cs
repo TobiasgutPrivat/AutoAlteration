@@ -195,8 +195,15 @@ class Map
 
   public void moveBlock(string block, Vec3 offset, Vec3 rotation)
   {
-    placeRelative(block, block, new BlockChange(offset, rotation));
-    delete(block);
+    foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == block)){//blocks
+      ctnBlock.AbsolutePositionInMap = ctnBlock.AbsolutePositionInMap + offset;
+      ctnBlock.Coord = ctnBlock.Coord + new Int3((int)offset.X/32, (int)offset.Y/8, (int)offset.Z/32);
+      ctnBlock.PitchYawRoll = ctnBlock.PitchYawRoll + rotation;
+    }
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == block)){//items
+      ctnItem.AbsolutePositionInMap = ctnItem.AbsolutePositionInMap + offset;
+      ctnItem.PitchYawRoll = ctnItem.PitchYawRoll + rotation;
+    }
   }
 
   public void moveBlock(string[] blocks, Vec3 offset, Vec3 rotation)
@@ -216,7 +223,10 @@ class Map
     AutoAlteration.Items.GetArticlesWithKeywords(keywords).ForEach(article => moveBlock(article.Name, offset, rotation));
   }
 
-  public void placeStagedBlocks(){//TODO Try sort by coordinates for correct connections (for example Gatefinish)
+  public void placeStagedBlocks(){
+    //TODO Try sort by coordinates for correct connections (for example Gatefinish)
+    stagedBlocks = stagedBlocks.OrderBy(block => block.absolutePosition.X).ThenBy(block => block.absolutePosition.Y).ThenBy(block => block.absolutePosition.Z).ToList();
+
     foreach (var block in stagedBlocks){
       if(block.name.Contains("_CustomBlock")){//TODO untested
         if(embeddedBlocks.Any(x => x.Name == block.name)){
