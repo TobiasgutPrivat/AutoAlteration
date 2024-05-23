@@ -26,7 +26,7 @@ class EffectAlteration: Alteration {
 
     public static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         Inventory CPMultiLap = Blocks.select("Checkpoint");
-        CPMultiLap.add(Blocks.GetArticles("Multilap"));
+        CPMultiLap.add(Blocks.select("Multilap"));
 
         string GateSpecial = "GateSpecial" + Effect;
         map.placeRelative(MultilapBlock, GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));

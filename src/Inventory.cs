@@ -19,6 +19,8 @@ class Inventory {
 
     public void add(List<Article> articles) =>
         this.articles.Concat(articles).ToList();
+    public void add(Inventory inventory) =>
+        this.articles.Concat(inventory.articles).ToList();
 
     public List<Article> GetArticles(string[] keywords) =>
         articles.Where(a => keywords.All(k => a.Keywords.Contains(k))).ToList();
