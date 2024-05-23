@@ -216,7 +216,7 @@ class Map
     AutoAlteration.Items.GetArticlesWithKeywords(keywords).ForEach(article => moveBlock(article.Name, offset, rotation));
   }
 
-  public void placeStagedBlocks(){
+  public void placeStagedBlocks(){//TODO Try sort by coordinates for correct connections (for example Gatefinish)
     foreach (var block in stagedBlocks){
       if(block.name.Contains("_CustomBlock")){//TODO untested
         if(embeddedBlocks.Any(x => x.Name == block.name)){

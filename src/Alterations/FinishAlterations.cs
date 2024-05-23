@@ -18,27 +18,27 @@ using GBX.NET.Engines.Game;
 //     }
 
 class OneUP: Alteration {
-    public static void OneUP(Map map){
+    public override void run(Map map){
         map.moveGroup("Finish", new Vec3(0,8,0), Vec3.Zero);
     }
 }
 class TwoUP: Alteration {
-    public static void TwoUP(Map map){
+    public override void run(Map map){
         map.moveGroup("Finish", new Vec3(0,16,0), Vec3.Zero);
     }
 }
 class OneRight: Alteration {
-    public static void OneRight(Map map){
+    public override void run(Map map){
         map.moveGroup("Finish", new Vec3(-32,0,0), Vec3.Zero);
     }
 }
 class OneLeft: Alteration {
-    public static void OneLeft(Map map){
+    public override void run(Map map){
         map.moveGroup("Finish", new Vec3(32,0,0), Vec3.Zero);
     }
 }
 class OneDown: Alteration {
-    public static void OneDown(Map map){
+    public override void run(Map map){
         map.moveGroup("Finish", new Vec3(0,-8,0), Vec3.Zero);
     }
 }
