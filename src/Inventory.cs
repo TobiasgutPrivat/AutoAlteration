@@ -7,6 +7,11 @@ class Inventory {
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
         articles = lines.Select(line => new Article(line.Trim(),Keywords)).ToList();
     }
+    public void addInventory(string inventoryPath,string[] Keywords) {
+        string json = File.ReadAllText(inventoryPath);
+        string[] lines = JsonConvert.DeserializeObject<string[]>(json);
+        articles.Add(lines.Select(line => new Article(line.Trim(),Keywords)).ToList());
+    }
 
     public List<Article> GetArticlesWithKeywords(string[] keywords) {
         List<Article> articlesWithAllKeywords = new List<Article>();

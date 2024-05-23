@@ -1,6 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
-class EffectAlterations {
+class EffectAlteration: Alteration {
     static float PI = (float)Math.PI;
     static string[] StartBlock = new string[] {"PlatformTechStart","RoadTechStart","RoadDirtStart","RoadBumpStart","RoadIceStart","PlatformTechStart","PlatformDirtStart","PlatformIceStart","PlatformGrassStart","PlatformPlasticStart","PlatformWaterStart"};
     static string[] MultilapBlock = new string[] {"PlatformTechMultilap","RoadTechMultilap","RoadDirtMultilap","RoadBumpMultilap","RoadIceMultilap","RoadWaterMultilap","PlatformTechMultilap","PlatformDirtMultilap","PlatformIceMultilap","PlatformGrassMultilap","PlatformPlasticMultilap","PlatformWaterMultilap"};
@@ -55,8 +55,6 @@ class EffectAlterations {
         map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
         map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Left));
 
-        //todo
-
         map.placeStagedBlocks();
     }
     private static void placeStartEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
@@ -67,44 +65,62 @@ class EffectAlterations {
         map.placeRelative(GateStart8m,"GateSpecial8m" + Effect,new BlockChange(new Vec3(0,0,forwardOffset-10),rotation));
         map.placeStagedBlocks();
     }
-
+}
+class NoBrake: EffectAlteration {
     public static void NoBrake(Map map){
         placeCPEffect(map,"NoBrake",1,Vec3.Zero);
         placeStartEffect(map,"NoBrake",1,Vec3.Zero);
     }
-
+}
+class Cruise: EffectAlteration {
     public static void Cruise(Map map){
         placeCPEffect(map,"Cruise",1,Vec3.Zero);
     }
+}
 
+class Fragile: EffectAlteration {
     public static void Fragile(Map map){
         placeCPEffect(map,"Fragile",1,Vec3.Zero);
         placeStartEffect(map,"Fragile",1,Vec3.Zero);
     }
+}
 
+class SlowMo: EffectAlteration {
     public static void SlowMo(Map map){
         placeCPEffect(map,"SlowMotion",1,Vec3.Zero);
         placeStartEffect(map,"SlowMotion",1,Vec3.Zero);
     }
+}
 
+class NoSteer: EffectAlteration {
     public static void NoSteer(Map map){
         placeCPEffect(map,"NoSteering",1,Vec3.Zero);
         placeStartEffect(map,"NoSteering",1,Vec3.Zero);
     }
+}
 
+class Glider: EffectAlteration {
     public static void Glider(Map map){
-        placeCPEffect(map,"Boost",1,Vec3.Zero);
+        placeCPEffect(map,"Boost",1,Vec3.Zero);//TODO Boost (Red/Yellow)
         placeStartEffect(map,"Boost",1,Vec3.Zero);
     }
+}
+
+class Reactor: EffectAlteration {
     public static void Reactor(Map map){
         placeCPEffect(map,"Boost",1,Vec3.Zero);
         placeStartEffect(map,"Boost",1,Vec3.Zero);
     }
+}
+
+class ReactorDown: EffectAlteration {
     public static void ReactorDown(Map map){
         placeCPEffect(map,"Boost",1,new Vec3(PI,0,0));
         placeStartEffect(map,"Boost",1,new Vec3(PI,0,0));
     }
+}
 
+class FreeWheel: EffectAlteration {
     public static void FreeWheel(Map map){
         placeCPEffect(map,"NoEngine",1,Vec3.Zero);
         placeStartEffect(map,"NoEngine",3,Vec3.Zero);
