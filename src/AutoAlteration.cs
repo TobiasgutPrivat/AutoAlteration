@@ -1,14 +1,4 @@
 class AutoAlteration {
-    public static Inventory Blocks;
-    public static Inventory Items;
-
-    public static void load(string projectFolder) {
-        string[] Keywords = File.ReadAllLines(projectFolder + "src/Configuration/Keywords.txt");
-        Array.Sort(Keywords, (a, b) => b.Length.CompareTo(a.Length));
-        Blocks = new Inventory(projectFolder + "src/Configuration/Blocks.json",Keywords);
-        // Blocks.addInventory(projectFolder + "src/Configuration/Macroblocks.json",Keywords);//TODO test Macroblocks
-        Items = new Inventory(projectFolder + "src/Configuration/Items.json",Keywords);
-    }
 
     public static void alter(List<Alteration> alterations, Map map) {
         foreach (Alteration alteration in alterations) {
@@ -56,9 +46,5 @@ class AutoAlteration {
     }
     public static void alterFile(Alteration alteration, string mapFile, string Name) {
         alterFile(alteration,mapFile,Path.GetDirectoryName(mapFile),Name);
-    }
-
-    public static void checkDuplicateNames(){
-        //TODO
     }
 }

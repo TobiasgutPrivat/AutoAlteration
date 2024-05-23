@@ -2,70 +2,48 @@ using Newtonsoft.Json;
 class Inventory {
     public List<Article> articles = new List<Article>();
 
+    public Inventory(List<Article> articles) {this.articles = articles;}
     public Inventory(string inventoryPath,string[] Keywords) {
         string json = File.ReadAllText(inventoryPath);
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
         articles = lines.Select(line => new Article(line.Trim(),Keywords)).ToList();
     }
-    public void addInventory(string inventoryPath,string[] Keywords) {
-        string json = File.ReadAllText(inventoryPath);
-        string[] lines = JsonConvert.DeserializeObject<string[]>(json);
-        lines.Select(line => new Article(line.Trim(),Keywords)).ToList().ForEach(articles.Add);
-    }
+    public Inventory select(string[] Keywords) =>
+        new Inventory(GetArticles(Keywords));
+    public Inventory select(string Keyword) =>
+        new Inventory(GetArticles(Keyword));
+    public Inventory select(string[] Keywords,string[] excludeKeywords) =>
+        new Inventory(GetArticles(Keywords,excludeKeywords));
+    public Inventory select(string Keyword,string[] excludeKeywords) =>
+        new Inventory(GetArticles(Keyword,excludeKeywords));
 
-    public List<Article> GetArticlesWithKeywords(string[] keywords) {
-        List<Article> articlesWithAllKeywords = new List<Article>();
-        foreach (var article in articles) {
-            bool hasAllKeywords = true;
-            foreach (var keyword in keywords) {
-                if (keyword == "Dirt" && article.Name == "OpenTechRoadEndSlope2Straight") {
-                    Console.WriteLine(!article.Keywords.Any(k => k == keyword));
-                }
-                if (!article.Keywords.Any(k => k == keyword)) {
-                    hasAllKeywords = false;
-                    break;
-                }
-                if (keyword == "Dirt" && article.Name == "OpenTechRoadEndSlope2Straight") {
-                    article.Keywords.Select(k => k).ToList().ForEach(Console.WriteLine);
-                }
-            }
-            if (hasAllKeywords) {
-                articlesWithAllKeywords.Add(article);
-            }
-        }
-        return articlesWithAllKeywords;
-    }
+    public void add(List<Article> articles) =>
+        this.articles.Concat(articles).ToList();
 
-    public Article GetExactArticleWithKeywords(string[] keywords) {
-        foreach (var article in articles) {
-            bool hasAllKeywords = true;
-            foreach (var keyword in keywords) {
-                if (!article.Keywords.Any(k => k == keyword)) {
-                    hasAllKeywords = false;
-                    break;
-                }
-            }
-            int totalLength = keywords.Aggregate(0, (sum, keyword) => sum + keyword.Length);
-            if (hasAllKeywords && totalLength == article.Name.Length) {
-                return article;
-            }
-        }
-        return null;
-    }
-    
-    public List<Article> GetArticlesWithKeywords(List<string> keywords) {
-        return GetArticlesWithKeywords(keywords.Select(k => k).ToArray());
-    }
-    public Article GetExactArticleWithKeywords(List<string> keywords) {
-        return GetExactArticleWithKeywords(keywords.Select(k => k).ToArray());
-    }
+    public List<Article> GetArticles(string[] keywords) =>
+        articles.Where(a => keywords.All(k => a.Keywords.Contains(k))).ToList();
+
+    public List<Article> GetArticles(string[] keywords,string[] excludeKeywords) =>
+        GetArticles(keywords).Where(a => !excludeKeywords.Any(k => a.Keywords.Contains(k))).ToList();
+    public List<Article> GetArticles(string keyword) =>
+        articles.Where(a => a.Keywords.Contains(keyword)).ToList();
+
+    public List<Article> GetArticles(string keyword,string[] excludeKeywords) =>
+        GetArticles(keyword).Where(a => !excludeKeywords.Any(k => a.Keywords.Contains(k))).ToList();
 
     public Article ArticleReplaceKeyword(Article article, string oldKeyword, string newKeyword) {
+        Console.WriteLine("Replace " + oldKeyword + " with " + newKeyword + " in " + article.Name);
         List<string> keywords = article.Keywords.ToList();
         keywords.RemoveAll(k => k == oldKeyword);
         keywords.Add(newKeyword);
-        Article newarticle = GetExactArticleWithKeywords(keywords);
-        return newarticle;
+        List<Article> newArticle = GetArticles(keywords.ToArray());
+        if (newArticle.Count() > 1) {
+            Console.WriteLine("ArticleReplaceKeyword: More than one found article with keywords: " + keywords + " -> " + newArticle.Select(a => a.Name).ToArray());
+        }
+        if (newArticle.Count() == 0) {
+            Console.WriteLine("ArticleReplaceKeyword: No found article with keywords: " + keywords);
+        }
+        return newArticle.First();
     }
     public List<Article> ArticleReplaceKeyword(List<Article> articles, string oldKeyword, string newKeyword) {
         List<Article> newArticles = new List<Article>();
