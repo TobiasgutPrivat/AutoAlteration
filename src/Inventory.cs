@@ -8,13 +8,13 @@ class Inventory {
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
         articles = lines.Select(line => new Article(line.Trim(),Keywords)).ToList();
     }
-    public Inventory select(string[] Keywords) =>
-        new Inventory(GetArticles(Keywords));
-    public Inventory select(string Keyword) =>
-        new Inventory(GetArticles(Keyword));
-    public Inventory select(string[] Keywords,string[] excludeKeywords) =>
+    // public Inventory select(string[] Keywords) =>
+    //     new Inventory(GetArticles(Keywords));
+    // public Inventory select(string Keyword) =>
+    //     new Inventory(GetArticles(Keyword));
+    public Inventory select(string[] Keywords,string[] excludeKeywords = null) =>
         new Inventory(GetArticles(Keywords,excludeKeywords));
-    public Inventory select(string Keyword,string[] excludeKeywords) =>
+    public Inventory select(string Keyword,string[] excludeKeywords = null) =>
         new Inventory(GetArticles(Keyword,excludeKeywords));
 
     public void add(List<Article> articles) =>
@@ -27,6 +27,7 @@ class Inventory {
 
     public List<Article> GetArticles(string[] keywords,string[] excludeKeywords) =>
         GetArticles(keywords).Where(a => !excludeKeywords.Any(k => a.Keywords.Contains(k))).ToList();
+
     public List<Article> GetArticles(string keyword) =>
         articles.Where(a => a.Keywords.Contains(keyword)).ToList();
 

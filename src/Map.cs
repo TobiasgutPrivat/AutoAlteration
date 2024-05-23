@@ -86,7 +86,7 @@ class Map
     });
   }
 
-  public void placeRelative(string atBlock, string newBlock, BlockChange blockChange){
+  public void placeRelative(string atBlock, string newBlock, BlockChange blockChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){//blocks
       stagedBlocks.Add(new Block(ctnBlock,newBlock,blockChange));
     }
@@ -95,21 +95,13 @@ class Map
     }
   }
 
-  public void placeRelative(string[] atBlocks, string newBlock, BlockChange blockChange){
+  public void placeRelative(string[] atBlocks, string newBlock, BlockChange blockChange = null){
     foreach(var atBlock in atBlocks){
       placeRelative(atBlock, newBlock, blockChange);
     }
   }
 
-  public void placeRelative(string[] atBlocks, string newBlock){
-    placeRelative(atBlocks, newBlock, null);
-  }
-
-  public void placeRelative(string atBlock, string newBlock){
-    placeRelative(atBlock, newBlock, null);
-  }
-
-  public void placeRelativeKeyword(string oldKeyword, string newKeyword, BlockChange blockChange){
+  public void placeRelativeKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
     foreach (Article block in Alteration.Blocks.GetArticles(new string[] {oldKeyword})) {
       string newBlock = Alteration.Blocks.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
       placeRelative(block.Name, newBlock, blockChange);
@@ -120,31 +112,17 @@ class Map
     }
   }
 
-  public void placeRelativeKeyword(string oldKeyword, string newKeyword){
-    placeRelativeKeyword(oldKeyword, newKeyword, null);
-  }
-
-  public void replace(string oldBlock, string newBlock, BlockChange blockChange){
+  public void replace(string oldBlock, string newBlock, BlockChange blockChange = null){
     placeRelative(oldBlock, newBlock, blockChange);
     delete(oldBlock);
   }
 
-  public void replace(string[] oldBlocks, string newBlock, BlockChange blockChange){
+  public void replace(string[] oldBlocks, string newBlock, BlockChange blockChange = null){
     placeRelative(oldBlocks, newBlock, blockChange);
     delete(oldBlocks);
   }
 
-  public void replace(string oldBlock, string newBlock){
-    placeRelative(oldBlock, newBlock);
-    delete(oldBlock);
-  }
-
-  public void replace(string[] oldBlocks, string newBlock){
-    placeRelative(oldBlocks, newBlock);
-    delete(oldBlocks);
-  }
-
-  public void replaceKeyword(string oldKeyword, string newKeyword, BlockChange blockChange){
+  public void replaceKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
     foreach (Article block in Alteration.Blocks.GetArticles(new string[] {oldKeyword})) {
       string newBlock = Alteration.Blocks.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
       replace(block.Name, newBlock, blockChange);
@@ -153,10 +131,6 @@ class Map
       string newBlock = Alteration.Items.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
       replace(block.Name, newBlock, blockChange);
     }
-  }
-
-  public void replaceKeyword(string oldKeyword, string newKeyword){
-    replaceKeyword(oldKeyword, newKeyword, null);
   }
 
   public void move(string block, Vec3 offset, Vec3 rotation)
@@ -179,16 +153,25 @@ class Map
     }
   }
 
-  public void placeStagedBlocks(){
-    //TODO Try sort by coordinates for correct connections (for example Gatefinish)
-    stagedBlocks = stagedBlocks.OrderBy(block => block.absolutePosition.X).ThenBy(block => block.absolutePosition.Y).ThenBy(block => block.absolutePosition.Z).ToList();
+  public void move(string block, Vec3 offset)
+  {
+    move(block, offset, Vec3.Zero);
+  }
 
+  public void move(string[] blocks, Vec3 offset)
+  {
+    move(blocks, offset, Vec3.Zero);
+  }
+
+  public void placeStagedBlocks(){
     foreach (var block in stagedBlocks){
-      if(block.name.Contains("_CustomBlock")){//TODO untested
-        if(embeddedBlocks.Any(x => x.Name == block.name)){
-          embedBlock(block.name.Replace("_CustomBlock",""));
-        }
-      } else
+      //TODO Embedded Blocks
+      // if(block.name.Contains("_CustomBlock")){
+      //   if(embeddedBlocks.Any(x => x.Name == block.name)){
+      //     embedBlock(block.name.Replace("_CustomBlock",""));
+      //   }
+      // }
+      
       if (Alteration.Blocks.hasArticle(block.name)){
         CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
         newBlock.IsFree = true;
@@ -200,7 +183,6 @@ class Map
       } else {
         Console.WriteLine("Block not found: " + block.name);
       }
-      //TODO Embedded Blocks
     } 
     stagedBlocks = new List<Block>();
   }
