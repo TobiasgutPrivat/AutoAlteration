@@ -1,6 +1,7 @@
 class Article {
     public string Name;
     public List<string> Keywords = new List<string>();
+    char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
 
     public Article(string name){ 
         this.Name = name;
@@ -9,6 +10,92 @@ class Article {
         this.Name = name;
         loadKeywords(keywordLines);
     }
+
+    public bool hasKeyword(string keyword) =>
+        Keywords.Any(k => k = keyword);
+
+    public bool match(string keywordFilter) {
+        bool current = false;
+        bool and = false;
+        bool or = false;
+        bool invert = false;
+        while (keywordFilter.Length > 0) {
+            switch (keywordFilter[index]) {
+            case '&':
+                and = true;
+                keywordFilter = keywordFilter.Substring(1);
+                break;
+            case '|':
+                or = true;
+                keywordFilter = keywordFilter.Substring(1);
+                break;
+            case '!':
+                invert = true;
+                keywordFilter = keywordFilter.Substring(1);
+                break;
+            case '(':
+                bool result = match(keywordFilter.Substring(1, getEndBracePos(keywordFilter) - 1));
+                if (invert) {
+                    result = !result;
+                    invert = false;
+                }
+                if (and) {
+                    current &= result;
+                    and = false;
+                } else if (or) {
+                    current |= result;
+                    or = false;
+                } else {
+                    current = result;
+                }
+                keywordFilter = keywordFilter.Substring(getEndBracePos(keywordFilter) + 1);
+                break;
+            default:
+                current = hasKeyword(keywordFilter.Substring(0, nextPos() - 1));
+                keywordFilter = keywordFilter.Substring(nextPos() - 1);
+                if (invert) {
+                    result = !result;
+                    invert = false;
+                }
+                if (and) {
+                    current &= result;
+                    and = false;
+                } else if (or) {
+                    current |= result;
+                    or = false;
+                } else {
+                    current = result;
+                }
+                break;
+            }
+        }
+        return current;
+    }
+
+    private int nextPos(string text) =>
+        text.IndexOfAny(systemCharacters);
+
+    private int getEndBracePos(string text) {
+        int depth = 0;
+        int i = 0;
+        foreach (char character in text)
+        {
+            if (character == '(') {
+                depth++;
+            }
+            if (character == ')'){
+                depth--;
+            }
+            if(depth = 0){
+                return i;
+            }
+            i++;
+        }
+    }
+
+    private bool isSystemCharacter(char character) => 
+        systemCharacters.Contains(character);
+
 
     public void loadKeywords(string[] keywordLines) {
         string name = this.Name;
