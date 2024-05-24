@@ -131,7 +131,7 @@ class Map
       replace(article.Name, inventory.ArticleReplaceKeyword(article, oldKeyword, newKeyword).Name, blockChange);
     }
   }
-  public void editKeyword(Inventory inventory, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){//TODO add/remove untested
+  public void editKeyword(Inventory inventory, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){//TODO use seperator instead of Array
       replace(article.Name, inventory.ArticleReplaceKeyword(article, addKeywords,removeKeywords).Name, blockChange);
   }
 

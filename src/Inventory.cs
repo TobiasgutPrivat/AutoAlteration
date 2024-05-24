@@ -8,39 +8,23 @@ class Inventory {
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
         articles = lines.Select(line => new Article(line.Trim(),Keywords)).ToList();
     }
-    // public Inventory select(string[] Keywords) => 
-    //     new Inventory(GetArticles(Keywords));
-    // public Inventory select(string Keyword) =>
-    //     new Inventory(GetArticles(Keyword));
-    public Inventory select(string[] Keywords,string[] excludeKeywords = null) =>//TODO test exclude = null
-        new Inventory(GetArticles(Keywords,excludeKeywords));
-    public Inventory select(string Keyword,string[] excludeKeywords = null) =>
-        new Inventory(GetArticles(Keyword,excludeKeywords));
-
-    public Inventory selectAny(string[] Keywords) =>
-        new Inventory(GetArticlesanyMatch(Keywords));
+    public Inventory select(string keywordFilter) =>
+        new Inventory(GetArticles(keywordFilter));
+    public string[] select(string keywordFilter) =>
+        GetArticles(keywordFilter).Select(a => a.Name).ToArray();
 
     public void add(List<Article> articles) =>
-        this.articles.Concat(articles).ToList();
+        this.articles.Concat(articles);
     public void add(Inventory inventory) =>
-        articles.Concat(inventory.articles).ToList();
-    public string[] names(Inventory inventory) =>
-        articles.select(a => a.Name).ToArray();
+        articles.Concat(inventory.articles);
+    // public string[] names(Inventory inventory) =>
+    //     articles.select(a => a.Name).ToArray();
 
-    public List<Article> GetArticles(string[] keywords) => //TODO try keywords as string using (and &) (or |)
-        articles.Where(a => keywords.All(k => a.Keywords.Contains(k))).ToList();
+    public List<Article> GetArticles(string keywordFilter) => //TODO try keywords as string using (and &) (or |)
+        articles.Where(a => a.match(keywordFilter));
 
-    public List<Article> GetArticlesanyMatch(string[] keywords) =>
-        articles.Where(a => keywords.Any(k => a.Keywords.Contains(k))).ToList();
-
-    public List<Article> GetArticles(string[] keywords,string[] excludeKeywords) =>
-        GetArticles(keywords).Where(a => !excludeKeywords.Any(k => a.Keywords.Contains(k))).ToList();
-
-    public List<Article> GetArticles(string keyword) =>
-        articles.Where(a => a.Keywords.Contains(keyword)).ToList();
-
-    public List<Article> GetArticles(string keyword,string[] excludeKeywords) =>
-        GetArticles(keyword).Where(a => !excludeKeywords.Any(k => a.Keywords.Contains(k))).ToList();
+    public List<Article> GetArticles(string[] keywords) =>
+        articles.Where(a => keywords.All(k => a.Keywords.Contains(k)));
 
     public Article ArticleReplaceKeyword(Article article, string addKeyword, string removeKeyword) {
         ArticleReplaceKeyword(article, new[] {addKeyword}, new[] {removeKeyword});
