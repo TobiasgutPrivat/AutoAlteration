@@ -1,27 +1,30 @@
 using GBX.NET;
 
-class OneUP: Alteration {
+class FinishAlteration: Alteration {
+    private List<Article> finishArticles = GetArticles("Finish");
+}
+class OneUP: FinishAlteration {
     public override void run(Map map){
-        map.move(GetArticles("Finish"), new Vec3(0,8,0));
+        map.move(finishArticles, new Vec3(0,8,0));
     }
 }
-class TwoUP: Alteration {
+class TwoUP: FinishAlteration {
     public override void run(Map map){
-        map.move(GetArticles("Finish"), new Vec3(0,16,0));
+        map.move(finishArticles, new Vec3(0,16,0));
     }
 }
-class OneRight: Alteration {
+class OneRight: FinishAlteration {
     public override void run(Map map){
-        map.move(GetArticles("Finish"), new Vec3(-32,0,0));
+        map.move(finishArticles, new Vec3(-32,0,0));
     }
 }
-class OneLeft: Alteration {
+class OneLeft: FinishAlteration {
     public override void run(Map map){
-        map.move(GetArticles("Finish"), new Vec3(32,0,0));
+        map.move(finishArticles, new Vec3(32,0,0));
     }
 }
-class OneDown: Alteration {
+class OneDown: FinishAlteration {
     public override void run(Map map){
-        map.move(GetArticles("Finish"), new Vec3(0,-8,0));
+        map.move(finishArticles, new Vec3(0,-8,0));
     }
 }

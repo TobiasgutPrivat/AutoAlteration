@@ -25,8 +25,8 @@ class EffectAlteration: Alteration {
     static string[] DiagLeft = new string[]{"RoadTechDiagLeftMultilap","RoadDirtDiagLeftMultilap","RoadBumpDiagLeftMultilap","RoadIceDiagLeftMultilap","RoadTechDiagLeftCheckpoint","RoadDirtDiagLeftCheckpoint","RoadBumpDiagLeftCheckpoint"};
 
     public static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
-        Inventory CPMultiLap = Blocks.select("Checkpoint");
-        CPMultiLap.add(Blocks.select("Multilap"));
+        Inventory CPMultiLap = Blocks.selectAny(new string[] {"Checkpoint","Multilap"});
+        BlockChange zero = new BlockChange(new Vec3(0,0,forwardOffset),rotation);
 
         string GateSpecial = "GateSpecial" + Effect;
         map.placeRelative(MultilapBlock, GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
@@ -36,28 +36,27 @@ class EffectAlteration: Alteration {
         map.placeRelative(CPRoadBlockTilt, GateSpecial,new BlockChange(new Vec3(0,-12,forwardOffset),rotation));
         map.placeRelative(DiagRight, GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
         map.placeRelative(DiagLeft, GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
-        map.placeRelative("GateCheckpoint", GateSpecial,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative("GateCheckpoint", GateSpecial, zero);
 
-        string GateSpecial32m = "GateSpecial32m" + Effect;
-        map.placeRelative(GateCP32m,GateSpecial32m,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative("GateCheckpointCenter24m",GateSpecial32m,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative(GateCP16m,"GateSpecial16m" + Effect,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative(GateCP8m,"GateSpecial8m" + Effect,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
+        Inventory GateCPMultilap = Items.select("Gate").selectAny(new[] {"Checkpoint","Multilap"});
+        map.editKeyword(GateCPMultilap, new[]{GateSpecial,"Special"}, new[] {"Checkpoint","Left","Right"}, zero);//TODO untested
+        map.editKeyword(GateCPMultilap, new[]{GateSpecial,"Special"}, new[] {"Multilap","Left","Right"}, zero);
 
-        map.placeRelative(IceWallRight,GateSpecial32m,new BlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
-        map.placeRelative(IceWallRight,GateSpecial32m,new BlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation));
-        map.placeRelative(IceWallLeft,GateSpecial32m,new BlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
-        map.placeRelative(IceWallLeft,GateSpecial32m,new BlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation));
+        Inventory BobsleighCPMultiLap = CPMultiLap.select(new[] {"Road","Ice"});
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","Right"}).names,GateSpecial32m,new BlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","Right"}).names,GateSpecial32m,new BlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","Left"}).names,GateSpecial32m,new BlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","Left"}).names,GateSpecial32m,new BlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation));
 
-        map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
-        map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Right));
-        map.placeRelative(DiagIceWallsRightLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
-        map.placeRelative(DiagIceWallsRightLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Right));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagRight","Right"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagRight","Right"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Right));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagRight","Left"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagRight","Left"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Right));
 
-        map.placeRelative(DiagIceWallsLeftRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
-        map.placeRelative(DiagIceWallsLeftRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Left));
-        map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
-        map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Left));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagLeft","Right"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagLeft","Right"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Left));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagLeft","Left"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
+        map.placeRelative(BobsleighCPMultiLap.select(new[] {"Wall","DiagLeft","Left"}).names,GateSpecial32m,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Left));
 
         map.placeStagedBlocks();
     }
@@ -112,15 +111,15 @@ class Glider: EffectAlteration {
 
 class Reactor: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"Boost",1,Vec3.Zero);
-        placeStartEffect(map,"Boost",1,Vec3.Zero);
+        placeCPEffect(map,"Boost2",1,Vec3.Zero);
+        placeStartEffect(map,"Boost2",1,Vec3.Zero);
     }
 }
 
 class ReactorDown: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"Boost",1,new Vec3(PI,0,0));
-        placeStartEffect(map,"Boost",1,new Vec3(PI,0,0));
+        placeCPEffect(map,"Boost2",1,new Vec3(PI,0,0));
+        placeStartEffect(map,"Boost2",1,new Vec3(PI,0,0));
     }
 }
 

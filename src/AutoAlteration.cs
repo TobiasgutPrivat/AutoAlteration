@@ -4,11 +4,9 @@ class AutoAlteration {
         foreach (Alteration alteration in alterations) {
             alteration.run(map);
         }
-        map.placeStagedBlocks();//TODO check if reasonable here
     }
     public static void alter(Alteration alteration, Map map) {
         alteration.run(map);
-        map.placeStagedBlocks();
     }
 
     public static void alterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {

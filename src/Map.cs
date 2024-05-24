@@ -123,14 +123,16 @@ class Map
   }
 
   public void replaceKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
-    foreach (Article block in Alteration.Blocks.GetArticles(new string[] {oldKeyword})) {
-      string newBlock = Alteration.Blocks.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
-      replace(block.Name, newBlock, blockChange);
+    replaceKeyword(Alteration.Blocks, oldKeyword, newKeyword, blockChange);
+    replaceKeyword(Alteration.Items, oldKeyword, newKeyword, blockChange);
+  }
+  public void replaceKeyword(Inventory inventory, string oldKeyword, string newKeyword, BlockChange blockChange = null){
+    foreach (Article article in inventory.GetArticles(new string[] {oldKeyword})) {
+      replace(article.Name, inventory.ArticleReplaceKeyword(article, oldKeyword, newKeyword).Name, blockChange);
     }
-    foreach (Article block in Alteration.Items.GetArticles(new string[] {oldKeyword})) {
-      string newBlock = Alteration.Items.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
-      replace(block.Name, newBlock, blockChange);
-    }
+  }
+  public void editKeyword(Inventory inventory, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){//TODO add/remove untested
+      replace(article.Name, inventory.ArticleReplaceKeyword(article, addKeywords,removeKeywords).Name, blockChange);
   }
 
   public void move(string block, Vec3 offset, Vec3 rotation)
