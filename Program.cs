@@ -1,11 +1,13 @@
 ﻿//Initial load
-AutoAlteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"); //Path to this project folder
+
 //Code for Execution (change for your use)
 
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2020 FreeWheel temp/";
-AutoAlteration.alterFolder(new FreeWheel(), sourcefolder, destinationFolder, "FreeWheel");
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
+// AutoAlteration.alterFolder(new FreeWheel(), sourcefolder, destinationFolder + "Spring 2024 FreeWheel temp/", "FreeWheel");
+AutoAlteration.alterFolder(new OneUP(), sourcefolder, destinationFolder + "Spring 2024 1-UP/", "1-UP");
 
 // //Single File Processing
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2020 alpha/Spring 2020 - S12.map.gbx";
