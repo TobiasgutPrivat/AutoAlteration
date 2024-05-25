@@ -15,53 +15,53 @@ Some basic knowledge of Coding will be usefull but not required.
 3. After installation you can write your code in Program.cs and execute it with F5
 
 ### Usage
-For Usage all Code should be written in Program.cs
+The Tool can be used by writting Code in Program.cs
 
-To alterate a map you need a object of the class "Map"
-> Map yourMapVar = new Map("SomeFolder/YourMap.Map.Gbx");
+#### Load
+First the Inventory needs to be loaded with
+> Alteration.load("currentProjectFolder");
 
-You can apply mutiple Alterations to your map like that:
-> EffectAlterations.FreeWheel(yourMapVar);
-\
-> CPAlterations.STTF(yourMapVar);
+for example
 
-All the Alterations are implemented in the "Alterations" Folder in the Project Folder.
+> Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
-Then you can save your map like that:
+#### Alteration
+There are multiple Functions for Alterations in the AutoAlteration class
 
-> yourMapVar.save("SomeFolder/YourMap Altered.Map.Gbx");
+Example Alter All Maps in a Folder to FreeWheel:
+> string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";\
+> string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2024 FreeWheel/";\
+> AutoAlteration.alterFolder(new FreeWheel(), sourcefolder, destinationFolder, "FreeWheel");
 
-Here is an example on how to alter all maps in a Folder to FreeWheel:
+sourceFolder: the Folder the Maps are in
 
->string sourcefolder = "C:/Users\\Tobias\\Documents\\Trackmania2020\\Maps\\Nadeo Maps\\Summer 2020\\";
-\
->string destinationFolder = "C:/Users\\Tobias\\Documents\\Trackmania2020\\Maps\\My-Maps\\Altered Nadeo\\Summer 2020 FreeWheel\\";
-\
->string[] files = Directory.GetFiles(sourcefolder);
-\
->foreach (string file in files)
-\
->{
-\
->    Map map = new Map(file);
-\
->    EffectAlterations.FreeWheel(map);
-\
->    map.map.MapName = Path.GetFileName(file).Substring(0, Path.GetFileName(file).Length - 8) + " FreeWheel";
-\
->    map.save(destinationFolder + Path.GetFileName(file).Substring(0, Path.GetFileName(file).Length - 8) + " 
-\
->    FreeWheel.map.gbx");
-\
->}
+destinationfolder: the Folder the Maps will be saved in
 
-### Alterations
+new FreeWheel(): declaration that the FreeWheel Alteration should be applied
+
+Name: The Name that will be put at the end of the Map- and Filename
+
+#### Multiple Alterations
+You can apply Multiple Alterations at once by making a list of them like this:
+
+> new List<Alteration>{new anAlteration(), new otherAlterations(), ...}
+
+This for example alterates the maps with FreeWheel and OneUp:
+>AutoAlteration.alterFolder(new List<Alteration>{new FreeWheel(), new OneUP()}, sourcefolder, destinationFolder, "FreeWheel (1-UP)");
+
+### Implementation of Alterations
 You can freely make new Alterations, your also asked to share them (see Contribution below)
 
 The Alterations can be edited or new ones can be created within the "Alterations" Folder
-\
-They should be in a reasonable called class and need to be public statis Functions with a map Parameter, like that:
-> public static void FreeWheel(Map map){}
+
+They should be in a reasonable called class and need to inherit the class Alteration and implement the run(Map map) function
+
+Example for OneUp:
+> class OneUP: Alteration {\
+>    public override void run(Map map){\
+>        map.move(Blocks.select("Finish"), new Vec3(0,8,0));\
+>    }
+>}
 
 Within this Function you can use the Functions provided in the Map to alter it.
 \
@@ -83,7 +83,7 @@ Example: delete all CheckpointRings:
 The Blockchange defines the new Block to be placed.
 
 Example: place a BoostRing at every RoadTechCheckpoint with an offset of 1m forwards
-> map.placeRelative("RoadTechCheckpoint", new BlockChange("GateSpecial" + Effect,new Vec3(0,-12,forwardOffset),rotation));
+> map.placeRelative("RoadTechCheckpoint", "GateSpecialTurbo", new BlockChange(new Vec3(0,-12,forwardOffset),rotation));
 
 Any placed Blocks get staged and need to be placed later by calling:
 
@@ -93,6 +93,14 @@ Any placed Blocks get staged and need to be placed later by calling:
 
 Example: replace a RoadTechCheckpoint with a Booster
 > map.replace("RoadTechCheckpoint",new BlockChange("RoadTechSpecialTurbo"));
+
+#### Block Selction
+
+There is also the option to select Blocks by Keywords
+
+Example place a Turboring at every CP or Multilap Block:
+
+> map.placeRelative(Blocks.select("Checkpoint|Multilap"), "GateSpecialTurbo");
 
 **Further Functionality** : please look at other Alterations how to do it.
 
@@ -105,7 +113,6 @@ I also made a Plugin to get the selected BlockModelId in editor (Also there will
 To install: Clone it into your Plugin Folder (Its not released yet)
 
 ## Known Issues/Bugs
-- Probably some Alterations have incorrect Configurations
 - A weird Problem when deleting boosters causing the map to not be loadable
 - When deleting Blocks the base Platform stays there. (Good for replacing but bad for CPLess)
 - Everything marked with //TODO in the Project
