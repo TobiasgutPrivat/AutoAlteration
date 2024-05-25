@@ -90,15 +90,15 @@ class NoSteer: EffectAlteration {
 
 class Glider: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"Boost",1,Vec3.Zero);//TODO Boost (Red/Yellow)
-        placeStartEffect(map,"Boost",1,Vec3.Zero);
+        placeCPEffect(map,"BoostOriented",1,Vec3.Zero);
+        placeStartEffect(map,"BoostOriented",1,Vec3.Zero);
     }
 }
 
 class Reactor: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"Boost2",1,Vec3.Zero);
-        placeStartEffect(map,"Boost2",1,Vec3.Zero);
+        placeCPEffect(map,"Boost2Oriented",1,Vec3.Zero);
+        placeStartEffect(map,"Boost2Oriented",1,Vec3.Zero);
     }
 }
 
