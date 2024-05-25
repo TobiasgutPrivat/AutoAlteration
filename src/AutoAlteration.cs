@@ -32,12 +32,10 @@ class AutoAlteration {
         alter(alterations, map);
         map.map.MapName = Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name;
         map.save(destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx");
+        Console.WriteLine(map.map.MapName);
     }
     public static void alterFile(Alteration alteration, string mapFile, string destinationFolder, string Name) {
-        Map map = new Map(mapFile);
-        alter(alteration, map);
-        map.map.MapName = Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name;
-        map.save(destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx");
+        alterFile(new List<Alteration>{alteration},mapFile,destinationFolder,Name);
     }
     public static void alterFile(List<Alteration> alterations, string mapFile, string Name) {
         alterFile(alterations,mapFile,Path.GetDirectoryName(mapFile),Name);

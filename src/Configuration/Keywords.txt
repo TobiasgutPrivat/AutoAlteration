@@ -5,11 +5,12 @@ Branch
 TShaped
 Cross
 Track
-Wall
 Curve
 Chicane
 Left
 Slope2
+Wall
+With
 1X4
 1x1
 X1
@@ -93,7 +94,7 @@ Back
 Small
 Torch
 Fogger
-With
+WithWall
 Light
 Speaker
 SpeakerB
@@ -115,7 +116,7 @@ End
 Multilap
 Turbo
 Turbo2
-Roulette
+TurboRoulette
 Boost
 Temple
 Podium

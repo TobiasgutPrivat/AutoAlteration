@@ -138,9 +138,20 @@ class Map
       replace(article.Name, inventory.ArticleReplaceKeyword(article, oldKeyword, newKeyword).Name, blockChange);
     }
   }
-  public void editKeyword(Inventory inventory, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){//TODO use seperator instead of Array
-    foreach (Article article in inventory.GetArticles(addKeywords)){
-      replace(article.Name, inventory.ArticleReplaceKeyword(article, addKeywords,removeKeywords).Name, blockChange);
+  public void replaceKeyword(Inventory inventory, string keywordFilter, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){
+    foreach (Article article in inventory.GetArticles(keywordFilter)) {
+      Article newArticle = inventory.ArticleReplaceKeyword(article, addKeywords, removeKeywords);
+      if (newArticle != null){
+        replace(article.Name, newArticle.Name, blockChange);
+      }
+    }
+  }
+  public void placeOtherKeywords(Inventory inventory, string keywordFilter, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){//TODO opt. use seperator instead of Array
+    foreach (Article article in inventory.GetArticles(keywordFilter)) {
+      Article newArticle = inventory.ArticleReplaceKeyword(article, addKeywords, removeKeywords);
+      if (newArticle != null){
+        placeRelative(article.Name, newArticle.Name, blockChange);
+      }
     }
   }
 
@@ -211,6 +222,7 @@ class Map
     if (Alteration.Blocks.hasArticle(block)){
       List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
       indexes = modifiedblocks.FindAll(b => b.BlockModel.Id == block).Select(b => modifiedblocks.IndexOf(b)).ToList();
+      indexes.Reverse();
       foreach(int index in indexes){
         //TODO delete Platform underneath
         modifiedblocks.RemoveAt(index);
@@ -221,6 +233,7 @@ class Map
     if (Alteration.Items.hasArticle(block)){
       List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
       indexes = modifiedItems.FindAll(b => b.ItemModel.Id == block).Select(b => modifiedItems.IndexOf(b)).ToList();
+      indexes.Reverse();
       foreach(int index in indexes){
         modifiedItems.RemoveAt(index);
       }

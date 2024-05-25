@@ -18,7 +18,7 @@ class Inventory {
     public string[] names() =>
         articles.Select(a => a.Name).ToArray();
 
-    public List<Article> GetArticles(string keywordFilter) => //TODO bad performance
+    public List<Article> GetArticles(string keywordFilter) =>
         articles.Where(a => a.match(keywordFilter)).ToList();
 
     public List<Article> GetArticles(string[] keywords) =>
@@ -33,10 +33,13 @@ class Inventory {
         keywords.RemoveAll(k => removeKeywords.Contains(k));
         List<Article> newArticle = GetArticles(keywords.ToArray());
         if (newArticle.Count() > 1) {
-            Console.WriteLine("ArticleReplaceKeyword: More than one found article with keywords: " + keywords + " -> " + newArticle.Select(a => a.Name).ToArray());
+            Console.WriteLine(article.Name + ": More than one found article with keywords: " + string.Join(", ", keywords));
+            Console.WriteLine("Articles: " + string.Join(", ", newArticle.Select(a => a.Name).ToArray()));
+            return null;
         }
         if (newArticle.Count() == 0) {
-            Console.WriteLine("ArticleReplaceKeyword: No found article with keywords: " + keywords);
+            Console.WriteLine(article.Name + ": No found article with keywords: " + string.Join(", ", keywords));
+            return null;
         }
         return newArticle.First();
     }

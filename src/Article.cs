@@ -23,9 +23,6 @@ class Article {
         bool or = false;
         bool invert = false;
         bool result;
-        if (Name == "PlatformIceSlope2Start"){
-            //Debug
-        }
         if (cacheFilter.ContainsKey(keywordFilter)) {
             return cacheFilter[keywordFilter];
         }
