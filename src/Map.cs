@@ -101,6 +101,10 @@ class Map
     }
   }
 
+  public void placeRelative(Inventory inventory, string newBlock, BlockChange blockChange = null){
+    placeRelative(inventory.names(), newBlock, blockChange);
+  }
+
   public void placeRelativeKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
     foreach (Article block in Alteration.Blocks.GetArticles(new string[] {oldKeyword})) {
       string newBlock = Alteration.Blocks.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
@@ -121,6 +125,9 @@ class Map
     placeRelative(oldBlocks, newBlock, blockChange);
     delete(oldBlocks);
   }
+  public void replace(Inventory inventory, string newBlock, BlockChange blockChange = null){
+    replace(inventory.names(), newBlock, blockChange);
+  }
 
   public void replaceKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
     replaceKeyword(Alteration.Blocks, oldKeyword, newKeyword, blockChange);
@@ -132,7 +139,9 @@ class Map
     }
   }
   public void editKeyword(Inventory inventory, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){//TODO use seperator instead of Array
+    foreach (Article article in inventory.GetArticles(addKeywords)){
       replace(article.Name, inventory.ArticleReplaceKeyword(article, addKeywords,removeKeywords).Name, blockChange);
+    }
   }
 
   public void move(string block, Vec3 offset, Vec3 rotation)
@@ -154,6 +163,10 @@ class Map
       move(block, offset, rotation);
     }
   }
+  public void move(Inventory inventory, Vec3 offset, Vec3 rotation)
+  {
+    move(inventory.names(), offset, rotation);
+  }
 
   public void move(string block, Vec3 offset)
   {
@@ -163,6 +176,10 @@ class Map
   public void move(string[] blocks, Vec3 offset)
   {
     move(blocks, offset, Vec3.Zero);
+  }
+  public void move(Inventory inventory, Vec3 offset)
+  {
+    move(inventory.names(), offset, Vec3.Zero);
   }
 
   public void placeStagedBlocks(){
@@ -214,5 +231,8 @@ class Map
     foreach(var block in blocks){
       delete(block);
     }
+  }
+  public void delete(Inventory inventory){
+    delete(inventory.names());
   }
 }

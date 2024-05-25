@@ -1,7 +1,7 @@
 using GBX.NET;
 
 class FinishAlteration: Alteration {
-    private List<Article> finishArticles = GetArticles("Finish");
+    public Inventory finishArticles = Blocks.select("Finish");
 }
 class OneUP: FinishAlteration {
     public override void run(Map map){

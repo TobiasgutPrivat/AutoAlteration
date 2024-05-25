@@ -10,27 +10,24 @@ class Inventory {
     }
     public Inventory select(string keywordFilter) =>
         new Inventory(GetArticles(keywordFilter));
-    public string[] select(string keywordFilter) =>
-        GetArticles(keywordFilter).Select(a => a.Name).ToArray();
 
     public void add(List<Article> articles) =>
-        this.articles.Concat(articles);
+        this.articles.AddRange(articles);
     public void add(Inventory inventory) =>
-        articles.Concat(inventory.articles);
-    // public string[] names(Inventory inventory) =>
-    //     articles.select(a => a.Name).ToArray();
+        articles.AddRange(inventory.articles);
+    public string[] names() =>
+        articles.Select(a => a.Name).ToArray();
 
-    public List<Article> GetArticles(string keywordFilter) => //TODO try keywords as string using (and &) (or |)
-        articles.Where(a => a.match(keywordFilter));
+    public List<Article> GetArticles(string keywordFilter) => //TODO bad performance
+        articles.Where(a => a.match(keywordFilter)).ToList();
 
     public List<Article> GetArticles(string[] keywords) =>
-        articles.Where(a => keywords.All(k => a.Keywords.Contains(k)));
+        articles.Where(a => keywords.All(k => a.Keywords.Contains(k))).ToList();
 
-    public Article ArticleReplaceKeyword(Article article, string addKeyword, string removeKeyword) {
+    public Article ArticleReplaceKeyword(Article article, string addKeyword, string removeKeyword) =>
         ArticleReplaceKeyword(article, new[] {addKeyword}, new[] {removeKeyword});
-    }
+    
     public Article ArticleReplaceKeyword(Article article, string[] addKeywords, string[] removeKeywords) {
-        Console.WriteLine("Replace " + oldKeyword + " with " + newKeyword + " in " + article.Name);
         List<string> keywords = article.Keywords.ToList();
         keywords.AddRange(addKeywords);
         keywords.RemoveAll(k => removeKeywords.Contains(k));
