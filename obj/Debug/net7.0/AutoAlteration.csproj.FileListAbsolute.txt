@@ -22,3 +22,28 @@ c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\obj\Debug\net7.0
 c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\bin\Debug\net7.0\Newtonsoft.Json.dll
 c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\bin\Debug\net7.0\GBX.NET.ZLib.dll
 c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\bin\Debug\net7.0\Iconic.Zlib.Netstandard.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\AutoAlteration.exe
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\AutoAlteration.deps.json
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\AutoAlteration.runtimeconfig.json
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\AutoAlteration.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\AutoAlteration.pdb
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\GBX.NET.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\GBX.NET.LZO.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\GBX.NET.ZLib.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\Iconic.Zlib.Netstandard.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\Newtonsoft.Json.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\TmEssentials.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.csproj.AssemblyReference.cache
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.AssemblyInfoInputs.cache
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.AssemblyInfo.cs
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.csproj.CoreCompileInputs.cache
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.sourcelink.json
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlte.889FD324.Up2Date
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\refint\AutoAlteration.dll
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.pdb
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\AutoAlteration.genruntimeconfig.cache
+c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\ref\AutoAlteration.dll

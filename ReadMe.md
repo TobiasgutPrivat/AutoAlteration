@@ -12,7 +12,8 @@ Some basic knowledge of Coding will be usefull but not required.
 ### Installation
 1. Clone this GitHub Repository
 2. You need some form of IDE, I recommend VSCode with C# Dev Kit 
-3. After installation you can write your code in Program.cs and execute it with F5
+3. You need Dotnet 7.0 and Nuget installed, also make sure to have correct package source using (dotnet nuget add source https://api.nuget.org/v3/index.json) in Console
+4. After installation you can write your code in Program.cs and execute it with F5
 
 ### Usage
 The Tool can be used by writting Code in Program.cs
