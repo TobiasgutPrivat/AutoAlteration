@@ -1,5 +1,7 @@
 ﻿//Initial load
-Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"); //Path to this project folder
+Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"); //Path to this project folder
+// Alteration.exportInventory("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"); //Path to this project folder
+// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"); //Path to this project folder
 
 //Code for Execution (change for your use)
 
