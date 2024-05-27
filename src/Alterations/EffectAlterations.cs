@@ -10,7 +10,7 @@ class EffectAlteration: Alteration {
     // static string[] GateCP8m = new string[] {"GateCheckpointLeft8m","GateCheckpointCenter8mv2","GateCheckpointRight8m","GateMultilapLeft8m","GateMultilapCenter8m","GateMultilapRight8m"};
 
     public static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
-        Inventory CPMultiLap = Blocks.select("Checkpoint|Multilap");
+        Inventory CPMultiLap = inventory.select("Checkpoint|Multilap");
         BlockChange zero = new BlockChange(new Vec3(0,0,forwardOffset),rotation);
 
         string GateSpecial = "GateSpecial" + Effect;
@@ -21,7 +21,7 @@ class EffectAlteration: Alteration {
         map.placeRelative(CPMultiLap.select("DiagLeft&!Ice"), GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
         map.placeRelative("GateCheckpoint", GateSpecial, zero);
 
-        map.placeOtherKeywords(Items,"Gate&(Checkpoint|Multilap)", new[]{Effect,"Special"}, new[] {"Multilap","Checkpoint","Left","Right","Center","v2"}, zero);
+        map.placeOtherKeywords(inventory,"Gate&(Checkpoint|Multilap)", new[]{Effect,"Special"}, new[] {"Multilap","Checkpoint","Left","Right","Center","v2"}, zero);
 
         map.placeRelative(CPMultiLap.select("Road&Ice&!WithWall&!DiagRight&!DiagLeft"), GateSpecial,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
         map.placeRelative(CPMultiLap.select("Road&DiagRight&Ice&!WithWall"), GateSpecial,new EffectDiagBlockChange(new Vec3(0,-8,forwardOffset),rotation,LeftRight.Right));
@@ -47,11 +47,11 @@ class EffectAlteration: Alteration {
         map.placeStagedBlocks();
     }
     public static void placeStartEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
-        Inventory start = Blocks.select("Start&!Slope2&!Deco");
+        Inventory start = inventory.select("Start&!Slope2&!Deco");
         map.placeRelative(start.select("!Water&!(Road&Ice)"), "GateSpecial" + Effect,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
         map.placeRelative(start.select("Road&Ice"), "GateSpecial" + Effect,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
         map.placeRelative("RoadWaterStart", "GateSpecial" + Effect,new BlockChange(new Vec3(0,-16,forwardOffset-2),rotation));
-        map.placeOtherKeywords(Items, "Start&!Slope", new[]{Effect,"Special"}, new[] {"Start","Left","Right","Center","v2"}, new BlockChange(new Vec3(0,0,forwardOffset-10),rotation));
+        map.placeOtherKeywords(inventory, "Start&!Slope", new[]{Effect,"Special"}, new[] {"Start","Left","Right","Center","v2"}, new BlockChange(new Vec3(0,0,forwardOffset-10),rotation));
         map.placeStagedBlocks();
     }
 }
