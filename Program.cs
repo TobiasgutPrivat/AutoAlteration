@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 //Initial load
 // Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
-Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"); //Path to this project folder
-
+// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"); //Path to this project folder
+stringToArticles("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/",BlockType.Block);
 //Code for Execution (change for your use)
 
 //Folder Processing
@@ -17,10 +17,10 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 
 
 //Function to convert list of block names to Serializable Articles
-void stringToArticles(string projectFolder, ArticleType type) {
-    string[] Keywords = File.ReadAllLines("src/Configuration/Keywords.json");
+void stringToArticles(string projectFolder, BlockType type) {
+    string[] Keywords = File.ReadAllLines(projectFolder + "src/Configuration/Keywords.txt");
     Array.Sort(Keywords, (a, b) => b.Length.CompareTo(a.Length));
-    Inventory inventory = new Inventory(projectFolder + "src/Configuration/Source.json",Keywords);
+    Inventory inventory = new Inventory(projectFolder + "src/Configuration/Items.json",Keywords);
     inventory.articles.ForEach(x => x.Type = type);
     string json = JsonConvert.SerializeObject(inventory.articles);
     File.WriteAllText(projectFolder + "src/Configuration/Destination.json", json);

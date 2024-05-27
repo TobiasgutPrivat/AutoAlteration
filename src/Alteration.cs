@@ -18,7 +18,7 @@ class Alteration {
         string json = File.ReadAllText(filePath);
         List<Article> articles = JsonConvert.DeserializeObject<List<Article>>(json);
         inventory = new Inventory(articles);
-        inventory.articles.ForEach(x => Console.WriteLine(x.Name + x.Type));
+        // inventory.articles.ForEach(x => Console.WriteLine(x.Name + x.Type));
     }
     // public static void checkDuplicateNames(){
     //     //TODO

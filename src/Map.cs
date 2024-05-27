@@ -106,12 +106,8 @@ class Map
   }
 
   public void placeRelativeKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
-    foreach (Article block in Alteration.Blocks.GetArticles(new string[] {oldKeyword})) {
-      string newBlock = Alteration.Blocks.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
-      placeRelative(block.Name, newBlock, blockChange);
-    }
-    foreach (Article block in Alteration.Items.GetArticles(new string[] {oldKeyword})) {
-      string newBlock = Alteration.Items.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
+    foreach (Article block in Alteration.inventory.GetArticles(new string[] {oldKeyword})) {
+      string newBlock = Alteration.inventory.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
       placeRelative(block.Name, newBlock, blockChange);
     }
   }
@@ -130,8 +126,7 @@ class Map
   }
 
   public void replaceKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
-    replaceKeyword(Alteration.Blocks, oldKeyword, newKeyword, blockChange);
-    replaceKeyword(Alteration.Items, oldKeyword, newKeyword, blockChange);
+    replaceKeyword(Alteration.inventory, oldKeyword, newKeyword, blockChange);
   }
   public void replaceKeyword(Inventory inventory, string oldKeyword, string newKeyword, BlockChange blockChange = null){
     foreach (Article article in inventory.GetArticles(new string[] {oldKeyword})) {
@@ -201,17 +196,21 @@ class Map
       //     embedBlock(block.name.Replace("_CustomBlock",""));
       //   }
       // }
-      
-      if (Alteration.Blocks.hasArticle(block.name)){
-        CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-        newBlock.IsFree = true;
-        newBlock.AbsolutePositionInMap = block.absolutePosition;
-        newBlock.PitchYawRoll = block.pitchYawRoll;
-      } else
-      if (Alteration.Items.hasArticle(block.name)){
-        map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
-      } else {
+      List<Article> article = Alteration.inventory.articles.Where(x => x.Name == block.name).ToList();
+      if (article.Count != 1) {
         Console.WriteLine("Block not found: " + block.name);
+      } else {
+        switch (article.First().Type){
+          case BlockType.Block:
+            CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
+            newBlock.IsFree = true;
+            newBlock.AbsolutePositionInMap = block.absolutePosition;
+            newBlock.PitchYawRoll = block.pitchYawRoll;
+            break;
+          case BlockType.Item:
+            map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
+            break;
+        }
       }
     } 
     stagedBlocks = new List<Block>();
@@ -219,25 +218,31 @@ class Map
 
   public void delete(string block){
     List<int> indexes;
-    if (Alteration.Blocks.hasArticle(block)){
-      List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
-      indexes = modifiedblocks.FindAll(b => b.BlockModel.Id == block).Select(b => modifiedblocks.IndexOf(b)).ToList();
-      indexes.Reverse();
-      foreach(int index in indexes){
-        //TODO delete Platform underneath
-        modifiedblocks.RemoveAt(index);
+    List<Article> article = Alteration.inventory.articles.Where(x => x.Name == block).ToList();
+    if (article.Count != 1) {
+      Console.WriteLine("Block not found: " + block);
+    } else {
+      switch (article.First().Type){
+        case BlockType.Block:
+          List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
+          indexes = modifiedblocks.FindAll(b => b.BlockModel.Id == block).Select(b => modifiedblocks.IndexOf(b)).ToList();
+          indexes.Reverse();
+          foreach(int index in indexes){
+            //TODO delete Platform underneath
+            modifiedblocks.RemoveAt(index);
+          }
+          map.Blocks = modifiedblocks;
+          break;
+        case BlockType.Item:
+        List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
+        indexes = modifiedItems.FindAll(b => b.ItemModel.Id == block).Select(b => modifiedItems.IndexOf(b)).ToList();
+        indexes.Reverse();
+        foreach(int index in indexes){
+          modifiedItems.RemoveAt(index);
+        }
+        map.AnchoredObjects = modifiedItems;
+          break;
       }
-      map.Blocks = modifiedblocks;
-    }
-
-    if (Alteration.Items.hasArticle(block)){
-      List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
-      indexes = modifiedItems.FindAll(b => b.ItemModel.Id == block).Select(b => modifiedItems.IndexOf(b)).ToList();
-      indexes.Reverse();
-      foreach(int index in indexes){
-        modifiedItems.RemoveAt(index);
-      }
-      map.AnchoredObjects = modifiedItems;
     }
   }
   public void delete(string[] blocks){

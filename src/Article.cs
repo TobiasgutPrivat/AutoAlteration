@@ -1,17 +1,13 @@
-enum ArticleType {
-    Block,
-    Item
-}
 class Article {
     public string Name;
-    public ArticleType Type;
+    public BlockType Type;
     public List<string> Keywords = new List<string>();
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
 
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
 
     public Article() { }
-    public Article(string name,ArticleType type,List<string> keywords){ 
+    public Article(string name,BlockType type,List<string> keywords){ 
         this.Name = name;
         this.Type = type;
         this.Keywords = keywords;
