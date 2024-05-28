@@ -58,4 +58,8 @@ class Inventory {
     public bool hasArticle(string name) {
         return articles.Any(article => article.Name == name);
     }
+    
+    // public static void checkDuplicateKeywords(){
+    //     //TODO
+    // }
 }

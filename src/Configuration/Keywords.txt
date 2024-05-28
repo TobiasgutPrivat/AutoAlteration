@@ -6,7 +6,16 @@ TShaped
 Cross
 Track
 Curve
+Curve1
+Curve2
+Curve3
+Curve4
+Curve5
 Chicane
+ChicaneX2
+ChicaneX3
+LoopStart
+LoopEnd
 Left
 Slope2
 Wall

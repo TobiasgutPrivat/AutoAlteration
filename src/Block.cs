@@ -14,26 +14,19 @@ class Block {
     public Vec3 absolutePosition;
     public Vec3 pitchYawRoll;
 
-    public Block(CGameCtnBlock block){
-        initBlock(block);
-    }
-
-    public Block(CGameCtnBlock block, BlockChange blockChange)
+    public Block(CGameCtnBlock block, BlockChange blockChange = null)
     {
         initBlock(block);
         if (blockChange != null) {
             blockChange.changeBlock(block, this);
         }
     }
-    public Block(CGameCtnBlock block, string name){
-        initBlock(block);
-        this.name = name;
-    }
 
-    public Block(CGameCtnBlock block, string name, BlockChange blockChange)
+    public Block(CGameCtnBlock block, string name, BlockChange blockChange = null)
     {
         initBlock(block);
         this.name = name;
+        //TODO change blocktype by name
         if (blockChange != null) {
             blockChange.changeBlock(block, this);
         }
@@ -72,21 +65,19 @@ class Block {
         }
     }
 
-    public Block(CGameCtnAnchoredObject item){
+    public Block(CGameCtnAnchoredObject item,BlockChange blockChange = null){
         initBlock(item);
+        if (blockChange != null) {
+            blockChange.changeItem(item, this);
+        }
     }
-    public Block(CGameCtnAnchoredObject item,BlockChange blockChange){
-        initBlock(item);
-        blockChange.changeItem(item, this);
-    }
-    public Block(CGameCtnAnchoredObject item, string name){
+    public Block(CGameCtnAnchoredObject item, string name,BlockChange blockChange = null){
         initBlock(item);
         this.name = name;
-    }
-    public Block(CGameCtnAnchoredObject item, string name,BlockChange blockChange){
-        initBlock(item);
-        this.name = name;
-        blockChange.changeItem(item, this);
+        //TODO change blocktype by name
+        if (blockChange != null) {
+            blockChange.changeItem(item, this);
+        }
     }
 
     public void initBlock(CGameCtnAnchoredObject item){
