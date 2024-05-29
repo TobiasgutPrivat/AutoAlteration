@@ -2,12 +2,9 @@ using Newtonsoft.Json;
 class Inventory {
     public List<Article> articles = new List<Article>();
 
+    public Inventory() {}
     public Inventory(List<Article> articles) {this.articles = articles;}
-    public Inventory(string inventoryPath,string[] Keywords) {
-        string json = File.ReadAllText(inventoryPath);
-        string[] lines = JsonConvert.DeserializeObject<string[]>(json);
-        articles = lines.Select(line => new Article(line.Split('/')[line.Split('/').Length-1].Trim(),Keywords)).ToList();
-    }
+    
     public Inventory select(string keywordFilter) =>
         new Inventory(GetArticles(keywordFilter));
 
@@ -59,7 +56,32 @@ class Inventory {
         return articles.Any(article => article.Name == name);
     }
     
-    public void checkInventory(){//used for Development
+    //Development Section ------------------------------------------------------------------------------------------------------
+    public void checkDuplicates(){
+        articles.ForEach(article => {
+            List<Article> tempArticles = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));
+            tempArticles.ForEach(article2 => {
+                if (article2.Name != article.Name){
+                    bool match = true;
+
+                    article.Keywords.ForEach(k => {
+                        if (article2.Keywords.Contains(k)){
+                            article2.Keywords.Remove(k);
+                        } else {
+                            match = false;
+                        }
+                    });
+                    if (article2.Keywords.Count > 0) {
+                        match = false;
+                    }
+                    if (match) {
+                        Console.WriteLine(article.Name + " matches " + article2.Name);
+                    }
+                };
+            });
+        });
+    }
+    public void checkKeywords(){
         articles.ForEach(article => {
             if (GetArticles(article.Keywords.ToArray()).Where(a => a.Keywords.Count == article.Keywords.Count).Count() > 1 ) {
                 Console.WriteLine(article.Name + ": More than one found article with keywords: " + string.Join(", ", article.Keywords) + "\nFound Articles: " + string.Join(", ", GetArticles(article.Keywords.ToArray()).Where(a => a.Keywords.Count == article.Keywords.Count).Select(a => a.Name).ToArray()));
@@ -85,5 +107,17 @@ class Inventory {
             });
         });
         Console.WriteLine("Keywords left: " + string.Join(", ", Keywords));
+    }
+
+    public void changeKeywords(string[] removeKeyword, string[] addKeyword) {
+        articles.ForEach(article => {
+            article.Keywords.AddRange(addKeyword);
+            removeKeyword.ToList().ForEach(k => article.Keywords.Remove(k));
+        });
+    }
+    public void print() {
+        articles.ForEach(article => {
+            Console.WriteLine(article.Name + ": " + string.Join(", ", article.Keywords));
+        });
     }
 }
