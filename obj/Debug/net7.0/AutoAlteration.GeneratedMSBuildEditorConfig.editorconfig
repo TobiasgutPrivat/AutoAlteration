@@ -8,6 +8,4 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = AutoAlteration
-build_property.ProjectDir = C:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.ProjectDir = c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\

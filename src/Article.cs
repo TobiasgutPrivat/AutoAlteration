@@ -114,11 +114,18 @@ class Article {
 
     public void loadKeywords(string[] keywordLines) {
         string name = this.Name;
-        foreach (var keywordLine in keywordLines) {//Max 2 of one keyword
+        foreach (var keywordLine in keywordLines) {//Max 4 of one keyword
             if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
                 Keywords.Add(keywordLine);
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
-                // name = name.Replace(keywordLine, "");
+            }
+            if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
+                Keywords.Add(keywordLine);
+                name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
+            }
+            if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
+                Keywords.Add(keywordLine);
+                name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
             }
             if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
                 Keywords.Add(keywordLine);
