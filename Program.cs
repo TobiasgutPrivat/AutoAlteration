@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json;
 //Initial load
+//"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
+//"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
+//"blockChange": null -> "blockChange":{"absolutePosition":{"X":0.0,"Y":0.0,"Z":0.0},"pitchYawRoll":{"X":0.0,"Y":0.0,"Z":0.0}}
 Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
 Alteration.inventory.checkInventory();
-// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"); //Path to this project folder
+
 // stringToArticles("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/",BlockType.Block);
 //Code for Execution (change for your use)
 
@@ -25,4 +28,11 @@ void stringToArticles(string projectFolder, BlockType type) {
     inventory.articles.ForEach(x => x.Type = type);
     string json = JsonConvert.SerializeObject(inventory.articles);
     File.WriteAllText(projectFolder + "src/Configuration/Destination.json", json);
+}
+void stringToName(string projectFolder) {
+    string json = File.ReadAllText(projectFolder + "src/Configuration/Items.json");
+    string[] lines = JsonConvert.DeserializeObject<string[]>(json);
+    string[] articles = lines.Select(line => line.Split('/')[line.Split('/').Length-1].Trim()).ToArray();
+    json = JsonConvert.SerializeObject(articles);
+    File.WriteAllText(projectFolder + "src/Configuration/ItemNames.json", json);
 }
