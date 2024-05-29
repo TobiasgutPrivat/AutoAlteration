@@ -1,5 +1,6 @@
 class Article {
     public string Name;
+    public BlockChange blockChange;
     public BlockType Type;
     public List<string> Keywords = new List<string>();
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
@@ -7,13 +8,15 @@ class Article {
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
 
     public Article() { }
-    public Article(string name,BlockType type,List<string> keywords){ 
+    public Article(string name,BlockType type,List<string> keywords,BlockChange blockChange){ 
         this.Name = name;
         this.Type = type;
         this.Keywords = keywords;
+        this.blockChange = blockChange;
     }
     public Article(string name,string[] keywordLines){ 
         this.Name = name;
+        blockChange = null;
         loadKeywords(keywordLines);
     }
 

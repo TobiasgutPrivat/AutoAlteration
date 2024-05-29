@@ -106,6 +106,7 @@ Fogger
 WithWall
 Light
 Speaker
+Desert
 SpeakerB
 Utop
 Tower

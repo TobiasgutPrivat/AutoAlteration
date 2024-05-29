@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 //Initial load
-// Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
+Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
+Alteration.inventory.checkInventory();
 // Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"); //Path to this project folder
-stringToArticles("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/",BlockType.Block);
+// stringToArticles("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/",BlockType.Block);
 //Code for Execution (change for your use)
 
 //Folder Processing
