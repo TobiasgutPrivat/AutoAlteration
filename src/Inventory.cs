@@ -8,10 +8,9 @@ class Inventory {
     public Inventory select(string keywordFilter) =>
         new Inventory(GetArticles(keywordFilter));
 
-    public void add(List<Article> articles) =>
-        this.articles.AddRange(articles);
-    public void add(Inventory inventory) =>
-        articles.AddRange(inventory.articles);
+    public Inventory selectString(string nameString) =>
+        new Inventory(articles.Where(a => a.Name.Contains(nameString)).ToList());
+
     public string[] names() =>
         articles.Select(a => a.Name).ToArray();
 
@@ -39,17 +38,6 @@ class Inventory {
             return null;
         }
         return newArticle.First();
-    }
-    public List<Article> ArticleReplaceKeyword(List<Article> articles, string oldKeyword, string newKeyword) {
-        List<Article> newArticles = new List<Article>();
-        foreach (var article in articles) {
-            Article newarticle = ArticleReplaceKeyword(article, oldKeyword, newKeyword);
-            if (newarticle != null)
-            {
-                newArticles.Add(newarticle);
-            }
-        }
-        return newArticles;
     }
 
     public bool hasArticle(string name) {
@@ -79,6 +67,11 @@ class Inventory {
                     }
                 };
             });
+            // article.Keywords.ForEach(k => {
+            //    if (article.Keywords.Where(k2 => k == k2).Count() > 1) {
+            //        Console.WriteLine(article.Name + " contains " + k + " multiple Times");
+            //    } 
+            // });
         });
     }
     public void checkKeywords(){
@@ -112,7 +105,11 @@ class Inventory {
     public void changeKeywords(string[] removeKeyword, string[] addKeyword) {
         articles.ForEach(article => {
             article.Keywords.AddRange(addKeyword);
-            removeKeyword.ToList().ForEach(k => article.Keywords.Remove(k));
+            removeKeyword.ToList().ForEach(k => {
+                if (!article.Keywords.Remove(k)){
+                    Console.WriteLine(article.Name + ": Keyword " + k + " not found");
+                }
+            });
         });
     }
     public void print() {

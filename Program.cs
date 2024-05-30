@@ -4,22 +4,20 @@ using Newtonsoft.Json;
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
 //"blockChange": null -> "blockChange":{"absolutePosition":{"X":0.0,"Y":0.0,"Z":0.0},"pitchYawRoll":{"X":0.0,"Y":0.0,"Z":0.0}}
+Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
 
-createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
-// testBlock("DecoHillIceDeadendSlope2Curve1OutLeft");
-// Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
-// Alteration.inventory.checkInventory();
+createInventory("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
 
 //Code for Execution (change for your use)
 //Folder Processing
 // string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-// AutoAlteration.alterFolder(new FreeWheel(), sourcefolder, destinationFolder + "Spring 2024 FreeWheel temp/", "FreeWheel");
+// Alteration.alterFolder(new FreeWheel(), sourcefolder, destinationFolder + "Spring 2024 FreeWheel temp/", "FreeWheel");
 
 // //Single File Processing
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2020 alpha/Spring 2020 - S12.map.gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My-Maps/Altered Nadeo/Spring 2020 CPFull/t01 Spring 2020 CPFull.map.gbx";
-// AutoAlteration.alterFile(new FreeWheel(), sourceFile, destinationFile, "FreeWheel");
+// Alteration.alterFile(new FreeWheel(), sourceFile, destinationFile, "FreeWheel");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
@@ -38,21 +36,27 @@ void stringToName(string projectFolder) {
 }
 
 void createInventory(string projectFolder) {
-    string[] Keywords = File.ReadAllLines(projectFolder + "src/Vanilla/Keywords.txt");
-    Array.Sort(Keywords, (a, b) => b.Length.CompareTo(a.Length));
-    Inventory items = Alteration.importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json",Keywords);
+    Inventory items = Alteration.importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json");
     items.articles.ForEach(x => x.Type = BlockType.Item);
-    Inventory blocks = Alteration.importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json",Keywords);
+    Inventory blocks = Alteration.importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
     blocks.articles.ForEach(x => x.Type = BlockType.Block);
+    blocks.select("Gate").changeKeywords(new string[] { "Gate" }, new string[] { "Ring" });
+    blocks.select("To").print();
+
     Inventory inventory = new Inventory();
     inventory.articles.AddRange(items.articles);
     inventory.articles.AddRange(blocks.articles);
 
-    inventory.select("Chicane&X2").changeKeywords(new string[] { "X2" }, new string[] { "Scale2" });
-    inventory.select("Chicane&X3").changeKeywords(new string[] { "X3" }, new string[] { "Scale3" });
-    inventory.select("Deco&Hill&!Cliff").changeKeywords(new string[] { "Slope","2" }, new string[] { "Scale3" });
-    inventory.checkDuplicates();
+    // inventory.select("Straight").changeKeywords(new string[] { "Straight" }, new string[] { });//TODO some issues (Water and Slope)
+    // inventory.select("Base").changeKeywords(new string[] { "Base" }, new string[] { });//
+    inventory.select("Start").print();
+    // inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
+    // inventory.select("Deco&Hill&!Cliff").changeKeywords(new string[] { "Slope","2" }, new string[] { "Scale3" });
+    
+    // //TODO Slope2
+    // inventory.checkDuplicates();
 
-    string json = JsonConvert.SerializeObject(inventory.articles);
-    File.WriteAllText(projectFolder + "src/Inventory.json", json);
+    // inventory.articles.ForEach(x => x.cacheFilter.Clear());
+    // string json = JsonConvert.SerializeObject(inventory.articles);
+    // File.WriteAllText(projectFolder + "src/Inventory.json", json);
 }

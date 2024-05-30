@@ -3,6 +3,10 @@ class Article {
     public BlockChange blockChange;
     public BlockType Type;
     public List<string> Keywords = new List<string>();
+    public string Shape;//opt
+    public string ToShape;//opt
+    public string Surface;//opt
+
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
 
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
@@ -14,10 +18,10 @@ class Article {
         this.Keywords = keywords;
         this.blockChange = blockChange;
     }
-    public Article(string name,string[] keywordLines){ 
+    public Article(string name){ 
         this.Name = name;
         blockChange = null;
-        loadKeywords(keywordLines);
+        loadKeywords();
     }
 
     public bool hasKeyword(string keyword) =>
@@ -112,26 +116,47 @@ class Article {
         return 0;
     }
 
-    public void loadKeywords(string[] keywordLines) {
+    public void loadKeywords() {
         string name = this.Name;
-        foreach (var keywordLine in keywordLines) {//Max 4 of one keyword
+        //toshape
+        if(name.Contains("To")){
+            string[] toshapes = Alteration.shapeKeywords.Where(x => name.Substring(name.IndexOf("To") + 2).Contains(x)).ToArray();
+            if (toshapes.Count() != 1) {
+                Console.WriteLine("invalid to shape: " + name);
+            } else {
+                ToShape = toshapes.First();
+                name = name.Remove(name.IndexOf("To"), toshapes.First().Length + 2);
+            }
+        }   
+        //shape
+        string[] shapes = Alteration.shapeKeywords.Where(x => name.Contains(x)).ToArray();
+        if (shapes.Count() > 1) {
+            Console.WriteLine("to many shapes: " + name);
+        } else {
+            Shape = shapes.First();
+            name = name.Remove(name.IndexOf(shapes.First()), shapes.First().Length);
+        }
+        
+        //shape
+        string[] surface = Alteration.shapeKeywords.Where(x => name.Contains(x)).ToArray();
+        if (shapes.Count() > 1) {
+            Console.WriteLine("to many surfaces: " + name);
+        } else {
+            Shape = surface.First();
+            name = name.Remove(name.IndexOf(surface.First()), surface.First().Length);
+        }
+        
+        //Keywords
+        foreach (var keywordLine in Alteration.Keywords) {
             if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
                 Keywords.Add(keywordLine);
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
             }
             if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
-                Keywords.Add(keywordLine);
-                name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
-            }
-            if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
-                Keywords.Add(keywordLine);
-                name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
-            }
-            if (name.Contains(keywordLine) && this.Name.Contains(keywordLine)) {
-                Keywords.Add(keywordLine);
-                name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
+                Console.WriteLine("Article name contains shape: " + keywordLine + " multiple Times");
             }
         }
+        
         CheckFullNameCoverage();
     }
     private void CheckFullNameCoverage() {

@@ -1,15 +1,22 @@
 using Newtonsoft.Json;
 class Alteration {
+    public static string[] Keywords;
+    public static string[] shapeKeywords;
+    public static string[] surfaceKeywords;
     public static Inventory inventory;
-    public static Inventory Blocks;
-    public static Inventory Items;
+    // public static Inventory Blocks;
+    // public static Inventory Items;
 
     public static void load(string projectFolder) {
-        string[] Keywords = File.ReadAllLines(projectFolder + "src/Vanilla/Keywords.txt");
+        shapeKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/shapeKeywords.txt");
+        Array.Sort(shapeKeywords, (a, b) => b.Length.CompareTo(a.Length));
+        surfaceKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/surfaceKeywords.txt");
+        Array.Sort(surfaceKeywords, (a, b) => b.Length.CompareTo(a.Length));
+        Keywords = File.ReadAllLines(projectFolder + "src/Vanilla/Keywords.txt");
         Array.Sort(Keywords, (a, b) => b.Length.CompareTo(a.Length));
         inventory = importSerializedInventory(projectFolder + "src/Inventory.json");
-        Blocks = importArrayInventory(projectFolder + "src/Vanilla/Blocks.json",Keywords);
-        Items = importArrayInventory(projectFolder + "src/Vanilla/Items.json",Keywords);
+        // Blocks = importArrayInventory(projectFolder + "src/Vanilla/Blocks.json",Keywords);
+        // Items = importArrayInventory(projectFolder + "src/Vanilla/Items.json",Keywords);
     }
 
     public static Inventory importSerializedInventory(string path)
@@ -20,10 +27,53 @@ class Alteration {
         return new Inventory(articles);
     }
     
-    public static Inventory importArrayInventory(string path,string[] Keywords){
+    public static Inventory importArrayInventory(string path){
         string json = File.ReadAllText(path);
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
-        return new Inventory(lines.Select(line => new Article(line,Keywords)).ToList());
+        return new Inventory(lines.Select(line => new Article(line)).ToList());
+    }
+    public static void alter(List<Alteration> alterations, Map map) {
+        foreach (Alteration alteration in alterations) {
+            alteration.run(map);
+        }
+    }
+    public static void alter(Alteration alteration, Map map) {
+        alteration.run(map);
+    }
+
+    public static void alterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
+        foreach (string mapFile in Directory.GetFiles(mapFolder))
+        {
+            alterFile(alterations,mapFile,destinationFolder,Name);
+        }
+    }
+    public static void alterFolder(Alteration alteration, string mapFolder, string destinationFolder, string Name) {
+        foreach (string mapFile in Directory.GetFiles(mapFolder))
+        {
+            alterFile(alteration,mapFile,destinationFolder,Name);
+        }
+    }
+    public static void alterFolder(List<Alteration> alterations, string mapFolder, string Name) {
+        alterFolder(alterations,mapFolder,mapFolder,Name);
+    }
+    public static void alterFolder(Alteration alteration, string mapFolder, string Name) {
+        alterFolder(alteration,mapFolder,mapFolder,Name);
+    }
+    public static void alterFile(List<Alteration> alterations, string mapFile, string destinationFolder, string Name) {
+        Map map = new Map(mapFile);
+        alter(alterations, map);
+        map.map.MapName = Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name;
+        map.save(destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx");
+        Console.WriteLine(map.map.MapName);
+    }
+    public static void alterFile(Alteration alteration, string mapFile, string destinationFolder, string Name) {
+        alterFile(new List<Alteration>{alteration},mapFile,destinationFolder,Name);
+    }
+    public static void alterFile(List<Alteration> alterations, string mapFile, string Name) {
+        alterFile(alterations,mapFile,Path.GetDirectoryName(mapFile),Name);
+    }
+    public static void alterFile(Alteration alteration, string mapFile, string Name) {
+        alterFile(alteration,mapFile,Path.GetDirectoryName(mapFile),Name);
     }
 
     public Alteration(){}
