@@ -9,11 +9,8 @@ class Alteration {
 
     public static void load(string projectFolder) {
         shapeKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/shapeKeywords.txt");
-        Array.Sort(shapeKeywords, (a, b) => b.Length.CompareTo(a.Length));
         surfaceKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/surfaceKeywords.txt");
-        Array.Sort(surfaceKeywords, (a, b) => b.Length.CompareTo(a.Length));
         Keywords = File.ReadAllLines(projectFolder + "src/Vanilla/Keywords.txt");
-        Array.Sort(Keywords, (a, b) => b.Length.CompareTo(a.Length));
         inventory = importSerializedInventory(projectFolder + "src/Inventory.json");
         // Blocks = importArrayInventory(projectFolder + "src/Vanilla/Blocks.json",Keywords);
         // Items = importArrayInventory(projectFolder + "src/Vanilla/Items.json",Keywords);

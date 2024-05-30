@@ -62,6 +62,9 @@ class Inventory {
                     if (article2.Keywords.Count > 0) {
                         match = false;
                     }
+                    if (article.Shape != article2.Shape) {match = false;}
+                    if (article.ToShape != article2.ToShape) {match = false;}
+                    if (article.Surface != article2.Surface) {match = false;}
                     if (match) {
                         Console.WriteLine(article.Name + " matches " + article2.Name);
                     }

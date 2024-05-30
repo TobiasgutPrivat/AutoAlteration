@@ -1,8 +1,8 @@
-Tech
-Dirt
-Grass
-Ice
-Plastic
-Penalty
 PenaltyDirt
 PenaltyIce
+Plastic
+Penalty
+Grass
+Tech
+Dirt
+Ice

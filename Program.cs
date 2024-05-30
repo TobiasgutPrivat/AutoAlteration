@@ -4,9 +4,10 @@ using Newtonsoft.Json;
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
 //"blockChange": null -> "blockChange":{"absolutePosition":{"X":0.0,"Y":0.0,"Z":0.0},"pitchYawRoll":{"X":0.0,"Y":0.0,"Z":0.0}}
-Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
+Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
-createInventory("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
+// testBlock("RoadIceDiagRightToRoadIceWithWallDiagLeft");
+createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 //Code for Execution (change for your use)
 //Folder Processing
@@ -41,7 +42,7 @@ void createInventory(string projectFolder) {
     Inventory blocks = Alteration.importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
     blocks.articles.ForEach(x => x.Type = BlockType.Block);
     blocks.select("Gate").changeKeywords(new string[] { "Gate" }, new string[] { "Ring" });
-    blocks.select("To").print();
+    // blocks.select("To").print();
 
     Inventory inventory = new Inventory();
     inventory.articles.AddRange(items.articles);
@@ -49,14 +50,13 @@ void createInventory(string projectFolder) {
 
     // inventory.select("Straight").changeKeywords(new string[] { "Straight" }, new string[] { });//TODO some issues (Water and Slope)
     // inventory.select("Base").changeKeywords(new string[] { "Base" }, new string[] { });//
-    inventory.select("Start").print();
-    // inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
-    // inventory.select("Deco&Hill&!Cliff").changeKeywords(new string[] { "Slope","2" }, new string[] { "Scale3" });
+    // inventory.select("Special").print();
+    inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
     
-    // //TODO Slope2
-    // inventory.checkDuplicates();
+    //TODO Slope2
+    inventory.checkDuplicates();
 
-    // inventory.articles.ForEach(x => x.cacheFilter.Clear());
-    // string json = JsonConvert.SerializeObject(inventory.articles);
-    // File.WriteAllText(projectFolder + "src/Inventory.json", json);
+    inventory.articles.ForEach(x => x.cacheFilter.Clear());
+    string json = JsonConvert.SerializeObject(inventory.articles);
+    File.WriteAllText(projectFolder + "src/Inventory.json", json);
 }
