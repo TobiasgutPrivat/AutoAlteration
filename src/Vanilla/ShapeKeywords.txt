@@ -6,10 +6,7 @@ TrackWallWater
 OpenGrassRoad
 PlatformWater
 DecoWallWater
-OpenTechRoad
-OpenDirtRoad
 RoadInGrass
-OpenIceRoad
 ZoneCenter
 TrackWall
 ZoneRight
