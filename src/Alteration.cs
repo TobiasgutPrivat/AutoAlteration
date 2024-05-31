@@ -4,6 +4,7 @@ class Alteration {
     public static string[] shapeKeywords;
     public static string[] surfaceKeywords;
     public static Inventory inventory;
+    public static bool devMode;
     // public static Inventory Blocks;
     // public static Inventory Items;
 

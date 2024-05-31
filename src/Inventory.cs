@@ -80,6 +80,15 @@ class Inventory {
 
 
     //Development Section ------------------------------------------------------------------------------------------------------
+    public InventoryEdit editOriginal(){
+        if (!Alteration.devMode){
+            Console.WriteLine("Edit Original only available in devMode");
+            return null;
+        } else {
+            return new InventoryEdit(articles);
+        }
+    }
+
     public void checkDuplicates(){
         articles.ForEach(article => {
             List<Article> tempArticles = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));

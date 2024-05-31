@@ -38,20 +38,24 @@ void stringToName(string projectFolder) {
 }
 
 void createInventory(string projectFolder) {
+    Alteration.devMode = true;
     Inventory items = Alteration.importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json");
     items.articles.ForEach(x => x.Type = BlockType.Item);
     Inventory blocks = Alteration.importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
     blocks.articles.ForEach(x => x.Type = BlockType.Block);
-    blocks.select("Gate").changeKeywords(new string[] { "Gate" }, new string[] { "Ring" });
+    blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
 
     Inventory inventory = new Inventory();
     inventory.articles.AddRange(items.articles);
     inventory.articles.AddRange(blocks.articles);
 
-    inventory.select("Checkpoint").remove("Checkpoint").add("Straight").align().print();
+    inventory.select("Checkpoint").remove("Checkpoint").add("Straight").align().editOriginal().remove("Straight").print();
+    inventory.select("Checkpoint").remove("Checkpoint").remove("Up").add("Straight4").align().editOriginal().remove("Straight4").print();
+    inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().editOriginal().remove("StraightX2").print();
+    inventory.select("Checkpoint").remove("Checkpoint").add("Base").align().editOriginal().remove("Base").print();
+    inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
     // inventory.select("Base").changeKeywords(new string[] { "Base" }, new string[] { });//
     // inventory.select("Start").print();//rename StartBlocks
-    inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
     
     // inventory.checkDuplicates();
 

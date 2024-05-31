@@ -66,7 +66,7 @@ class InventoryEdit {
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                newarticles.Add(articles.First());
+                newarticles.Add(article);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
