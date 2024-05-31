@@ -54,7 +54,6 @@ void createInventory(string projectFolder) {
     // inventory.select("Special").print();
     inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
     
-    //TODO Slope2
     inventory.checkDuplicates();
 
     inventory.articles.ForEach(x => x.cacheFilter.Clear());

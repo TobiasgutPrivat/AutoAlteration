@@ -26,7 +26,6 @@ class Block {
     {
         initBlock(block);
         this.name = name;
-        //TODO change blocktype by name
         if (blockChange != null) {
             blockChange.changeBlock(block, this);
         }
@@ -74,7 +73,6 @@ class Block {
     public Block(CGameCtnAnchoredObject item, string name,BlockChange blockChange = null){
         initBlock(item);
         this.name = name;
-        //TODO change blocktype by name
         if (blockChange != null) {
             blockChange.changeItem(item, this);
         }

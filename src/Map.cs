@@ -141,7 +141,7 @@ class Map
   //     }
   //   }
   // }
-  // public void placeOtherKeywords(Inventory inventory, string keywordFilter, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){//TODO opt. use seperator instead of Array
+  // public void placeOtherKeywords(Inventory inventory, string keywordFilter, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){
   //   foreach (Article article in inventory.GetArticles(keywordFilter)) {
   //     Article newArticle = inventory.ArticleReplaceKeyword(article, addKeywords, removeKeywords);
   //     if (newArticle != null){
