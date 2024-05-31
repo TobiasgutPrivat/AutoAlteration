@@ -22,8 +22,12 @@ class Inventory {
 
     public InventoryEdit add(string Keyword) =>
         edit().add(Keyword);
+    public InventoryEdit add(string[] Keyword) =>
+        edit().add(Keyword);
 
     public InventoryEdit remove(string Keyword) =>
+        edit().remove(Keyword);
+    public InventoryEdit remove(string[] Keyword) =>
         edit().remove(Keyword);
 
     public InventoryEdit surface(string Keyword) =>

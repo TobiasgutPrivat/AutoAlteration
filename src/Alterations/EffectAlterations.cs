@@ -2,12 +2,6 @@ using GBX.NET;
 using GBX.NET.Engines.Game;
 class EffectAlteration: Alteration {
     public static float PI = (float)Math.PI;
-    // static string[] GateStart32m = new string[] {"GateStartLeft32m","GateStartCenter32m","GateStartRight32m"};
-    // static string[] GateStart16m = new string[] {"GateStartLeft16m","GateStartCenter16m","GateStartRight16m"};
-    // static string[] GateStart8m = new string[] {"GateStartLeft8m","GateStartCenter8m","GateStartRight8m"};
-    // static string[] GateCP32m = new string[] {"GateCheckpointLeft32m","GateCheckpointCenter32mv2","GateCheckpointRight32m","GateMultilapLeft32m","GateMultilapCenter32m","GateMultilapRight32m"};
-    // static string[] GateCP16m = new string[] {"GateCheckpointLeft16m","GateCheckpointCenter16mv2","GateCheckpointRight16m","GateMultilapLeft16m","GateMultilapCenter16m","GateMultilapRight16m"};
-    // static string[] GateCP8m = new string[] {"GateCheckpointLeft8m","GateCheckpointCenter8mv2","GateCheckpointRight8m","GateMultilapLeft8m","GateMultilapCenter8m","GateMultilapRight8m"};
 
     public static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         Inventory CPMultiLap = inventory.select("Checkpoint|Multilap");
@@ -21,7 +15,7 @@ class EffectAlteration: Alteration {
         map.placeRelative(CPMultiLap.select("DiagLeft&!Ice"), GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
         map.placeRelative("GateCheckpoint", GateSpecial, zero);
 
-        map.placeOtherKeywords(inventory,"Gate&(Checkpoint|Multilap)", new[]{Effect,"Special"}, new[] {"Multilap","Checkpoint","Left","Right","Center","v2"}, zero);
+        inventory.select("Gate&(Checkpoint|Multilap)").add(Effect).remove(new[] {"Multilap","Checkpoint","Left","Right","Center","v2"}).placeRelative(map, zero);
 
         map.placeRelative(CPMultiLap.select("Road&Ice&!WithWall&!DiagRight&!DiagLeft"), GateSpecial,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
         map.placeRelative(CPMultiLap.select("Road&DiagRight&Ice&!WithWall"), GateSpecial,new EffectDiagBlockChange(new Vec3(0,-8,forwardOffset),rotation,LeftRight.Right));
@@ -47,11 +41,11 @@ class EffectAlteration: Alteration {
         map.placeStagedBlocks();
     }
     public static void placeStartEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
-        Inventory start = inventory.select("Start&!Slope2&!Deco");
+        Inventory start = inventory.select("Start&!Slope2&!Deco");//TODO RaceStart
         map.placeRelative(start.select("!Water&!(Road&Ice)"), "GateSpecial" + Effect,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
         map.placeRelative(start.select("Road&Ice"), "GateSpecial" + Effect,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
         map.placeRelative("RoadWaterStart", "GateSpecial" + Effect,new BlockChange(new Vec3(0,-16,forwardOffset-2),rotation));
-        map.placeOtherKeywords(inventory, "Start&!Slope", new[]{Effect,"Special"}, new[] {"Start","Left","Right","Center","v2"}, new BlockChange(new Vec3(0,0,forwardOffset-10),rotation));
+        inventory.select("Start&!Slope").add(Effect).remove(new string[] {"Start", "Left", "Right", "Center", "v2" }).placeRelative(map,new BlockChange(new Vec3(0,0,forwardOffset-10),rotation));
         map.placeStagedBlocks();
     }
 }

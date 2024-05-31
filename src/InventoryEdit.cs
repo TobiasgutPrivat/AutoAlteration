@@ -8,9 +8,19 @@ class InventoryEdit {
         articles.ForEach(a => a.Keywords.Add(Keyword));
         return this;
     }
+
+    public InventoryEdit add(string[] Keywords) {
+        articles.ForEach(a => a.Keywords.AddRange(Keywords));
+        return this;
+    }
     
     public InventoryEdit remove(string Keyword) {
         articles.ForEach(a => a.Keywords.Remove(Keyword));
+        return this;
+    }
+
+    public InventoryEdit remove(string[] Keywords) {
+        Keywords.ToList().ForEach(k => articles.ForEach(a => a.Keywords.Remove(k)));
         return this;
     }
     

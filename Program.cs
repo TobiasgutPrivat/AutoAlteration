@@ -43,7 +43,6 @@ void createInventory(string projectFolder) {
     Inventory blocks = Alteration.importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
     blocks.articles.ForEach(x => x.Type = BlockType.Block);
     blocks.select("Gate").changeKeywords(new string[] { "Gate" }, new string[] { "Ring" });
-    // blocks.select("To").print();
 
     Inventory inventory = new Inventory();
     inventory.articles.AddRange(items.articles);
@@ -51,10 +50,10 @@ void createInventory(string projectFolder) {
 
     // inventory.select("Straight").changeKeywords(new string[] { "Straight" }, new string[] { });//TODO some issues (Water and Slope)
     // inventory.select("Base").changeKeywords(new string[] { "Base" }, new string[] { });//
-    // inventory.select("Special").print();
+    // inventory.select("Start").print();//rename StartBlocks
     inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
     
-    inventory.checkDuplicates();
+    // inventory.checkDuplicates();
 
     inventory.articles.ForEach(x => x.cacheFilter.Clear());
     string json = JsonConvert.SerializeObject(inventory.articles);
