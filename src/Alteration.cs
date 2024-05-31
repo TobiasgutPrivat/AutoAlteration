@@ -43,13 +43,13 @@ class Alteration {
     public static void alterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(mapFolder))
         {
-            alterFile(alterations,mapFile,destinationFolder,Name);
+            alterFile(alterations,mapFile,destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
         }
     }
     public static void alterFolder(Alteration alteration, string mapFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(mapFolder))
         {
-            alterFile(alteration,mapFile,destinationFolder,Name);
+            alterFile(alteration,mapFile,destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
         }
     }
     public static void alterFolder(List<Alteration> alterations, string mapFolder, string Name) {
@@ -58,21 +58,21 @@ class Alteration {
     public static void alterFolder(Alteration alteration, string mapFolder, string Name) {
         alterFolder(alteration,mapFolder,mapFolder,Name);
     }
-    public static void alterFile(List<Alteration> alterations, string mapFile, string destinationFolder, string Name) {
+    public static void alterFile(List<Alteration> alterations, string mapFile, string destinationFile, string Name) {
         Map map = new Map(mapFile);
         alter(alterations, map);
         map.map.MapName = Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name;
-        map.save(destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx");
+        map.save(destinationFile);
         Console.WriteLine(map.map.MapName);
     }
-    public static void alterFile(Alteration alteration, string mapFile, string destinationFolder, string Name) {
-        alterFile(new List<Alteration>{alteration},mapFile,destinationFolder,Name);
+    public static void alterFile(Alteration alteration, string mapFile, string destinationFile, string Name) {
+        alterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);
     }
     public static void alterFile(List<Alteration> alterations, string mapFile, string Name) {
-        alterFile(alterations,mapFile,Path.GetDirectoryName(mapFile),Name);
+        alterFile(alterations,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
     }
     public static void alterFile(Alteration alteration, string mapFile, string Name) {
-        alterFile(alteration,mapFile,Path.GetDirectoryName(mapFile),Name);
+        alterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
     }
 
     public Alteration(){}

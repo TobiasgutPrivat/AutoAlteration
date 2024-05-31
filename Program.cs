@@ -14,12 +14,12 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-Alteration.alterFolder(new YepTree(), sourcefolder, destinationFolder + "Spring 2024 YepTree/", "YepTree");
+Alteration.alterFolder(new STTF(), sourcefolder, destinationFolder + "Spring 2024 STTF/", "STTF");
 
 // //Single File Processing
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/Spring 2024 - 01.map.gbx";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2024 YepTree/";
-// Alteration.alterFile(new YepTree(), sourceFile, destinationFolder, "YepTree");
+// string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2024 YepTree/";
+// Alteration.alterFile(new YepTree(), sourceFile, destinationFile, "YepTree");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
@@ -49,13 +49,12 @@ void createInventory(string projectFolder) {
     inventory.articles.AddRange(items.articles);
     inventory.articles.AddRange(blocks.articles);
 
-    inventory.select("Checkpoint").remove("Checkpoint").add("Straight").align().editOriginal().remove("Straight").print();
-    inventory.select("Checkpoint").remove("Checkpoint").remove("Up").add("Straight4").align().editOriginal().remove("Straight4").print();
-    inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().editOriginal().remove("StraightX2").print();
-    inventory.select("Checkpoint").remove("Checkpoint").add("Base").align().editOriginal().remove("Base").print();
+    inventory.select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Up").remove("Down").add("Straight").align().editOriginal().remove("Straight");
+    inventory.select("Checkpoint").remove("Checkpoint").remove("Up").add("Straight4").align().editOriginal().remove("Straight4");
+    inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().editOriginal().remove("StraightX2");
+    inventory.select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Up").remove("Down").add("Base").align().editOriginal().remove("Base").print();
     inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
-    // inventory.select("Base").changeKeywords(new string[] { "Base" }, new string[] { });//
-    // inventory.select("Start").print();//rename StartBlocks
+    inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").editOriginal().remove("Start").add("MapStart");
     
     // inventory.checkDuplicates();
 

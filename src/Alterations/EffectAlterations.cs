@@ -39,7 +39,7 @@ class EffectAlteration: Alteration {
         map.placeStagedBlocks();
     }
     public static void placeStartEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
-        Inventory start = inventory.select("Start&!Slope2&!Deco");//TODO RaceStart
+        Inventory start = inventory.select("MapStart");
         map.placeRelative(start.select("!Water&!(Road&Ice)"), "GateSpecial" + Effect,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
         map.placeRelative(start.select("Road&Ice"), "GateSpecial" + Effect,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
         map.placeRelative("RoadWaterStart", "GateSpecial" + Effect,new BlockChange(new Vec3(0,-16,forwardOffset-2),rotation));

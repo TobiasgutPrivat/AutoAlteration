@@ -3,7 +3,7 @@ using GBX.NET.Engines.Game;
 
 class CPBoost : Alteration{
     public override void run(Map map){
-        // map.replaceKeyword("Checkpoint","SpecialTurbo");
+        // map.replaceKeyword("Checkpoint","Turbo");
         // map.replaceKeyword(inventory,"Checkpoint",new[] {"Turbo","Special"},new[] {"Checkpoint"});
         // map.replaceKeyword("SpecialTurbo","Checkpoint");
         // map.replaceKeyword(inventory,"Turbo",new[] {"Checkpoint"},new[] {"Turbo","Special"});
@@ -13,32 +13,24 @@ class CPBoost : Alteration{
 class CPLess : Alteration{
     public override void run(Map map){
         map.delete(inventory.select("Checkpoint"));
-        map.delete(inventory.select("Checkpoint"));
     }
 }
 class STTF : Alteration{
     public override void run(Map map){
-        // map.replaceKeyword(inventory,"Platform&Wall&Checkpoint",new[] {"Straight","4"},new[] {"Checkpoint","Up","Down","Right","Left"});
-        // map.replaceKeyword(inventory,"Road&(DiagRight|DiagLeft)&Checkpoint",new[] {"Straight","X2"},new[] {"Checkpoint"});
-        map.delete("GateCheckpoint");
-        map.delete(inventory.select("Checkpoint"));
+        map.delete(inventory.select("Checkpoint&(Ring|Gate)"));
+        Inventory checkpoint = inventory.select("Checkpoint&!(Ring|Gate)").print();
+        checkpoint.remove("Checkpoint").replace(map);
+        checkpoint.select("Wall").remove("Checkpoint").remove("Up").remove("Down").remove("Right").remove("Left").replace(map);
+        checkpoint.select("Slope2&Up").remove("Checkpoint").remove("Up").replace(map);
+        checkpoint.select("Slope2&Down").remove("Checkpoint").remove("Down").replace(map,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
+        checkpoint.select("Slope2&Right").remove("Checkpoint").remove("Right").replace(map,new BlockChange(new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
+        checkpoint.select("Slope2&Left").remove("Checkpoint").remove("Left").replace(map,new BlockChange(new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
+
+        checkpoint.select("Slope&Down").remove("Checkpoint").remove("Down").replace(map,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
+        checkpoint.select("Slope&Up").remove("Checkpoint").remove("Up").replace(map);
+        checkpoint.select("Tilt&Left").remove("Checkpoint").remove("Left").replace(map,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
+        checkpoint.select("Tilt&Right").remove("Checkpoint").remove("Right").replace(map);
         
-        Inventory RoadCP = inventory.select("Road&Checkpoint");
-        
-        // map.replaceKeyword(RoadCP,"Slope&Down",new[] {"Straight"},new[] {"Checkpoint"},new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        // map.replaceKeyword(RoadCP,"Slope&!Tilt&!Down",new[] {"Straight"},new[] {"Checkpoint"});
-
-        // map.replaceKeyword(RoadCP,"Tilt&Left",new[] {"Straight","Left"},new[] {"Checkpoint"},new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        // map.replaceKeyword(RoadCP,"Tilt&Right",new[] {"Straight","Right"},new[] {"Checkpoint"});
-
-        Inventory PlatformCP = inventory.select("Platform&Checkpoint");
-
-        // map.replaceKeyword(PlatformCP,"!Slope2",new[] {"Base"},new[] {"Checkpoint"});
-        // map.replaceKeyword(PlatformCP,"Slope2&Up",new[] {"Straight"},new[] {"Checkpoint","Up"});
-        // map.replaceKeyword(PlatformCP,"Slope2&Down",new[] {"Straight"},new[] {"Checkpoint","Down"},new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        // map.replaceKeyword(PlatformCP,"Slope2&Right",new[] {"Straight"},new[] {"Checkpoint","Right"},new BlockChange(new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
-        // map.replaceKeyword(PlatformCP,"Slope2&Left",new[] {"Straight"},new[] {"Checkpoint","Left"},new BlockChange(new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
-
         map.replace("RoadIceWithWallCheckpointRight","RoadIceWithWallStraight");
         map.replace("RoadIceWithWallCheckpointLeft","RoadIceWithWallStraight");
         map.replace("RoadIceWithWallDiagRightCheckpointRight","RoadIceDiagLeftWithWallStraight");

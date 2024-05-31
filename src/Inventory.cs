@@ -85,6 +85,7 @@ class Inventory {
             Console.WriteLine("Edit Original only available in devMode");
             return null;
         } else {
+            articles.ForEach(x => x.cacheFilter.Clear());
             return new InventoryEdit(articles);
         }
     }
@@ -159,9 +160,10 @@ class Inventory {
             });
         });
     }
-    public void print() {
+    public Inventory print() {
         articles.ForEach(article => {
             Console.WriteLine(article.Name + ": " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape));
         });
+        return this;
     }
 }

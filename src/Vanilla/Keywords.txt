@@ -82,7 +82,6 @@ ChicaneX2
 VerySmall
 Screen155
 Oscillate
-LoopStart
 Cylinder
 DiagLeft
 Sponsors

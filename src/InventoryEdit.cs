@@ -45,7 +45,7 @@ class InventoryEdit {
             if (article != null) {
                 map.replace(a.Name, article.Name, blockChange);
             } else {
-                // Console.WriteLine("No matching article found for: " + string.Join(", ", a.Keywords,a.Surface,a.Shape,a.ToShape));
+                // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
         });
     }
