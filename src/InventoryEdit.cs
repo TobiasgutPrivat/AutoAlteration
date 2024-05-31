@@ -40,23 +40,23 @@ class InventoryEdit {
     }
 
     public void replace(Map map,BlockChange blockChange = null){
-        articles.ForEach(a => {
-            List<Article> articles = Alteration.inventory.GetArticles(a.Keywords.ToArray());
-            if (articles.Count > 1) {
-                Console.WriteLine(a.Name + ": More than one found article with keywords: " + string.Join(", ", a.Keywords) + "\nFound Articles: " + string.Join(", ", articles.Select(a => a.Name).ToArray()));
-            } else if (articles.Count == 1) {
-                map.replace(a.Name, articles.First().Name, blockChange);
+        articles.ForEach( a => {
+            Article article = Alteration.inventory.alignArticle(a);
+            if (article != null) {
+                map.replace(a.Name, article.Name, blockChange);
+            } else {
+                // Console.WriteLine("No matching article found for: " + string.Join(", ", a.Keywords,a.Surface,a.Shape,a.ToShape));
             }
         });
     }
 
     public void placeRelative(Map map,BlockChange blockChange = null){
-        articles.ForEach(a => {
-            List<Article> articles = Alteration.inventory.GetArticles(a.Keywords.ToArray());
-            if (articles.Count > 1) {
-                Console.WriteLine(a.Name + ": More than one found article with keywords: " + string.Join(", ", a.Keywords) + "\nFound Articles: " + string.Join(", ", articles.Select(a => a.Name).ToArray()));
-            } else if (articles.Count == 1) {
-                map.placeRelative(a.Name, articles.First().Name, blockChange);
+        articles.ForEach( a => {
+            Article article = Alteration.inventory.alignArticle(a);
+            if (article != null) {
+                map.placeRelative(a.Name, article.Name, blockChange);
+            } else {
+                // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
         });
     }
@@ -64,11 +64,11 @@ class InventoryEdit {
     public Inventory align() {
         List<Article> newarticles = new List<Article>();
         articles.ForEach( a => {
-            List<Article> articles = Alteration.inventory.GetArticles(a.Keywords.ToArray());
-            if (articles.Count > 1) {
-                Console.WriteLine(a.Name + ": More than one found article with keywords: " + string.Join(", ", a.Keywords) + "\nFound Articles: " + string.Join(", ", articles.Select(a => a.Name).ToArray()));
-            } else if (articles.Count == 1) {
+            Article article = Alteration.inventory.alignArticle(a);
+            if (article != null) {
                 newarticles.Add(articles.First());
+            } else {
+                // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
         });
         return new Inventory(newarticles);
@@ -77,4 +77,9 @@ class InventoryEdit {
     public string[] names() =>
         align().articles.Select(a => a.Name).ToArray();
 
+    public void print() {
+        articles.ForEach(article => {
+            Console.WriteLine(article.Name + ": " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape));
+        });
+    }
 }

@@ -48,7 +48,7 @@ void createInventory(string projectFolder) {
     inventory.articles.AddRange(items.articles);
     inventory.articles.AddRange(blocks.articles);
 
-    // inventory.select("Straight").changeKeywords(new string[] { "Straight" }, new string[] { });//TODO some issues (Water and Slope)
+    inventory.select("Checkpoint").remove("Checkpoint").add("Straight").align().print();
     // inventory.select("Base").changeKeywords(new string[] { "Base" }, new string[] { });//
     // inventory.select("Start").print();//rename StartBlocks
     inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });

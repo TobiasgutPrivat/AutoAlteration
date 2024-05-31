@@ -20,6 +20,17 @@ class Inventory {
     public List<Article> GetArticles(string[] keywords) =>
         articles.Where(a => keywords.All(k => a.Keywords.Contains(k))).ToList();
 
+    public Article alignArticle(Article article) {
+        List<Article> temparticles = articles.Where(a => article.Keywords.All(k => a.Keywords.Contains(k)) && a.Keywords.Count == article.Keywords.Count && article.Surface == a.Surface && article.Shape == a.Shape && article.ToShape == a.ToShape).ToList();
+        if (temparticles.Count > 1) {
+            Console.WriteLine("More than one found article with keywords: " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape) + "\nFound Articles: " + string.Join(", ", articles.Select(a => a.Name).ToArray()));
+            return null;
+        } else if (temparticles.Count == 1) {
+            return temparticles.First();
+        }
+        return null;
+    }
+
     public InventoryEdit add(string Keyword) =>
         edit().add(Keyword);
     public InventoryEdit add(string[] Keyword) =>
@@ -141,7 +152,7 @@ class Inventory {
     }
     public void print() {
         articles.ForEach(article => {
-            Console.WriteLine(article.Name + ": " + string.Join(", ", article.Keywords));
+            Console.WriteLine(article.Name + ": " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape));
         });
     }
 }
