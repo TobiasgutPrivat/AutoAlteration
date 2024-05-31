@@ -4,8 +4,15 @@ RallyCastleRoad
 RoadIceWithWall
 TrackWallWater
 OpenGrassRoad
+OpenGrassZone
 PlatformWater
 DecoWallWater
+OpenDirtRoad
+OpenTechRoad
+OpenIceRoad
+OpenDirtZone
+OpenTechZone
+OpenIceZone
 RoadInGrass
 ZoneCenter
 TrackWall

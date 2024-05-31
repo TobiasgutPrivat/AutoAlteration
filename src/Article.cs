@@ -125,14 +125,17 @@ class Article {
 
     public void loadKeywords() {
         string name = this.Name;
+        if (name.Contains("RallyRoadDirtLow")) {
+            // Console.WriteLine("Debug");
+        }
         //toshape
         if(name.Contains("To")){
             int toPos = name.IndexOf("To");
             string[] toshapes = Alteration.shapeKeywords.Where(x => name.Substring(toPos + 2).Contains(x)).ToArray();
             if (toshapes.Count() >= 1){
                 ToShape = toshapes.First();
-                name = name.Remove(toPos, 2);
-                name = name.Remove(name.IndexOf(ToShape), ToShape.Length);
+                String ToString = name.Substring(toPos + 2);
+                name = name.Substring(0,toPos) + ToString.Remove(ToString.IndexOf(ToShape), ToShape.Length);
             }
             toshapes = Alteration.shapeKeywords.Where(x => name.Substring(toPos).Contains(x)).ToArray();
             if (toshapes.Count() > 1) {

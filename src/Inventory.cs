@@ -20,30 +20,50 @@ class Inventory {
     public List<Article> GetArticles(string[] keywords) =>
         articles.Where(a => keywords.All(k => a.Keywords.Contains(k))).ToList();
 
-    public Article ArticleReplaceKeyword(Article article, string addKeyword, string removeKeyword) =>
-        ArticleReplaceKeyword(article, new[] {addKeyword}, new[] {removeKeyword});
-    
-    public Article ArticleReplaceKeyword(Article article, string[] addKeywords, string[] removeKeywords) {
-        List<string> keywords = article.Keywords.ToList();
-        keywords.AddRange(addKeywords);
-        keywords.RemoveAll(k => removeKeywords.Contains(k));
-        List<Article> newArticle = GetArticles(keywords.ToArray());
-        if (newArticle.Count() > 1) {
-            Console.WriteLine(article.Name + ": More than one found article with keywords: " + string.Join(", ", keywords));
-            Console.WriteLine("Articles: " + string.Join(", ", newArticle.Select(a => a.Name).ToArray()));
-            return null;
-        }
-        if (newArticle.Count() == 0) {
-            Console.WriteLine(article.Name + ": No found article with keywords: " + string.Join(", ", keywords));
-            return null;
-        }
-        return newArticle.First();
+    public InventoryEdit add(string Keyword) =>
+        edit().add(Keyword);
+
+    public InventoryEdit remove(string Keyword) =>
+        edit().remove(Keyword);
+
+    public InventoryEdit surface(string Keyword) =>
+        edit().surface(Keyword);
+
+    public InventoryEdit shape(string Keyword) =>
+        edit().shape(Keyword);
+
+    public InventoryEdit toShape(string Keyword) =>
+        edit().toShape(Keyword);
+
+    public InventoryEdit edit(){
+        List<Article> articleClone = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));
+        return new InventoryEdit(articleClone);
     }
+    // public Article ArticleReplaceKeyword(Article article, string addKeyword, string removeKeyword) =>
+    //     ArticleReplaceKeyword(article, new[] {addKeyword}, new[] {removeKeyword});
+    
+    // public Article ArticleReplaceKeyword(Article article, string[] addKeywords, string[] removeKeywords) {
+    //     List<string> keywords = article.Keywords.ToList();
+    //     keywords.AddRange(addKeywords);
+    //     keywords.RemoveAll(k => removeKeywords.Contains(k));
+    //     List<Article> newArticle = GetArticles(keywords.ToArray());
+    //     if (newArticle.Count() > 1) {
+    //         Console.WriteLine(article.Name + ": More than one found article with keywords: " + string.Join(", ", keywords));
+    //         Console.WriteLine("Articles: " + string.Join(", ", newArticle.Select(a => a.Name).ToArray()));
+    //         return null;
+    //     }
+    //     if (newArticle.Count() == 0) {
+    //         Console.WriteLine(article.Name + ": No found article with keywords: " + string.Join(", ", keywords));
+    //         return null;
+    //     }
+    //     return newArticle.First();
+    // }
 
     public bool hasArticle(string name) {
         return articles.Any(article => article.Name == name);
     }
-    
+
+
     //Development Section ------------------------------------------------------------------------------------------------------
     public void checkDuplicates(){
         articles.ForEach(article => {
