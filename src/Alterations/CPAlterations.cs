@@ -18,7 +18,6 @@ class CPLess : Alteration{
 }
 class STTF : Alteration{
     public override void run(Map map){
-        float PI = (float)Math.PI;
         // map.replaceKeyword(inventory,"Platform&Wall&Checkpoint",new[] {"Straight","4"},new[] {"Checkpoint","Up","Down","Right","Left"});
         // map.replaceKeyword(inventory,"Road&(DiagRight|DiagLeft)&Checkpoint",new[] {"Straight","X2"},new[] {"Checkpoint"});
         map.delete("GateCheckpoint");
@@ -53,7 +52,6 @@ class STTF : Alteration{
 
 class CPFull : Alteration{
     public override void run(Map map){
-        float PI = (float)Math.PI;
         Inventory roadStraight = inventory.select("Road&Straight");
         // map.replaceKeyword(roadStraight,"!Wall&!WithWall&!Tilt",new[] {"Checkpoint"},new[] {"Straight"});
         // map.replaceKeyword(roadStraight,"Tilt",new[] {"Checkpoint","Right"},new[] {"Straight"});

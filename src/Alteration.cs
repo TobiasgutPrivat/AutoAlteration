@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 class Alteration {
+    public static float PI = (float)Math.PI;
     public static string[] Keywords;
     public static string[] shapeKeywords;
     public static string[] surfaceKeywords;

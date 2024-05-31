@@ -72,6 +72,7 @@ class Block {
     }
     public Block(CGameCtnAnchoredObject item, string name,BlockChange blockChange = null){
         initBlock(item);
+
         this.name = name;
         if (blockChange != null) {
             blockChange.changeItem(item, this);

@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
 //"blockChange": null -> "blockChange":{"absolutePosition":{"X":0.0,"Y":0.0,"Z":0.0},"pitchYawRoll":{"X":0.0,"Y":0.0,"Z":0.0}}
-Alteration.load("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
-createInventory("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/");
+Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+// createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 // testBlock("RoadIceDiagRightToRoadIceWithWallDiagLeft");
 // createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
@@ -14,12 +14,12 @@ createInventory("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-// Alteration.alterFolder(new Surfaceless(), sourcefolder, destinationFolder + "Spring 2024 Surfaceless/", "Surfaceless");
+Alteration.alterFolder(new YepTree(), sourcefolder, destinationFolder + "Spring 2024 YepTree/", "YepTree");
 
 // //Single File Processing
-// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2020 alpha/Spring 2020 - S12.map.gbx";
-// string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My-Maps/Altered Nadeo/Spring 2020 CPFull/t01 Spring 2020 CPFull.map.gbx";
-// Alteration.alterFile(new FreeWheel(), sourceFile, destinationFile, "FreeWheel");
+// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/Spring 2024 - 01.map.gbx";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2024 YepTree/";
+// Alteration.alterFile(new YepTree(), sourceFile, destinationFolder, "YepTree");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------

@@ -2,6 +2,7 @@ using GBX.NET;
 using GBX.NET.Engines.Game;
 
 class BlockChange{
+    public static float PI = (float)Math.PI;
     public Vec3 absolutePosition;
     public Vec3 pitchYawRoll;
 

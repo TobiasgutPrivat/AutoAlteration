@@ -1,8 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
 class EffectAlteration: Alteration {
-    public static float PI = (float)Math.PI;
-
     public static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         Inventory CPMultiLap = inventory.select("Checkpoint|Multilap");
         BlockChange zero = new BlockChange(new Vec3(0,0,forwardOffset),rotation);
@@ -120,7 +118,6 @@ enum LeftRight
 
 class EffectDiagBlockChange : BlockChange{
 
-    static float PI = (float)Math.PI;
     LeftRight side;
     public EffectDiagBlockChange(LeftRight side) : base(){this.side = side;}
     public EffectDiagBlockChange(Vec3 absolutePosition,LeftRight side) : base(absolutePosition){this.side = side;}

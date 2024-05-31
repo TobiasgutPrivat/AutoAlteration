@@ -105,13 +105,6 @@ class Map
     placeRelative(inventory.names(), newBlock, blockChange);
   }
 
-  // public void placeRelativeKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
-  //   foreach (Article block in Alteration.inventory.GetArticles(new string[] {oldKeyword})) {
-  //     string newBlock = Alteration.inventory.ArticleReplaceKeyword(block, oldKeyword, newKeyword).Name;
-  //     placeRelative(block.Name, newBlock, blockChange);
-  //   }
-  // }
-
   public void replace(string oldBlock, string newBlock, BlockChange blockChange = null){
     placeRelative(oldBlock, newBlock, blockChange);
     delete(oldBlock);
@@ -124,31 +117,6 @@ class Map
   public void replace(Inventory inventory, string newBlock, BlockChange blockChange = null){
     replace(inventory.names(), newBlock, blockChange);
   }
-
-  // public void replaceKeyword(string oldKeyword, string newKeyword, BlockChange blockChange = null){
-  //   replaceKeyword(Alteration.inventory, oldKeyword, newKeyword, blockChange);
-  // }
-  // public void replaceKeyword(Inventory inventory, string oldKeyword, string newKeyword, BlockChange blockChange = null){
-  //   foreach (Article article in inventory.GetArticles(new string[] {oldKeyword})) {
-  //     replace(article.Name, inventory.ArticleReplaceKeyword(article, oldKeyword, newKeyword).Name, blockChange);
-  //   }
-  // }
-  // public void replaceKeyword(Inventory inventory, string keywordFilter, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){
-  //   foreach (Article article in inventory.GetArticles(keywordFilter)) {
-  //     Article newArticle = inventory.ArticleReplaceKeyword(article, addKeywords, removeKeywords);
-  //     if (newArticle != null){
-  //       replace(article.Name, newArticle.Name, blockChange);
-  //     }
-  //   }
-  // }
-  // public void placeOtherKeywords(Inventory inventory, string keywordFilter, string[] addKeywords = null, string[] removeKeywords = null, BlockChange blockChange = null){
-  //   foreach (Article article in inventory.GetArticles(keywordFilter)) {
-  //     Article newArticle = inventory.ArticleReplaceKeyword(article, addKeywords, removeKeywords);
-  //     if (newArticle != null){
-  //       placeRelative(article.Name, newArticle.Name, blockChange);
-  //     }
-  //   }
-  // }
 
   public void move(string block, Vec3 offset, Vec3 rotation)
   {
@@ -204,6 +172,9 @@ class Map
           newBlock.PitchYawRoll = block.pitchYawRoll;
           break;
         case BlockType.Item:
+        // if (block.name == "GateCheckpointCenter8mv2") {
+        //     Console.WriteLine("Debug");
+        // }
           map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
           break;
       }
