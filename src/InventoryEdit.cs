@@ -29,6 +29,28 @@ class InventoryEdit {
         return this;
     }
 
+    public void replace(Map map,BlockChange blockChange = null){
+        articles.ForEach(a => {
+            List<Article> articles = Alteration.inventory.GetArticles(a.Keywords.ToArray());
+            if (articles.Count > 1) {
+                Console.WriteLine(a.Name + ": More than one found article with keywords: " + string.Join(", ", a.Keywords) + "\nFound Articles: " + string.Join(", ", articles.Select(a => a.Name).ToArray()));
+            } else if (articles.Count == 1) {
+                map.replace(a.Name, articles.First().Name, blockChange);
+            }
+        });
+    }
+
+    public void placeRelative(Map map,BlockChange blockChange = null){
+        articles.ForEach(a => {
+            List<Article> articles = Alteration.inventory.GetArticles(a.Keywords.ToArray());
+            if (articles.Count > 1) {
+                Console.WriteLine(a.Name + ": More than one found article with keywords: " + string.Join(", ", a.Keywords) + "\nFound Articles: " + string.Join(", ", articles.Select(a => a.Name).ToArray()));
+            } else if (articles.Count == 1) {
+                map.placeRelative(a.Name, articles.First().Name, blockChange);
+            }
+        });
+    }
+
     public Inventory align() {
         List<Article> newarticles = new List<Article>();
         articles.ForEach( a => {
