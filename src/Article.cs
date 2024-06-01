@@ -12,10 +12,13 @@ class Article {
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
 
     public Article() { }
-    public Article(string name,BlockType type,List<string> keywords,BlockChange blockChange){ 
+    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,BlockChange blockChange = null){ 
         this.Name = name;
         this.Type = type;
         this.Keywords = keywords;
+        this.Shape = shape;
+        this.ToShape = toShape;
+        this.Surface = surface;
         this.blockChange = blockChange;
     }
     public Article(string name){ 

@@ -1,3 +1,4 @@
+using GBX.NET;
 using Newtonsoft.Json;
 class Alteration {
     public static float PI = (float)Math.PI;
@@ -77,4 +78,60 @@ class Alteration {
 
     public Alteration(){}
     public virtual void run(Map map) {}
+
+
+    public static void createInventory(string projectFolder) {
+        devMode = true;
+        Inventory items = Alteration.importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json");
+        items.articles.ForEach(x => x.Type = BlockType.Item);
+        Inventory blocks = Alteration.importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
+        blocks.articles.ForEach(x => x.Type = BlockType.Block);
+        blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
+
+        Inventory inventory = Alteration.inventory;
+        inventory.articles.Clear();
+        inventory.articles.AddRange(items.articles);
+        inventory.articles.AddRange(blocks.articles);
+
+        inventory.select("Platform&Wall&Straight").editOriginal().remove("Straight").add("Thin").print();
+        inventory.select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Up").remove("Down").add("Straight").align().editOriginal().remove("Straight");
+        inventory.select("Checkpoint").remove("Checkpoint").remove("Up").add("Straight4").align().editOriginal().remove("Straight4");
+        inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().editOriginal().remove("StraightX2");
+        inventory.select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Up").remove("Down").add("Base").align().editOriginal().remove("Base").print();
+        inventory.select("Special").editOriginal().remove("Special");
+        addRoadSlopes(inventory, "Tech");
+        addRoadSlopes(inventory, "Dirt");
+        addRoadSlopes(inventory, "Bump");
+        addRoadSlopes(inventory, "Ice");
+        addPlatformDefault(inventory, "Tech");
+        addPlatformDefault(inventory, "Dirt");
+        addPlatformDefault(inventory, "Plastic");
+        addPlatformDefault(inventory, "Grass");
+        addPlatformDefault(inventory, "Ice");
+        // inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").editOriginal().remove("Start").add("MapStart");
+        
+        // inventory.checkDuplicates();
+
+        inventory.articles.ForEach(x => x.cacheFilter.Clear());
+        string json = JsonConvert.SerializeObject(inventory.articles);
+        File.WriteAllText(projectFolder + "src/Inventory.json", json);
+        devMode = false;
+    }
+
+    private static void addRoadSlopes(Inventory inventory, string surface){
+        inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Up","Slope"},"Road" +surface,"",""));
+        inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Down","Slope"},"Road" +surface,"","",new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Left","Tilt"},"Road" +surface,"","",new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Right","Tilt"},"Road" +surface,"",""));
+    }
+    private static void addPlatformDefault(Inventory inventory, string surface){
+        inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Up","Slope2"},"Platform","",surface));
+        inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Down","Slope2"},"Platform","",surface,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Right","Slope2"},"Platform","",surface,new BlockChange(new Vec3(0,0,32), new Vec3(PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Left","Slope2"},"Platform","",surface,new BlockChange(new Vec3(32,0,0), new Vec3(PI*1.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Up","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Down","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Right","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Left","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
+    }
 }

@@ -12,7 +12,7 @@ class YepTree: Alteration {
         Trees = Trees.Append("Summer").ToArray();
         Trees = Trees.Append("Winter").ToArray();
         Trees = Trees.Append("Fall").ToArray();
-        map.placeRelative(Trees,"GateCheckpointCenter8mv2",new BlockChange(Vec3.Zero,Vec3.Zero));
+        map.placeRelative(Trees,inventory.GetArticle("GateCheckpointCenter8mv2"),new BlockChange(Vec3.Zero,Vec3.Zero));
         // map.placeRelative(Trees,"GateCheckpointCenter8mv2",new BlockChange(Vec3.Zero,new Vec3(PI*0.5f,0,0)));
         map.placeStagedBlocks();
     }

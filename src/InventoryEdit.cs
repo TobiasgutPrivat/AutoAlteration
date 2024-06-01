@@ -43,7 +43,7 @@ class InventoryEdit {
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.replace(a.Name, article.Name, blockChange);
+                map.replace(a.Name, article, blockChange);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
@@ -54,7 +54,7 @@ class InventoryEdit {
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.placeRelative(a.Name, article.Name, blockChange);
+                map.placeRelative(a.Name, article, blockChange);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
@@ -64,9 +64,6 @@ class InventoryEdit {
     public Inventory align() {
         List<Article> newarticles = new List<Article>();
         articles.ForEach( a => {
-            // if (a.Name == "PlatformTechCheckpoint"){
-            //     Console.WriteLine("Debug");
-            // }
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
                 newarticles.Add(article);
@@ -80,9 +77,10 @@ class InventoryEdit {
     public string[] names() =>
         align().articles.Select(a => a.Name).ToArray();
 
-    public void print() {
+    public InventoryEdit print() {
         articles.ForEach(article => {
             Console.WriteLine(article.Name + ": " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape));
         });
+        return this;
     }
 }

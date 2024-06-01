@@ -86,37 +86,72 @@ class Map
     });
   }
 
-  public void placeRelative(string atBlock, string newBlock, BlockChange blockChange = null){
+  public void placeRelative(string atBlock, string newBlock,BlockType blockType, BlockChange blockChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){//blocks
-      stagedBlocks.Add(new Block(ctnBlock,newBlock,blockChange));
+      stagedBlocks.Add(new Block(ctnBlock,newBlock,blockType,blockChange));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){//items
-      stagedBlocks.Add(new Block(ctnItem,newBlock,blockChange));
+      stagedBlocks.Add(new Block(ctnItem,newBlock,blockType,blockChange));
     }
   }
 
-  public void placeRelative(string[] atBlocks, string newBlock, BlockChange blockChange = null){
+  public void placeRelative(string[] atBlocks, string newBlock,BlockType blockType, BlockChange blockChange = null){
     foreach(var atBlock in atBlocks){
-      placeRelative(atBlock, newBlock, blockChange);
+      placeRelative(atBlock, newBlock, blockType, blockChange);
+    }
+  }
+  public void placeRelative(Inventory inventory, string newBlock,BlockType blockType, BlockChange blockChange = null){
+    placeRelative(inventory.names(), newBlock, blockType, blockChange);
+  }
+
+  public void placeRelative(string atBlock, Article newArticle, BlockChange blockChange = null){
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){//blocks
+      stagedBlocks.Add(new Block(ctnBlock,newArticle,blockChange));
+    }
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){//items
+      stagedBlocks.Add(new Block(ctnItem,newArticle,blockChange));
     }
   }
 
-  public void placeRelative(Inventory inventory, string newBlock, BlockChange blockChange = null){
-    placeRelative(inventory.names(), newBlock, blockChange);
+  public void placeRelative(string[] atBlocks, Article newArticle, BlockChange blockChange = null){
+    foreach(var atBlock in atBlocks){
+      placeRelative(atBlock, newArticle, blockChange);
+    }
+  }
+  public void placeRelative(Inventory inventory, Article newArticle, BlockChange blockChange = null){
+    placeRelative(inventory, newArticle, blockChange);
   }
 
-  public void replace(string oldBlock, string newBlock, BlockChange blockChange = null){
-    placeRelative(oldBlock, newBlock, blockChange);
+  public void replace(string oldBlock, string newBlock,BlockType blockType, BlockChange blockChange = null){
+    placeRelative(oldBlock, newBlock, blockType,blockChange);
     delete(oldBlock);
   }
 
-  public void replace(string[] oldBlocks, string newBlock, BlockChange blockChange = null){
-    placeRelative(oldBlocks, newBlock, blockChange);
+  public void replace(string[] oldBlocks, string newBlock,BlockType blockType, BlockChange blockChange = null){
+    placeRelative(oldBlocks, newBlock, blockType,blockChange);
     delete(oldBlocks);
   }
-  public void replace(Inventory inventory, string newBlock, BlockChange blockChange = null){
-    replace(inventory.names(), newBlock, blockChange);
+  public void replace(Inventory inventory, string newBlock,BlockType blockType, BlockChange blockChange = null){
+    placeRelative(inventory, newBlock, blockType,blockChange);
+    delete(inventory);
   }
+
+  public void replace(string oldBlock, Article article, BlockChange blockChange = null){
+    placeRelative(oldBlock, article,blockChange);
+    delete(oldBlock);
+  }
+
+  public void replace(string[] oldBlocks, Article article, BlockChange blockChange = null){
+    placeRelative(oldBlocks, article,blockChange);
+    delete(oldBlocks);
+  }
+  public void replace(Inventory inventory, Article article, BlockChange blockChange = null){
+    placeRelative(inventory, article,blockChange);
+    delete(inventory);
+  }
+  // public void replace(Inventory inventory, Article newArticle, BlockChange blockChange = null){
+  //   replace(inventory.names(), newArticle, blockChange);
+  // }
 
   public void move(string block, Vec3 offset, Vec3 rotation)
   {
@@ -172,9 +207,6 @@ class Map
           newBlock.PitchYawRoll = block.pitchYawRoll;
           break;
         case BlockType.Item:
-        // if (block.name == "GateCheckpointCenter8mv2") {
-        //     Console.WriteLine("Debug");
-        // }
           map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
           break;
       }
