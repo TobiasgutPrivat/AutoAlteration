@@ -79,6 +79,7 @@ DiagRight
 ChicaneX3
 Structure
 ChicaneX2
+LoopStart
 VerySmall
 Screen155
 Oscillate

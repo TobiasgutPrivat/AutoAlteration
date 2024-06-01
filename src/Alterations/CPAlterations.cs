@@ -19,24 +19,14 @@ class STTF : Alteration{
     public override void run(Map map){
         map.delete(inventory.select("Checkpoint&(Ring|Gate)"));
         Inventory checkpoint = inventory.select("Checkpoint&!(Ring|Gate)");
-        checkpoint.remove("Checkpoint").print().replace(map);
-        // checkpoint.select("Wall").remove("Checkpoint").remove("Up").remove("Down").remove("Right").remove("Left").replace(map);
-        // checkpoint.select("Slope2&Up").remove("Checkpoint").remove("Up").replace(map);
-        // checkpoint.select("Slope2&Down").remove("Checkpoint").remove("Down").replace(map,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        // checkpoint.select("Slope2&Right").remove("Checkpoint").remove("Right").replace(map,new BlockChange(new Vec3(0,0,32), new Vec3(PI*0.5f,0,0)));
-        // checkpoint.select("Slope2&Left").remove("Checkpoint").remove("Left").replace(map,new BlockChange(new Vec3(32,0,0), new Vec3(PI*1.5f,0,0)));
-
-        // checkpoint.select("Slope&Down").remove("Checkpoint").remove("Down").replace(map,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        // checkpoint.select("Slope&Up").remove("Checkpoint").remove("Up").replace(map);
-        // checkpoint.select("Tilt&Left").remove("Checkpoint").remove("Left").replace(map,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        // checkpoint.select("Tilt&Right").remove("Checkpoint").remove("Right").replace(map);
+        checkpoint.remove("Checkpoint").replace(map);
         
-        map.replace("RoadIceWithWallCheckpointRight","RoadIceWithWallStraight",BlockType.Block);
-        map.replace("RoadIceWithWallCheckpointLeft","RoadIceWithWallStraight",BlockType.Block);
-        map.replace("RoadIceWithWallDiagRightCheckpointRight","RoadIceDiagLeftWithWallStraight",BlockType.Block);
-        map.replace("RoadIceWithWallDiagLeftCheckpointRight","RoadIceDiagLeftWithWallStraight",BlockType.Block,new DiagBlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        map.replace("RoadIceWithWallDiagRightCheckpointLeft","RoadIceDiagRightWithWallStraight",BlockType.Block);
-        map.replace("RoadIceWithWallDiagLeftCheckpointLeft","RoadIceDiagRightWithWallStraight",BlockType.Block,new DiagBlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
+        // map.replace("RoadIceWithWallCheckpointRight","RoadIceWithWallStraight",BlockType.Block);
+        // map.replace("RoadIceWithWallCheckpointLeft","RoadIceWithWallStraight",BlockType.Block);
+        // map.replace("RoadIceWithWallDiagRightCheckpointRight","RoadIceDiagLeftWithWallStraight",BlockType.Block);
+        // map.replace("RoadIceWithWallDiagLeftCheckpointRight","RoadIceDiagLeftWithWallStraight",BlockType.Block,new DiagBlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
+        // map.replace("RoadIceWithWallDiagRightCheckpointLeft","RoadIceDiagRightWithWallStraight",BlockType.Block);
+        // map.replace("RoadIceWithWallDiagLeftCheckpointLeft","RoadIceDiagRightWithWallStraight",BlockType.Block,new DiagBlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
 
         map.placeStagedBlocks();
     }

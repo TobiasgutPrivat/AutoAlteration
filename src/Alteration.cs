@@ -110,7 +110,7 @@ class Alteration {
         addPlatformDefault(inventory, "Ice");
         // inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").editOriginal().remove("Start").add("MapStart");
         
-        // inventory.checkDuplicates();
+        inventory.checkDuplicates();
 
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
         string json = JsonConvert.SerializeObject(inventory.articles);
