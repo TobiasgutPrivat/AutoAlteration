@@ -47,7 +47,7 @@ class InventoryEdit {
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.replace(a.Name, article, blockChange);
+                map.replace(a, article, blockChange);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
@@ -58,7 +58,7 @@ class InventoryEdit {
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.placeRelative(a.Name, article, blockChange);
+                map.placeRelative(a, article, blockChange);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }

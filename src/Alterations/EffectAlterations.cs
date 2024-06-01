@@ -11,7 +11,7 @@ class EffectAlteration: Alteration {
         map.placeRelative(CPMultiLap.select("Road&Tilt"), GateSpecial,new BlockChange(new Vec3(0,-12,forwardOffset),rotation));
         map.placeRelative(CPMultiLap.select("DiagRight&!Ice"), GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
         map.placeRelative(CPMultiLap.select("DiagLeft&!Ice"), GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
-        map.placeRelative("GateCheckpoint", GateSpecial, zero);
+        map.placeRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial, zero);
 
         inventory.select("Gate&(Checkpoint|Multilap)").add(Effect).remove(new[] {"Multilap","Checkpoint","Left","Right","Center","v2"}).placeRelative(map, zero);
 
@@ -43,7 +43,7 @@ class EffectAlteration: Alteration {
         Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         map.placeRelative(start.select("!Water&!(Road&Ice)"), GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
         map.placeRelative(start.select("Road&Ice"), GateSpecial,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
-        map.placeRelative("RoadWaterStart", GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset-2),rotation));
+        map.placeRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset-2),rotation));
         inventory.select("Start&!Slope").add(Effect).remove(new string[] {"Start", "Left", "Right", "Center", "v2" }).placeRelative(map,new BlockChange(new Vec3(0,0,forwardOffset-10),rotation));
         map.placeStagedBlocks();
     }

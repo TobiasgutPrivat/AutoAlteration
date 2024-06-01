@@ -14,12 +14,12 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-// Alteration.alterFolder(new CPFull(), sourcefolder, destinationFolder + "Spring 2024 CPFull/", "CPFull");
+Alteration.alterFolder(new Surfaceless(), sourcefolder, destinationFolder + "Spring 2024 Surfaceless/", "Surfaceless");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test STTF.Map.Gbx";
 string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPFull.Map.Gbx";
-Alteration.alterFile(new CPFull(), sourceFile, destinationFile, "CPFull");
+// Alteration.alterFile(new CPFull(), sourceFile, destinationFile, "CPFull");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
