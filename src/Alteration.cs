@@ -5,14 +5,15 @@ class Alteration {
     public static string[] Keywords;
     public static string[] shapeKeywords;
     public static string[] surfaceKeywords;
-    public static Inventory inventory;
+    public static Inventory inventory = new Inventory();
     public static bool devMode;
 
     public static void load(string projectFolder) {
         shapeKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/shapeKeywords.txt");
         surfaceKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/surfaceKeywords.txt");
         Keywords = File.ReadAllLines(projectFolder + "src/Vanilla/Keywords.txt");
-        inventory = importSerializedInventory(projectFolder + "src/Inventory.json");
+        // inventory = importSerializedInventory(projectFolder + "src/Inventory.json");
+        createInventory(projectFolder);
     }
 
     public static Inventory importSerializedInventory(string path)
@@ -88,8 +89,8 @@ class Alteration {
         blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
 
         //Init Inventory
-        Inventory inventory = Alteration.inventory;
-        inventory.articles.Clear();
+        // Inventory inventory = Alteration.inventory;
+        // inventory.articles.Clear();
         inventory.articles.AddRange(items.articles);
         inventory.articles.AddRange(blocks.articles);
 
@@ -101,12 +102,12 @@ class Alteration {
         inventory.addArticles(inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").remove("Start").add("MapStart"));
         
         //Control
-        inventory.checkDuplicates();
+        // inventory.checkDuplicates();
 
         //Save
-        inventory.articles.ForEach(x => x.cacheFilter.Clear());
-        string json = JsonConvert.SerializeObject(inventory.articles);
-        File.WriteAllText(projectFolder + "src/Inventory.json", json);
+        // inventory.articles.ForEach(x => x.cacheFilter.Clear());
+        // string json = JsonConvert.SerializeObject(inventory.articles);
+        // File.WriteAllText(projectFolder + "src/Inventory.json", json);
         devMode = false;
     }
 

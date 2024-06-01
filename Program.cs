@@ -10,12 +10,12 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-Alteration.alterFolder(new CPBoost(), sourcefolder, destinationFolder + "Spring 2024 CPBoost/", "CPBoost");
+// Alteration.alterFolder(new CPBoost(), sourcefolder, destinationFolder + "Spring 2024 CPBoost/", "CPBoost");
 
 // //Single File Processing
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test STTF.Map.Gbx";
-string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPFull.Map.Gbx";
-// Alteration.alterFile(new CPFull(), sourceFile, destinationFile, "CPFull");
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
+string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
+Alteration.alterFile(new CPBoost(), sourceFile, destinationFile, "CPBoost");
 
 
 
