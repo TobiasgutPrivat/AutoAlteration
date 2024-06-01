@@ -1,7 +1,6 @@
 RallyRoadDirtHigh
 RallyRoadDirtLow
 RallyCastleRoad
-RoadIceWithWall
 TrackWallWater
 OpenGrassRoad
 OpenGrassZone

@@ -113,13 +113,8 @@ class Map
     }
   }
 
-  // public void placeRelative(string[] atBlocks, Article newArticle, BlockChange blockChange = null){
-  //   foreach(var atBlock in atBlocks){
-  //     placeRelative(atBlock, newArticle, blockChange);
-  //   }
-  // }
   public void placeRelative(Inventory inventory, Article newArticle, BlockChange blockChange = null){
-    placeRelative(inventory, newArticle, blockChange);
+    inventory.articles.ForEach(a => placeRelative(a, newArticle, blockChange));
   }
 
   public void replace(string oldBlock, string newBlock,BlockType blockType, BlockChange blockChange = null){
@@ -132,7 +127,7 @@ class Map
     delete(oldBlocks);
   }
   public void replace(Inventory inventory, string newBlock,BlockType blockType, BlockChange blockChange = null){
-    placeRelative(inventory, newBlock, blockType,blockChange);
+    placeRelative(inventory.names(), newBlock, blockType,blockChange);
     delete(inventory);
   }
 
@@ -141,10 +136,6 @@ class Map
     delete(oldArticle.Name);
   }
 
-  // public void replace(string[] oldBlocks, Article article, BlockChange blockChange = null){
-  //   placeRelative(oldBlocks, article,blockChange);
-  //   delete(oldBlocks);
-  // }
   public void replace(Inventory inventory, Article article, BlockChange blockChange = null){
     placeRelative(inventory, article,blockChange);
     delete(inventory);
