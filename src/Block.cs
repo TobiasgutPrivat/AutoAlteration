@@ -13,6 +13,7 @@ class Block {
     public string name;
     public Vec3 absolutePosition;
     public Vec3 pitchYawRoll;
+    public DifficultyColor color;
 
     public Block(CGameCtnBlock block, BlockChange blockChange = null)
     {
@@ -46,6 +47,7 @@ class Block {
     }
 
     private void initBlock(CGameCtnBlock block){
+        color = block.Color;
         blockType = BlockType.Block;
         name = block.BlockModel.Id;
         if (block.IsFree){

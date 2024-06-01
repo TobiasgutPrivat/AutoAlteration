@@ -19,28 +19,13 @@ class STTF : Alteration{
     public override void run(Map map){
         map.delete(inventory.select("Checkpoint&(Ring|Gate)"));
         inventory.select(BlockType.Block).select("Checkpoint").remove("Checkpoint").replace(map);
-
         map.placeStagedBlocks();
     }
 }
 
 class CPFull : Alteration{
     public override void run(Map map){
-        Inventory roadStraight = inventory.select("Road&Straight");
-        // map.replaceKeyword(roadStraight,"!Wall&!WithWall&!Tilt",new[] {"Checkpoint"},new[] {"Straight"});
-        // map.replaceKeyword(roadStraight,"Tilt",new[] {"Checkpoint","Right"},new[] {"Straight"});
-        map.replace("RoadIceWithWallStraight","RoadIceWithWallCheckpointLeft",BlockType.Block);
-        map.replace("RoadIceDiagLeftWithWallStraight","RoadIceWithWallDiagRightCheckpointRight",BlockType.Block);
-        map.replace("RoadIceDiagRightWithWallStraight","RoadIceWithWallDiagRightCheckpointLeft",BlockType.Block);
-        
-        // map.replaceKeyword(roadStraight,"X2&&!Ice",new[] {"Checkpoint"},new[] {"Straight","X2"});
-
-        // map.replaceKeyword(roadStraight,"Base",new[] {"Checkpoint"},new[] {"Base"});
-        // map.replaceKeyword(roadStraight,"Slope2&Straight",new[] {"Checkpoint","Up"},new[] {"Straight"});
-        map.replace("PlatformWaterRampBase","PlatformWaterCheckpoint",BlockType.Block);
-        
-
-        // map.replaceKeyword(inventory,"Platform&Wall&Straight&4",new[] {"Checkpoint","Up"},new[] {"Straight","4"},new BlockChange(new Vec3(0,0,32),new Vec3(PI*0.5f,0,0)));
+        inventory.select(BlockType.Block).add("Checkpoint").replace(map);
         map.placeStagedBlocks();
     }
 }

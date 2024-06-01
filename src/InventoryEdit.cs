@@ -45,9 +45,6 @@ class InventoryEdit {
 
     public void replace(Map map,BlockChange blockChange = null){
         articles.ForEach( a => {
-            if (a.Name =="RoadIceWithWallCheckpointLeft"){
-                Console.WriteLine("RoadIceWithWallCheckpointLeft");
-            }
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
                 map.replace(a.Name, article, blockChange);

@@ -149,9 +149,6 @@ class Map
     placeRelative(inventory, article,blockChange);
     delete(inventory);
   }
-  // public void replace(Inventory inventory, Article newArticle, BlockChange blockChange = null){
-  //   replace(inventory.names(), newArticle, blockChange);
-  // }
 
   public void move(string block, Vec3 offset, Vec3 rotation)
   {
@@ -203,6 +200,7 @@ class Map
         case BlockType.Block:
           CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
           newBlock.IsFree = true;
+          newBlock.Color = block.color;
           newBlock.AbsolutePositionInMap = block.absolutePosition;
           newBlock.PitchYawRoll = block.pitchYawRoll;
           break;

@@ -100,7 +100,7 @@ class Alteration {
         inventory.addArticles(inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").remove("Start").add("MapStart"));
         
         //Control
-        // inventory.checkDuplicates();
+        inventory.checkDuplicates();
 
         //Save
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
