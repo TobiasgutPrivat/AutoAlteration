@@ -3,23 +3,25 @@ using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
-//"blockChange": null -> "blockChange":{"absolutePosition":{"X":0.0,"Y":0.0,"Z":0.0},"pitchYawRoll":{"X":0.0,"Y":0.0,"Z":0.0}}
 Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 // Alteration.createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
-
-// testBlock("RoadIceDiagRightToRoadIceWithWallDiagLeft");
-// createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 //Code for Execution (change for your use)
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-Alteration.alterFolder(new Fragile(), sourcefolder, destinationFolder + "Spring 2024 Fragile/", "Fragile");
+Alteration.alterFolder(new CPBoost(), sourcefolder, destinationFolder + "Spring 2024 CPBoost/", "CPBoost");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test STTF.Map.Gbx";
 string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPFull.Map.Gbx";
 // Alteration.alterFile(new CPFull(), sourceFile, destinationFile, "CPFull");
+
+
+
+
+
+
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------

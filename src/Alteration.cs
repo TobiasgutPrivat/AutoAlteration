@@ -93,6 +93,7 @@ class Alteration {
         inventory.articles.AddRange(items.articles);
         inventory.articles.AddRange(blocks.articles);
 
+        inventory.select("Special").editOriginal().remove("Special");
         inventory.select("DiagLeft|DiagRight").editOriginal().blockChange(new DiagBlockChange());
 
         //Add Articles with unnecessary keywords removed

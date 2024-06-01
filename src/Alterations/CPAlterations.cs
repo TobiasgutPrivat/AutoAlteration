@@ -3,10 +3,14 @@ using GBX.NET.Engines.Game;
 
 class CPBoost : Alteration{
     public override void run(Map map){
-        // map.replaceKeyword("Checkpoint","Turbo");
-        // map.replaceKeyword(inventory,"Checkpoint",new[] {"Turbo","Special"},new[] {"Checkpoint"});
-        // map.replaceKeyword("SpecialTurbo","Checkpoint");
-        // map.replaceKeyword(inventory,"Turbo",new[] {"Checkpoint"},new[] {"Turbo","Special"});
+        
+        inventory.select(BlockType.Block).select("Checkpoint").remove("Checkpoint").add("Turbo").replace(map);
+        inventory.select(BlockType.Block).select("Turbo").remove("Turbo").add("Checkpoint").replace(map);
+        inventory.select(BlockType.Block).select("Turbo2").remove("Turbo2").add("Checkpoint").replace(map);
+        inventory.select(BlockType.Item).select("Checkpoint").remove(new[] {"Right","Left","Center","Checkpoint","v2"}).add("Turbo").replace(map);
+        inventory.select(BlockType.Item).select("Turbo").add("Center").remove("Turbo").add("Checkpoint").replace(map);
+        inventory.select(BlockType.Item).select("Turbo2").add("Center").remove("Turbo2").add("Checkpoint").replace(map);
+        map.replace("GateSpecial4mTurbo","GateCheckpointCenter8mv2",BlockType.Item,new BlockChange(new Vec3(2,0,0),Vec3.Zero));//untested
         map.placeStagedBlocks();
     }
 }
