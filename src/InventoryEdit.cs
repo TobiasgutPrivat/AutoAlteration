@@ -64,6 +64,9 @@ class InventoryEdit {
     public Inventory align() {
         List<Article> newarticles = new List<Article>();
         articles.ForEach( a => {
+            // if (a.Name == "PlatformTechCheckpoint"){
+            //     Console.WriteLine("Debug");
+            // }
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
                 newarticles.Add(article);

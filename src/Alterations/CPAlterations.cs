@@ -18,7 +18,7 @@ class CPLess : Alteration{
 class STTF : Alteration{
     public override void run(Map map){
         map.delete(inventory.select("Checkpoint&(Ring|Gate)"));
-        Inventory checkpoint = inventory.select("Checkpoint&!(Ring|Gate)").print();
+        Inventory checkpoint = inventory.select("Checkpoint&!(Ring|Gate)");
         checkpoint.remove("Checkpoint").replace(map);
         checkpoint.select("Wall").remove("Checkpoint").remove("Up").remove("Down").remove("Right").remove("Left").replace(map);
         checkpoint.select("Slope2&Up").remove("Checkpoint").remove("Up").replace(map);

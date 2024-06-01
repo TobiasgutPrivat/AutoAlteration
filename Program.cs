@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
 //"blockChange": null -> "blockChange":{"absolutePosition":{"X":0.0,"Y":0.0,"Z":0.0},"pitchYawRoll":{"X":0.0,"Y":0.0,"Z":0.0}}
 Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
-// createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 // testBlock("RoadIceDiagRightToRoadIceWithWallDiagLeft");
 // createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
@@ -14,12 +14,12 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-Alteration.alterFolder(new STTF(), sourcefolder, destinationFolder + "Spring 2024 STTF/", "STTF");
+// Alteration.alterFolder(new STTF(), sourcefolder, destinationFolder + "Spring 2024 STTF/", "STTF");
 
 // //Single File Processing
-// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/Spring 2024 - 01.map.gbx";
-// string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2024 YepTree/";
-// Alteration.alterFile(new YepTree(), sourceFile, destinationFile, "YepTree");
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
+string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test STTF.Map.Gbx";
+Alteration.alterFile(new STTF(), sourceFile, destinationFile, "STTF");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
@@ -45,7 +45,8 @@ void createInventory(string projectFolder) {
     blocks.articles.ForEach(x => x.Type = BlockType.Block);
     blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
 
-    Inventory inventory = new Inventory();
+    Inventory inventory = Alteration.inventory;
+    inventory.articles.Clear();
     inventory.articles.AddRange(items.articles);
     inventory.articles.AddRange(blocks.articles);
 
@@ -53,8 +54,8 @@ void createInventory(string projectFolder) {
     inventory.select("Checkpoint").remove("Checkpoint").remove("Up").add("Straight4").align().editOriginal().remove("Straight4");
     inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().editOriginal().remove("StraightX2");
     inventory.select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Up").remove("Down").add("Base").align().editOriginal().remove("Base").print();
-    inventory.select("Special").changeKeywords(new string[] { "Special" }, new string[] { });
-    inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").editOriginal().remove("Start").add("MapStart");
+    inventory.select("Special").editOriginal().remove("Special");
+    // inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").editOriginal().remove("Start").add("MapStart");
     
     // inventory.checkDuplicates();
 
