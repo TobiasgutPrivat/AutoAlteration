@@ -7,6 +7,8 @@ class Inventory {
     
     public Inventory select(string keywordFilter) =>
         new Inventory(GetArticles(keywordFilter));
+    public Inventory select(BlockType blockType) =>
+        new Inventory(articles.Where(a => a.Type == blockType).ToList());
 
     public Inventory selectString(string nameString) =>
         new Inventory(articles.Where(a => a.Name.Contains(nameString)).ToList());
@@ -55,6 +57,8 @@ class Inventory {
 
     public InventoryEdit toShape(string Keyword) =>
         edit().toShape(Keyword);
+    public InventoryEdit blockChange(BlockChange blockChange) =>
+        edit().blockChange(blockChange);
 
     public InventoryEdit edit(){
         List<Article> articleClone = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));
@@ -67,6 +71,22 @@ class Inventory {
 
 
     //Development Section ------------------------------------------------------------------------------------------------------
+    public Inventory addArticles(List<Article> newArticles) {
+        if (!Alteration.devMode){
+            Console.WriteLine("Adding Articles only available in devMode");
+        } else {
+            articles.AddRange(newArticles);
+        }
+        return this;
+    }
+    public Inventory addArticles(InventoryEdit inventoryEdit) {
+        if (!Alteration.devMode){
+            Console.WriteLine("Adding Articles only available in devMode");
+        } else {
+            articles.AddRange(inventoryEdit.articles);
+        }
+        return this;
+    }
     public InventoryEdit editOriginal(){
         if (!Alteration.devMode){
             Console.WriteLine("Edit Original only available in devMode");

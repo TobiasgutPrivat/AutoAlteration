@@ -18,15 +18,7 @@ class CPLess : Alteration{
 class STTF : Alteration{
     public override void run(Map map){
         map.delete(inventory.select("Checkpoint&(Ring|Gate)"));
-        Inventory checkpoint = inventory.select("Checkpoint&!(Ring|Gate)");
-        checkpoint.remove("Checkpoint").replace(map);
-        
-        // map.replace("RoadIceWithWallCheckpointRight","RoadIceWithWallStraight",BlockType.Block);
-        // map.replace("RoadIceWithWallCheckpointLeft","RoadIceWithWallStraight",BlockType.Block);
-        // map.replace("RoadIceWithWallDiagRightCheckpointRight","RoadIceDiagLeftWithWallStraight",BlockType.Block);
-        // map.replace("RoadIceWithWallDiagLeftCheckpointRight","RoadIceDiagLeftWithWallStraight",BlockType.Block,new DiagBlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
-        // map.replace("RoadIceWithWallDiagRightCheckpointLeft","RoadIceDiagRightWithWallStraight",BlockType.Block);
-        // map.replace("RoadIceWithWallDiagLeftCheckpointLeft","RoadIceDiagRightWithWallStraight",BlockType.Block,new DiagBlockChange(new Vec3(32,0,32), new Vec3(PI,0,0)));
+        inventory.select(BlockType.Block).select("Checkpoint").remove("Checkpoint").replace(map);
 
         map.placeStagedBlocks();
     }
