@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
 //"blockChange": null -> "blockChange":{"absolutePosition":{"X":0.0,"Y":0.0,"Z":0.0},"pitchYawRoll":{"X":0.0,"Y":0.0,"Z":0.0}}
 Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
-// Alteration.createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+Alteration.createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 // testBlock("RoadIceDiagRightToRoadIceWithWallDiagLeft");
 // createInventory("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
@@ -14,7 +14,7 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-Alteration.alterFolder(new Surfaceless(), sourcefolder, destinationFolder + "Spring 2024 Surfaceless/", "Surfaceless");
+// Alteration.alterFolder(new Surfaceless(), sourcefolder, destinationFolder + "Spring 2024 Surfaceless/", "Surfaceless");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test STTF.Map.Gbx";
