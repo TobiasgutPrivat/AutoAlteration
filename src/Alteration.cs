@@ -133,10 +133,20 @@ class Alteration {
         createTriggerArticle(CPMLBlock.select("Slope2&Right"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
         createTriggerArticle(CPMLBlock.select("Slope2&Left"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
         float slope = slope2/2;
-        createTriggerArticle(CPMLBlock.select("Slope&Down"), midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
-        createTriggerArticle(CPMLBlock.select("Slope&Up"), midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
-        createTriggerArticle(CPMLBlock.select("Tilt&Right"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
-        createTriggerArticle(CPMLBlock.select("Tilt&Left"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
+        createTriggerArticle(CPMLBlock.select("Slope&Down&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
+        createTriggerArticle(CPMLBlock.select("Slope&Up&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
+        createTriggerArticle(CPMLBlock.select("Tilt&Right&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
+        createTriggerArticle(CPMLBlock.select("Tilt&Left&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
+
+        createTriggerArticle(CPMLBlock.select("Slope&Down&RoadIce"), midPlatform + new Vec3(0,8,0),new Vec3(0,slope,0));
+        createTriggerArticle(CPMLBlock.select("Slope&Up&RoadIce"), midPlatform + new Vec3(0,8,0),new Vec3(0,-slope,0));
+
+        createTriggerArticle(CPMLBlock.select("Platform&Wall&Down"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,0));
+        createTriggerArticle(CPMLBlock.select("Platform&Wall&Up"), new Vec3(16,16,29),new Vec3(0,-PI*0.5f,0));
+        createTriggerArticle(CPMLBlock.select("Platform&Wall&Right"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,PI*0.5f));//should work i think, but some problem with offset
+        createTriggerArticle(CPMLBlock.select("Platform&Wall&Left"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,-PI*0.5f));
+
+        
     }
 
     private static void createTriggerArticle(Inventory selection,Vec3 offset, Vec3 rotation){

@@ -45,15 +45,15 @@ class Block {
             blockChange.changeBlock(block, this);
         }
     }
-    public Block(CGameCtnBlock block,BlockChange oldBlockChange,  Article article, BlockChange blockChange = null)
+    public Block(CGameCtnBlock block,BlockChange baseBlockChange,  Article article, BlockChange blockChange = null)
     {
         initBlock(block);
         
-        if (oldBlockChange != null) {
-            oldBlockChange.changeBlock(block, this);
-        }
         this.name = article.Name;
         this.blockType = article.Type;
+        if (baseBlockChange != null) {
+            baseBlockChange.changeBlock(block, this);
+        }
         if (article.blockChange != null) {
             article.blockChange.changeBlock(block, this);
         }
@@ -124,14 +124,14 @@ class Block {
         }
     }
 
-    public Block(CGameCtnAnchoredObject item,BlockChange oldBlockChange, Article article,BlockChange blockChange = null){
+    public Block(CGameCtnAnchoredObject item,BlockChange baseBlockChange, Article article,BlockChange blockChange = null){
         initBlock(item);
 
-        if (oldBlockChange != null) {
-            oldBlockChange.changeItem(item, this);
-        }
         this.name = article.Name;
         this.blockType = article.Type;
+        if (baseBlockChange != null) {
+            baseBlockChange.changeItem(item, this);
+        }
         if (article.blockChange != null) {
             article.blockChange.changeItem(item, this);
         }

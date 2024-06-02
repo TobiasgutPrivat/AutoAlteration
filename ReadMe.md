@@ -1,7 +1,7 @@
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
 
-This Project is based on the GBX.NET Framework from BigBang.
+This Project is based on the GBX.NET Framework from BigBang (Nationsconverter Guy).
 
 It's still in early development, so there will probably be some Bugs and Problems. Contribution to the repository is very welcome, feel free to create pull requests.
 
@@ -51,7 +51,7 @@ This for example alterates the maps with FreeWheel and OneUp:
 >AutoAlteration.alterFolder(new List<Alteration>{new FreeWheel(), new OneUP()}, sourcefolder, destinationFolder, "FreeWheel (1-UP)");
 
 ### Implementation of Alterations
-You can freely make new Alterations, your also asked to share them (see Contribution below)
+You can freely make new Alterations, your also asked to share them (see Contribution below) This will require some basic 
 
 The Alterations can be edited or new ones can be created within the "Alterations" Folder
 
@@ -114,9 +114,9 @@ I also made a Plugin to get the selected BlockModelId in editor (Also there will
 To install: Clone it into your Plugin Folder (Its not released yet)
 
 ## Known Issues/Bugs
-- A weird Problem when deleting boosters causing the map to not be loadable
 - When deleting Blocks the base Platform stays there. (Good for replacing but bad for CPLess)
-- Everything marked with //TODO in the Project
+- Some Issue With incorrect Relative Offset in complex Rotations
+
 ## Contribution
 You are welcome to contribute to the Project by creating Pull Requests on GitHub
 
