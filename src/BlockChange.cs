@@ -27,13 +27,13 @@ class BlockChange{
         block.relativeOffset(absolutePosition);
         block.pitchYawRoll += pitchYawRoll;
     }
-    public virtual void invertChangeBlock(CGameCtnBlock ctnBlock,Block @block){
-        block.pitchYawRoll -= pitchYawRoll;
-        block.relativeOffset(absolutePosition * -1);
-    }
+    // public virtual void invertChangeBlock(CGameCtnBlock ctnBlock,Block @block){
+    //     block.pitchYawRoll -= pitchYawRoll;
+    //     block.relativeOffset(absolutePosition * -1);
+    // }
 
-    public virtual void invertChangeItem(CGameCtnAnchoredObject ctnItem,Block @block){
-        block.pitchYawRoll -= pitchYawRoll;
-        block.relativeOffset(absolutePosition * -1);
-    }
+    // public virtual void invertChangeItem(CGameCtnAnchoredObject ctnItem,Block @block){
+    //     block.pitchYawRoll -= pitchYawRoll;
+    //     block.relativeOffset(absolutePosition * -1);
+    // }
 }

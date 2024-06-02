@@ -45,12 +45,12 @@ class Block {
             blockChange.changeBlock(block, this);
         }
     }
-    public Block(CGameCtnBlock block,BlockChange invertBlockChange,  Article article, BlockChange blockChange = null)
+    public Block(CGameCtnBlock block,BlockChange oldBlockChange,  Article article, BlockChange blockChange = null)
     {
         initBlock(block);
-
-        if (invertBlockChange != null) {
-            invertBlockChange.invertChangeBlock(block, this);
+        
+        if (oldBlockChange != null) {
+            oldBlockChange.changeBlock(block, this);
         }
         this.name = article.Name;
         this.blockType = article.Type;
@@ -124,11 +124,11 @@ class Block {
         }
     }
 
-    public Block(CGameCtnAnchoredObject item,BlockChange invertBlockChange, Article article,BlockChange blockChange = null){
+    public Block(CGameCtnAnchoredObject item,BlockChange oldBlockChange, Article article,BlockChange blockChange = null){
         initBlock(item);
 
-        if (invertBlockChange != null) {
-            invertBlockChange.invertChangeItem(item, this);
+        if (oldBlockChange != null) {
+            oldBlockChange.changeItem(item, this);
         }
         this.name = article.Name;
         this.blockType = article.Type;

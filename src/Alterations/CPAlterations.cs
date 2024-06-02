@@ -58,7 +58,7 @@ class DiagBlockChange : BlockChange{
         block.relativeOffset(absolutePosition);
         block.pitchYawRoll += pitchYawRoll;
     }
-    public override void invertChangeBlock(CGameCtnBlock ctnBlock,Block @block){
+    // public override void invertChangeBlock(CGameCtnBlock ctnBlock,Block @block){
         // switch (ctnBlock.Direction){
         //     case Direction.North:
         //         block.relativeOffset(new Vec3(0,0,0));
@@ -74,7 +74,7 @@ class DiagBlockChange : BlockChange{
         //         break;
         // }
         
-        block.pitchYawRoll -= pitchYawRoll;
-        block.relativeOffset(absolutePosition * -1);
-    }
+    //     block.pitchYawRoll -= pitchYawRoll;
+    //     block.relativeOffset(absolutePosition * -1);
+    // }
 }

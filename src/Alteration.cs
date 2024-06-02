@@ -70,7 +70,7 @@ class Alteration {
         alterFile(alterations,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
     }
     public static void alterFile(Alteration alteration, string mapFile, string Name) {
-        alterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
+        alterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
     }
 
     public Alteration(){}
@@ -80,17 +80,15 @@ class Alteration {
     public static void createInventory(string projectFolder) {
         devMode = true;
         //Load Vanilla Articles
-        Inventory items = Alteration.importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json");
+        Inventory items = importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json");
         items.articles.ForEach(x => x.Type = BlockType.Item);
-        Inventory blocks = Alteration.importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
+        Inventory blocks = importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
         blocks.articles.ForEach(x => x.Type = BlockType.Block);
 
         //Fix Gate naming
         blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
 
         //Init Inventory
-        // Inventory inventory = Alteration.inventory;
-        // inventory.articles.Clear();
         inventory.articles.AddRange(items.articles);
         inventory.articles.AddRange(blocks.articles);
 
@@ -98,58 +96,75 @@ class Alteration {
         inventory.select("DiagLeft|DiagRight").editOriginal().blockChange(new DiagBlockChange());
 
         //Add Articles with unnecessary keywords removed
-        addCheckpointBlocks(inventory);
+        addCheckpointBlocks();
+        addCheckpointTrigger();
         inventory.addArticles(inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").remove("Start").add("MapStart"));
         
         //Control
         // inventory.checkDuplicates();
 
-        //Save
-        // inventory.articles.ForEach(x => x.cacheFilter.Clear());
-        // string json = JsonConvert.SerializeObject(inventory.articles);
-        // File.WriteAllText(projectFolder + "src/Inventory.json", json);
         devMode = false;
     }
 
-    private static void addCheckpointBlocks(Inventory inventory){
+    private static void addCheckpointBlocks(){
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("Straight").align().remove("Straight"));
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().remove("StraightX2").blockChange(new DiagBlockChange()));
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("Base").align().remove("Base"));
         inventory.addArticles(inventory.select("Special").remove("Special"));
-        addRoadNoCPBlocks(inventory, "Tech");
-        addRoadNoCPBlocks(inventory, "Dirt");
-        addRoadNoCPBlocks(inventory, "Bump");
-        addRoadNoCPBlocks(inventory, "Ice");
-        addPlatformNoCPBlocks(inventory, "Tech");
-        addPlatformNoCPBlocks(inventory, "Dirt");
-        addPlatformNoCPBlocks(inventory, "Plastic");
-        addPlatformNoCPBlocks(inventory, "Grass");
-        addPlatformNoCPBlocks(inventory, "Ice");
-        addIceRoadNoCPBlocks(inventory);
+        addRoadNoCPBlocks("Tech");
+        addRoadNoCPBlocks("Dirt");
+        addRoadNoCPBlocks("Bump");
+        addRoadNoCPBlocks("Ice");
+        addPlatformNoCPBlocks("Tech");
+        addPlatformNoCPBlocks("Dirt");
+        addPlatformNoCPBlocks("Plastic");
+        addPlatformNoCPBlocks("Grass");
+        addPlatformNoCPBlocks("Ice");
+        addIceRoadNoCPBlocks();
     }
 
-    private static void addRoadNoCPBlocks(Inventory inventory, string surface){
+    private static void addCheckpointTrigger(){
+        Inventory CPMLBlock = inventory.select(BlockType.Block).select("Checkpoint|Multilap");
+        Vec3 midPlatform = new Vec3(16,2,16);
+        createTriggerArticle(CPMLBlock.select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!(RoadIce)"), midPlatform,Vec3.Zero);
+        float slope2 = 0.47f;
+        createTriggerArticle(CPMLBlock.select("Slope2&Down"), midPlatform + new Vec3(0,8,0),new Vec3(0,slope2,0));
+        createTriggerArticle(CPMLBlock.select("Slope2&Up"), midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));
+        createTriggerArticle(CPMLBlock.select("Slope2&Right"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
+        createTriggerArticle(CPMLBlock.select("Slope2&Left"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
+        float slope = slope2/2;
+        createTriggerArticle(CPMLBlock.select("Slope&Down"), midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
+        createTriggerArticle(CPMLBlock.select("Slope&Up"), midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
+        createTriggerArticle(CPMLBlock.select("Tilt&Right"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
+        createTriggerArticle(CPMLBlock.select("Tilt&Left"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
+    }
+
+    private static void createTriggerArticle(Inventory selection,Vec3 offset, Vec3 rotation){
+        inventory.addArticles(selection.add("Trigger").blockChange(new BlockChange(offset,rotation)));
+    }
+
+    private static void addRoadNoCPBlocks(string surface){
         inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Up","Slope"},"Road" +surface,"",""));
         inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Down","Slope"},"Road" +surface,"","",new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Left","Tilt"},"Road" +surface,"","",new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Right","Tilt"},"Road" +surface,"",""));
     }
-    private static void addPlatformNoCPBlocks(Inventory inventory, string surface){
+    private static void addPlatformNoCPBlocks(string surface){
         inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Up","Slope2"},"Platform","",surface));
         inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Down","Slope2"},"Platform","",surface,new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Right","Slope2"},"Platform","",surface,new BlockChange(new Vec3(0,0,32), new Vec3(PI*0.5f,0,0))));
         inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Left","Slope2"},"Platform","",surface,new BlockChange(new Vec3(32,0,0), new Vec3(PI*1.5f,0,0))));
-        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Up","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
-        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Down","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
-        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Right","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
-        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Left","Wall"},"Platform","",surface,new BlockChange(Vec3.Zero, new Vec3(PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Up","Wall"},"Platform","",surface,new BlockChange(new Vec3(32,0,0), new Vec3(-PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Down","Wall"},"Platform","",surface,new BlockChange(new Vec3(32,0,0), new Vec3(-PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Right","Wall"},"Platform","",surface,new BlockChange(new Vec3(32,0,0), new Vec3(-PI*0.5f,0,0))));
+        inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Left","Wall"},"Platform","",surface,new BlockChange(new Vec3(32,0,0), new Vec3(-PI*0.5f,0,0))));
     }
-    private static void addIceRoadNoCPBlocks(Inventory inventory){
-        inventory.articles.Add(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Left"},"RoadIceWithWall","",""));
-        inventory.articles.Add(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Right"},"RoadIceWithWall","","",new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
-        inventory.articles.Add(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Right"},"RoadIceWithWall","","",new DiagBlockChange()));
-        inventory.articles.Add(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Right"},"RoadIceWithWall","","",new DiagBlockChange(new Vec3(96,0,64), new Vec3(PI,0,0))));
-        inventory.articles.Add(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Left"},"RoadIceWithWall","","",new DiagBlockChange(new Vec3(96,0,64), new Vec3(PI,0,0))));
-        inventory.articles.Add(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Left"},"RoadIceWithWall","","",new DiagBlockChange()));
+    private static void addIceRoadNoCPBlocks(){
+        inventory.articles.Add(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Left","WithWall"},"RoadIce","",""));
+        inventory.articles.Add(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Right","WithWall"},"RoadIce","","",new BlockChange(new Vec3(32,0,32), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Right","WithWall"},"RoadIce","","",new DiagBlockChange()));
+        inventory.articles.Add(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Right","WithWall"},"RoadIce","","",new DiagBlockChange(new Vec3(96,0,64), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Left","WithWall"},"RoadIce","","",new DiagBlockChange(new Vec3(96,0,64), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Left","WithWall"},"RoadIce","","",new DiagBlockChange()));
     }
 }
