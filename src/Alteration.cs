@@ -85,7 +85,7 @@ class Alteration {
     public static void loadCustomBlocks(){
         string[] customBlocks = Directory.GetFiles(BlocksFolder, "*", SearchOption.AllDirectories).Select(x => x.Remove(0, BlocksFolder.Length)).ToArray();
         string[] customItems = Directory.GetFiles(ItemsFolder, "*", SearchOption.AllDirectories).Select(x => x.Remove(0, ItemsFolder.Length)).ToArray();
-        inventory.addArticles(customBlocks.Select(x => new Article(x, BlockType.Block)).ToList());
+        inventory.addArticles(customBlocks.Select(x => new Article(x, BlockType.Block)).ToList());//TODO think about Path
         inventory.addArticles(customItems.Select(x => new Article(x, BlockType.Item)).ToList());
     }
 
