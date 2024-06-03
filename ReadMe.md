@@ -79,21 +79,21 @@ Example: delete all CheckpointRings:
 > map.delete("GateCheckpoint");
 
 **PlaceRelativ** : places a Block positioned relative to all Blocks off one Type
-> map.placeRelative(BlockToAddTo,new BlockChange(BlockType, newBlock, positionOffset, rotationOffset));
+> map.placeRelative(BlockToAddTo, newBlock, BlockType, new BlockMove(positionOffset, rotationOffset));
 
-The Blockchange defines the new Block to be placed.
+The BlockMove defines the new Block to be placed.
 
 Example: place a BoostRing at every RoadTechCheckpoint with an offset of 1m forwards
-> map.placeRelative("RoadTechCheckpoint", "GateSpecialTurbo", new BlockChange(new Vec3(0,-12,forwardOffset),rotation));
+> map.placeRelative("RoadTechCheckpoint", "GateSpecialTurbo", BlockType.Block, new BlockMove(new Vec3(0,-12,1),Vec3.Zero));
 
-Any placed Blocks get staged and need to be placed later by calling:
+All placed Blocks get staged and need to be placed later by calling:
 
 > map.placeStagedBlocks();
 
 **Replace** uses placeRelative and delete to replace the specified Blocks
 
 Example: replace a RoadTechCheckpoint with a Booster
-> map.replace("RoadTechCheckpoint",new BlockChange("RoadTechSpecialTurbo"));
+> map.replace("RoadTechCheckpoint","RoadTechSpecialTurbo",BlockType.Block);
 
 #### Block Selction
 

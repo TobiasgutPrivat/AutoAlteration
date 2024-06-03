@@ -39,30 +39,30 @@ class Inventory {
         return null;
     }
 
-    public InventoryEdit add(string Keyword) =>
+    public KeywordEdit add(string Keyword) =>
         edit().add(Keyword);
-    public InventoryEdit add(string[] Keyword) =>
+    public KeywordEdit add(string[] Keyword) =>
         edit().add(Keyword);
 
-    public InventoryEdit remove(string Keyword) =>
+    public KeywordEdit remove(string Keyword) =>
         edit().remove(Keyword);
-    public InventoryEdit remove(string[] Keyword) =>
+    public KeywordEdit remove(string[] Keyword) =>
         edit().remove(Keyword);
 
-    public InventoryEdit surface(string Keyword) =>
+    public KeywordEdit surface(string Keyword) =>
         edit().surface(Keyword);
 
-    public InventoryEdit shape(string Keyword) =>
+    public KeywordEdit shape(string Keyword) =>
         edit().shape(Keyword);
 
-    public InventoryEdit toShape(string Keyword) =>
+    public KeywordEdit toShape(string Keyword) =>
         edit().toShape(Keyword);
-    public InventoryEdit blockChange(BlockChange blockChange) =>
-        edit().blockChange(blockChange);
+    public KeywordEdit blockMove(BlockMove blockMove) =>
+        edit().blockMove(blockMove);
 
-    public InventoryEdit edit(){
+    public KeywordEdit edit(){
         List<Article> articleClone = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));
-        return new InventoryEdit(articleClone);
+        return new KeywordEdit(articleClone);
     }
 
     public bool hasArticle(string name) {
@@ -79,21 +79,21 @@ class Inventory {
         }
         return this;
     }
-    public Inventory addArticles(InventoryEdit inventoryEdit) {
+    public Inventory addArticles(KeywordEdit keywordEdit) {
         if (!Alteration.devMode){
             Console.WriteLine("Adding Articles only available in devMode");
         } else {
-            articles.AddRange(inventoryEdit.articles);
+            articles.AddRange(keywordEdit.articles);
         }
         return this;
     }
-    public InventoryEdit editOriginal(){
+    public KeywordEdit editOriginal(){
         if (!Alteration.devMode){
             Console.WriteLine("Edit Original only available in devMode");
             return null;
         } else {
             articles.ForEach(x => x.cacheFilter.Clear());
-            return new InventoryEdit(articles);
+            return new KeywordEdit(articles);
         }
     }
 

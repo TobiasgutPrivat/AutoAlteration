@@ -15,50 +15,50 @@ class Block {
     public Vec3 pitchYawRoll;
     public DifficultyColor color;
 
-    public Block(CGameCtnBlock block, BlockChange blockChange = null)
+    public Block(CGameCtnBlock block, BlockMove blockMove = null)
     {
         initBlock(block);
-        if (blockChange != null) {
-            blockChange.changeBlock(block, this);
+        if (blockMove != null) {
+            blockMove.changeBlock(block, this);
         }
     }
 
-    public Block(CGameCtnBlock block, string name,BlockType blockType, BlockChange blockChange = null)
+    public Block(CGameCtnBlock block, string name,BlockType blockType, BlockMove blockMove = null)
     {
         initBlock(block);
         this.name = name;
         this.blockType = blockType;
-        if (blockChange != null) {
-            blockChange.changeBlock(block, this);
+        if (blockMove != null) {
+            blockMove.changeBlock(block, this);
         }
     }
 
-    public Block(CGameCtnBlock block, Article article, BlockChange blockChange = null)
+    public Block(CGameCtnBlock block, Article article, BlockMove blockMove = null)
     {
         initBlock(block);
         this.name = article.Name;
         this.blockType = article.Type;
-        if (article.blockChange != null) {
-            article.blockChange.changeBlock(block, this);
+        if (article.blockMove != null) {
+            article.blockMove.changeBlock(block, this);
         }
-        if (blockChange != null) {
-            blockChange.changeBlock(block, this);
+        if (blockMove != null) {
+            blockMove.changeBlock(block, this);
         }
     }
-    public Block(CGameCtnBlock block,BlockChange baseBlockChange,  Article article, BlockChange blockChange = null)
+    public Block(CGameCtnBlock block,BlockMove baseBlockMove,  Article article, BlockMove blockMove = null)
     {
         initBlock(block);
         
         this.name = article.Name;
         this.blockType = article.Type;
-        if (baseBlockChange != null) {
-            baseBlockChange.changeBlock(block, this);
+        if (baseBlockMove != null) {
+            baseBlockMove.changeBlock(block, this);
         }
-        if (article.blockChange != null) {
-            article.blockChange.changeBlock(block, this);
+        if (article.blockMove != null) {
+            article.blockMove.changeBlock(block, this);
         }
-        if (blockChange != null) {
-            blockChange.changeBlock(block, this);
+        if (blockMove != null) {
+            blockMove.changeBlock(block, this);
         }
     }
 
@@ -96,47 +96,47 @@ class Block {
         }
     }
 
-    public Block(CGameCtnAnchoredObject item,BlockChange blockChange = null){
+    public Block(CGameCtnAnchoredObject item,BlockMove blockMove = null){
         initBlock(item);
-        if (blockChange != null) {
-            blockChange.changeItem(item, this);
+        if (blockMove != null) {
+            blockMove.changeItem(item, this);
         }
     }
-    public Block(CGameCtnAnchoredObject item, string name,BlockType blockType,BlockChange blockChange = null){
+    public Block(CGameCtnAnchoredObject item, string name,BlockType blockType,BlockMove blockMove = null){
         initBlock(item);
 
         this.name = name;
         this.blockType = blockType;
-        if (blockChange != null) {
-            blockChange.changeItem(item, this);
+        if (blockMove != null) {
+            blockMove.changeItem(item, this);
         }
     }
-    public Block(CGameCtnAnchoredObject item, Article article,BlockChange blockChange = null){
+    public Block(CGameCtnAnchoredObject item, Article article,BlockMove blockMove = null){
         initBlock(item);
         
         this.name = article.Name;
         this.blockType = article.Type;
-        if (article.blockChange != null) {
-            article.blockChange.changeItem(item, this);
+        if (article.blockMove != null) {
+            article.blockMove.changeItem(item, this);
         }
-        if (blockChange != null) {
-            blockChange.changeItem(item, this);
+        if (blockMove != null) {
+            blockMove.changeItem(item, this);
         }
     }
 
-    public Block(CGameCtnAnchoredObject item,BlockChange baseBlockChange, Article article,BlockChange blockChange = null){
+    public Block(CGameCtnAnchoredObject item,BlockMove baseBlockMove, Article article,BlockMove blockMove = null){
         initBlock(item);
 
         this.name = article.Name;
         this.blockType = article.Type;
-        if (baseBlockChange != null) {
-            baseBlockChange.changeItem(item, this);
+        if (baseBlockMove != null) {
+            baseBlockMove.changeItem(item, this);
         }
-        if (article.blockChange != null) {
-            article.blockChange.changeItem(item, this);
+        if (article.blockMove != null) {
+            article.blockMove.changeItem(item, this);
         }
-        if (blockChange != null) {
-            blockChange.changeItem(item, this);
+        if (blockMove != null) {
+            blockMove.changeItem(item, this);
         }
     }
 

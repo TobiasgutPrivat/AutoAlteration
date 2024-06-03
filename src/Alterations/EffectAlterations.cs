@@ -24,25 +24,25 @@ class EffectAlteration: Alteration {
 
     public static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         string GateSpecial = "GateSpecial" + Effect;
-        map.placeRelative(MultilapBlock, GateSpecial,BlockType.Block ,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
-        map.placeRelative(CPRoadBlock, GateSpecial,BlockType.Block,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
-        map.placeRelative(CPPlatformBlock, GateSpecial,BlockType.Block,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
-        map.placeRelative(CPPlatformTilt, GateSpecial,BlockType.Block,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
-        map.placeRelative(CPRoadBlockTilt, GateSpecial,BlockType.Block,new BlockChange(new Vec3(0,-12,forwardOffset),rotation));
+        map.placeRelative(MultilapBlock, GateSpecial,BlockType.Block ,new BlockMove(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(CPRoadBlock, GateSpecial,BlockType.Block,new BlockMove(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(CPPlatformBlock, GateSpecial,BlockType.Block,new BlockMove(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(CPPlatformTilt, GateSpecial,BlockType.Block,new BlockMove(new Vec3(0,-8,forwardOffset),rotation));
+        map.placeRelative(CPRoadBlockTilt, GateSpecial,BlockType.Block,new BlockMove(new Vec3(0,-12,forwardOffset),rotation));
         map.placeRelative(DiagRight, GateSpecial,BlockType.Block,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
         map.placeRelative(DiagLeft, GateSpecial,BlockType.Block,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
-        map.placeRelative("GateCheckpoint", GateSpecial,BlockType.Block,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative("GateCheckpoint", GateSpecial,BlockType.Block,new BlockMove(new Vec3(0,0,forwardOffset),rotation));
 
         string GateSpecial32m = "GateSpecial32m" + Effect;
-        map.placeRelative(GateCP32m,GateSpecial32m,BlockType.Item,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative("GateCheckpointCenter24m",GateSpecial32m,BlockType.Item,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative(GateCP16m,"GateSpecial16m" + Effect,BlockType.Item,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative(GateCP8m,"GateSpecial8m" + Effect,BlockType.Item,new BlockChange(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative(GateCP32m,GateSpecial32m,BlockType.Item,new BlockMove(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative("GateCheckpointCenter24m",GateSpecial32m,BlockType.Item,new BlockMove(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative(GateCP16m,"GateSpecial16m" + Effect,BlockType.Item,new BlockMove(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative(GateCP8m,"GateSpecial8m" + Effect,BlockType.Item,new BlockMove(new Vec3(0,0,forwardOffset),rotation));
 
-        map.placeRelative(IceWallRight,GateSpecial32m,BlockType.Item,new BlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
-        map.placeRelative(IceWallRight,GateSpecial32m,BlockType.Item,new BlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation));
-        map.placeRelative(IceWallLeft,GateSpecial32m,BlockType.Item,new BlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
-        map.placeRelative(IceWallLeft,GateSpecial32m,BlockType.Item,new BlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation));
+        map.placeRelative(IceWallRight,GateSpecial32m,BlockType.Item,new BlockMove(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
+        map.placeRelative(IceWallRight,GateSpecial32m,BlockType.Item,new BlockMove(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation));
+        map.placeRelative(IceWallLeft,GateSpecial32m,BlockType.Item,new BlockMove(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
+        map.placeRelative(IceWallLeft,GateSpecial32m,BlockType.Item,new BlockMove(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation));
 
         map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
         map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Right));
@@ -62,7 +62,7 @@ class EffectAlteration: Alteration {
 
         Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), inventory.GetArticle("ObstaclePillar2m"));
-        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), GateSpecial,new BlockChange(new Vec3(-16,-18,-16 + forwardOffset),rotation));
+        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), GateSpecial,new BlockMove(new Vec3(-16,-18,-16 + forwardOffset),rotation));
         // map.placeRelative(CPMultiLap.select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!(RoadIce)&!Gate"), GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
         // map.placeRelative(CPMultiLap.select("Platform&Slope2"), GateSpecial,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
         // map.placeRelative(CPMultiLap.select("Platform&Wall"), GateSpecial,new BlockChange(new Vec3(0,0,forwardOffset),new Vec3(0,PI/2,0) + rotation));
@@ -100,10 +100,10 @@ class EffectAlteration: Alteration {
     public static void placeStartEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         Inventory start = inventory.select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
-        map.placeRelative(start.select("!Water&!(RoadIce)"), GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
-        map.placeRelative(start.select("RoadIce"), GateSpecial,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
-        map.placeRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset-2),rotation));
-        inventory.select("MapStart&Gate").add(Effect).remove(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).placeRelative(map,new BlockChange(new Vec3(0,0,forwardOffset-10),rotation));
+        map.placeRelative(start.select("!Water&!(RoadIce)"), GateSpecial,new BlockMove(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(start.select("RoadIce"), GateSpecial,new BlockMove(new Vec3(0,-8,forwardOffset),rotation));
+        map.placeRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,new BlockMove(new Vec3(0,-16,forwardOffset-2),rotation));
+        inventory.select("MapStart&Gate").add(Effect).remove(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).placeRelative(map,new BlockMove(new Vec3(0,0,forwardOffset-10),rotation));
         map.placeStagedBlocks();
     }
 }
@@ -176,7 +176,7 @@ enum LeftRight
     Right
 }
 
-class EffectDiagBlockChange : BlockChange{
+class EffectDiagBlockChange : BlockMove{
 
     LeftRight side;
     public EffectDiagBlockChange(LeftRight side) : base(){this.side = side;}

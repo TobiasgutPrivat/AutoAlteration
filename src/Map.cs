@@ -86,7 +86,7 @@ class Map
     });
   }
 
-  public void placeRelative(string atBlock, string newBlock,BlockType blockType, BlockChange blockChange = null){
+  public void placeRelative(string atBlock, string newBlock,BlockType blockType, BlockMove blockChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){
       stagedBlocks.Add(new Block(ctnBlock,newBlock,blockType,blockChange));
     }
@@ -95,48 +95,48 @@ class Map
     }
   }
 
-  public void placeRelative(string[] atBlocks, string newBlock,BlockType blockType, BlockChange blockChange = null){
+  public void placeRelative(string[] atBlocks, string newBlock,BlockType blockType, BlockMove blockChange = null){
     foreach(var atBlock in atBlocks){
       placeRelative(atBlock, newBlock, blockType, blockChange);
     }
   }
-  public void placeRelative(Inventory inventory, string newBlock,BlockType blockType, BlockChange blockChange = null){
+  public void placeRelative(Inventory inventory, string newBlock,BlockType blockType, BlockMove blockChange = null){
     placeRelative(inventory.names(), newBlock, blockType, blockChange);
   }
 
-  public void placeRelative(Article atArticle, Article newArticle, BlockChange blockChange = null){
+  public void placeRelative(Article atArticle, Article newArticle, BlockMove blockChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){
-      stagedBlocks.Add(new Block(ctnBlock,atArticle.blockChange,newArticle,blockChange));
+      stagedBlocks.Add(new Block(ctnBlock,atArticle.blockMove,newArticle,blockChange));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.Name)){
-      stagedBlocks.Add(new Block(ctnItem,atArticle.blockChange,newArticle,blockChange));
+      stagedBlocks.Add(new Block(ctnItem,atArticle.blockMove,newArticle,blockChange));
     }
   }
 
-  public void placeRelative(Inventory inventory, Article newArticle, BlockChange blockChange = null){
+  public void placeRelative(Inventory inventory, Article newArticle, BlockMove blockChange = null){
     inventory.articles.ForEach(a => placeRelative(a, newArticle, blockChange));
   }
 
-  public void replace(string oldBlock, string newBlock,BlockType blockType, BlockChange blockChange = null){
+  public void replace(string oldBlock, string newBlock,BlockType blockType, BlockMove blockChange = null){
     placeRelative(oldBlock, newBlock, blockType,blockChange);
     delete(oldBlock);
   }
 
-  public void replace(string[] oldBlocks, string newBlock,BlockType blockType, BlockChange blockChange = null){
+  public void replace(string[] oldBlocks, string newBlock,BlockType blockType, BlockMove blockChange = null){
     placeRelative(oldBlocks, newBlock, blockType,blockChange);
     delete(oldBlocks);
   }
-  public void replace(Inventory inventory, string newBlock,BlockType blockType, BlockChange blockChange = null){
+  public void replace(Inventory inventory, string newBlock,BlockType blockType, BlockMove blockChange = null){
     placeRelative(inventory.names(), newBlock, blockType,blockChange);
     delete(inventory);
   }
 
-  public void replace(Article oldArticle, Article article, BlockChange blockChange = null){
+  public void replace(Article oldArticle, Article article, BlockMove blockChange = null){
     placeRelative(oldArticle, article,blockChange);
     delete(oldArticle.Name);
   }
 
-  public void replace(Inventory inventory, Article article, BlockChange blockChange = null){
+  public void replace(Inventory inventory, Article article, BlockMove blockChange = null){
     placeRelative(inventory, article,blockChange);
     delete(inventory);
   }
