@@ -14,7 +14,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altere
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new FreeWheel(), sourceFile, "FreeWheel");
+Alteration.alterFile(new STTF(), sourceFile, "STTF");
 
 
 
@@ -36,4 +36,20 @@ void stringToName(string projectFolder) {
     string[] articles = lines.Select(line => line.Split('/')[line.Split('/').Length-1].Trim()).ToArray();
     json = JsonConvert.SerializeObject(articles);
     File.WriteAllText(projectFolder + "src/Vanilla/ItemNames.json", json);
+}
+
+class Test : Alteration {
+    public override void run(Map map){
+
+        Article from = new("PlatformTechCheckpoint",BlockType.Block);
+        Article to = new("PlatformTechCheckpoint",BlockType.Block);
+        
+        map.placeRelative(from,to,new Position(new Vec3(0,32,0),new Vec3(PI,0,0)).addPosition(new Position(new Vec3(10,0,0),new Vec3(0,PI*0.5f,0)).addPosition(new Position(new Vec3(0,0,10),new Vec3(0,0,PI*0.5f)))));
+        // from.position.addPosition(new Position(new Vec3(0,32,0),new Vec3(0,PI*0.5f,0)));
+
+        // map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
+        // from.position.addPosition(new Position(new Vec3(0,0,0),new Vec3(0,0,PI*0.5f)));
+        // map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
+        map.placeStagedBlocks();
+    }
 }

@@ -1,6 +1,5 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
-using System.Numerics;
 
 enum BlockType
 {
@@ -11,55 +10,53 @@ enum BlockType
 class Block {
     public BlockType blockType;
     public string name;
-    public Vec3 absolutePosition;
-    public Vec3 pitchYawRoll;
+    public Position position = new Position();
     public DifficultyColor color;
 
-    public Block(CGameCtnBlock block, BlockMove blockMove = null)
+    public Block(CGameCtnBlock block, Position placePosition)
     {
         initBlock(block);
-        if (blockMove != null) {
-            blockMove.changeBlock(block, this);
-        }
+        position.addPosition(placePosition);
     }
 
-    public Block(CGameCtnBlock block, string name,BlockType blockType, BlockMove blockMove = null)
+    public Block(CGameCtnBlock block, string name,BlockType blockType, Position placePosition)
     {
         initBlock(block);
         this.name = name;
         this.blockType = blockType;
-        if (blockMove != null) {
-            blockMove.changeBlock(block, this);
-        }
+        position.addPosition(placePosition);
     }
 
-    public Block(CGameCtnBlock block, Article article, BlockMove blockMove = null)
+    public Block(CGameCtnBlock block, Article article, Position placePosition)
     {
         initBlock(block);
         this.name = article.name;
         this.blockType = article.type;
-        article.blockMoves.ForEach(b => b.changeBlock(block, this));
-        if (blockMove != null) {
-            blockMove.changeBlock(block, this);
-        }
+        position.addPosition(placePosition);
+        position.subtractPosition(article.position);
     }
-    public Block(CGameCtnBlock block,List<BlockMove> baseBlockMoves,  Article article, BlockMove blockMove = null)
+    public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position placePosition)
     {
         initBlock(block);
-        
+        if (article.name == "PlatformTechSlope2Straight"){
+            Console.WriteLine("test");
+        }
         this.name = article.name;
         this.blockType = article.type;
-        baseBlockMoves.ForEach(b => b.changeBlock(block, this));
-        article.blockMoves.ForEach(b => b.changeBlock(block, this));
-        if (blockMove != null) {
-            blockMove.changeBlock(block, this);
+        if (fromArticle.posCorection != null) {
+            position.move(fromArticle.posCorection.block(block));
         }
+        position.addPosition(fromArticle.position);
+        position.addPosition(placePosition);
+        position.subtractPosition(article.position);
     }
 
     private void initBlock(CGameCtnBlock block){
         color = block.Color;
         blockType = BlockType.Block;
         name = block.BlockModel.Id;
+        Vec3 absolutePosition;
+        Vec3 pitchYawRoll;
         if (block.IsFree){
             absolutePosition = (Vec3)block.AbsolutePositionInMap;
             pitchYawRoll = (Vec3)block.PitchYawRoll;
@@ -86,60 +83,47 @@ class Block {
                     absolutePosition = new(0,0,0);
                     break;
             }
-            absolutePosition = absolutePosition + new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
+            absolutePosition += new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
         }
+        position.addPosition(absolutePosition,pitchYawRoll);
     }
 
-    public Block(CGameCtnAnchoredObject item,BlockMove blockMove = null){
+    public Block(CGameCtnAnchoredObject item,Position placePosition){
         initBlock(item);
-        if (blockMove != null) {
-            blockMove.changeItem(item, this);
-        }
+        position.addPosition(placePosition);
     }
-    public Block(CGameCtnAnchoredObject item, string name,BlockType blockType,BlockMove blockMove = null){
+    public Block(CGameCtnAnchoredObject item, string name,BlockType blockType,Position placePosition){
         initBlock(item);
 
         this.name = name;
         this.blockType = blockType;
-        if (blockMove != null) {
-            blockMove.changeItem(item, this);
-        }
+        position.addPosition(placePosition);
     }
-    public Block(CGameCtnAnchoredObject item, Article article,BlockMove blockMove = null){
+    public Block(CGameCtnAnchoredObject item, Article article,Position placePosition){
         initBlock(item);
         
         this.name = article.name;
         this.blockType = article.type;
-        article.blockMoves.ForEach(b => b.changeItem(item, this));
-        if (blockMove != null) {
-            blockMove.changeItem(item, this);
-        }
+        position.addPosition(placePosition);
+        position.subtractPosition(article.position);
     }
 
-    public Block(CGameCtnAnchoredObject item,List<BlockMove> baseBlockMoves, Article article,BlockMove blockMove = null){
+    public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position placePosition){
         initBlock(item);
 
         this.name = article.name;
         this.blockType = article.type;
-        baseBlockMoves.ForEach(b => b.changeItem(item, this));
-        article.blockMoves.ForEach(b => b.changeItem(item, this));
-        if (blockMove != null) {
-            blockMove.changeItem(item, this);
+        if (fromArticle.posCorection != null) {
+            position.move(fromArticle.posCorection.item(item));
         }
+        position.addPosition(fromArticle.position);
+        position.addPosition(placePosition);
+        position.subtractPosition(article.position);
     }
 
     public void initBlock(CGameCtnAnchoredObject item){
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
-        absolutePosition = item.AbsolutePositionInMap;
-        pitchYawRoll = item.PitchYawRoll;
-    }
-
-    public void relativeOffset(Vec3 offset)
-    {
-        Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.X, pitchYawRoll.Y, pitchYawRoll.Z);//yaw,pitch,roll
-        Vector3 offsetV3 = new Vector3(offset.X,offset.Y,offset.Z);
-        Vector3 transformedOffset = Vector3.Transform(offsetV3, rotationMatrix);
-        absolutePosition = absolutePosition + new Vec3(transformedOffset.X, transformedOffset.Y, transformedOffset.Z);
+        position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
     }
 }

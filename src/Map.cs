@@ -75,68 +75,60 @@ class Map
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
       ZipArchiveEntry entry = zipArchive.CreateEntry(path);
-      using (Stream entryStream = entry.Open())
-      {
-        using (FileStream fileStream = File.OpenRead(Alteration.BlocksFolder + path))
-        {
-          fileStream.CopyTo(entryStream);
-        }
-      }
+        using Stream entryStream = entry.Open();
+        using FileStream fileStream = File.OpenRead(Alteration.BlocksFolder + path);
+        fileStream.CopyTo(entryStream);
     });
   }
 
-  public void placeRelative(string atBlock, string newBlock,BlockType blockType, BlockMove blockChange = null){
+  public void placeRelative(string atBlock, string newBlock,BlockType blockType, Position poitionChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnBlock,newBlock,blockType,blockChange));
+      stagedBlocks.Add(new Block(ctnBlock,newBlock,blockType,poitionChange));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnItem,newBlock,blockType,blockChange));
+      stagedBlocks.Add(new Block(ctnItem,newBlock,blockType,poitionChange));
     }
   }
 
-  public void placeRelative(string[] atBlocks, string newBlock,BlockType blockType, BlockMove blockChange = null){
+  public void placeRelative(string[] atBlocks, string newBlock,BlockType blockType, Position poitionChange = null){
     foreach(var atBlock in atBlocks){
-      placeRelative(atBlock, newBlock, blockType, blockChange);
+      placeRelative(atBlock, newBlock, blockType, poitionChange);
     }
   }
-  public void placeRelative(Inventory inventory, string newBlock,BlockType blockType, BlockMove blockChange = null){
-    placeRelative(inventory.names(), newBlock, blockType, blockChange);
+  public void placeRelative(Inventory inventory, string newBlock,BlockType blockType, Position poitionChange = null){
+    placeRelative(inventory.names(), newBlock, blockType, poitionChange);
   }
 
-  public void placeRelative(Article atArticle, Article newArticle, BlockMove blockChange = null){
+  public void placeRelative(Article atArticle, Article newArticle, Position positionChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.name)){
-      stagedBlocks.Add(new Block(ctnBlock,atArticle.blockMoves,newArticle,blockChange));
+      stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,positionChange));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.name)){
-      stagedBlocks.Add(new Block(ctnItem,atArticle.blockMoves,newArticle,blockChange));
+      stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,positionChange));
     }
   }
 
-  public void placeRelative(Inventory inventory, Article newArticle, BlockMove blockChange = null){
-    inventory.articles.ForEach(a => placeRelative(a, newArticle, blockChange));
+  public void placeRelative(Inventory inventory, Article newArticle, Position positionChange = null){
+    inventory.articles.ForEach(a => placeRelative(a, newArticle, positionChange));
   }
 
-  public void replace(string oldBlock, string newBlock,BlockType blockType, BlockMove blockChange = null){
-    placeRelative(oldBlock, newBlock, blockType,blockChange);
+  public void replace(string oldBlock, string newBlock,BlockType blockType, Position positionChange = null){
+    placeRelative(oldBlock, newBlock, blockType,positionChange);
     delete(oldBlock);
   }
 
-  public void replace(string[] oldBlocks, string newBlock,BlockType blockType, BlockMove blockChange = null){
-    placeRelative(oldBlocks, newBlock, blockType,blockChange);
+  public void replace(string[] oldBlocks, string newBlock,BlockType blockType, Position positionChange = null){
+    placeRelative(oldBlocks, newBlock, blockType,positionChange);
     delete(oldBlocks);
   }
-  public void replace(Inventory inventory, string newBlock,BlockType blockType, BlockMove blockChange = null){
-    placeRelative(inventory.names(), newBlock, blockType,blockChange);
-    delete(inventory);
-  }
 
-  public void replace(Article oldArticle, Article article, BlockMove blockChange = null){
-    placeRelative(oldArticle, article,blockChange);
+  public void replace(Article oldArticle, Article article, Position positionChange = null){
+    placeRelative(oldArticle, article,positionChange);
     delete(oldArticle.name);
   }
 
-  public void replace(Inventory inventory, Article article, BlockMove blockChange = null){
-    placeRelative(inventory, article,blockChange);
+  public void replace(Inventory inventory, Article article, Position positionChange = null){
+    placeRelative(inventory, article,positionChange);
     delete(inventory);
   }
 
@@ -191,11 +183,11 @@ class Map
           CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
           newBlock.IsFree = true;
           newBlock.Color = block.color;
-          newBlock.AbsolutePositionInMap = block.absolutePosition;
-          newBlock.PitchYawRoll = block.pitchYawRoll;
+          newBlock.AbsolutePositionInMap = block.position.coords;
+          newBlock.PitchYawRoll = block.position.pitchYawRoll;
           break;
         case BlockType.Item:
-          map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.absolutePosition,block.pitchYawRoll);
+          map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
           break;
       }
     } 

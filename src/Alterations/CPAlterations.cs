@@ -10,7 +10,7 @@ class CPBoost : Alteration{
         inventory.select(BlockType.Item).select("Checkpoint").remove(new[] {"Right","Left","Center","Checkpoint","v2"}).add("Turbo").replace(map);
         inventory.select(BlockType.Item).select("Turbo").add("Center").remove("Turbo").add("Checkpoint").replace(map);
         inventory.select(BlockType.Item).select("Turbo2").add("Center").remove("Turbo2").add("Checkpoint").replace(map);
-        map.replace("GateSpecial4mTurbo","GateCheckpointCenter8mv2",BlockType.Item,new BlockMove(new Vec3(2,0,0),Vec3.Zero));//untested
+        map.replace("GateSpecial4mTurbo","GateCheckpointCenter8mv2",BlockType.Item,new Position(new Vec3(2,0,0),Vec3.Zero));//untested
         map.placeStagedBlocks();
     }
 }
@@ -34,47 +34,3 @@ class CPFull : Alteration{
     }
 }
 
-class DiagBlockMove : BlockMove{
-    public DiagBlockMove() : base(){}
-    public DiagBlockMove(Vec3 absolutePosition) : base(absolutePosition){}
-    public DiagBlockMove(Vec3 absolutePosition, Vec3 pitchYawRoll) : base(absolutePosition,pitchYawRoll){}
-
-    public override void changeBlock(CGameCtnBlock ctnBlock,Block @block){
-        switch (ctnBlock.Direction){
-            case Direction.North:
-                block.relativeOffset(new Vec3(0,0,0));
-                break;
-            case Direction.East:
-                block.relativeOffset(new Vec3(0,0,-32));
-                break;
-            case Direction.South:
-                block.relativeOffset(new Vec3(-64,0,-32));
-                break;
-            case Direction.West:
-                block.relativeOffset(new Vec3(-64,0,0));
-                break;
-        }
-        
-        block.relativeOffset(absolutePosition);
-        block.pitchYawRoll += pitchYawRoll;
-    }
-    // public override void invertChangeBlock(CGameCtnBlock ctnBlock,Block @block){
-        // switch (ctnBlock.Direction){
-        //     case Direction.North:
-        //         block.relativeOffset(new Vec3(0,0,0));
-        //         break;
-        //     case Direction.East:
-        //         block.relativeOffset(new Vec3(0,0,-32));
-        //         break;
-        //     case Direction.South:
-        //         block.relativeOffset(new Vec3(-64,0,-32));
-        //         break;
-        //     case Direction.West:
-        //         block.relativeOffset(new Vec3(-64,0,0));
-        //         break;
-        // }
-        
-    //     block.pitchYawRoll -= pitchYawRoll;
-    //     block.relativeOffset(absolutePosition * -1);
-    // }
-}

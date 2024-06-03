@@ -1,6 +1,7 @@
 class Article {
     public string name;
-    public List<BlockMove> blockMoves = new List<BlockMove>();//Order does Matter
+    public Position position = new Position();
+    public PosCorection posCorection;
     public BlockType type;
     public List<string> keywords = new List<string>();
     public string shape = "";
@@ -12,36 +13,20 @@ class Article {
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
 
     public Article() { }
-    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface){ 
+    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,Position position = null,PosCorection posCorection = null){
         this.name = name;
         this.type = type;
         this.keywords = keywords;
         this.shape = shape;
         this.toShape = toShape;
         this.surface = surface;
+        this.position.addPosition(position);
+        this.posCorection = posCorection;
     }
-    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,List<BlockMove> blockMoves){ 
-        this.name = name;
-        this.type = type;
-        this.keywords = keywords;
-        this.shape = shape;
-        this.toShape = toShape;
-        this.surface = surface;
-        this.blockMoves.AddRange(blockMoves);
-    }
-    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,BlockMove blockMove){ 
-        this.name = name;
-        this.type = type;
-        this.keywords = keywords;
-        this.shape = shape;
-        this.toShape = toShape;
-        this.surface = surface;
-        this.blockMoves.Add(blockMove);
-    }
-    public Article(string name){ 
-        this.name = name;
-        loadKeywords();
-    }
+    // public Article(string name){ 
+    //     this.name = name;
+    //     loadKeywords();
+    // }
     public Article(string name,BlockType type){
         this.name = name;
         loadKeywords();

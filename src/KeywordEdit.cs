@@ -38,27 +38,31 @@ class KeywordEdit {
         articles.ForEach(a => a.toShape = toShape);
         return this;
     }
-    public KeywordEdit blockMove(BlockMove blockChange) {
-        articles.ForEach(a => a.blockMoves.Add(blockChange));
+    public KeywordEdit changePosition(Position position) {
+        articles.ForEach(a => a.position.addPosition(position));
+        return this;
+    }
+    public KeywordEdit posCorrection(PosCorection posCorection) {
+        articles.ForEach(a => a.posCorection = posCorection);
         return this;
     }
 
-    public void replace(Map map,BlockMove blockChange = null){
+    public void replace(Map map,Position position = null){
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.replace(a, article, blockChange);
+                map.replace(a, article, position);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
         });
     }
 
-    public void placeRelative(Map map,BlockMove blockChange = null){
+    public void placeRelative(Map map,Position position = null){
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.placeRelative(a, article, blockChange);
+                map.placeRelative(a, article, position);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }

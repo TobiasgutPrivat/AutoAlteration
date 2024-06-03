@@ -12,12 +12,12 @@ class Surfaceless: Alteration {
 }
 class YepTree: Alteration {
     public override void run(Map map){    
-        string[] Trees = inventory.select("Tree|Cactus|Fir|Palm|Cypress").names();
+        string[] Trees = inventory.select("Small&(Tree|Cactus|Fir|Palm|Cypress)").names();
         Trees = Trees.Append("Spring").ToArray();
         Trees = Trees.Append("Summer").ToArray();
         Trees = Trees.Append("Winter").ToArray();
         Trees = Trees.Append("Fall").ToArray();
-        map.placeRelative(Trees,"GateCheckpointCenter8mv2",BlockType.Item,new BlockMove(Vec3.Zero,Vec3.Zero));
+        map.placeRelative(Trees,"GateCheckpointCenter8mv2",BlockType.Item,new Position(Vec3.Zero,Vec3.Zero));
         map.placeStagedBlocks();
     }
 }
