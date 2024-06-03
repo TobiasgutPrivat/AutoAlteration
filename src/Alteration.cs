@@ -81,9 +81,9 @@ class Alteration {
         devMode = true;
         //Load Vanilla Articles
         Inventory items = importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json");
-        items.articles.ForEach(x => x.Type = BlockType.Item);
+        items.articles.ForEach(x => x.type = BlockType.Item);
         Inventory blocks = importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
-        blocks.articles.ForEach(x => x.Type = BlockType.Block);
+        blocks.articles.ForEach(x => x.type = BlockType.Block);
 
         //Fix Gate naming
         blocks.select("Gate").editOriginal().remove("Gate").add("Ring");

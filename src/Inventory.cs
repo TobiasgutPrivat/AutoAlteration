@@ -8,30 +8,30 @@ class Inventory {
     public Inventory select(string keywordFilter) =>
         new Inventory(GetArticles(keywordFilter));
     public Inventory select(BlockType blockType) =>
-        new Inventory(articles.Where(a => a.Type == blockType).ToList());
+        new Inventory(articles.Where(a => a.type == blockType).ToList());
 
     public Inventory selectString(string nameString) =>
-        new Inventory(articles.Where(a => a.Name.Contains(nameString)).ToList());
+        new Inventory(articles.Where(a => a.name.Contains(nameString)).ToList());
 
     public string[] names() =>
-        articles.Select(a => a.Name).ToArray();
+        articles.Select(a => a.name).ToArray();
 
     public Article GetArticle(string name) =>
-        articles.Where(a => a.Name == name).First();
+        articles.Where(a => a.name == name).First();
 
     public List<Article> GetArticles(string keywordFilter) =>
         articles.Where(a => a.match(keywordFilter)).ToList();
 
     public List<Article> GetArticles(string[] keywords) =>
-        articles.Where(a => keywords.All(k => a.Keywords.Contains(k))).ToList();
+        articles.Where(a => keywords.All(k => a.keywords.Contains(k))).ToList();
 
     public Article alignArticle(Article article) {
         // if (article.Name == "PlatformTechCheckpoint"){
         //     Console.WriteLine("Debug");
         // }
-        List<Article> temparticles = articles.Where(a => article.Keywords.All(k => a.Keywords.Contains(k)) && a.Keywords.Count == article.Keywords.Count && article.Surface == a.Surface && article.Shape == a.Shape && article.ToShape == a.ToShape).ToList();
+        List<Article> temparticles = articles.Where(a => article.keywords.All(k => a.keywords.Contains(k)) && a.keywords.Count == article.keywords.Count && article.surface == a.surface && article.shape == a.shape && article.toShape == a.toShape).ToList();
         if (temparticles.Count > 1) {
-            Console.WriteLine("More than one found article with keywords: " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape) + "\nFound Articles: " + string.Join(", ", temparticles.Select(a => a.Name).ToArray()));
+            Console.WriteLine("More than one found article with keywords: " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape) + "\nFound Articles: " + string.Join(", ", temparticles.Select(a => a.name).ToArray()));
             return null;
         } else if (temparticles.Count == 1) {
             return temparticles.First();
@@ -66,7 +66,7 @@ class Inventory {
     }
 
     public bool hasArticle(string name) {
-        return articles.Any(article => article.Name == name);
+        return articles.Any(article => article.name == name);
     }
 
 
@@ -101,24 +101,24 @@ class Inventory {
         articles.ForEach(article => {
             List<Article> tempArticles = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));
             tempArticles.ForEach(article2 => {
-                if (article2.Name != article.Name){
+                if (article2.name != article.name){
                     bool match = true;
 
-                    article.Keywords.ForEach(k => {
-                        if (article2.Keywords.Contains(k)){
-                            article2.Keywords.Remove(k);
+                    article.keywords.ForEach(k => {
+                        if (article2.keywords.Contains(k)){
+                            article2.keywords.Remove(k);
                         } else {
                             match = false;
                         }
                     });
-                    if (article2.Keywords.Count > 0) {
+                    if (article2.keywords.Count > 0) {
                         match = false;
                     }
-                    if (article.Shape != article2.Shape) {match = false;}
-                    if (article.ToShape != article2.ToShape) {match = false;}
-                    if (article.Surface != article2.Surface) {match = false;}
+                    if (article.shape != article2.shape) {match = false;}
+                    if (article.toShape != article2.toShape) {match = false;}
+                    if (article.surface != article2.surface) {match = false;}
                     if (match) {
-                        Console.WriteLine(article.Name + " matches " + article2.Name);
+                        Console.WriteLine(article.name + " matches " + article2.name);
                     }
                 };
             });
@@ -154,12 +154,12 @@ class Inventory {
     //             }
     //         });
     //     });
-    //     Console.WriteLine("Keywords left: " + string.Join(", ", Keywords));
+    //     Console.WriteLine("Unused Keywords: " + string.Join(", ", Keywords));
     // }
 
     public Inventory print() {
         articles.ForEach(article => {
-            Console.WriteLine(article.Name + ": " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape));
+            Console.WriteLine(article.name + ": " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape));
         });
         return this;
     }

@@ -105,11 +105,11 @@ class Map
   }
 
   public void placeRelative(Article atArticle, Article newArticle, BlockMove blockChange = null){
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){
-      stagedBlocks.Add(new Block(ctnBlock,atArticle.blockMove,newArticle,blockChange));
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.name)){
+      stagedBlocks.Add(new Block(ctnBlock,atArticle.blockMoves,newArticle,blockChange));
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.Name)){
-      stagedBlocks.Add(new Block(ctnItem,atArticle.blockMove,newArticle,blockChange));
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.name)){
+      stagedBlocks.Add(new Block(ctnItem,atArticle.blockMoves,newArticle,blockChange));
     }
   }
 
@@ -133,7 +133,7 @@ class Map
 
   public void replace(Article oldArticle, Article article, BlockMove blockChange = null){
     placeRelative(oldArticle, article,blockChange);
-    delete(oldArticle.Name);
+    delete(oldArticle.name);
   }
 
   public void replace(Inventory inventory, Article article, BlockMove blockChange = null){

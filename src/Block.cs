@@ -36,27 +36,21 @@ class Block {
     public Block(CGameCtnBlock block, Article article, BlockMove blockMove = null)
     {
         initBlock(block);
-        this.name = article.Name;
-        this.blockType = article.Type;
-        if (article.blockMove != null) {
-            article.blockMove.changeBlock(block, this);
-        }
+        this.name = article.name;
+        this.blockType = article.type;
+        article.blockMoves.ForEach(b => b.changeBlock(block, this));
         if (blockMove != null) {
             blockMove.changeBlock(block, this);
         }
     }
-    public Block(CGameCtnBlock block,BlockMove baseBlockMove,  Article article, BlockMove blockMove = null)
+    public Block(CGameCtnBlock block,List<BlockMove> baseBlockMoves,  Article article, BlockMove blockMove = null)
     {
         initBlock(block);
         
-        this.name = article.Name;
-        this.blockType = article.Type;
-        if (baseBlockMove != null) {
-            baseBlockMove.changeBlock(block, this);
-        }
-        if (article.blockMove != null) {
-            article.blockMove.changeBlock(block, this);
-        }
+        this.name = article.name;
+        this.blockType = article.type;
+        baseBlockMoves.ForEach(b => b.changeBlock(block, this));
+        article.blockMoves.ForEach(b => b.changeBlock(block, this));
         if (blockMove != null) {
             blockMove.changeBlock(block, this);
         }
@@ -114,27 +108,21 @@ class Block {
     public Block(CGameCtnAnchoredObject item, Article article,BlockMove blockMove = null){
         initBlock(item);
         
-        this.name = article.Name;
-        this.blockType = article.Type;
-        if (article.blockMove != null) {
-            article.blockMove.changeItem(item, this);
-        }
+        this.name = article.name;
+        this.blockType = article.type;
+        article.blockMoves.ForEach(b => b.changeItem(item, this));
         if (blockMove != null) {
             blockMove.changeItem(item, this);
         }
     }
 
-    public Block(CGameCtnAnchoredObject item,BlockMove baseBlockMove, Article article,BlockMove blockMove = null){
+    public Block(CGameCtnAnchoredObject item,List<BlockMove> baseBlockMoves, Article article,BlockMove blockMove = null){
         initBlock(item);
 
-        this.name = article.Name;
-        this.blockType = article.Type;
-        if (baseBlockMove != null) {
-            baseBlockMove.changeItem(item, this);
-        }
-        if (article.blockMove != null) {
-            article.blockMove.changeItem(item, this);
-        }
+        this.name = article.name;
+        this.blockType = article.type;
+        baseBlockMoves.ForEach(b => b.changeItem(item, this));
+        article.blockMoves.ForEach(b => b.changeItem(item, this));
         if (blockMove != null) {
             blockMove.changeItem(item, this);
         }

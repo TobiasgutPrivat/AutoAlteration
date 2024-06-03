@@ -5,41 +5,41 @@ class KeywordEdit {
     public KeywordEdit(List<Article> articles) {this.articles = articles;}
 
     public KeywordEdit add(string Keyword) {
-        articles.ForEach(a => a.Keywords.Add(Keyword));
+        articles.ForEach(a => a.keywords.Add(Keyword));
         return this;
     }
 
     public KeywordEdit add(string[] Keywords) {
-        articles.ForEach(a => a.Keywords.AddRange(Keywords));
+        articles.ForEach(a => a.keywords.AddRange(Keywords));
         return this;
     }
     
     public KeywordEdit remove(string Keyword) {
-        articles.ForEach(a => a.Keywords.Remove(Keyword));
+        articles.ForEach(a => a.keywords.Remove(Keyword));
         return this;
     }
 
     public KeywordEdit remove(string[] Keywords) {
-        Keywords.ToList().ForEach(k => articles.ForEach(a => a.Keywords.Remove(k)));
+        Keywords.ToList().ForEach(k => articles.ForEach(a => a.keywords.Remove(k)));
         return this;
     }
     
     public KeywordEdit surface(string surface) {
-        articles.ForEach(a => a.Surface = surface);
+        articles.ForEach(a => a.surface = surface);
         return this;
     }
 
     public KeywordEdit shape(string shape) {
-        articles.ForEach(a => a.Shape = shape);
+        articles.ForEach(a => a.shape = shape);
         return this;
     }
 
     public KeywordEdit toShape(string toShape) {
-        articles.ForEach(a => a.ToShape = toShape);
+        articles.ForEach(a => a.toShape = toShape);
         return this;
     }
     public KeywordEdit blockMove(BlockMove blockChange) {
-        articles.ForEach(a => a.blockMove = blockChange);
+        articles.ForEach(a => a.blockMoves.Add(blockChange));
         return this;
     }
 
@@ -79,11 +79,11 @@ class KeywordEdit {
     }
 
     public string[] names() =>
-        align().articles.Select(a => a.Name).ToArray();
+        align().articles.Select(a => a.name).ToArray();
 
     public KeywordEdit print() {
         articles.ForEach(article => {
-            Console.WriteLine(article.Name + ": " + string.Join(", ", string.Join(", ", article.Keywords),article.Surface,article.Shape,article.ToShape));
+            Console.WriteLine(article.name + ": " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape));
         });
         return this;
     }
