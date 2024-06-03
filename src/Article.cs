@@ -42,6 +42,11 @@ class Article {
         this.name = name;
         loadKeywords();
     }
+    public Article(string name,BlockType type){
+        this.name = name;
+        loadKeywords();
+        this.type = type;
+    }
 
     public bool hasKeyword(string keyword) {
         if (Alteration.shapeKeywords.Contains(keyword)) {

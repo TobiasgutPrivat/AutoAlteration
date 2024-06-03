@@ -2,6 +2,9 @@ using GBX.NET;
 using Newtonsoft.Json;
 class Alteration {
     public static float PI = (float)Math.PI;
+    public static string ProjectFolder;
+    public static string BlocksFolder;
+    public static string ItemsFolder;
     public static string[] Keywords;
     public static string[] shapeKeywords;
     public static string[] surfaceKeywords;
@@ -9,11 +12,14 @@ class Alteration {
     public static bool devMode;
 
     public static void load(string projectFolder) {
-        shapeKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/shapeKeywords.txt");
-        surfaceKeywords = File.ReadAllLines(projectFolder + "src/Vanilla/surfaceKeywords.txt");
-        Keywords = File.ReadAllLines(projectFolder + "src/Vanilla/Keywords.txt");
-        // inventory = importSerializedInventory(projectFolder + "src/Inventory.json");
-        createInventory(projectFolder);
+        ProjectFolder = projectFolder;
+        BlocksFolder = ProjectFolder + "src/CustomBlocks/";
+        ItemsFolder = ProjectFolder + "src/CustomItems/";
+        shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/shapeKeywords.txt");
+        surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/surfaceKeywords.txt");
+        Keywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/Keywords.txt");
+        createInventory();
+        loadCustomBlocks();
     }
 
     public static Inventory importSerializedInventory(string path)
@@ -76,13 +82,19 @@ class Alteration {
     public Alteration(){}
     public virtual void run(Map map) {}
 
+    public static void loadCustomBlocks(){
+        string[] customBlocks = Directory.GetFiles(BlocksFolder, "*", SearchOption.AllDirectories).Select(x => x.Remove(0, BlocksFolder.Length)).ToArray();
+        string[] customItems = Directory.GetFiles(ItemsFolder, "*", SearchOption.AllDirectories).Select(x => x.Remove(0, ItemsFolder.Length)).ToArray();
+        inventory.addArticles(customBlocks.Select(x => new Article(x, BlockType.Block)).ToList());
+        inventory.addArticles(customItems.Select(x => new Article(x, BlockType.Item)).ToList());
+    }
 
-    public static void createInventory(string projectFolder) {
+    public static void createInventory() {
         devMode = true;
         //Load Vanilla Articles
-        Inventory items = importArrayInventory(projectFolder + "src/Vanilla/ItemNames.json");
+        Inventory items = importArrayInventory(ProjectFolder + "src/Vanilla/ItemNames.json");
         items.articles.ForEach(x => x.type = BlockType.Item);
-        Inventory blocks = importArrayInventory(projectFolder + "src/Vanilla/BlockNames.json");
+        Inventory blocks = importArrayInventory(ProjectFolder + "src/Vanilla/BlockNames.json");
         blocks.articles.ForEach(x => x.type = BlockType.Block);
 
         //Fix Gate naming
@@ -106,7 +118,7 @@ class Alteration {
         //save
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
         string json = JsonConvert.SerializeObject(inventory.articles);
-        File.WriteAllText(projectFolder + "src/Inventory.json", json);
+        File.WriteAllText(ProjectFolder + "src/Inventory.json", json);
 
         devMode = false;
     }

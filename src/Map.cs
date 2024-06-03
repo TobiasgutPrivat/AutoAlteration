@@ -9,7 +9,6 @@ class Map
   public CGameCtnChallenge map;
   public List<Block> stagedBlocks = new List<Block>();
   public List<Article> embeddedBlocks = new List<Article>();
-  static string BlocksFolder = "C:\\Users\\Tobias\\Documents\\Programmieren\\GBX Test\\Alteration\\Blocks\\";
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
@@ -78,7 +77,7 @@ class Map
       ZipArchiveEntry entry = zipArchive.CreateEntry(path);
       using (Stream entryStream = entry.Open())
       {
-        using (FileStream fileStream = File.OpenRead(BlocksFolder + path))
+        using (FileStream fileStream = File.OpenRead(Alteration.BlocksFolder + path))
         {
           fileStream.CopyTo(entryStream);
         }
@@ -144,13 +143,13 @@ class Map
   public void move(string block, Vec3 offset, Vec3 rotation)
   {
     foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == block)){
-      ctnBlock.AbsolutePositionInMap = ctnBlock.AbsolutePositionInMap + offset;
-      ctnBlock.Coord = ctnBlock.Coord + new Int3((int)offset.X/32, (int)offset.Y/8, (int)offset.Z/32);
-      ctnBlock.PitchYawRoll = ctnBlock.PitchYawRoll + rotation;
+      ctnBlock.AbsolutePositionInMap += offset;
+      ctnBlock.Coord += new Int3((int)offset.X/32, (int)offset.Y/8, (int)offset.Z/32);
+      ctnBlock.PitchYawRoll += rotation;
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == block)){
-      ctnItem.AbsolutePositionInMap = ctnItem.AbsolutePositionInMap + offset;
-      ctnItem.PitchYawRoll = ctnItem.PitchYawRoll + rotation;
+      ctnItem.AbsolutePositionInMap += offset;
+      ctnItem.PitchYawRoll += rotation;
     }
   }
 
@@ -181,12 +180,12 @@ class Map
 
   public void placeStagedBlocks(){
     foreach (var block in stagedBlocks){
-      //TODO Embedded Blocks
-      // if(block.name.Contains("_CustomBlock")){
-      //   if(embeddedBlocks.Any(x => x.Name == block.name)){
-      //     embedBlock(block.name.Replace("_CustomBlock",""));
-      //   }
-      // }
+      //TODO test Embedded Blocks
+      if(block.name.Contains("_CustomBlock")){
+        if(embeddedBlocks.Any(x => x.name == block.name)){
+          embedBlock(block.name.Replace("_CustomBlock",""));
+        }
+      }
       switch (block.blockType){
         case BlockType.Block:
           CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
