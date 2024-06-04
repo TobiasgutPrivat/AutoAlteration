@@ -41,7 +41,7 @@ class Position {
         return this;
     }
     public Position subtractPosition(Vec3 coords, Vec3 pitchYawRoll){
-        this.pitchYawRoll = addRotation(this.pitchYawRoll, -pitchYawRoll);
+        this.pitchYawRoll = subRotation(this.pitchYawRoll, pitchYawRoll);
         this.coords -= relativeOffset(this.pitchYawRoll, coords);
         return this;
     }
@@ -62,6 +62,21 @@ class Position {
                                    Matrix4x4.CreateRotationZ(addRotation.Z);
 
         Matrix4x4 totalMatrix = rotationMatrix * addMatrix;
+
+        Vector3 newRotation = GetEulerAngles(totalMatrix);
+
+        return new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
+    }
+    public static Vec3 subRotation(Vec3 currentRotation, Vec3 subRotation) {
+        Matrix4x4 rotationMatrix = Matrix4x4.CreateRotationX(currentRotation.X) *
+                                   Matrix4x4.CreateRotationY(currentRotation.Y) *
+                                   Matrix4x4.CreateRotationZ(currentRotation.Z);
+        Matrix4x4 subMatrix = Matrix4x4.CreateRotationX(subRotation.X) *
+                                   Matrix4x4.CreateRotationY(subRotation.Y) *
+                                   Matrix4x4.CreateRotationZ(subRotation.Z);
+        Matrix4x4.Invert(subMatrix, out subMatrix);
+
+        Matrix4x4 totalMatrix = rotationMatrix * subMatrix;
 
         Vector3 newRotation = GetEulerAngles(totalMatrix);
 
