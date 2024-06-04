@@ -14,7 +14,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altere
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new STTF(), sourceFile, "STTF");
+Alteration.alterFile(new Test(), sourceFile, "Test");
 
 
 
@@ -44,12 +44,12 @@ class Test : Alteration {
         Article from = new("PlatformTechCheckpoint",BlockType.Block);
         Article to = new("PlatformTechCheckpoint",BlockType.Block);
         
-        map.placeRelative(from,to,new Position(new Vec3(0,32,0),new Vec3(PI,0,0)).addPosition(new Position(new Vec3(10,0,0),new Vec3(0,PI*0.5f,0)).addPosition(new Position(new Vec3(0,0,10),new Vec3(0,0,PI*0.5f)))));
-        // from.position.addPosition(new Position(new Vec3(0,32,0),new Vec3(0,PI*0.5f,0)));
-
-        // map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
-        // from.position.addPosition(new Position(new Vec3(0,0,0),new Vec3(0,0,PI*0.5f)));
-        // map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
+        from.position.addPosition(new Position(new Vec3(0,32,0),new Vec3(0,0,0)));
+        map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
+        from.position.addPosition(new Position(new Vec3(0,0,0),new Vec3(0,0,PI*0.5f)));
+        map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
+        from.position.addPosition(new Position(new Vec3(0,32,0),new Vec3(0,0,0)));
+        map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
         map.placeStagedBlocks();
     }
 }

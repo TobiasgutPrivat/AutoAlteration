@@ -5,6 +5,7 @@ class Position {
     public Vec3 coords;
     public Vec3 pitchYawRoll;
 
+
     public Position(){
         this.coords = Vec3.Zero;
         this.pitchYawRoll = Vec3.Zero;
@@ -24,16 +25,16 @@ class Position {
         return this;
     }
     public Position addPosition(Vec3 coords, Vec3 pitchYawRoll){
-        this.coords += relativeOffset(this.pitchYawRoll, coords);
-        this.pitchYawRoll = addRotation(this.pitchYawRoll, pitchYawRoll);
+        relativeOffset(coords);
+        addRotation(pitchYawRoll);
         return this;
     }
     public Position move(Vec3 coords){
-        this.coords += relativeOffset(this.pitchYawRoll, coords);
+        relativeOffset(coords);
         return this;
     }
     public Position rotate(Vec3 pitchYawRoll){
-        this.pitchYawRoll = addRotation(this.pitchYawRoll, pitchYawRoll);
+        addRotation(pitchYawRoll);
         return this;
     }
     public Position subtractPosition(Position position){
@@ -41,48 +42,40 @@ class Position {
         return this;
     }
     public Position subtractPosition(Vec3 coords, Vec3 pitchYawRoll){
-        this.pitchYawRoll = subRotation(this.pitchYawRoll, pitchYawRoll);
-        this.coords -= relativeOffset(this.pitchYawRoll, coords);
+        subRotation(pitchYawRoll);
+        relativeOffset(-coords);
         return this;
     }
-
-    public static Vec3 relativeOffset(Vec3 pitchYawRoll, Vec3 offset){
+    public void relativeOffset(Vec3 offset){
         Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.X, pitchYawRoll.Y, pitchYawRoll.Z);
         Vector3 offsetV3 = new Vector3(offset.X,offset.Y,offset.Z);
         Vector3 transformedOffset = Vector3.Transform(offsetV3, rotationMatrix);
-        return new Vec3(transformedOffset.X, transformedOffset.Y, transformedOffset.Z);
+        coords += new Vec3(transformedOffset.X, transformedOffset.Y, transformedOffset.Z);
     }
 
-    public static Vec3 addRotation(Vec3 currentRotation, Vec3 addRotation) {
-        Matrix4x4 rotationMatrix = Matrix4x4.CreateRotationX(currentRotation.X) *
-                                   Matrix4x4.CreateRotationY(currentRotation.Y) *
-                                   Matrix4x4.CreateRotationZ(currentRotation.Z);
-        Matrix4x4 addMatrix = Matrix4x4.CreateRotationX(addRotation.X) *
-                                   Matrix4x4.CreateRotationY(addRotation.Y) *
-                                   Matrix4x4.CreateRotationZ(addRotation.Z);
+    public void addRotation(Vec3 addRotation) {
+        Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.Y,pitchYawRoll.X,pitchYawRoll.Z);
+        Matrix4x4 addMatrix = Matrix4x4.CreateFromYawPitchRoll(addRotation.Y,addRotation.X,addRotation.Z);
 
         Matrix4x4 totalMatrix = rotationMatrix * addMatrix;
 
         Vector3 newRotation = GetEulerAngles(totalMatrix);
 
-        return new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
+        pitchYawRoll = new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
     }
-    public static Vec3 subRotation(Vec3 currentRotation, Vec3 subRotation) {
-        Matrix4x4 rotationMatrix = Matrix4x4.CreateRotationX(currentRotation.X) *
-                                   Matrix4x4.CreateRotationY(currentRotation.Y) *
-                                   Matrix4x4.CreateRotationZ(currentRotation.Z);
-        Matrix4x4 subMatrix = Matrix4x4.CreateRotationX(subRotation.X) *
-                                   Matrix4x4.CreateRotationY(subRotation.Y) *
-                                   Matrix4x4.CreateRotationZ(subRotation.Z);
+    public void subRotation(Vec3 subRotation) {
+        Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.Y,pitchYawRoll.X,pitchYawRoll.Z);
+        Matrix4x4 subMatrix = Matrix4x4.CreateFromYawPitchRoll(subRotation.Y,subRotation.X,subRotation.Z);
+
         Matrix4x4.Invert(subMatrix, out subMatrix);
 
         Matrix4x4 totalMatrix = rotationMatrix * subMatrix;
 
         Vector3 newRotation = GetEulerAngles(totalMatrix);
 
-        return new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
+        pitchYawRoll = new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
     }
-    public static Vector3 GetEulerAngles(this Matrix4x4 matrix)
+    public Vector3 GetEulerAngles(Matrix4x4 matrix)
     {
         // Extract the pitch, yaw, and roll angles from the rotation matrix
         float pitch = (float)Math.Asin(-matrix.M13);
