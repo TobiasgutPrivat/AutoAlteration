@@ -1,8 +1,7 @@
 using System.Numerics;
 using GBX.NET;
 
-class Position{
-    public static float PI = (float)Math.PI;
+class Position {
     public Vec3 coords;
     public Vec3 pitchYawRoll;
 
@@ -18,31 +17,31 @@ class Position{
         this.coords = coords;
         this.pitchYawRoll = pitchYawRoll;
     }
-    public virtual Position addPosition(Position position){
+    public Position addPosition(Position position){
         if (position != null){
             addPosition(position.coords, position.pitchYawRoll);
         }
         return this;
     }
-    public virtual Position addPosition(Vec3 coords, Vec3 pitchYawRoll){
+    public Position addPosition(Vec3 coords, Vec3 pitchYawRoll){
         this.coords += relativeOffset(this.pitchYawRoll, coords);
-        this.pitchYawRoll += getRelativeRotation(this.pitchYawRoll, pitchYawRoll);
+        this.pitchYawRoll = addRotation(this.pitchYawRoll, pitchYawRoll);
         return this;
     }
-    public virtual Position move(Vec3 coords){
+    public Position move(Vec3 coords){
         this.coords += relativeOffset(this.pitchYawRoll, coords);
         return this;
     }
-    public virtual Position rotate(Vec3 pitchYawRoll){
-        this.pitchYawRoll += getRelativeRotation(this.pitchYawRoll, pitchYawRoll);
+    public Position rotate(Vec3 pitchYawRoll){
+        this.pitchYawRoll = addRotation(this.pitchYawRoll, pitchYawRoll);
         return this;
     }
-    public virtual Position subtractPosition(Position position){
+    public Position subtractPosition(Position position){
         subtractPosition(position.coords, position.pitchYawRoll);
         return this;
     }
-    public virtual Position subtractPosition(Vec3 coords, Vec3 pitchYawRoll){
-        this.pitchYawRoll -= getRelativeRotation(this.pitchYawRoll, pitchYawRoll);
+    public Position subtractPosition(Vec3 coords, Vec3 pitchYawRoll){
+        this.pitchYawRoll = addRotation(this.pitchYawRoll, -pitchYawRoll);
         this.coords -= relativeOffset(this.pitchYawRoll, coords);
         return this;
     }
@@ -54,13 +53,27 @@ class Position{
         return new Vec3(transformedOffset.X, transformedOffset.Y, transformedOffset.Z);
     }
 
-    public static Vec3 getRelativeRotation(Vec3 currentRotation, Vec3 targetRotation) {
-        Matrix4x4 currentRotationMatrix = Matrix4x4.CreateFromYawPitchRoll(currentRotation.X, currentRotation.Y, currentRotation.Z);
-        Matrix4x4 inverseRotationMatrix = Matrix4x4.Transpose(currentRotationMatrix);
+    public static Vec3 addRotation(Vec3 currentRotation, Vec3 addRotation) {
+        Matrix4x4 rotationMatrix = Matrix4x4.CreateRotationX(currentRotation.X) *
+                                   Matrix4x4.CreateRotationY(currentRotation.Y) *
+                                   Matrix4x4.CreateRotationZ(currentRotation.Z);
+        Matrix4x4 addMatrix = Matrix4x4.CreateRotationX(addRotation.X) *
+                                   Matrix4x4.CreateRotationY(addRotation.Y) *
+                                   Matrix4x4.CreateRotationZ(addRotation.Z);
 
-        Vector3 targetRotationV3 = new Vector3(targetRotation.X, targetRotation.Y, targetRotation.Z);
-        Vector3 relativeRotationV3 = Vector3.Transform(targetRotationV3, inverseRotationMatrix);
+        Matrix4x4 totalMatrix = rotationMatrix * addMatrix;
 
-        return new Vec3(relativeRotationV3.X, relativeRotationV3.Y, relativeRotationV3.Z);
+        Vector3 newRotation = GetEulerAngles(totalMatrix);
+
+        return new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
+    }
+    public static Vector3 GetEulerAngles(this Matrix4x4 matrix)
+    {
+        // Extract the pitch, yaw, and roll angles from the rotation matrix
+        float pitch = (float)Math.Asin(-matrix.M13);
+        float roll = (float)Math.Atan2(matrix.M23, matrix.M33);
+        float yaw = (float)Math.Atan2(matrix.M12, matrix.M11);
+
+        return new Vector3(pitch, yaw, roll);
     }
 }

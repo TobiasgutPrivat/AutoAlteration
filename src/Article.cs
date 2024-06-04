@@ -23,10 +23,7 @@ class Article {
         this.position.addPosition(position);
         this.posCorection = posCorection;
     }
-    // public Article(string name){ 
-    //     this.name = name;
-    //     loadKeywords();
-    // }
+    
     public Article(string name,BlockType type){
         this.name = name;
         loadKeywords();
