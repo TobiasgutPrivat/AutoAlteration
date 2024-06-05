@@ -85,3 +85,7 @@ class Position {
         return new Vector3(pitch, yaw, roll);
     }
 }
+//Joel: https://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf
+// ψ (psi) represents the roll.
+// θ (theta) represents the pitch.
+// ϕ (phi) represents the yaw.
