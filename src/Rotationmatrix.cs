@@ -1,4 +1,5 @@
 using System;
+using GBX.NET;
 
 public class RotationMatrix
 {
@@ -33,7 +34,7 @@ public class RotationMatrix
         return R;
     }
 
-    private static double[,] MultiplyMatrices(double[,] A, double[,] B)
+    public static double[,] MultiplyMatrices(double[,] A, double[,] B)
     {
         int aRows = A.GetLength(0);
         int aCols = A.GetLength(1);
@@ -54,7 +55,7 @@ public class RotationMatrix
         return result;
     }
 
-    public static (double psi, double theta, double phi) GetEulerAngles(double[,] R)
+    public static Vec3 GetEulerAngles(double[,] R)
     {
         double psi, theta, phi;
 
@@ -81,7 +82,7 @@ public class RotationMatrix
             }
         }
 
-        return (psi, theta, phi);
+        return new Vec3((float)psi, (float)theta, (float)phi);
     }
 
     // public static void Main(double psi,double theta,double phi)

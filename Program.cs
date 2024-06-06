@@ -1,4 +1,5 @@
 ﻿using GBX.NET;
+using GBX.NET.Engines.Game;
 using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
@@ -12,14 +13,12 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altere
 // Alteration.alterFolder(new CPBoost(), sourcefolder, destinationFolder + "Spring 2024 CPBoost/", "CPBoost");
 
 // //Single File Processing
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/RC Racing.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// Alteration.alterFile(new Test(), sourceFile, "Test");
+Alteration.alterFile(new Test(), sourceFile, "Test");
 
-float PI = (float)Math.PI;
-Position position = new Position(new Vec3(0, 0, 0), new Vec3(0, PI, 0));
-position.addPosition(new Position(new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
-Console.WriteLine(position.pitchYawRoll.ToString());
+// float PI = (float)Math.PI;
+
 
 // double[,] rotationMatrix = RotationMatrix.CreateRotationMatrix(0,Math.PI,0);//roll,pitch,yaw
 // Console.WriteLine(RotationMatrix.GetEulerAngles(rotationMatrix));
@@ -45,16 +44,30 @@ void stringToName(string projectFolder) {
 
 class Test : Alteration {
     public override void run(Map map){
+        float PI = (float)Math.PI;
+        CGameCtnBlock baseBlock = map.map.PlaceBlock("PlatformTechCheckpoint",new(0,0,0),Direction.North);
+        baseBlock.IsFree = true;
+        baseBlock.AbsolutePositionInMap = new Vec3(700,60,700);
+        baseBlock.PitchYawRoll = new Vec3(0,0,0);
 
-        Article from = new("PlatformTechCheckpoint",BlockType.Block);
-        Article to = new("PlatformTechCheckpoint",BlockType.Block);
-        
-        from.position.addPosition(new Position(new Vec3(0,32,0),new Vec3(0,0,0)));
-        map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
-        from.position.addPosition(new Position(new Vec3(0,0,0),new Vec3(0,0,PI*0.5f)));
-        map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
-        from.position.addPosition(new Position(new Vec3(0,32,0),new Vec3(0,0,0)));
-        map.placeRelative(from,to,new Position(new Vec3(0,0,0),new Vec3(0,0,0)));
-        map.placeStagedBlocks();
+        Vec3 pitchYawRoll = new Vec3(PI*0.5f,PI*0.5f,PI*0.5f);
+        CGameCtnBlock Block1 = map.map.PlaceBlock("PlatformTechCheckpoint",new(0,0,0),Direction.North);
+        Block1.IsFree = true;
+        Block1.AbsolutePositionInMap = new Vec3(700,60,700);
+        Block1.PitchYawRoll = pitchYawRoll;
+
+        double [,] rotationMatrix = RotationMatrix.CreateRotationMatrix(pitchYawRoll.X,-pitchYawRoll.Y,-pitchYawRoll.Z);
+        double [,] rotationMatrix2 = RotationMatrix.CreateRotationMatrix(0,0,PI*0.5f);
+        double [,] result = RotationMatrix.MultiplyMatrices(rotationMatrix, rotationMatrix2);
+        Vec3 eulerAngles = RotationMatrix.GetEulerAngles(result );
+        Console.WriteLine(eulerAngles);
+
+        CGameCtnBlock Block2 = map.map.PlaceBlock("PlatformTechCheckpoint",new(0,0,0),Direction.North);
+        Block2.IsFree = true;
+        Block2.AbsolutePositionInMap = new Vec3(700,60,700);
+
+        Block2.PitchYawRoll = eulerAngles;
+
+        // map.placeStagedBlocks();
     }
 }
