@@ -59,9 +59,21 @@ class Position {
 
         Matrix4x4 totalMatrix = rotationMatrix * addMatrix;
 
-        Vector3 newRotation = GetEulerAngles(totalMatrix);
+        Vector3 scale;
+        Quaternion rotation;
+        Vector3 translation;
+        Matrix4x4. Decompose(totalMatrix, out scale, out rotation, out translation);
 
-        pitchYawRoll = new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
+        pitchYawRoll = GetEulerAngles(rotation);
+    }
+
+    public static Vec3 GetEulerAngles(Quaternion quaternion)
+    {
+        float pitch = (float)Math.Atan2(2 * (quaternion.Y * quaternion.W + quaternion.X * quaternion.Z), quaternion.W * quaternion.W - quaternion.X * quaternion.X - quaternion.Y * quaternion.Y + quaternion.Z * quaternion.Z);
+        float roll = (float)Math.Asin(-2 * (quaternion.X * quaternion.Y - quaternion.W * quaternion.Z));
+        float yaw = (float)Math.Atan2(2 * (quaternion.X * quaternion.W + quaternion.Y * quaternion.Z), quaternion.W * quaternion.W + quaternion.X * quaternion.X - quaternion.Y * quaternion.Y - quaternion.Z * quaternion.Z);
+
+        return new Vec3(pitch, yaw, roll);
     }
     public void subRotation(Vec3 subRotation) {
         Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.Y,pitchYawRoll.X,pitchYawRoll.Z);

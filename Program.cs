@@ -16,8 +16,13 @@ string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
 // Alteration.alterFile(new Test(), sourceFile, "Test");
 
-double[,] rotationMatrix = RotationMatrix.CreateRotationMatrix(0,Math.PI,0);//roll,pitch,yaw
-Console.WriteLine(RotationMatrix.GetEulerAngles(rotationMatrix));
+float PI = (float)Math.PI;
+Position position = new Position(new Vec3(0, 0, 0), new Vec3(0, PI, 0));
+position.addPosition(new Position(new Vec3(0, 0, 0), new Vec3(0, 0, 0)));
+Console.WriteLine(position.pitchYawRoll.ToString());
+
+// double[,] rotationMatrix = RotationMatrix.CreateRotationMatrix(0,Math.PI,0);//roll,pitch,yaw
+// Console.WriteLine(RotationMatrix.GetEulerAngles(rotationMatrix));
 
 
 
