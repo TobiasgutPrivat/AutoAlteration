@@ -15,12 +15,12 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Full Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
-Alteration.alterAll(new Desert(), sourcefolder, destinationFolder, "Desert");
+// Alteration.alterAll(new Desert(), sourcefolder, destinationFolder, "Desert");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// Alteration.alterFile(new Rally(), sourceFile, "Rally");
+Alteration.alterFile(new Test(), sourceFile, "Test");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
