@@ -42,8 +42,12 @@ class KeywordEdit {
         articles.ForEach(a => a.position.addPosition(position));
         return this;
     }
-    public KeywordEdit posCorrection(PosCorection posCorection) {
-        articles.ForEach(a => a.posCorection = posCorection);
+    public KeywordEdit width(int width) {
+        articles.ForEach(a => a.width = width);
+        return this;
+    }
+    public KeywordEdit length(int length) {
+        articles.ForEach(a => a.length = length);
         return this;
     }
 

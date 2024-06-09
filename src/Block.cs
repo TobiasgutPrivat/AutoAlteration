@@ -15,18 +15,18 @@ class Block {
 
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position placePosition)
     {
-        initBlock(block);
+        initBlock(block,fromArticle);
         this.name = article.name;
         this.blockType = article.type;
-        if (fromArticle.posCorection != null) {
-            position.move(fromArticle.posCorection.block(block));
-        }
+        // if (fromArticle.posCorection != null) {
+        //     position.move(fromArticle.posCorection.block(block));
+        // }
         position.addPosition(fromArticle.position);
         position.addPosition(placePosition);
         position.subtractPosition(article.position);
     }
 
-    private void initBlock(CGameCtnBlock block){
+    private void initBlock(CGameCtnBlock block, Article fromArticle) {
         color = block.Color;
         blockType = BlockType.Block;
         name = block.BlockModel.Id;
@@ -44,14 +44,17 @@ class Block {
                 case Direction.East:
                     pitchYawRoll = new Vec3(Alteration.PI * 1.5f,0,0);
                     absolutePosition = new (0,0,-32);
+                    absolutePosition += new Vec3((fromArticle.length - 1) * 32,0,0); 
                     break;
                 case Direction.South:
                     pitchYawRoll = new Vec3(Alteration.PI,0,0);
                     absolutePosition = new (0,0,0);
+                    absolutePosition += new Vec3((fromArticle.width - 1)*32,0,(fromArticle.length - 1)*32); 
                     break;
                 case Direction.West:
                     pitchYawRoll = new Vec3(Alteration.PI * 0.5f,0,0);
                     absolutePosition = new (-32,0,0);
+                    absolutePosition += new Vec3(0,0,(fromArticle.width - 1)*32);
                     break;
                 default:
                     pitchYawRoll = new Vec3(0,0,0);
@@ -68,9 +71,9 @@ class Block {
 
         this.name = article.name;
         this.blockType = article.type;
-        if (fromArticle.posCorection != null) {
-            position.move(fromArticle.posCorection.item(item));
-        }
+        // if (fromArticle.posCorection != null) {
+        //     position.move(fromArticle.posCorection.item(item));
+        // }
         position.addPosition(fromArticle.position);
         position.addPosition(placePosition);
         position.subtractPosition(article.position);

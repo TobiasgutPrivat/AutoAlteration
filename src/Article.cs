@@ -7,6 +7,8 @@ class Article {
     public string shape = "";
     public string toShape = "";
     public string surface = "";
+    public int width = 1;
+    public int length = 1;
 
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
 
@@ -35,6 +37,8 @@ class Article {
         clonedArticle.name = this.name;
         clonedArticle.position = new Position(this.position.coords, this.position.pitchYawRoll);
         clonedArticle.posCorection = this.posCorection;
+        clonedArticle.length = this.length;
+        clonedArticle.width = this.width;
         clonedArticle.type = this.type;
         clonedArticle.keywords = new List<string>(this.keywords);
         clonedArticle.shape = this.shape;

@@ -20,7 +20,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new Test(), sourceFile, "Test");
+Alteration.alterFile(new STTF(), sourceFile, "STTF");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------

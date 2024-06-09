@@ -56,8 +56,10 @@ class Inventory {
         edit().toShape(Keyword);
     public KeywordEdit changePosition(Position position) =>
         edit().changePosition(position);
-    public KeywordEdit posCorrection(PosCorection posCorection) =>
-        edit().posCorrection(posCorection);
+    public KeywordEdit width(int width) =>
+        edit().width(width);
+    public KeywordEdit length(int length) =>
+        edit().length(length);
 
     public KeywordEdit edit(){
         List<Article> articleClone = articles.Select(a => a.CloneArticle()).ToList();//JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles))
