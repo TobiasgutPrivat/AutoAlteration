@@ -204,6 +204,17 @@ class Stadium: EffectAlteration {
     }
 }
 
+class RallyCarswitchToDesert: EffectAlteration {
+    public override void run(Map map){
+        inventory.select("Gameplay&Rally").remove("Rally").add("Desert").replace(map);
+    }
+}
+class RallyCarswitchToSnow: EffectAlteration {
+    public override void run(Map map){
+        inventory.select("Gameplay&Rally").remove("Rally").add("Snow").replace(map);
+    }
+}
+
 enum LeftRight
 {
     Left,

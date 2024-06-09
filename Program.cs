@@ -15,7 +15,7 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Full Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
-Alteration.alterAll(new Snow(), sourcefolder, destinationFolder, "Snow");
+Alteration.alterAll(new Desert(), sourcefolder, destinationFolder, "Desert");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
