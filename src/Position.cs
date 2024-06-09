@@ -53,49 +53,22 @@ class Position {
         coords += new Vec3(transformedOffset.X, transformedOffset.Y, transformedOffset.Z);
     }
 
-    public void addRotation(Vec3 addRotation) {
-        Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.Y,pitchYawRoll.X,pitchYawRoll.Z);
-        Matrix4x4 addMatrix = Matrix4x4.CreateFromYawPitchRoll(addRotation.Y,addRotation.X,addRotation.Z);
+    public void addRotation(Vec3 rotation) {
+        RotationMatrix rotationMatrix = new RotationMatrix(pitchYawRoll);
+        RotationMatrix addMatrix = new RotationMatrix(rotation);
 
-        Matrix4x4 totalMatrix = rotationMatrix * addMatrix;
+        rotationMatrix.Multiply(addMatrix);
 
-        Vector3 scale;
-        Quaternion rotation;
-        Vector3 translation;
-        Matrix4x4. Decompose(totalMatrix, out scale, out rotation, out translation);
-
-        pitchYawRoll = GetEulerAngles(rotation);
+        pitchYawRoll = rotationMatrix.GetEulerAngles();
     }
 
-    public void subRotation(Vec3 subRotation) {
-        Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.X,pitchYawRoll.Y,pitchYawRoll.Z);
-        Matrix4x4 subMatrix = Matrix4x4.CreateFromYawPitchRoll(subRotation.X,subRotation.Y,subRotation.Z);
+    public void subRotation(Vec3 rotation) {
+        RotationMatrix rotationMatrix = new RotationMatrix(pitchYawRoll);
+        RotationMatrix addMatrix = new RotationMatrix(-rotation);
 
-        Matrix4x4.Invert(subMatrix, out subMatrix);
+        rotationMatrix.Multiply(addMatrix);
 
-        Matrix4x4 totalMatrix = rotationMatrix * subMatrix;
-
-        Vector3 newRotation = GetEulerAngles(totalMatrix);
-
-        pitchYawRoll = new Vec3(newRotation.X, newRotation.Y, newRotation.Z);
-    }
-    
-    public Vector3 GetEulerAngles(Matrix4x4 matrix)
-    {
-        // Extract the pitch, yaw, and roll angles from the rotation matrix
-        float pitch = (float)Math.Asin(-matrix.M13);
-        float roll = (float)Math.Atan2(matrix.M23, matrix.M33);
-        float yaw = (float)Math.Atan2(matrix.M12, matrix.M11);
-
-        return new Vector3(pitch, yaw, roll);
-    }
-    public static Vec3 GetEulerAngles(Quaternion quaternion)
-    {
-        float pitch = (float)Math.Atan2(2 * (quaternion.Y * quaternion.W + quaternion.X * quaternion.Z), quaternion.W * quaternion.W - quaternion.X * quaternion.X - quaternion.Y * quaternion.Y + quaternion.Z * quaternion.Z);
-        float roll = (float)Math.Asin(-2 * (quaternion.X * quaternion.Y - quaternion.W * quaternion.Z));
-        float yaw = (float)Math.Atan2(2 * (quaternion.X * quaternion.W + quaternion.Y * quaternion.Z), quaternion.W * quaternion.W + quaternion.X * quaternion.X - quaternion.Y * quaternion.Y - quaternion.Z * quaternion.Z);
-
-        return new Vec3(pitch, yaw, roll);
+        pitchYawRoll = rotationMatrix.GetEulerAngles();
     }
 }
 //Joel: https://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf

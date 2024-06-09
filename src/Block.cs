@@ -67,15 +67,15 @@ class Block {
                     absolutePosition = new (-32,0,-32);
                     break;
                 case Direction.East:
-                    pitchYawRoll = new Vec3(0,Alteration.PI * 1.5f,0);
+                    pitchYawRoll = new Vec3(Alteration.PI * 1.5f,0,0);
                     absolutePosition = new (0,0,-32);
                     break;
                 case Direction.South:
-                    pitchYawRoll = new Vec3(0,Alteration.PI,0);
+                    pitchYawRoll = new Vec3(Alteration.PI,0,0);
                     absolutePosition = new (0,0,0);
                     break;
                 case Direction.West:
-                    pitchYawRoll = new Vec3(0,Alteration.PI * 0.5f,0);
+                    pitchYawRoll = new Vec3(Alteration.PI * 0.5f,0,0);
                     absolutePosition = new (-32,0,0);
                     break;
                 default:
