@@ -1,6 +1,9 @@
-﻿using GBX.NET;
+﻿// using System.Numerics;
+using GBX.NET;
 using GBX.NET.Engines.Game;
 using Newtonsoft.Json;
+using MathNet.Numerics;
+using MathNet.Numerics.LinearAlgebra.Complex;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
@@ -15,16 +18,23 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altere
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/RC Racing.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new Test(), sourceFile, "Test");
+// Alteration.alterFile(new Test(), sourceFile, "Test");
 
-// float PI = (float)Math.PI;
+float PI = (float)Math.PI;
+RotationMatrix rotationMatrix = new RotationMatrix(0, PI, 0);
+for (int i = 0; i < rotationMatrix.rotationMatrix.GetLength(0); i++)
+{
+    for (int j = 0; j < rotationMatrix.rotationMatrix.GetLength(1); j++)
+    {
+        Console.Write(rotationMatrix.rotationMatrix[i, j] + "|");
+    }
+    Console.WriteLine();
+}
+
+Console.WriteLine(rotationMatrix.GetEulerAngles());
 
 
-// double[,] rotationMatrix = RotationMatrix.CreateRotationMatrix(0,Math.PI,0);//roll,pitch,yaw
-// Console.WriteLine(RotationMatrix.GetEulerAngles(rotationMatrix));
-
-
-
+// Console.WriteLine(rotationMatrix.GetEulerAngles());
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
@@ -56,10 +66,10 @@ class Test : Alteration {
         Block1.AbsolutePositionInMap = new Vec3(700,60,700);
         Block1.PitchYawRoll = pitchYawRoll;
 
-        double [,] rotationMatrix = RotationMatrix.CreateRotationMatrix(pitchYawRoll.X,-pitchYawRoll.Y,-pitchYawRoll.Z);
-        double [,] rotationMatrix2 = RotationMatrix.CreateRotationMatrix(0,0,PI*0.5f);
-        double [,] result = RotationMatrix.MultiplyMatrices(rotationMatrix, rotationMatrix2);
-        Vec3 eulerAngles = RotationMatrix.GetEulerAngles(result );
+        double [,] rotationMatrix = RotationMatrixLib.CreateRotationMatrix(pitchYawRoll.X,-pitchYawRoll.Y,-pitchYawRoll.Z);
+        double [,] rotationMatrix2 = RotationMatrixLib.CreateRotationMatrix(0,0,PI*0.5f);
+        double [,] result = RotationMatrixLib.MultiplyMatrices(rotationMatrix, rotationMatrix2);
+        Vec3 eulerAngles = RotationMatrixLib.GetEulerAngles(result );
         Console.WriteLine(eulerAngles);
 
         CGameCtnBlock Block2 = map.map.PlaceBlock("PlatformTechCheckpoint",new(0,0,0),Direction.North);

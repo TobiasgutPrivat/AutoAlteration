@@ -1,14 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "e3l01D97tcuAAQHv3x594Kl1lT6xfp9lZwlnNjM0kHUC479vKN47csLsnbITk6H/FafEgq8eYBkuHGuKKQWZKA==",
+  "dgSpecHash": "f4jfdV1p5ZLKRaTF1etsCCrXWJB3EFG4zEcewck9VbLIWVTyNhwah8VtJ+euSgqhOkjtJEY/nZjmATb6DO4WwQ==",
   "success": true,
-  "projectFilePath": "c:\\Users\\Tobias\\Documents\\Programmieren\\GBX Test\\AutoAlteration\\AutoAlteration.csproj",
+  "projectFilePath": "C:\\Users\\Tobias\\Documents\\Programmieren\\GBX Test\\AutoAlteration\\AutoAlteration.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Tobias\\.nuget\\packages\\gbx.net\\2.0.2\\gbx.net.2.0.2.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\gbx.net.lzo\\2.0.0\\gbx.net.lzo.2.0.0.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\gbx.net.zlib\\1.1.0\\gbx.net.zlib.1.1.0.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\glm\\1.0.1\\glm.1.0.1.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\iconic.zlib.netstandard\\1.0.0\\iconic.zlib.netstandard.1.0.0.nupkg.sha512",
+    "C:\\Users\\Tobias\\.nuget\\packages\\mathnet.numerics\\5.0.0\\mathnet.numerics.5.0.0.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.1\\microsoft.extensions.dependencyinjection.abstractions.8.0.1.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.1\\microsoft.extensions.logging.abstractions.8.0.1.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\microsoft.netcore.platforms\\1.0.1\\microsoft.netcore.platforms.1.0.1.nupkg.sha512",
