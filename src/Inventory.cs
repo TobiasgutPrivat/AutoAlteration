@@ -26,9 +26,6 @@ class Inventory {
         articles.Where(a => keywords.All(k => a.keywords.Contains(k))).ToList();
 
     public Article alignArticle(Article article) {
-        // if (article.Name == "PlatformTechCheckpoint"){
-        //     Console.WriteLine("Debug");
-        // }
         List<Article> temparticles = articles.Where(a => article.keywords.All(k => a.keywords.Contains(k)) && a.keywords.Count == article.keywords.Count && article.surface == a.surface && article.shape == a.shape && article.toShape == a.toShape).ToList();
         if (temparticles.Count > 1) {
             Console.WriteLine("More than one found article with keywords: " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape) + "\nFound Articles: " + string.Join(", ", temparticles.Select(a => a.name).ToArray()));
@@ -63,7 +60,7 @@ class Inventory {
         edit().posCorrection(posCorection);
 
     public KeywordEdit edit(){
-        List<Article> articleClone = articles.Select(a => a.CloneArticle()).ToList();
+        List<Article> articleClone = articles.Select(a => a.CloneArticle()).ToList();//JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles))
         return new KeywordEdit(articleClone);
     }
 

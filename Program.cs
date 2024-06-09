@@ -8,18 +8,19 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 
 //Code for Execution (change for your use)
 //Folder Processing
-string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/";
-// Alteration.alterFolder(new CPBoost(), sourcefolder, destinationFolder + "Spring 2024 CPBoost/", "CPBoost");
+// string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
+// Alteration.alterFolder(new Snow(), sourcefolder, destinationFolder + "Spring 2024 Snow/", "Snow");
+
+//Full Folder Processing
+string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
+Alteration.alterAll(new Snow(), sourcefolder, destinationFolder, "Snow");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new STTF(), sourceFile, "STTF");
-// Position position = new Position(new Vec3(0, 0, 0), new Vec3(0, 1, 0));
-// Console.WriteLine(position.pitchYawRoll);
-// position.addPosition(new Vec3(0, 0, 0), new Vec3(0, 0, 0));
-// Console.WriteLine(position.pitchYawRoll);
+// Alteration.alterFile(new Rally(), sourceFile, "Rally");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------

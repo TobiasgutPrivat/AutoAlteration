@@ -33,10 +33,10 @@ class Article {
     public Article CloneArticle() {
         Article clonedArticle = new Article();
         clonedArticle.name = this.name;
-        clonedArticle.position = this.position; // assuming Position has a copy constructor
+        clonedArticle.position = new Position(this.position.coords, this.position.pitchYawRoll);
         clonedArticle.posCorection = this.posCorection;
         clonedArticle.type = this.type;
-        clonedArticle.keywords = this.keywords;
+        clonedArticle.keywords = new List<string>(this.keywords);
         clonedArticle.shape = this.shape;
         clonedArticle.toShape = this.toShape;
         clonedArticle.surface = this.surface;

@@ -106,6 +106,15 @@ class EffectAlteration: Alteration {
         inventory.select("MapStart&Gate").add(Effect).remove(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).placeRelative(map,new Position(new Vec3(0,0,forwardOffset-10),rotation));
         map.placeStagedBlocks();
     }
+    public static void placeStartGamePlay(Map map, string GamePlay,int forwardOffset,Vec3 rotation){
+        Inventory start = inventory.select(BlockType.Block).select("MapStart");
+        Article GateSpecial = inventory.GetArticle("GateGameplay" + GamePlay);
+        map.placeRelative(start.select("!Water&!(RoadIce)"), GateSpecial,new Position(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(start.select("RoadIce"), GateSpecial,new Position(new Vec3(0,-8,forwardOffset),rotation));
+        map.placeRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,new Position(new Vec3(0,-16,forwardOffset-2),rotation));
+        inventory.select("MapStart&Gate").add("Gameplay").add(GamePlay).remove(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).placeRelative(map,new Position(new Vec3(0,0,forwardOffset-10),rotation));
+        map.placeStagedBlocks();
+    }
 }
 class NoBrake: EffectAlteration {
     public override void run(Map map){
@@ -170,47 +179,33 @@ class FreeWheel: EffectAlteration {
     }
 }
 
+class Rally: EffectAlteration {
+    public override void run(Map map){
+        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Rally").replace(map);
+        placeStartGamePlay(map,"Rally",0,Vec3.Zero);
+    }
+}
+class Snow: EffectAlteration {
+    public override void run(Map map){
+        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Snow").replace(map);
+        placeStartGamePlay(map,"Snow",0,Vec3.Zero);
+    }
+}
+class Desert: EffectAlteration {
+    public override void run(Map map){
+        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Desert").replace(map);
+        placeStartGamePlay(map,"Desert",0,Vec3.Zero);
+    }
+}
+class Stadium: EffectAlteration {
+    public override void run(Map map){
+        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Stadium").replace(map);
+        placeStartGamePlay(map,"Stadium",0,Vec3.Zero);
+    }
+}
+
 enum LeftRight
 {
     Left,
     Right
 }
-
-// class EffectDiagBlockChange : PosCorection{
-
-//     LeftRight side;
-//     public EffectDiagBlockChange(LeftRight side) : base(){this.side = side;}
-//     public EffectDiagBlockChange(Vec3 absolutePosition,LeftRight side) : base(absolutePosition){this.side = side;}
-//     public EffectDiagBlockChange(Vec3 absolutePosition, Vec3 pitchYawRoll,LeftRight side) : base(absolutePosition,pitchYawRoll){this.side = side;}
-
-//     public override void block(CGameCtnBlock ctnBlock,Block @block){
-//         switch (ctnBlock.Direction){
-//             case Direction.North:
-//                 block.relativeOffset(new Vec3(64,0,0));
-//                 break;
-//             case Direction.East:
-//                 block.relativeOffset(new Vec3(64,0,-32));
-//                 break;
-//             case Direction.South:
-//                 block.relativeOffset(new Vec3(0,0,-32));
-//                 break;
-//             case Direction.West:
-//                 block.relativeOffset(new Vec3(0,0,0));
-//                 break;
-//         }
-
-//         switch (side){
-//             case LeftRight.Right:
-//                 block.relativeOffset(new Vec3(-23.1f,0,10.6f));
-//                 block.pitchYawRoll += new Vec3(PI * -0.148f,0f,0);
-//                 break;
-//             case LeftRight.Left:
-//                 block.relativeOffset(new Vec3(-37.3f,0,24.8f));
-//                 block.pitchYawRoll += new Vec3(PI * 0.148f,0,0);
-//                 break;
-//         }
-
-//         block.relativeOffset(absolutePosition);
-//         block.pitchYawRoll += pitchYawRoll;
-//     }
-// }

@@ -45,16 +45,23 @@ class Alteration {
     }
 
     public static void alterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        foreach (string mapFile in Directory.GetFiles(mapFolder))
+        foreach (string mapFile in Directory.GetFiles(mapFolder, "*.map.gbx", SearchOption.TopDirectoryOnly))
         {
             alterFile(alterations,mapFile,destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
         }
     }
     public static void alterFolder(Alteration alteration, string mapFolder, string destinationFolder, string Name) {
-        foreach (string mapFile in Directory.GetFiles(mapFolder))
+        alterFolder(new List<Alteration>{alteration},mapFolder,destinationFolder,Name);
+    }
+    public static void alterAll(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
+        alterFolder(alterations,mapFolder,destinationFolder + Path.GetFileName(mapFolder) + " - " + Name + "/",Name);
+        foreach (string Directory in Directory.GetDirectories(mapFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            alterFile(alteration,mapFile,destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
+            alterAll(alterations,Directory,destinationFolder + Directory.Substring(mapFolder.Length) + "/",Name);
         }
+    }
+    public static void alterAll(Alteration alteration, string mapFolder, string destinationFolder, string Name) {
+        alterAll(new List<Alteration>{alteration},mapFolder,destinationFolder,Name);
     }
     public static void alterFolder(List<Alteration> alterations, string mapFolder, string Name) {
         alterFolder(alterations,mapFolder,mapFolder,Name);
@@ -67,7 +74,7 @@ class Alteration {
         alter(alterations, map);
         map.map.MapName = Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name;
         map.save(destinationFile);
-        Console.WriteLine(map.map.MapName);
+        Console.WriteLine(destinationFile);
     }
     public static void alterFile(Alteration alteration, string mapFile, string destinationFile, string Name) {
         alterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);
@@ -127,7 +134,6 @@ class Alteration {
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("Straight").align().remove("Straight"));
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().remove("StraightX2"));
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("Base").align().remove("Base"));
-        // inventory.addArticles(inventory.select("Special").remove("Special"));
         addRoadNoCPBlocks("Tech");
         addRoadNoCPBlocks("Dirt");
         addRoadNoCPBlocks("Bump");
