@@ -30,6 +30,19 @@ class Article {
         this.type = type;
     }
 
+    public Article CloneArticle() {
+        Article clonedArticle = new Article();
+        clonedArticle.name = this.name;
+        clonedArticle.position = this.position; // assuming Position has a copy constructor
+        clonedArticle.posCorection = this.posCorection;
+        clonedArticle.type = this.type;
+        clonedArticle.keywords = this.keywords;
+        clonedArticle.shape = this.shape;
+        clonedArticle.toShape = this.toShape;
+        clonedArticle.surface = this.surface;
+        return clonedArticle;
+    }
+
     public bool hasKeyword(string keyword) {
         if (Alteration.shapeKeywords.Contains(keyword)) {
             return shape == keyword || toShape == keyword;

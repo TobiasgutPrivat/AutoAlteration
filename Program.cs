@@ -15,7 +15,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altere
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new Test(), sourceFile, "Test");
+Alteration.alterFile(new STTF(), sourceFile, "STTF");
 // Position position = new Position(new Vec3(0, 0, 0), new Vec3(0, 1, 0));
 // Console.WriteLine(position.pitchYawRoll);
 // position.addPosition(new Vec3(0, 0, 0), new Vec3(0, 0, 0));

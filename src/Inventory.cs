@@ -63,7 +63,7 @@ class Inventory {
         edit().posCorrection(posCorection);
 
     public KeywordEdit edit(){
-        List<Article> articleClone = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));
+        List<Article> articleClone = articles.Select(a => a.CloneArticle()).ToList();
         return new KeywordEdit(articleClone);
     }
 
@@ -101,7 +101,7 @@ class Inventory {
 
     public void checkDuplicates(){
         articles.ForEach(article => {
-            List<Article> tempArticles = JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles));
+            List<Article> tempArticles = articles.Select(a => a.CloneArticle()).ToList();
             tempArticles.ForEach(article2 => {
                 if (article2.name != article.name){
                     bool match = true;
@@ -161,7 +161,7 @@ class Inventory {
 
     public Inventory print() {
         articles.ForEach(article => {
-            Console.WriteLine(article.name + ": " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape));
+            Console.WriteLine(article.name + ": " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape,article.posCorection));
         });
         return this;
     }

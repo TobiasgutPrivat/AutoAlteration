@@ -16,9 +16,6 @@ class Block {
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position placePosition)
     {
         initBlock(block);
-        if (article.name == "PlatformTechSlope2Straight"){
-            Console.WriteLine("test");
-        }
         this.name = article.name;
         this.blockType = article.type;
         if (fromArticle.posCorection != null) {
