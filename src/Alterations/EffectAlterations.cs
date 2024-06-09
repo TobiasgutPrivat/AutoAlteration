@@ -24,35 +24,35 @@ class EffectAlteration: Alteration {
 
     public static void placeCPEffect(Map map, string Effect,int forwardOffset,Vec3 rotation){
         string GateSpecial = "GateSpecial" + Effect;
-        map.placeRelative(MultilapBlock, GateSpecial,BlockType.Block ,new Position(new Vec3(0,-16,forwardOffset),rotation));
-        map.placeRelative(CPRoadBlock, GateSpecial,BlockType.Block,new Position(new Vec3(0,-16,forwardOffset),rotation));
-        map.placeRelative(CPPlatformBlock, GateSpecial,BlockType.Block,new Position(new Vec3(0,-16,forwardOffset),rotation));
-        map.placeRelative(CPPlatformTilt, GateSpecial,BlockType.Block,new Position(new Vec3(0,-8,forwardOffset),rotation));
-        map.placeRelative(CPRoadBlockTilt, GateSpecial,BlockType.Block,new Position(new Vec3(0,-12,forwardOffset),rotation));
-        // map.placeRelative(DiagRight, GateSpecial,BlockType.Block,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
-        // map.placeRelative(DiagLeft, GateSpecial,BlockType.Block,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
-        map.placeRelative("GateCheckpoint", GateSpecial,BlockType.Block,new Position(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative(MultilapBlock, GateSpecial,new Position(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(CPRoadBlock, GateSpecial,new Position(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(CPPlatformBlock, GateSpecial,new Position(new Vec3(0,-16,forwardOffset),rotation));
+        map.placeRelative(CPPlatformTilt, GateSpecial,new Position(new Vec3(0,-8,forwardOffset),rotation));
+        map.placeRelative(CPRoadBlockTilt, GateSpecial,new Position(new Vec3(0,-12,forwardOffset),rotation));
+        // map.placeRelative(DiagRight, GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Right));
+        // map.placeRelative(DiagLeft, GateSpecial,new EffectDiagBlockChange(new Vec3(0,-16,forwardOffset),rotation,LeftRight.Left));
+        map.placeRelative("GateCheckpoint", GateSpecial,new Position(new Vec3(0,0,forwardOffset),rotation));
 
         string GateSpecial32m = "GateSpecial32m" + Effect;
-        map.placeRelative(GateCP32m,GateSpecial32m,BlockType.Item,new Position(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative("GateCheckpointCenter24m",GateSpecial32m,BlockType.Item,new Position(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative(GateCP16m,"GateSpecial16m" + Effect,BlockType.Item,new Position(new Vec3(0,0,forwardOffset),rotation));
-        map.placeRelative(GateCP8m,"GateSpecial8m" + Effect,BlockType.Item,new Position(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative(GateCP32m,GateSpecial32m,new Position(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative("GateCheckpointCenter24m",GateSpecial32m,new Position(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative(GateCP16m,"GateSpecial16m" + Effect,new Position(new Vec3(0,0,forwardOffset),rotation));
+        map.placeRelative(GateCP8m,"GateSpecial8m" + Effect,new Position(new Vec3(0,0,forwardOffset),rotation));
 
-        map.placeRelative(IceWallRight,GateSpecial32m,BlockType.Item,new Position(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
-        map.placeRelative(IceWallRight,GateSpecial32m,BlockType.Item,new Position(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation));
-        map.placeRelative(IceWallLeft,GateSpecial32m,BlockType.Item,new Position(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
-        map.placeRelative(IceWallLeft,GateSpecial32m,BlockType.Item,new Position(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation));
+        map.placeRelative(IceWallRight,GateSpecial32m,new Position(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
+        map.placeRelative(IceWallRight,GateSpecial32m,new Position(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation));
+        map.placeRelative(IceWallLeft,GateSpecial32m,new Position(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation));
+        map.placeRelative(IceWallLeft,GateSpecial32m,new Position(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation));
 
-        // map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
-        // map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Right));
-        // map.placeRelative(DiagIceWallsRightLeft,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
-        // map.placeRelative(DiagIceWallsRightLeft,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Right));
+        // map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
+        // map.placeRelative(DiagIceWallsRightRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Right));
+        // map.placeRelative(DiagIceWallsRightLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Right));
+        // map.placeRelative(DiagIceWallsRightLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Right));
 
-        // map.placeRelative(DiagIceWallsLeftRight,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
-        // map.placeRelative(DiagIceWallsLeftRight,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Left));
-        // map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
-        // map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,BlockType.Item,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Left));
+        // map.placeRelative(DiagIceWallsLeftRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
+        // map.placeRelative(DiagIceWallsLeftRight,GateSpecial32m,new EffectDiagBlockChange(new Vec3(10,12,16+forwardOffset),new Vec3(0,0,PI/2) + rotation,LeftRight.Left));
+        // map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(16,10,16+forwardOffset),new Vec3(PI,PI,0) + rotation,LeftRight.Left));
+        // map.placeRelative(DiagIceWallsLeftLeft,GateSpecial32m,new EffectDiagBlockChange(new Vec3(22,12,16+forwardOffset),new Vec3(0,0,-PI/2) + rotation,LeftRight.Left));
 
         map.placeStagedBlocks();
     }

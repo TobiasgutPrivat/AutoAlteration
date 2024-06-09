@@ -81,22 +81,22 @@ class Map
     });
   }
 
-  public void placeRelative(string atBlock, string newBlock,BlockType blockType, Position poitionChange = null){
+  public void placeRelative(string atBlock, string newBlock,Position positionChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnBlock,newBlock,blockType,poitionChange));
+      stagedBlocks.Add(new Block(ctnBlock,getArticle(atBlock),getArticle(newBlock),positionChange));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnItem,newBlock,blockType,poitionChange));
+      stagedBlocks.Add(new Block(ctnItem,getArticle(atBlock),getArticle(newBlock),positionChange));
     }
   }
 
-  public void placeRelative(string[] atBlocks, string newBlock,BlockType blockType, Position poitionChange = null){
+  public void placeRelative(string[] atBlocks, string newBlock,Position positionChange = null){
     foreach(var atBlock in atBlocks){
-      placeRelative(atBlock, newBlock, blockType, poitionChange);
+      placeRelative(atBlock, newBlock, positionChange);
     }
   }
-  public void placeRelative(Inventory inventory, string newBlock,BlockType blockType, Position poitionChange = null){
-    placeRelative(inventory.names(), newBlock, blockType, poitionChange);
+  public void placeRelative(Inventory inventory, string newBlock,Position positionChange = null){
+    placeRelative(inventory.names(), newBlock, positionChange);
   }
 
   public void placeRelative(Article atArticle, Article newArticle, Position positionChange = null){
@@ -112,13 +112,13 @@ class Map
     inventory.articles.ForEach(a => placeRelative(a, newArticle, positionChange));
   }
 
-  public void replace(string oldBlock, string newBlock,BlockType blockType, Position positionChange = null){
-    placeRelative(oldBlock, newBlock, blockType,positionChange);
+  public void replace(string oldBlock, string newBlock,Position positionChange = null){
+    placeRelative(oldBlock, newBlock, positionChange);
     delete(oldBlock);
   }
 
-  public void replace(string[] oldBlocks, string newBlock,BlockType blockType, Position positionChange = null){
-    placeRelative(oldBlocks, newBlock, blockType,positionChange);
+  public void replace(string[] oldBlocks, string newBlock,Position positionChange = null){
+    placeRelative(oldBlocks, newBlock, positionChange);
     delete(oldBlocks);
   }
 
@@ -219,5 +219,13 @@ class Map
   }
   public void delete(Inventory inventory){
     delete(inventory.names());
+  }
+
+  public static Article getArticle(string name){
+    Article article = Alteration.inventory.articles.FirstOrDefault(x => x.name == name);
+    if (article == null){
+      throw new Exception("Article not found: " + name);
+    }
+    return article;
   }
 }

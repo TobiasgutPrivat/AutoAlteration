@@ -13,28 +13,6 @@ class Block {
     public Position position = new Position();
     public DifficultyColor color;
 
-    public Block(CGameCtnBlock block, Position placePosition)
-    {
-        initBlock(block);
-        position.addPosition(placePosition);
-    }
-
-    public Block(CGameCtnBlock block, string name,BlockType blockType, Position placePosition)
-    {
-        initBlock(block);
-        this.name = name;
-        this.blockType = blockType;
-        position.addPosition(placePosition);
-    }
-
-    public Block(CGameCtnBlock block, Article article, Position placePosition)
-    {
-        initBlock(block);
-        this.name = article.name;
-        this.blockType = article.type;
-        position.addPosition(placePosition);
-        position.subtractPosition(article.position);
-    }
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position placePosition)
     {
         initBlock(block);
@@ -86,26 +64,6 @@ class Block {
             absolutePosition += new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
         }
         position.addPosition(absolutePosition,pitchYawRoll);
-    }
-
-    public Block(CGameCtnAnchoredObject item,Position placePosition){
-        initBlock(item);
-        position.addPosition(placePosition);
-    }
-    public Block(CGameCtnAnchoredObject item, string name,BlockType blockType,Position placePosition){
-        initBlock(item);
-
-        this.name = name;
-        this.blockType = blockType;
-        position.addPosition(placePosition);
-    }
-    public Block(CGameCtnAnchoredObject item, Article article,Position placePosition){
-        initBlock(item);
-        
-        this.name = article.name;
-        this.blockType = article.type;
-        position.addPosition(placePosition);
-        position.subtractPosition(article.position);
     }
 
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position placePosition){

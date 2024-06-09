@@ -38,12 +38,8 @@ class Position {
         return this;
     }
     public Position subtractPosition(Position position){
-        subtractPosition(position.coords, position.pitchYawRoll);
-        return this;
-    }
-    public Position subtractPosition(Vec3 coords, Vec3 pitchYawRoll){
-        subRotation(pitchYawRoll);
-        relativeOffset(-coords);
+        addRotation(-position.pitchYawRoll);
+        relativeOffset(-position.coords);
         return this;
     }
     public void relativeOffset(Vec3 offset){
@@ -61,17 +57,4 @@ class Position {
 
         pitchYawRoll = rotationMatrix.GetEulerAngles();
     }
-
-    public void subRotation(Vec3 rotation) {
-        RotationMatrix rotationMatrix = new RotationMatrix(pitchYawRoll);
-        RotationMatrix addMatrix = new RotationMatrix(-rotation);
-
-        rotationMatrix.Multiply(addMatrix);
-
-        pitchYawRoll = rotationMatrix.GetEulerAngles();
-    }
 }
-//Joel: https://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf
-// ψ (psi) represents the roll.
-// θ (theta) represents the pitch.
-// ϕ (phi) represents the yaw.

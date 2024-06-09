@@ -10,7 +10,7 @@ class CPBoost : Alteration{
         inventory.select(BlockType.Item).select("Checkpoint").remove(new[] {"Right","Left","Center","Checkpoint","v2"}).add("Turbo").replace(map);
         inventory.select(BlockType.Item).select("Turbo").add("Center").remove("Turbo").add("Checkpoint").replace(map);
         inventory.select(BlockType.Item).select("Turbo2").add("Center").remove("Turbo2").add("Checkpoint").replace(map);
-        map.replace("GateSpecial4mTurbo","GateCheckpointCenter8mv2",BlockType.Item,new Position(new Vec3(2,0,0),Vec3.Zero));//untested
+        map.replace("GateSpecial4mTurbo","GateCheckpointCenter8mv2",new Position(new Vec3(2,0,0),Vec3.Zero));//untested
         map.placeStagedBlocks();
     }
 }

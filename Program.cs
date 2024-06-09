@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
-// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 //Code for Execution (change for your use)
 //Folder Processing
@@ -40,9 +40,9 @@ void stringToName(string projectFolder) {
 class Test : Alteration {
     public override void run(Map map){
         float PI = (float)Math.PI;
-        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",BlockType.Block,new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)));
-        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",BlockType.Block,new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.5f,0)));
-        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",BlockType.Block,new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.5f,0)).rotate(new Vec3(0,0,PI*0.5f)));
+        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)));
+        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.5f,0)));
+        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.5f,0)).rotate(new Vec3(0,0,PI*0.5f)));
         map.placeStagedBlocks();
     }
 }
