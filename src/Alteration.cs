@@ -117,7 +117,7 @@ class Alteration {
         addCheckpointBlocks();
         addCheckpointTrigger();
         inventory.addArticles(inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").remove("Start").add("MapStart"));
-        inventory.select("DiagLeft|DiagRight").editOriginal().width(3).length(2);
+        inventory.select(BlockType.Block).select("DiagLeft|DiagRight").editOriginal().width(3).length(2);
         
         //Control
         // inventory.checkDuplicates();
