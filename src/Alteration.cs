@@ -117,7 +117,7 @@ class Alteration {
         addCheckpointBlocks();
         addCheckpointTrigger();
         inventory.addArticles(inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").remove("Start").add("MapStart"));
-        inventory.select(BlockType.Block).select("DiagLeft|DiagRight").editOriginal().width(3).length(2);
+        setSizes();
         
         //Control
         // inventory.checkDuplicates();
@@ -128,6 +128,12 @@ class Alteration {
         File.WriteAllText(ProjectFolder + "src/Inventory.json", json);
 
         devMode = false;
+    }
+
+    private static void setSizes(){
+        inventory.select(BlockType.Block).select("DiagLeft|DiagRight").editOriginal().width(3).length(2);
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Straight&!Small").editOriginal().width(4).length(2);
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Straight&Small").editOriginal().width(1).length(2);
     }
 
     private static void addCheckpointBlocks(){

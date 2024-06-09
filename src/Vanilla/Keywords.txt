@@ -197,6 +197,7 @@ Stage
 Frame
 Turbo
 Theme
+Cliff10
 Cliff8
 Cliff
 Right
@@ -304,7 +305,6 @@ To
 X1
 X5
 1D
-10
 90
 In
 2D
