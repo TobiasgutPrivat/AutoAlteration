@@ -37,24 +37,19 @@ class Position {
         addRotation(pitchYawRoll);
         return this;
     }
-    public Position subtractPosition(Position position){
-        addRotation(-position.pitchYawRoll);
-        relativeOffset(-position.coords);
-        return this;
-    }
     public void relativeOffset(Vec3 offset){
         Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.X, pitchYawRoll.Y, pitchYawRoll.Z);
         Vector3 offsetV3 = new Vector3(offset.X,offset.Y,offset.Z);
         Vector3 transformedOffset = Vector3.Transform(offsetV3, rotationMatrix);
         coords += new Vec3(transformedOffset.X, transformedOffset.Y, transformedOffset.Z);
     }
+    public Position subtractPosition(Position position){
+        addRotation(-position.pitchYawRoll);
+        relativeOffset(-position.coords);
+        return this;
+    }
 
     public void addRotation(Vec3 rotation) {
-        RotationMatrix rotationMatrix = new RotationMatrix(pitchYawRoll);
-        RotationMatrix addMatrix = new RotationMatrix(rotation);
-
-        rotationMatrix.Multiply(addMatrix);
-
-        pitchYawRoll = rotationMatrix.GetEulerAngles();
+        pitchYawRoll = RotationMatrix.RotateRelative(pitchYawRoll, rotation);
     }
 }
