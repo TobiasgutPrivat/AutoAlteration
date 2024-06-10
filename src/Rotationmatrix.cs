@@ -60,4 +60,61 @@ class RotationMatrix {
         // Multiply the current rotation matrix by the other rotation matrix
         rotationMatrix = rotationMatrix * other.rotationMatrix;
     }
+    public static Vec3 Multiply(Vec3 rotation, Vec3 otherRotation){
+        double yaw = rotation.X;
+        double pitch = -rotation.Y;//probably inverted
+        double roll = -rotation.Z;//same
+
+        // Rotation matrix for yaw (Z-axis)
+        Matrix<double> rotationZ = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(yaw), -Math.Sin(yaw), 0 },
+            { Math.Sin(yaw), Math.Cos(yaw), 0 },
+            { 0, 0, 1 }
+        });
+
+        // Rotation matrix for pitch (Y-axis)
+        Matrix<double> rotationY = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(pitch), 0, Math.Sin(pitch) },
+            { 0, 1, 0 },
+            { -Math.Sin(pitch), 0, Math.Cos(pitch) }
+        });
+
+        // Rotation matrix for roll (X-axis)
+        Matrix<double> rotationX = DenseMatrix.OfArray(new double[,] {
+            { 1, 0, 0 },
+            { 0, Math.Cos(roll), -Math.Sin(roll) },
+            { 0, Math.Sin(roll), Math.Cos(roll) }
+        });
+        double otherYaw = rotation.X;
+        double otherPitch = -rotation.Y;//probably inverted
+        double otherRoll = -rotation.Z;//same
+
+        // Rotation matrix for otherYaw (Z-axis)
+        Matrix<double> otherRotationZ = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(otherYaw), -Math.Sin(otherYaw), 0 },
+            { Math.Sin(otherYaw), Math.Cos(otherYaw), 0 },
+            { 0, 0, 1 }
+        });
+
+        // Rotation matrix for otherPitch (Y-axis)
+        Matrix<double> otherRotationY = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(otherPitch), 0, Math.Sin(otherPitch) },
+            { 0, 1, 0 },
+            { -Math.Sin(otherPitch), 0, Math.Cos(otherPitch) }
+        });
+
+        // Rotation matrix for otherRoll (X-axis)
+        Matrix<double> otherRotationX = DenseMatrix.OfArray(new double[,] {
+            { 1, 0, 0 },
+            { 0, Math.Cos(otherRoll), -Math.Sin(otherRoll) },
+            { 0, Math.Sin(otherRoll), Math.Cos(otherRoll) }
+        });
+
+        Matrix<double> rotationMatrix = otherRotationX * otherRotationY * otherRotationZ * rotationX * rotationY * rotationZ;//probably XYZ
+
+        double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
+        double extractedPitch = Math.Asin(-rotationMatrix[2, 0]);
+        double extractedRoll = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
+        return new Vec3((float)extractedYaw, -(float)extractedPitch, -(float)extractedRoll);
+    }
 }
