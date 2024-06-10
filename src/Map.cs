@@ -3,12 +3,13 @@ using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
 using System.IO.Compression;
 using GBX.NET.ZLib;
+using Newtonsoft.Json;
 class Map
 {
   Gbx<CGameCtnChallenge> gbx;
   public CGameCtnChallenge map;
   public List<Block> stagedBlocks = new List<Block>();
-  public List<Article> embeddedBlocks = new List<Article>();
+  public List<string> embeddedBlocks = new List<string>();
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
@@ -71,14 +72,23 @@ class Map
     map.MapUid = new string(stringChars);
   }
 
-  private void embedBlock(string path){
+  private void embedBlock(string name){//TODO overthink if this is good
+    List<string> customBlocks = new List<string>();
+    customBlocks.AddRange(Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-10) == name).ToList());
+    customBlocks.AddRange(Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-9) == name).ToList());
+    if (customBlocks.Count != 1){
+      Console.WriteLine("Found " + customBlocks.Count + " custom blocks for " + name);
+      return;
+    }
+    string path = customBlocks.First();
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
-      ZipArchiveEntry entry = zipArchive.CreateEntry(path);
+      ZipArchiveEntry entry = zipArchive.CreateEntry(name);
         using Stream entryStream = entry.Open();
-        using FileStream fileStream = File.OpenRead(Alteration.BlocksFolder + path);
+        using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
+    Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
 
   public void placeRelative(string atBlock, string newBlock,Position positionChange = null){
@@ -174,8 +184,9 @@ class Map
     foreach (var block in stagedBlocks){
       //TODO test Embedded Blocks
       if(block.name.Contains("_CustomBlock")){
-        if(embeddedBlocks.Any(x => x.name == block.name)){
-          embedBlock(block.name.Replace("_CustomBlock",""));
+        if(!embeddedBlocks.Any(x => x == block.name)){
+          embedBlock(block.name.Replace("_CustomBlock", ""));
+          embeddedBlocks.Add(block.name);
         }
       }
       switch (block.blockType){

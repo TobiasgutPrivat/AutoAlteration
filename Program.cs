@@ -41,9 +41,9 @@ void stringToName(string projectFolder) {
 class Test : Alteration {
     public override void run(Map map){
         float PI = (float)Math.PI;
-        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)));
-        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.5f,0)));
-        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.5f,0)).rotate(new Vec3(0,0,PI*0.5f)));
+        map.placeRelative("PlatformTechCheckpoint","RoadBumpDeadEnd_CustomBlock",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)));
+        map.placeRelative("PlatformTechCheckpoint","RoadDirtDeadEnd_CustomBlock",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.3f,0)));
+        map.placeRelative("PlatformTechCheckpoint","RoadIceDeadEnd_CustomBlock",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.3f,0)).rotate(new Vec3(0,0,PI*0.5f)));
         map.placeStagedBlocks();
     }
 }

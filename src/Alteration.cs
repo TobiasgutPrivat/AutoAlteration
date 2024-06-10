@@ -3,8 +3,7 @@ using Newtonsoft.Json;
 class Alteration {
     public static float PI = (float)Math.PI;
     public static string ProjectFolder = "";
-    public static string BlocksFolder = "";
-    public static string ItemsFolder = "";
+    public static string CustomBlocksFolder = "";
     public static string[] Keywords;
     public static string[] shapeKeywords;
     public static string[] surfaceKeywords;
@@ -13,13 +12,11 @@ class Alteration {
 
     public static void load(string projectFolder) {
         ProjectFolder = projectFolder;
-        BlocksFolder = ProjectFolder + "src/CustomBlocks/";
-        ItemsFolder = ProjectFolder + "src/CustomItems/";
+        CustomBlocksFolder = ProjectFolder + "src/CustomBlocks/";
         shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/shapeKeywords.txt");
         surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/surfaceKeywords.txt");
         Keywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/Keywords.txt");
         createInventory();
-        // loadCustomBlocks();
     }
 
     public static Inventory importSerializedInventory(string path)
@@ -90,10 +87,8 @@ class Alteration {
     public virtual void run(Map map) {}
 
     public static void loadCustomBlocks(){
-        string[] customBlocks = Directory.GetFiles(BlocksFolder, "*", SearchOption.AllDirectories).Select(x => x.Remove(0, BlocksFolder.Length)).ToArray();
-        string[] customItems = Directory.GetFiles(ItemsFolder, "*", SearchOption.AllDirectories).Select(x => x.Remove(0, ItemsFolder.Length)).ToArray();
-        inventory.addArticles(customBlocks.Select(x => new Article(x, BlockType.Block)).ToList());//TODO think about Path
-        inventory.addArticles(customItems.Select(x => new Article(x, BlockType.Item)).ToList());
+        inventory.addArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-10) + "_CustomBlock", BlockType.Block)).ToList());
+        inventory.addArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-9) + "_CustomBlock", BlockType.Item)).ToList());
     }
 
     
@@ -110,6 +105,7 @@ class Alteration {
         //Init Inventory
         inventory.articles.AddRange(items.articles);
         inventory.articles.AddRange(blocks.articles);
+        loadCustomBlocks();
 
         inventory.select("Special").editOriginal().remove("Special");
 
