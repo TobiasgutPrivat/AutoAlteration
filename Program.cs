@@ -13,14 +13,14 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 // Alteration.alterFolder(new Snow(), sourcefolder, destinationFolder + "Spring 2024 Snow/", "Snow");
 
 //Full Folder Processing
-string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
-// Alteration.alterAll(new Desert(), sourcefolder, destinationFolder, "Desert");
+string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/Spring_2024_Snowcarswitch";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/";
+// Alteration.alterAll(new SnowCarswitchToRally(), sourcefolder, destinationFolder, "Rally");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new STTF(), sourceFile, "STTF");
+Alteration.alterFile(new Test(), sourceFile, "Test");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
