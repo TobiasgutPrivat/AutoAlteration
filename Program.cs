@@ -1,5 +1,4 @@
 ﻿// using System.Numerics;
-using System.Numerics;
 using GBX.NET;
 using Newtonsoft.Json;
 //Initial load
@@ -13,18 +12,8 @@ using Newtonsoft.Json;
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
 // Alteration.alterFolder(new Snow(), sourcefolder, destinationFolder + "Spring 2024 Snow/", "Snow");
 
-QuaternionLib q1 = RotationMatrixLib.ToQuaternion(-Math.PI*0.5,0,0);
-Matrix4x4 matrix1 = Matrix4x4.CreateFromQuaternion(new Quaternion((float)q1.x,(float)q1.y,(float)q1.z,(float)q1.w));
-QuaternionLib q2 = RotationMatrixLib.ToQuaternion(0,Math.PI*0.5,0);
-Matrix4x4 matrix2 = Matrix4x4.CreateFromQuaternion(new Quaternion((float)q2.x,(float)q2.y,(float)q2.z,(float)q2.w));
-Matrix4x4 matrix = Matrix4x4.Multiply(matrix1,matrix2);
-Vector3 scale;
-Quaternion rotation;
-Vector3 translation;
-Matrix4x4.Decompose(matrix,out scale,out rotation,out translation);
-EulerAnglesLib angles = RotationMatrixLib.ToEulerAngles(new QuaternionLib(){ x = rotation.X, y = rotation.Y, z = rotation.Z, w = rotation.W });
-Console.WriteLine(angles.roll + " " + angles.pitch + " " + angles.yaw);
-
+float PI = (float)Math.PI;
+RotationMatrix.DebugRotateRelative(PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.25);
 //Full Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/Spring_2024_Snowcarswitch";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/";
