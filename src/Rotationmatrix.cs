@@ -71,16 +71,6 @@ class RotationMatrix {
         Matrix<double> rotationMatrix = rotationZ;
         printMatrix(rotationMatrix);
 
-        // Rotation matrix for roll (X-axis)
-        Matrix<double> rotationX = DenseMatrix.OfArray(new double[,] {
-            { 1, 0, 0 ,0},
-            { 0, Math.Cos(roll), -Math.Sin(roll) ,0},
-            { 0, Math.Sin(roll), Math.Cos(roll) ,0},
-            { 0, 0, 0 , 1}
-        });
-        rotationMatrix *= rotationX;
-        printMatrix(rotationMatrix);
-
         // Rotation matrix for pitch (Y-axis)
         Matrix<double> rotationY = DenseMatrix.OfArray(new double[,] {
             { Math.Cos(pitch), 0, Math.Sin(pitch) ,0},
@@ -89,6 +79,16 @@ class RotationMatrix {
             { 0, 0, 0 , 1}
         });
         rotationMatrix *= rotationY;
+        printMatrix(rotationMatrix);
+
+        // Rotation matrix for roll (X-axis)
+        Matrix<double> rotationX = DenseMatrix.OfArray(new double[,] {
+            { 1, 0, 0 ,0},
+            { 0, Math.Cos(roll), -Math.Sin(roll) ,0},
+            { 0, Math.Sin(roll), Math.Cos(roll) ,0},
+            { 0, 0, 0 , 1}
+        });
+        rotationMatrix *= rotationX;
         printMatrix(rotationMatrix);
 
         double byYaw = -byRotation.X;
@@ -105,16 +105,6 @@ class RotationMatrix {
         rotationMatrix *= byRotationZ;
         printMatrix(rotationMatrix);
 
-        // Rotation matrix for byRoll (X-axis)
-        Matrix<double> byRotationX = DenseMatrix.OfArray(new double[,] {
-            { 1, 0, 0 ,0},
-            { 0, Math.Cos(byRoll), -Math.Sin(byRoll) ,0},
-            { 0, Math.Sin(byRoll), Math.Cos(byRoll) ,0},
-            { 0, 0, 0 , 1}
-        });
-        rotationMatrix *= byRotationX;
-        printMatrix(rotationMatrix);
-
         // Rotation matrix for byPitch (Y-axis)
         Matrix<double> byRotationY = DenseMatrix.OfArray(new double[,] {
             { Math.Cos(byPitch), 0, Math.Sin(byPitch) ,0},
@@ -123,6 +113,16 @@ class RotationMatrix {
             { 0, 0, 0 , 1}
         });
         rotationMatrix *= byRotationY;
+        printMatrix(rotationMatrix);
+
+        // Rotation matrix for byRoll (X-axis)
+        Matrix<double> byRotationX = DenseMatrix.OfArray(new double[,] {
+            { 1, 0, 0 ,0},
+            { 0, Math.Cos(byRoll), -Math.Sin(byRoll) ,0},
+            { 0, Math.Sin(byRoll), Math.Cos(byRoll) ,0},
+            { 0, 0, 0 , 1}
+        });
+        rotationMatrix *= byRotationX;
         printMatrix(rotationMatrix);
 
         double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
