@@ -131,9 +131,155 @@ class Alteration {
     }
 
     private static void setSizes(){
-        inventory.select(BlockType.Block).select("DiagLeft|DiagRight").editOriginal().width(3).length(2);
-        inventory.select(BlockType.Block).select("Deco&Cliff10&Straight&!Small").editOriginal().width(4).length(2);
-        inventory.select(BlockType.Block).select("Deco&Cliff10&Straight&Small").editOriginal().width(1).length(2);
+        // Road Type
+        inventory.select(BlockType.Block).select("Road&Curve2&(!In|!Out)").editOriginal().width(2).length(2); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
+        inventory.select(BlockType.Block).select("Road&Curve3&(!In|!Out)").editOriginal().width(3).length(3); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
+        inventory.select(BlockType.Block).select("Road&Curve4&(!In|!Out)").editOriginal().width(4).length(4); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
+        inventory.select(BlockType.Block).select("Road&Curve5&(!In|!Out)").editOriginal().width(5).length(5); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
+
+        inventory.select(BlockType.Block).select("Road&Chicane&X2").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Road&Chicane&X3").editOriginal().width(2).length(3);
+
+        inventory.select(BlockType.Block).select("Road&Branch&Straigt&X4").editOriginal().width(2).length(4);
+        inventory.select(BlockType.Block).select("Road&Branch&Curve3").editOriginal().width(3).length(3); // Redundant because of Curve3
+        inventory.select(BlockType.Block).select("Road&Branch&YShaped&2X3").editOriginal().width(2).length(3); // Redundant because of 2X3
+        inventory.select(BlockType.Block).select("Road&BranchTo&Diag&(Left|Right)").editOriginal().width(1).length(2);
+
+        inventory.select(BlockType.Block).select("Road&Slope&(Base|Start|End)&2x1").editOriginal().width(2).length(1); // Redundant because of 2x1
+        inventory.select(BlockType.Block).select("Road&Slope&(UTop|UBottom)&2X").editOriginal().width(2).length(2); // Redundant because of 2X // InGround vaiant not included, but should still be caught by UBottom
+
+        inventory.select(BlockType.Block).select("Road&Tilt&Transition2&((Up|Down)&(Left|Right))").editOriginal().width(1).length(2);
+        inventory.select(BlockType.Block).select("Road&Tilt&Transition2&Curve&(In|Out)").editOriginal().width(1).length(2);
+
+        inventory.select(BlockType.Block).select("Road&DiagLeft|DiagRight").editOriginal().width(3).length(2); // Original example by Tobias
+
+        inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Chicane&Right").editOriginal().width(2).length(1);
+        inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Chicane&Left").editOriginal().width(3).length(1);
+
+        inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Start&Straight&X2").editOriginal().width(2).length(1);
+        inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Start&Curve1&In").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Start&Curve2&In").editOriginal().width(2).length(3);
+
+        inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Start&Curve1&Out").editOriginal().width(2).length(1);
+        inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Start&Curve2&Out").editOriginal().width(3).length(2);
+
+        inventory.select(BlockType.Block).select("Road&Diag&Switch&Curve1").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Road&Diag&Switch&Curve2").editOriginal().width(3).length(3);
+
+        inventory.select(BlockType.Block).select("Road&Loop6X").editOriginal().width(3).length(1);
+        inventory.select(BlockType.Block).select("Road&Loop11X").editOriginal().width(4).length(2);
+
+
+        // Platform
+        inventory.select(BlockType.Block).select("Platform&Curve2In").editOriginal().width(1).length(1); // Should be included "Platform[Surface]Curve2In" is 1x1
+        inventory.select(BlockType.Block).select("Platform&Curve3In").editOriginal().width(2).length(2);
+
+        inventory.select(BlockType.Block).select("Platform&To&Road&Tech&Diag&(Right|Left)").editOriginal().width(2).length(1); // Don't rememver how the 'To' works :xdd:
+
+        inventory.select(BlockType.Block).select("Platform&Slope2&Curve2&(Out|In)").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Slope2&Curve3&(Out|In)").editOriginal().width(3).length(3);
+
+        inventory.select(BlockType.Block).select("Platform&Tilt&Transition2").editOriginal().width(1).length(2);
+        inventory.select(BlockType.Block).select("Platform&Slope2&(Start2|End2)").editOriginal().width(1).length(2);
+
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&Curve2&In").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&Curve3&In").editOriginal().width(3).length(3);
+
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&Curve1&Out").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&Curve2&Out").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&Curve3&Out").editOriginal().width(4).length(4);
+
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x2&Curve2&In").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x2&Curve3&In").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x2&Curve1&Out").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x2&Curve2&Out").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x1&Curve2&In").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x1&Curve3&In").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x1&Curve1&Out").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&Start&1x1&Curve2&Out").editOriginal().width(3).length(3);
+
+        inventory.select(BlockType.Block).select("Platform&Loop&Out&Start&Curve1").editOriginal().width(2).length(2); // Counts for Curve1In too
+        inventory.select(BlockType.Block).select("Platform&Loop&Out&Start&Curve2").editOriginal().width(3).length(3); // Counts for Curve2In too
+        inventory.select(BlockType.Block).select("Platform&Loop&Out&Start&Curve3").editOriginal().width(4).length(4); // Counts for Curve3In too
+
+        inventory.select(BlockType.Block).select("Platform&Loop&End&Curve2&In").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&End&Curve3&In").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("Platform&Loop&End&Curve1&Out").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Loop&End&Curve2&Out").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("Platform&Loop&End&Curve3&Out").editOriginal().width(4).length(4);
+
+        inventory.select(BlockType.Block).select("Platform&Wall&Curve2").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Platform&Wall&Curve3").editOriginal().width(3).length(3);
+
+
+
+        // Deco platform
+        inventory.select(BlockType.Block).select("DecoPlatform&Curve2").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("DecoPlatform&Curve3").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("DecoPlatform&Curve4").editOriginal().width(4).length(4);
+        inventory.select(BlockType.Block).select("DecoPlatform&Curve5").editOriginal().width(5).length(5);
+        //                                        DecoPlatform Curve
+        inventory.select(BlockType.Block).select("DecoPlatform&Curve2&In").editOriginal().width(1).length(1); // Should be included "Platform[Surface]Curve2In" is 1x1
+
+        inventory.select(BlockType.Block).select("DecoPlatform&Curve3&In").editOriginal().width(2).length(2);
+
+        inventory.select(BlockType.Block).select("DecoPlatform&Slope2&Start&Curve2&(In|Out)").editOriginal().width(2).length(2);
+
+        inventory.select(BlockType.Block).select("DecoPlatform&Slope2&(Start2|End2)&!Curve").editOriginal().width(1).length(2);
+        inventory.select(BlockType.Block).select("DecoPlatform&Slope2&(Start2|End2)&Curve2").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("DecoPlatform&Slope2&(Start2|End2)&Curve4").editOriginal().width(4).length(4);
+
+        inventory.select(BlockType.Block).select("DecoPlatform&Slope2&Base&To&Slope2&Base2").editOriginal().width(1).length(2);
+        //                                        DecoPlatform Slope2 Base To Slope2 Base2 (right / left)
+        inventory.select(BlockType.Block).select("DecoPlatform&Slope2&Curve2").editOriginal().width(2).length(2);
+        //                                        DecoPlatform Slope2 Start Curve2In (right / left)
+
+        inventory.select(BlockType.Block).select("DecoPlatform&Slope2&Curve2").editOriginal().width(2).length(2);
+        // Deco Hill
+        inventory.select(BlockType.Block).select("Deco&Hill&Slope2&StraightX2").editOriginal().width(2).length(1);
+        inventory.select(BlockType.Block).select("Deco&Hill&Slope2&Curve2").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Deco&Hill&Slope2&ChicaneX2").editOriginal().width(2).length(2); // Might be &Chicane&X2 or &((Chicane&X2)| (ChicaneX2), not tested yet
+        //                                        Deco Hill Slope2 ChicaneX2
+        inventory.select(BlockType.Block).select("Deco&Hill&Slope4&Base4&Curve").editOriginal().width(4).length(4);
+        inventory.select(BlockType.Block).select("Deco&Hill&Slope2&Start2&Base5").editOriginal().width(4).length(4);
+        
+        // Deco Cliff
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Straight&!Small").editOriginal().width(4).length(2); // Original example by Tobias
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Straight&Small").editOriginal().width(1).length(2); // Original example by Tobias
+
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Corner&In&!Small").editOriginal().width(4).length(4);
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Corner&In&Small").editOriginal().width(2).length(2);
+        //                                        Deco Cliff10 Corner In
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Corner&Out&!Small").editOriginal().width(2).length(2); // Testing 2x2, might be 3x3 xdd
+        inventory.select(BlockType.Block).select("Deco&Cliff10&Corner&Out&Small").editOriginal().width(2).length(2);
+
+        inventory.select(BlockType.Block).select("Deco&Cliff10&DiagOut&!Small").editOriginal().width(3).length(3);
+        inventory.select(BlockType.Block).select("Deco&Cliff10&DiagOut&Small").editOriginal().width(2).length(2);
+        inventory.select(BlockType.Block).select("Deco&Cliff10&DiagIn&!Small").editOriginal().width(4).length(4);
+        inventory.select(BlockType.Block).select("Deco&Cliff10&DiagIn&Small").editOriginal().width(2).length(2);
+
+        inventory.select(BlockType.Block).select("Deco&Cliff10&End").editOriginal().width(6).length(2);
+        inventory.select(BlockType.Block).select("Deco&Cliff10&End&!Mirror").editOriginal().width(6).length(2); // Is redundant
+
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Straight&!Small").editOriginal().width(4).length(2);
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Straight&Small").editOriginal().width(1).length(2);
+        //                                        Deco Cliff8 No Hill Straight
+
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Corner&In&!Small").editOriginal().width(4).length(4);
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Corner&In&Small").editOriginal().width(2).length(2);
+
+
+        // inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Corner&Out&!Simple").editOriginal().width(4).length(4); // Does not actually exist, but might in the future
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Corner&Out").editOriginal().width(2).length(2);
+        //                                        Deco Cliff8 No Hill Corner Out  Simple
+
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Diag&Out&!Small").editOriginal().width(4).length(4); // Does not actually exist, but might in the future
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Diag&Out&Small").editOriginal().width(2).length(2);
+        //                                        Deco Cliff8 No Hill Diag Out Small
+        //                                        Deco Cliff8 No Hill Diag Out
+
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&DiagIn&!Small").editOriginal().width(4).length(4);
+        inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&DiagIn").editOriginal().width(2).length(2);
     }
 
     private static void addCheckpointBlocks(){
