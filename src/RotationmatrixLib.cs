@@ -1,15 +1,8 @@
 
-class Quaternion {
-    public double w, x, y, z;
-};
-
-class EulerAngles {
-    public double roll, pitch, yaw;
-};
 class RotationMatrixLib {
     
-public static EulerAngles ToEulerAngles(Quaternion q) {
-        EulerAngles angles = new EulerAngles();
+public static EulerAnglesLib ToEulerAngles(QuaternionLib q) {
+        EulerAnglesLib angles = new EulerAnglesLib();
 
         // roll (x-axis rotation)
         double sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
@@ -29,7 +22,7 @@ public static EulerAngles ToEulerAngles(Quaternion q) {
         return angles;
     }
 
-    Quaternion ToQuaternion(double roll, double pitch, double yaw) // roll (x), pitch (y), yaw (z), angles are in radians
+    public static QuaternionLib ToQuaternion(double roll, double pitch, double yaw) // roll (x), pitch (y), yaw (z), angles are in radians
     {
         // Abbreviations for the various angular functions
 
@@ -40,7 +33,7 @@ public static EulerAngles ToEulerAngles(Quaternion q) {
         double cy = Math.Cos(yaw * 0.5);
         double sy = Math.Sin(yaw * 0.5);
 
-        Quaternion q = new Quaternion();
+        QuaternionLib q = new QuaternionLib();
         q.w = cr * cp * cy + sr * sp * sy;
         q.x = sr * cp * cy - cr * sp * sy;
         q.y = cr * sp * cy + sr * cp * sy;
@@ -49,3 +42,10 @@ public static EulerAngles ToEulerAngles(Quaternion q) {
         return q;
     }
 }
+class QuaternionLib {
+    public double w, x, y, z;
+};
+
+class EulerAnglesLib {
+    public double roll, pitch, yaw;
+};
