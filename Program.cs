@@ -1,10 +1,11 @@
 ﻿// using System.Numerics;
 using GBX.NET;
+using GBX.NET.Engines.Game;
 using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
-// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 //Code for Execution (change for your use)
 //Folder Processing
@@ -12,8 +13,8 @@ using Newtonsoft.Json;
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
 // Alteration.alterFolder(new Snow(), sourcefolder, destinationFolder + "Spring 2024 Snow/", "Snow");
 
-float PI = (float)Math.PI;
-RotationMatrix.DebugRotateRelative(PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.25);
+// float PI = (float)Math.PI;
+// RotationMatrix.DebugRotateRelative(PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.25);
 //Full Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/Spring_2024_Snowcarswitch";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/";
@@ -22,7 +23,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altere
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// Alteration.alterFile(new Test(), sourceFile, "Test");
+Alteration.alterFile(new Test(), sourceFile, "Test");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
@@ -43,9 +44,27 @@ void stringToName(string projectFolder) {
 class Test : Alteration {
     public override void run(Map map){
         float PI = (float)Math.PI;
-        map.placeRelative("PlatformTechCheckpoint","RoadBumpDeadEnd_CustomBlock",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)));
-        map.placeRelative("PlatformTechCheckpoint","RoadDirtDeadEnd_CustomBlock",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.3f,0)));
-        map.placeRelative("PlatformTechCheckpoint","RoadIceDeadEnd_CustomBlock",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,PI*0.3f,0)).rotate(new Vec3(0,0,PI*0.5f)));
+        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)));
+        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,0,PI*0.5f)));
+        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,0,PI*0.5f)).rotate(new Vec3(0,PI*0.3f,0)));
+        map.placeRelative("PlatformTechCheckpoint","PlatformTechCheckpoint",new Position(new Vec3(0,0,0),new Vec3(0,0,0)).rotate(new Vec3(PI,0,0)).rotate(new Vec3(0,0,PI*0.5f)).rotate(new Vec3(0,PI*0.3f,0)).rotate(new Vec3(PI*0.5f,0,0)));
+
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(800,100,800),new Vec3(0,0,0));
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(800,100,800),new Vec3(PI,0,0));
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(800,100,800),new Vec3(PI,PI*0.3f,0));
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(800,100,800),new Vec3(PI,PI*0.3f,PI*0.5f));
+
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(900,100,900),new Vec3(0,0,0));
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(900,100,900),new Vec3(0,0,PI));
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(900,100,900),new Vec3(0,PI*0.3f,PI));
+        placeblock(map,"PlatformTechCheckpoint",new Vec3(900,100,900),new Vec3(PI*0.5f,0,PI));
         map.placeStagedBlocks();
+    }
+
+    public void placeblock(Map map,string name,Vec3 position,Vec3 rotation) {
+        CGameCtnBlock newBlock = map.map.PlaceBlock(name,new(0,0,0),Direction.North);
+        newBlock.IsFree = true;
+        newBlock.AbsolutePositionInMap = position;
+        newBlock.PitchYawRoll = rotation;
     }
 }
