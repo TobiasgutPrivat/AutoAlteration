@@ -14,6 +14,9 @@ class Block {
     public string name;
     public Position position = new Position();
     public DifficultyColor color;
+    public bool IsClip;
+    public bool IsGhost;
+    public bool IsGround;
 
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position placePosition)
     {
@@ -29,6 +32,9 @@ class Block {
         color = block.Color;
         blockType = BlockType.Block;
         name = block.BlockModel.Id;
+        IsClip = block.IsClip;
+        IsGhost = block.IsGhost;
+        IsGround = block.IsGround;
         Vec3 absolutePosition;
         Vec3 pitchYawRoll;
         if (block.IsFree){

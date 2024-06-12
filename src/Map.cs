@@ -225,9 +225,10 @@ class Map
 
   private void placeBlock(Block block){
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-    newBlock.IsFree = true;
-    // newBlock.IsGround = true;//TODO Test
-    // newBlock.IsClip = true;//TODO Test
+    newBlock.IsFree = true;//TODO maybe try nonfree option for ingrid blocks
+    newBlock.IsGhost = block.IsGhost;
+    newBlock.IsGround = block.IsGround;
+    newBlock.IsClip = block.IsClip;
     newBlock.Color = block.color;
     newBlock.AbsolutePositionInMap = block.position.coords;
     newBlock.PitchYawRoll = block.position.pitchYawRoll;
