@@ -182,36 +182,42 @@ class FreeWheel: EffectAlteration {
 class Rally: EffectAlteration {
     public override void run(Map map){
         inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Rally").replace(map);
+        map.placeStagedBlocks();
         placeStartGamePlay(map,"Rally",0,Vec3.Zero);
     }
 }
 class Snow: EffectAlteration {
     public override void run(Map map){
         inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Snow").replace(map);
+        map.placeStagedBlocks();
         placeStartGamePlay(map,"Snow",0,Vec3.Zero);
     }
 }
 class Desert: EffectAlteration {
     public override void run(Map map){
         inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Desert").replace(map);
+        map.placeStagedBlocks();
         placeStartGamePlay(map,"Desert",0,Vec3.Zero);
     }
 }
 class Stadium: EffectAlteration {
     public override void run(Map map){
         inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Stadium").replace(map);
+        map.placeStagedBlocks();
         placeStartGamePlay(map,"Stadium",0,Vec3.Zero);
     }
 }
 
-class RallyCarswitchToDesert: EffectAlteration {
+class SnowCarswitchToDesert: EffectAlteration {
     public override void run(Map map){
-        inventory.select("Gameplay&Rally").remove("Rally").add("Desert").replace(map);
+        inventory.select("Gameplay&Snow").remove("Snow").add("Desert").replace(map);
+        map.placeStagedBlocks();
     }
 }
-class RallyCarswitchToSnow: EffectAlteration {
+class SnowCarswitchToRally: EffectAlteration {
     public override void run(Map map){
-        inventory.select("Gameplay&Rally").remove("Rally").add("Snow").replace(map);
+        inventory.select("Gameplay&Snow").remove("Snow").add("Rally").replace(map);
+        map.placeStagedBlocks();
     }
 }
 

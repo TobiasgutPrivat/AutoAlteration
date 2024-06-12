@@ -4,7 +4,9 @@ using GBX.NET.Engines.Game;
 enum BlockType
 {
     Block,
-    Item
+    Item,
+    CustomBlock,
+    CustomItem
 }
 
 class Block {
@@ -18,9 +20,6 @@ class Block {
         initBlock(block,fromArticle);
         this.name = article.name;
         this.blockType = article.type;
-        // if (fromArticle.posCorection != null) {
-        //     position.move(fromArticle.posCorection.block(block));
-        // }
         position.addPosition(fromArticle.position);
         position.addPosition(placePosition);
         position.subtractPosition(article.position);
@@ -71,9 +70,6 @@ class Block {
 
         this.name = article.name;
         this.blockType = article.type;
-        // if (fromArticle.posCorection != null) {
-        //     position.move(fromArticle.posCorection.item(item));
-        // }
         position.addPosition(fromArticle.position);
         position.addPosition(placePosition);
         position.subtractPosition(article.position);

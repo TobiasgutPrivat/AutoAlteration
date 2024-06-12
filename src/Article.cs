@@ -1,5 +1,6 @@
 class Article {
     public string name;
+    // public string customBlockPath;
     public Position position = new Position();
     public PosCorection posCorection;
     public BlockType type;

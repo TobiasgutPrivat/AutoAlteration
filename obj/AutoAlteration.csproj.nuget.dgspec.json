@@ -45,6 +45,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "AssimpNet": {
+              "target": "Package",
+              "version": "[4.1.0, )"
+            },
             "GBX.NET": {
               "target": "Package",
               "version": "[2.0.2, )"
@@ -60,6 +64,10 @@
             "MathNet.Numerics": {
               "target": "Package",
               "version": "[5.0.0, )"
+            },
+            "MathNet.Spatial": {
+              "target": "Package",
+              "version": "[0.6.0, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
