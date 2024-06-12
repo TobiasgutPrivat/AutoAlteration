@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {}
+    "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {}
   },
   "projects": {
-    "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {
+    "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
+        "projectUniqueName": "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
         "projectName": "AutoAlteration",
-        "projectPath": "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
+        "projectPath": "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
         "packagesPath": "C:\\Users\\tgu\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\obj\\",
+        "outputPath": "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tgu\\AppData\\Roaming\\NuGet\\NuGet.Config",

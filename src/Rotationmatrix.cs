@@ -127,9 +127,36 @@ class RotationMatrix {
         rotationMatrix *= byRotationX;
         printMatrix(rotationMatrix);
 
-        double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
-        double extractedRoll = -Math.Asin(rotationMatrix[2, 0]);
-        double extractedPitch = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
+        // double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
+        // double extractedRoll = -Math.Asin(rotationMatrix[2, 0]);
+        // double extractedPitch = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
+        //Generated
+        double extractedYaw;
+        double extractedPitch;
+        double extractedRoll;
+
+        if (rotationMatrix[1, 2] < 1)
+        {
+            if (rotationMatrix[1, 2] > -1)
+            {
+                extractedPitch = Math.Asin(rotationMatrix[1, 2]);
+                extractedRoll = Math.Atan2(-rotationMatrix[0, 2], rotationMatrix[2, 2]);
+                extractedYaw = Math.Atan2(-rotationMatrix[1, 0], rotationMatrix[1, 1]);
+            }
+            else // rotationMatrix[1, 2] == -1
+            {
+                extractedPitch = -Math.PI / 2;
+                extractedRoll = -Math.Atan2(rotationMatrix[0, 1], rotationMatrix[0, 0]);
+                extractedYaw = 0;
+            }
+        }
+        else // rotationMatrix[1, 2] == 1
+        {
+            extractedPitch = Math.PI / 2;
+            extractedRoll = Math.Atan2(rotationMatrix[0, 1], rotationMatrix[0, 0]);
+            extractedYaw = 0;
+        }
+
         return new Vec3((float)extractedYaw, (float)extractedPitch, (float)extractedRoll);
     }
 
