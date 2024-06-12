@@ -86,11 +86,6 @@ class Alteration {
     public Alteration(){}
     public virtual void run(Map map) {}
 
-    public static void loadCustomBlocks(){
-        inventory.addArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-10) + "_CustomBlock", BlockType.Block)).ToList());
-        inventory.addArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-9) + "_CustomBlock", BlockType.Item)).ToList());
-    }
-
     
 
     public static void createInventory() {
@@ -103,9 +98,11 @@ class Alteration {
         blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
 
         //Init Inventory
-        inventory.articles.AddRange(items.articles);
-        inventory.articles.AddRange(blocks.articles);
-        loadCustomBlocks();
+        inventory.addArticles(items.articles);
+        inventory.addArticles(blocks.articles);
+        //CustomBlocks
+        inventory.addArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x), BlockType.CustomBlock)).ToList());
+        inventory.addArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x), BlockType.CustomItem)).ToList());
 
         inventory.select("Special").editOriginal().remove("Special");
 

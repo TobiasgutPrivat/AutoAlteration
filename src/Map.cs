@@ -72,10 +72,8 @@ class Map
     map.MapUid = new string(stringChars);
   }
 
-  private void embedBlock(string name){//TODO overthink if this is good
-    List<string> customBlocks = new List<string>();
-    customBlocks.AddRange(Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-10) == name).ToList());
-    customBlocks.AddRange(Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x).Substring(0,Path.GetFileName(x).Length-9) == name).ToList());
+  private void embedBlock(string name){//TODO overthink getting path
+    List<string> customBlocks = Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x) == name).ToList();
     if (customBlocks.Count != 1){
       Console.WriteLine("Found " + customBlocks.Count + " custom blocks for " + name);
       return;
@@ -83,7 +81,23 @@ class Map
     string path = customBlocks.First();
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
-      ZipArchiveEntry entry = zipArchive.CreateEntry(name);
+      ZipArchiveEntry entry = zipArchive.CreateEntry("Blocks\\" + name);
+        using Stream entryStream = entry.Open();
+        using FileStream fileStream = File.OpenRead(path);
+        fileStream.CopyTo(entryStream);
+    });
+    Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
+  }
+  private void embedItem(string name){//TODO overthink getting path
+    List<string> customBlocks = Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x) == name).ToList();
+    if (customBlocks.Count != 1){
+      Console.WriteLine("Found " + customBlocks.Count + " custom blocks for " + name);
+      return;
+    }
+    string path = customBlocks.First();
+    map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
+    {
+      ZipArchiveEntry entry = zipArchive.CreateEntry("Items\\" + name);
         using Stream entryStream = entry.Open();
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
@@ -182,29 +196,41 @@ class Map
 
   public void placeStagedBlocks(){
     foreach (var block in stagedBlocks){
-      //TODO test Embedded Blocks
-      if(block.name.Contains("_CustomBlock")){
-        if(!embeddedBlocks.Any(x => x == block.name)){
-          embedBlock(block.name.Replace("_CustomBlock", ""));
-          embeddedBlocks.Add(block.name);
-        }
-      }
       switch (block.blockType){
         case BlockType.Block:
-          CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-          newBlock.IsFree = true;
-          // newBlock.IsGround = true;//TODO Test
-          // newBlock.IsClip = true;//TODO Test
-          newBlock.Color = block.color;
-          newBlock.AbsolutePositionInMap = block.position.coords;
-          newBlock.PitchYawRoll = block.position.pitchYawRoll;
+          placeBlock(block);
           break;
         case BlockType.Item:
           map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
           break;
+        case BlockType.CustomBlock:
+          if(!embeddedBlocks.Any(x => x == block.name)){
+            embedBlock(block.name);
+            embeddedBlocks.Add(block.name);
+          }
+          block.name += "_CustomBlock";
+          placeBlock(block);
+          break;
+        case BlockType.CustomItem:
+          if(!embeddedBlocks.Any(x => x == block.name)){
+            embedItem(block.name);
+            embeddedBlocks.Add(block.name);
+          }
+          map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);//TODO Customblock-Author
+          break;
       }
     } 
     stagedBlocks = new List<Block>();
+  }
+
+  private void placeBlock(Block block){
+    CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
+    newBlock.IsFree = true;
+    // newBlock.IsGround = true;//TODO Test
+    // newBlock.IsClip = true;//TODO Test
+    newBlock.Color = block.color;
+    newBlock.AbsolutePositionInMap = block.position.coords;
+    newBlock.PitchYawRoll = block.position.pitchYawRoll;
   }
 
   public void delete(string Block){

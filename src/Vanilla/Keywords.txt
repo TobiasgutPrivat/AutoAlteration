@@ -1,4 +1,6 @@
 _CustomBlock
+.Block.Gbx
+.Item.Gbx
 RallyRoadDirtHigh
 RallyRoadDirtLow
 RallyCastleRoad

@@ -4,7 +4,9 @@ using GBX.NET.Engines.Game;
 enum BlockType
 {
     Block,
-    Item
+    Item,
+    CustomBlock,
+    CustomItem
 }
 
 class Block {
