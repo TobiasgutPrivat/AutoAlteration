@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
-Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 
 //Code for Execution (change for your use)
 //Folder Processing
@@ -14,7 +14,7 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 // Alteration.alterFolder(new Snow(), sourcefolder, destinationFolder + "Spring 2024 Snow/", "Snow");
 
 // float PI = (float)Math.PI;
-// RotationMatrix.DebugRotateRelative(PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.5,PI*0.25);
+// RotationMatrix.RotateRelative(new Vec3( PI*0.5f,PI*0.5f,PI*0.5f), new Vec3 (PI*0.5f,PI*0.5f,PI*0.25f));
 //Full Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/Spring_2024_Snowcarswitch";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/";
@@ -23,7 +23,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altere
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new Test(), sourceFile, "Test");
+// Alteration.alterFile(new Test(), sourceFile, "Test");
 
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
