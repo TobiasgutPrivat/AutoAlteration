@@ -83,16 +83,6 @@ class Position {
         Matrix<double> rotationMatrix = RotationZ;
         printMatrix(rotationMatrix);
 
-        // Rotation matrix for Pitch (Y-axis)
-        Matrix<double> RotationY = DenseMatrix.OfArray(new double[,] {
-            { Math.Cos(Pitch), 0, Math.Sin(Pitch) ,0},
-            { 0, 1, 0 ,0},
-            { -Math.Sin(Pitch), 0, Math.Cos(Pitch) ,0},
-            { 0, 0, 0 , 1}
-        });
-        rotationMatrix *= RotationY;
-        printMatrix(rotationMatrix);
-
         // Rotation matrix for Roll (X-axis)
         Matrix<double> RotationX = DenseMatrix.OfArray(new double[,] {
             { 1, 0, 0 ,0},
@@ -101,6 +91,16 @@ class Position {
             { 0, 0, 0 , 1}
         });
         rotationMatrix *= RotationX;
+        printMatrix(rotationMatrix);
+
+        // Rotation matrix for Pitch (Y-axis)
+        Matrix<double> RotationY = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(Pitch), 0, Math.Sin(Pitch) ,0},
+            { 0, 1, 0 ,0},
+            { -Math.Sin(Pitch), 0, Math.Cos(Pitch) ,0},
+            { 0, 0, 0 , 1}
+        });
+        rotationMatrix *= RotationY;
         printMatrix(rotationMatrix);
         return rotationMatrix;
     }
