@@ -1,6 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
-
+//TODO Remove
 class PosCorection {
     public PosCorection(){}
     public virtual Vec3 block(CGameCtnBlock ctnBlock){

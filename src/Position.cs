@@ -69,9 +69,9 @@ class Position {
     }
 
     private static Matrix<double> createNadeoMatrix(Vec3 rotation) {
-        double Yaw = rotation.X;
-        double Roll = rotation.Z;
         double Pitch = rotation.Y;
+        double Roll = rotation.Z;
+        double Yaw = rotation.X;
 
         // Rotation matrix for Yaw (Z-axis)
         Matrix<double> RotationZ = DenseMatrix.OfArray(new double[,] {
@@ -110,6 +110,91 @@ class Position {
         double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
         double extractedPitch = -Math.Asin(rotationMatrix[2, 0]);
         double extractedRoll = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
-        Console.WriteLine($"Yaw: {extractedYaw}, Pitch: {extractedPitch}, Roll: {extractedRoll}");
+        Console.WriteLine($"Yaw: {extractedYaw}, Roll: {extractedRoll}, Pitch: {extractedPitch}");
+        Console.WriteLine("-------------------------------------------------------------------------");
+    }
+
+    public static Vec3 DebugRotateRelative(Vec3 rotation, Vec3 byRotation){
+        double yaw = rotation.X;
+        double roll = rotation.Z;
+        double pitch = rotation.Y;
+
+        //Trackmania does Yaw, then Roll, then Pitch (All Clockwise)
+
+        Console.WriteLine("################\nStart\n####################");
+        // Rotation matrix for yaw (Z-axis)
+        Matrix<double> rotationZ = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(yaw), -Math.Sin(yaw), 0 , 0},
+            { Math.Sin(yaw), Math.Cos(yaw), 0 , 0},
+            { 0, 0, 1 , 0},
+            { 0, 0, 0 , 1}
+        });
+        Console.WriteLine("Yaw: " + yaw);
+        Matrix<double> rotationMatrix = rotationZ;
+        printMatrix(rotationMatrix);
+
+        // Rotation matrix for roll (X-axis)
+        Matrix<double> rotationX = DenseMatrix.OfArray(new double[,] {
+            { 1, 0, 0 ,0},
+            { 0, Math.Cos(roll), -Math.Sin(roll) ,0},
+            { 0, Math.Sin(roll), Math.Cos(roll) ,0},
+            { 0, 0, 0 , 1}
+        });
+        Console.WriteLine("Roll: " + roll);
+        rotationMatrix *= rotationX;
+        printMatrix(rotationMatrix);
+
+        // Rotation matrix for pitch (Y-axis)
+        Matrix<double> rotationY = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(pitch), 0, Math.Sin(pitch) ,0},
+            { 0, 1, 0 ,0},
+            { -Math.Sin(pitch), 0, Math.Cos(pitch) ,0},
+            { 0, 0, 0 , 1}
+        });
+        Console.WriteLine("Pitch: " + pitch);
+        rotationMatrix *= rotationY;
+        printMatrix(rotationMatrix);
+
+        double byYaw = byRotation.X;
+        double byRoll = byRotation.Z;
+        double byPitch = byRotation.Y;
+
+        // Rotation matrix for byYaw (Z-axis)
+        Matrix<double> byRotationZ = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(byYaw), -Math.Sin(byYaw), 0 ,0},
+            { Math.Sin(byYaw), Math.Cos(byYaw), 0 ,0},
+            { 0, 0, 1 ,0},
+            { 0, 0, 0 , 1}
+        });
+        Console.WriteLine("byYaw: " + byYaw);
+        rotationMatrix *= byRotationZ;
+        printMatrix(rotationMatrix);
+
+        // Rotation matrix for byRoll (X-axis)
+        Matrix<double> byRotationX = DenseMatrix.OfArray(new double[,] {
+            { 1, 0, 0 ,0},
+            { 0, Math.Cos(byRoll), -Math.Sin(byRoll) ,0},
+            { 0, Math.Sin(byRoll), Math.Cos(byRoll) ,0},
+            { 0, 0, 0 , 1}
+        });
+        Console.WriteLine("byRoll: " + byRoll);
+        rotationMatrix *= byRotationX;
+        printMatrix(rotationMatrix);
+
+        // Rotation matrix for byPitch (Y-axis)
+        Matrix<double> byRotationY = DenseMatrix.OfArray(new double[,] {
+            { Math.Cos(byPitch), 0, Math.Sin(byPitch) ,0},
+            { 0, 1, 0 ,0},
+            { -Math.Sin(byPitch), 0, Math.Cos(byPitch) ,0},
+            { 0, 0, 0 , 1}
+        });
+        Console.WriteLine("byPitch: " + byPitch);
+        rotationMatrix *= byRotationY;
+        printMatrix(rotationMatrix);
+
+        double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
+        double extractedPitch = -Math.Asin(rotationMatrix[2, 0]);
+        double extractedRoll = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
+        return new Vec3((float)extractedYaw, (float)extractedPitch, (float)extractedRoll);
     }
 }
