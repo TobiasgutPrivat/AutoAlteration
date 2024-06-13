@@ -62,7 +62,7 @@ class Inventory {
         edit().length(length);
 
     public KeywordEdit edit(){
-        List<Article> articleClone = articles.Select(a => a.CloneArticle()).ToList();//JsonConvert.DeserializeObject<List<Article>>(JsonConvert.SerializeObject(articles))
+        List<Article> articleClone = articles.Select(a => a.CloneArticle()).ToList();
         return new KeywordEdit(articleClone);
     }
 
@@ -123,44 +123,44 @@ class Inventory {
                     }
                 };
             });
-            // article.Keywords.ForEach(k => {
-            //    if (article.Keywords.Where(k2 => k == k2).Count() > 1) {
-            //        Console.WriteLine(article.Name + " contains " + k + " multiple Times");
-            //    } 
-            // });
         });
     }
-    // public void checkKeywords(){
-    //     articles.ForEach(article => {
-    //         if (GetArticles(article.Keywords.ToArray()).Where(a => a.Keywords.Count == article.Keywords.Count).Count() > 1 ) {
-    //             Console.WriteLine(article.Name + ": More than one found article with keywords: " + string.Join(", ", article.Keywords) + "\nFound Articles: " + string.Join(", ", GetArticles(article.Keywords.ToArray()).Where(a => a.Keywords.Count == article.Keywords.Count).Select(a => a.Name).ToArray()));
-    //         }
-    //     });
-    //     List<string> Keywords = File.ReadAllLines("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/src/Configuration/Keywords.txt").ToList();
-    //     Keywords.ForEach(k => {
-    //         int count = 0;
-    //         foreach (Article article in articles)
-    //         {
-    //             if (article.Keywords.Contains(k))
-    //             {
-    //                 count++;
-    //             }
-    //         }
-    //         Console.WriteLine($"'{k}' count: {count}");
-    //     });
-    //     articles.ForEach(article => {
-    //         article.Keywords.ForEach(keyword => {
-    //             if (Keywords.Contains(keyword)) {
-    //                 Keywords.RemoveAll(k => k == keyword);
-    //             }
-    //         });
-    //     });
-    //     Console.WriteLine("Unused Keywords: " + string.Join(", ", Keywords));
-    // }
+    public void analyzeKeywords(){
+        articles.ForEach(article => {
+            if (GetArticles(article.keywords.ToArray()).Where(a => a.keywords.Count == article.keywords.Count).Count() > 1 ) {
+                Console.WriteLine(article.name + ": More than one found article with keywords: " + string.Join(", ", article.keywords) + "\nFound Articles: " + string.Join(", ", GetArticles(article.keywords.ToArray()).Where(a => a.keywords.Count == article.keywords.Count).Select(a => a.name).ToArray()));
+            }
+        });
+        List<string> keywords = File.ReadAllLines("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/src/Configuration/keywords.txt").ToList();
+        keywords.ForEach(k => {
+            int count = 0;
+            foreach (Article article in articles)
+            {
+                if (article.keywords.Contains(k))
+                {
+                    count++;
+                }
+            }
+            Console.WriteLine($"'{k}' count: {count}");
+        });
+        articles.ForEach(article => {
+            article.keywords.ForEach(k => {
+                if (article.keywords.Where(k2 => k == k2).Count() > 1) {
+                    Console.WriteLine(article.name + " contains " + k + " multiple Times");
+                } 
+            });
+            article.keywords.ForEach(keyword => {
+                if (keywords.Contains(keyword)) {
+                    keywords.RemoveAll(k => k == keyword);
+                }
+            });
+        });
+        Console.WriteLine("Unused Keywords: " + string.Join(", ", keywords));
+    }
 
     public Inventory print() {
         articles.ForEach(article => {
-            Console.WriteLine(article.name + ": " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape,article.posCorection));
+            Console.WriteLine(article.name + ": " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape));
         });
         return this;
     }

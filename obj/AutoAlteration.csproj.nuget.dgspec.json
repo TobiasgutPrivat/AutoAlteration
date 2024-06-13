@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {}
+    "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {}
   },
   "projects": {
-    "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {
+    "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
+        "projectUniqueName": "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
         "projectName": "AutoAlteration",
-        "projectPath": "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
+        "projectPath": "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
         "packagesPath": "C:\\Users\\tgu\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\obj\\",
+        "outputPath": "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tgu\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -45,10 +45,6 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "AssimpNet": {
-              "target": "Package",
-              "version": "[4.1.0, )"
-            },
             "GBX.NET": {
               "target": "Package",
               "version": "[2.0.2, )"
@@ -65,17 +61,9 @@
               "target": "Package",
               "version": "[5.0.0, )"
             },
-            "MathNet.Spatial": {
-              "target": "Package",
-              "version": "[0.6.0, )"
-            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
-            },
-            "glm": {
-              "target": "Package",
-              "version": "[1.0.1, )"
             }
           },
           "imports": [

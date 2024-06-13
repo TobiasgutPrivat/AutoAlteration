@@ -3,7 +3,6 @@ using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
 using System.IO.Compression;
 using GBX.NET.ZLib;
-using Newtonsoft.Json;
 class Map
 {
   Gbx<CGameCtnChallenge> gbx;
@@ -216,7 +215,7 @@ class Map
             embedItem(block.name);
             embeddedBlocks.Add(block.name);
           }
-          map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);//TODO Customblock-Author
+          map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
           break;
       }
     } 

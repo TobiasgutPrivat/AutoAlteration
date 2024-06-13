@@ -1,8 +1,6 @@
 class Article {
     public string name;
-    // public string customBlockPath;
     public Position position = new Position();
-    public PosCorection posCorection;
     public BlockType type;
     public List<string> keywords = new List<string>();
     public string shape = "";
@@ -16,7 +14,7 @@ class Article {
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
 
     public Article() { }
-    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,Position position = null,PosCorection posCorection = null){
+    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,Position position = null){
         this.name = name;
         this.type = type;
         this.keywords = keywords;
@@ -24,7 +22,6 @@ class Article {
         this.toShape = toShape;
         this.surface = surface;
         this.position.addPosition(position);
-        this.posCorection = posCorection;
     }
     
     public Article(string name,BlockType type){
@@ -37,7 +34,6 @@ class Article {
         Article clonedArticle = new Article();
         clonedArticle.name = this.name;
         clonedArticle.position = new Position(this.position.coords, this.position.pitchYawRoll);
-        clonedArticle.posCorection = this.posCorection;
         clonedArticle.length = this.length;
         clonedArticle.width = this.width;
         clonedArticle.type = this.type;
