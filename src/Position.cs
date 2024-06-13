@@ -56,19 +56,27 @@ class Position {
     }
 
     public static Vec3 RotateRelative(Vec3 rotation, Vec3 byRotation){
-        Matrix<double> rotationMatrix = createNadeoMatrix(rotation);
-        Matrix<double> byrotationMatrix = createNadeoMatrix(byRotation);
+        Matrix<double> rotationMatrix = createZXYMatrix(rotation);
+        Matrix<double> byrotationMatrix = createZXYMatrix(byRotation);
                   
         rotationMatrix = rotationMatrix * byrotationMatrix;
         printMatrix(rotationMatrix);
 
-        double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
-        double extractedPitch = -Math.Asin(rotationMatrix[2, 0]);
-        double extractedRoll = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
+        return getEulerZXY(rotationMatrix);
+    }
+
+    public static Vec3 getEulerZXY(Matrix<double> rotationMatrix) {
+        // double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
+        // double extractedPitch = -Math.Asin(rotationMatrix[2, 0]);
+        // double extractedRoll = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
+        //GPT:
+        double extractedRoll = Math.Asin(rotationMatrix[2, 1]);
+        double extractedPitch = Math.Atan2(-rotationMatrix[2, 0], rotationMatrix[2, 2]);
+        double extractedYaw = Math.Atan2(-rotationMatrix[0, 1], rotationMatrix[1, 1]);
         return new Vec3((float)extractedYaw, (float)extractedPitch, (float)extractedRoll);
     }
 
-    private static Matrix<double> createNadeoMatrix(Vec3 rotation) {
+    private static Matrix<double> createZXYMatrix(Vec3 rotation) {
         double Pitch = rotation.Y;
         double Roll = rotation.Z;
         double Yaw = rotation.X;
@@ -107,10 +115,8 @@ class Position {
     
     private static void printMatrix(Matrix<double> rotationMatrix) {
         Console.WriteLine(rotationMatrix);
-        double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
-        double extractedPitch = -Math.Asin(rotationMatrix[2, 0]);
-        double extractedRoll = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
-        Console.WriteLine($"Yaw: {extractedYaw}, Roll: {extractedRoll}, Pitch: {extractedPitch}");
+        Vec3 euler = getEulerZXY(rotationMatrix);
+        Console.WriteLine($"Yaw: {euler.X}, Roll: {euler.Z}, Pitch: {euler.Y}");
         Console.WriteLine("-------------------------------------------------------------------------");
     }
 
@@ -192,9 +198,6 @@ class Position {
         rotationMatrix *= byRotationY;
         printMatrix(rotationMatrix);
 
-        double extractedYaw = Math.Atan2(rotationMatrix[1, 0], rotationMatrix[0, 0]);
-        double extractedPitch = -Math.Asin(rotationMatrix[2, 0]);
-        double extractedRoll = Math.Atan2(rotationMatrix[2, 1], rotationMatrix[2, 2]);
-        return new Vec3((float)extractedYaw, (float)extractedPitch, (float)extractedRoll);
+        return getEulerZXY(rotationMatrix);
     }
 }
