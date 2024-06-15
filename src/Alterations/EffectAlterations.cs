@@ -61,8 +61,10 @@ class EffectAlteration: Alteration {
         // BlockChange zero = new BlockChange(new Vec3(0,0,forwardOffset),rotation);
 
         Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
-        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), inventory.GetArticle("ObstaclePillar2m"));
-        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), GateSpecial,new Position(new Vec3(-16,-18,-16 + forwardOffset),rotation));
+        inventory.select(BlockType.Item).select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Center").remove("v2").add(Effect).placeRelative(map,new Position(new Vec3(0,0,forwardOffset),rotation));
+        // map.placeRelative(inventory.select(BlockType.Item).select("Checkpoint"),inventory.GetArticle("GateSpecial" + Effect),new Position(new Vec3(0,0,forwardOffset),rotation));
+        // map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), inventory.GetArticle("ObstaclePillar2m"));
+        // map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), GateSpecial,new Position(new Vec3(-16,-18,-16 + forwardOffset),rotation));
         // map.placeRelative(CPMultiLap.select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!(RoadIce)&!Gate"), GateSpecial,new BlockChange(new Vec3(0,-16,forwardOffset),rotation));
         // map.placeRelative(CPMultiLap.select("Platform&Slope2"), GateSpecial,new BlockChange(new Vec3(0,-8,forwardOffset),rotation));
         // map.placeRelative(CPMultiLap.select("Platform&Wall"), GateSpecial,new BlockChange(new Vec3(0,0,forwardOffset),new Vec3(0,PI/2,0) + rotation));
@@ -172,9 +174,9 @@ class ReactorDown: EffectAlteration {
 
 class FreeWheel: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"NoEngine",1,Vec3.Zero);
+        newplaceCPEffect(map,"NoEngine",1,Vec3.Zero);
         placeStartEffect(map,"NoEngine",3,Vec3.Zero);
-        placeCPEffect(map,"Turbo",0,Vec3.Zero);
+        newplaceCPEffect(map,"Turbo",0,Vec3.Zero);
         placeStartEffect(map,"Turbo",0,Vec3.Zero);
     }
 }

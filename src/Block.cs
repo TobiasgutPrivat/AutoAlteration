@@ -12,7 +12,7 @@ enum BlockType
 class Block {
     public BlockType blockType;
     public string name;
-    public Position position = new Position();
+    public Position position;
     public DifficultyColor color;
     public bool IsClip;
     public bool IsGhost;
@@ -49,17 +49,17 @@ class Block {
                 case Direction.East:
                     pitchYawRoll = new Vec3(Alteration.PI * 1.5f,0,0);
                     absolutePosition = new (0,0,-32);
-                    absolutePosition += new Vec3((fromArticle.length - 1) * 32,0,0); 
+                    // absolutePosition += new Vec3((fromArticle.length - 1) * 32,0,0); 
                     break;
                 case Direction.South:
                     pitchYawRoll = new Vec3(Alteration.PI,0,0);
                     absolutePosition = new (0,0,0);
-                    absolutePosition += new Vec3((fromArticle.width - 1)*32,0,(fromArticle.length - 1)*32); 
+                    // absolutePosition += new Vec3((fromArticle.width - 1)*32,0,(fromArticle.length - 1)*32); 
                     break;
                 case Direction.West:
                     pitchYawRoll = new Vec3(Alteration.PI * 0.5f,0,0);
                     absolutePosition = new (-32,0,0);
-                    absolutePosition += new Vec3(0,0,(fromArticle.width - 1)*32);
+                    // absolutePosition += new Vec3(0,0,(fromArticle.width - 1)*32);
                     break;
                 default:
                     pitchYawRoll = new Vec3(0,0,0);
@@ -68,7 +68,7 @@ class Block {
             }
             absolutePosition += new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
         }
-        position.addPosition(absolutePosition,pitchYawRoll);
+        position = new Position(absolutePosition,pitchYawRoll);
     }
 
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position placePosition){
