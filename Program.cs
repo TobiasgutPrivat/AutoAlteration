@@ -22,7 +22,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new Test(), sourceFile, "Effect");
+Alteration.alterFile(new Flipped(), sourceFile, "Flipped");
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void testBlock(string Name) {
@@ -41,7 +41,9 @@ void stringToName(string projectFolder) {
 
 class Test : Alteration {
     public override void run(Map map){
-        EffectAlteration.newplaceCPEffect(map,"Turbo");
+        // EffectAlteration.newplaceCPEffect(map,"Turbo");
+        map.map.PlaceBlock("PlatformTechCheckpoint", new Int3(48,38,48), Direction.North);
+        map.map.PlaceBlock("PlatformTechCheckpoint", new Int3(1,9,1), Direction.North);
         map.placeStagedBlocks();
     }
 
