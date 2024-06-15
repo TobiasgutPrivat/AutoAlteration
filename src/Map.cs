@@ -226,6 +226,7 @@ class Map
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
     newBlock.IsFree = true;//TODO maybe try nonfree option for ingrid blocks
     newBlock.IsGhost = block.IsGhost;
+    //TODO only if position is onground
     newBlock.IsGround = block.IsGround;
     newBlock.IsClip = block.IsClip;
     newBlock.Color = block.color;

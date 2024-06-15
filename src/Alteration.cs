@@ -144,7 +144,7 @@ class Alteration {
         inventory.select(BlockType.Block).select("Road&Tilt&Transition2&((Up|Down)&(Left|Right))").editOriginal().width(1).length(2);
         inventory.select(BlockType.Block).select("Road&Tilt&Transition2&Curve&(In|Out)").editOriginal().width(1).length(2);
 
-        inventory.select(BlockType.Block).select("Road&DiagLeft|DiagRight").editOriginal().width(3).length(2); // Original example by Tobias
+        inventory.select(BlockType.Block).select("(RoadTech|RoadDirt|RoadBump|RoadIce)&(DiagLeft|DiagRight)").editOriginal().width(3).length(2); // Original example by Tobias
 
         inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Chicane&Right").editOriginal().width(2).length(1);
         inventory.select(BlockType.Block).select("Road&Diag&(Left|Right)&Chicane&Left").editOriginal().width(3).length(1);
@@ -323,8 +323,8 @@ class Alteration {
 
     private static void addRoadNoCPBlocks(string surface){
         inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Up","Slope"},"Road" +surface,"",""));
-        inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Down","Slope"},"Road" +surface,"","",new Position(new Vec3(32,0,-32), new Vec3(PI,0,0))));
-        inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Left","Tilt"},"Road" +surface,"","",new Position(new Vec3(32,0,-32), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Down","Slope"},"Road" +surface,"","",new Position(new Vec3(32,0,32), new Vec3(PI,0,0))));
+        inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Left","Tilt"},"Road" +surface,"","",new Position(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Right","Tilt"},"Road" +surface,"",""));
     }
     private static void addPlatformNoCPBlocks(string surface){
