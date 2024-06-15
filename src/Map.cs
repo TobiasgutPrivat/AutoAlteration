@@ -224,29 +224,21 @@ class Map
 
   private void placeBlock(Block block){
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-    if (!block.IsFree && block.isInGrid()){//TODO untested
+    if (!block.IsFree && block.isInGrid()){
       newBlock.IsFree = false;
-      // newBlock.Coord = new Int3 ((int)(block.position.coords.X/32), (int)(block.position.coords.Y/8) + 8, (int)(block.position.coords.Z/32));
       newBlock.IsGround = block.IsGround;
       switch (Block.round(block.position.pitchYawRoll.X / ((float)Math.PI/2)) % 4){
         case 0:
           newBlock.Direction = Direction.North;
-          // newBlock.Coord += new Int3(1,0,1);
           break;
         case 1:
           newBlock.Direction = Direction.East;
-          // newBlock.Coord += new Int3(0,0,1);
-          // newBlock.Coord += new Int3((block.article.length - 1) * -1,0,0); 
           break;
         case 2:
           newBlock.Direction = Direction.South;
-          // newBlock.Coord += new Int3(0,0,0);
-          // newBlock.Coord += new Int3((block.article.width - 1)*-1,0,(block.article.length - 1)*-1); 
           break;
         case 3:
           newBlock.Direction = Direction.West;
-          // newBlock.Coord += new Int3(1,0,0);
-          // newBlock.Coord += new Int3(0,0,block.article.width - 1);
           break;
         default:
           Console.WriteLine("Unknown Direction");

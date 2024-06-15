@@ -16,8 +16,14 @@ class Inventory {
     public string[] names() =>
         articles.Select(a => a.name).ToArray();
 
-    public Article GetArticle(string name) =>
-        articles.Where(a => a.name == name).First();
+    public Article GetArticle(string name) {
+        List<Article> match = articles.Where(a => a.name == name).ToList();
+        if (match.Count == 0) {
+            Console.WriteLine("No article with name: " + name);
+            return null;
+        }
+        return match.First();
+    }
 
     public List<Article> GetArticles(string keywordFilter) =>
         articles.Where(a => a.match(keywordFilter)).ToList();

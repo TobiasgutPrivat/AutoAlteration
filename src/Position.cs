@@ -39,6 +39,9 @@ class Position {
         addRotation(pitchYawRoll);
         return this;
     }
+    public Position clone(){
+        return new Position(coords, pitchYawRoll);
+    }
     public void relativeOffset(Vec3 offset){
         Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.X, pitchYawRoll.Y, pitchYawRoll.Z);
         Vector3 offsetV3 = new Vector3(offset.X,offset.Y,offset.Z);
