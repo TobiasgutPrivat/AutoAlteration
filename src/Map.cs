@@ -224,14 +224,46 @@ class Map
 
   private void placeBlock(Block block){
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-    newBlock.IsFree = true;//TODO maybe try nonfree option for ingrid blocks
+    if (!block.IsFree && block.isInGrid()){//TODO untested
+      newBlock.IsFree = false;
+      // newBlock.Coord = new Int3 ((int)(block.position.coords.X/32), (int)(block.position.coords.Y/8) + 8, (int)(block.position.coords.Z/32));
+      newBlock.IsGround = block.IsGround;
+      switch (Block.round(block.position.pitchYawRoll.X / ((float)Math.PI/2)) % 4){
+        case 0:
+          newBlock.Direction = Direction.North;
+          // newBlock.Coord += new Int3(1,0,1);
+          break;
+        case 1:
+          newBlock.Direction = Direction.East;
+          // newBlock.Coord += new Int3(0,0,1);
+          // newBlock.Coord += new Int3((block.article.length - 1) * -1,0,0); 
+          break;
+        case 2:
+          newBlock.Direction = Direction.South;
+          // newBlock.Coord += new Int3(0,0,0);
+          // newBlock.Coord += new Int3((block.article.width - 1)*-1,0,(block.article.length - 1)*-1); 
+          break;
+        case 3:
+          newBlock.Direction = Direction.West;
+          // newBlock.Coord += new Int3(1,0,0);
+          // newBlock.Coord += new Int3(0,0,block.article.width - 1);
+          break;
+        default:
+          Console.WriteLine("Unknown Direction");
+          break;
+      }
+      Vec3 offset;
+      Block.getDirectionOffset(block.article,newBlock.Direction,out offset,out _);
+      Vec3 coords = block.position.coords - offset;
+      newBlock.Coord += new Int3((int)coords.X/32, (int)coords.Y/8 + 8, (int)coords.Z/32);
+    } else{
+      newBlock.IsFree = true;
+      newBlock.AbsolutePositionInMap = block.position.coords;
+      newBlock.PitchYawRoll = block.position.pitchYawRoll;
+    }
     newBlock.IsGhost = block.IsGhost;
-    //TODO only if position is onground
-    newBlock.IsGround = block.IsGround;
     newBlock.IsClip = block.IsClip;
     newBlock.Color = block.color;
-    newBlock.AbsolutePositionInMap = block.position.coords;
-    newBlock.PitchYawRoll = block.position.pitchYawRoll;
   }
 
   public void delete(string Block){

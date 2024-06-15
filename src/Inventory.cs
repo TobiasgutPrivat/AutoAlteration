@@ -131,7 +131,7 @@ class Inventory {
                 Console.WriteLine(article.name + ": More than one found article with keywords: " + string.Join(", ", article.keywords) + "\nFound Articles: " + string.Join(", ", GetArticles(article.keywords.ToArray()).Where(a => a.keywords.Count == article.keywords.Count).Select(a => a.name).ToArray()));
             }
         });
-        List<string> keywords = File.ReadAllLines("C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/src/Configuration/keywords.txt").ToList();
+        List<string> keywords = File.ReadAllLines("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/src/Vanilla/Keywords.txt").ToList();
         keywords.ForEach(k => {
             int count = 0;
             foreach (Article article in articles)

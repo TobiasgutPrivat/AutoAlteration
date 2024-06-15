@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sP6JBBMMVn3rNNGAfE1CFIV+rfDMXx2MbqROlj953+iGUZJfWi2lHwPPU0e1+qIs20hWvEbrwi6wLGkMA/6kQw==",
+  "dgSpecHash": "UnW24IVOiTc3uSHy9YkUgNsboed8Guj8Np9nBdGtjIYHSnt8GNPFqzfjNpjzJb3etFgvQSgxIPsSLggEbvlqSw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Tobias\\Documents\\Programmieren\\GBX Test\\AutoAlteration\\AutoAlteration.csproj",
+  "projectFilePath": "c:\\Users\\Tobias\\Documents\\Programmieren\\GBX Test\\AutoAlteration\\AutoAlteration.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Tobias\\.nuget\\packages\\gbx.net\\2.0.2\\gbx.net.2.0.2.nupkg.sha512",
     "C:\\Users\\Tobias\\.nuget\\packages\\gbx.net.lzo\\2.0.0\\gbx.net.lzo.2.0.0.nupkg.sha512",
