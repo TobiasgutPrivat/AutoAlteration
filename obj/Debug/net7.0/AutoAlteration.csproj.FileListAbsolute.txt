@@ -49,9 +49,3 @@ c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0
 c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\obj\Debug\net7.0\ref\AutoAlteration.dll
 c:\Users\Tobias\Documents\Programmieren\GBX Test\AutoAlteration\bin\Debug\net7.0\MathNet.Numerics.dll
 C:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\MathNet.Numerics.dll
-c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\AssimpNet.dll
-c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\MathNet.Spatial.dll
-c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\runtimes\linux-x64\native\libassimp.so
-c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\runtimes\osx-x64\native\libassimp.dylib
-c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\runtimes\win-x64\native\assimp.dll
-c:\Users\tgu\OneDrive - This AG\Dokumente\Privat\AutoAlteration\bin\Debug\net7.0\runtimes\win-x86\native\assimp.dll

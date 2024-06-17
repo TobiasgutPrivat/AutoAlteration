@@ -43,9 +43,43 @@ class Position {
         return new Position(coords, pitchYawRoll);
     }
     public void relativeOffset(Vec3 offset){
-        Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.X, pitchYawRoll.Y, pitchYawRoll.Z);
+        // Matrix<double> rotationMatrix = createZXYMatrix(pitchYawRoll);//TODO untested
+        // double Yaw = pitchYawRoll.X;
+        // double Roll = pitchYawRoll.Z;
+        // double Pitch = pitchYawRoll.Y;
+        // Matrix<double> RotationZ = DenseMatrix.OfArray(new double[,] {
+        //     { 1, 0, 0},
+        //     { 0, Math.Cos(Yaw), -Math.Sin(Yaw)},
+        //     { 0, Math.Sin(Yaw), Math.Cos(Yaw)},
+        // });
+        // Matrix<double> rotationMatrix = RotationZ;
+
+        // // Rotation matrix for Roll (X-axis)
+        // Matrix<double> RotationX = DenseMatrix.OfArray(new double[,] {
+        //     { Math.Cos(Roll), -Math.Sin(Roll), 0},
+        //     { Math.Sin(Roll), Math.Cos(Roll), 0},
+        //     { 0, 0, 1},
+        // });
+        // rotationMatrix *= RotationX;
+
+        // // Rotation matrix for Pitch (Y-axis)
+        // Matrix<double> RotationY = DenseMatrix.OfArray(new double[,] {
+        //     { Math.Cos(Pitch), 0, Math.Sin(Pitch)},
+        //     { 0, 1, 0},
+        //     { -Math.Sin(Pitch), 0, Math.Cos(Pitch)},
+        // });
+        // rotationMatrix *= RotationY;
+        Matrix<double> rotationMatrix = createZXYMatrix(pitchYawRoll);
+        Matrix4x4 newMatrix4x4 = new Matrix4x4(
+            (float)rotationMatrix[0, 0], (float)rotationMatrix[0, 1], (float)rotationMatrix[0, 2], 0,
+            (float)rotationMatrix[1, 0], (float)rotationMatrix[1, 1], (float)rotationMatrix[1, 2], 0,
+            (float)rotationMatrix[2, 0], (float)rotationMatrix[2, 1], (float)rotationMatrix[2, 2], 0,
+            0, 0, 0, 1
+        );
+
+        // Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(pitchYawRoll.X, pitchYawRoll.Y, pitchYawRoll.Z);//Works but wrong rotation order
         Vector3 offsetV3 = new Vector3(offset.X,offset.Y,offset.Z);
-        Vector3 transformedOffset = Vector3.Transform(offsetV3, rotationMatrix);
+        Vector3 transformedOffset = Vector3.Transform(offsetV3, newMatrix4x4);
         coords += new Vec3((float)transformedOffset[0], (float)transformedOffset[1], (float)transformedOffset[2]);
     }
 

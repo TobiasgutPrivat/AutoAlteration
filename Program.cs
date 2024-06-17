@@ -1,10 +1,12 @@
-﻿using GBX.NET;
+﻿using System.Numerics;
+using GBX.NET;
 using GBX.NET.Engines.Game;
+using MathNet.Numerics.LinearAlgebra;
 using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
-Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 // Alteration.inventory.checkDuplicates();//TODO
 // Alteration.inventory.analyzeKeywords();
 
@@ -22,7 +24,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new Flipped(), sourceFile, "Flipped");
+// Alteration.alterFile(new Flipped(), sourceFile, "Flipped");
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void testBlock(string Name) {
