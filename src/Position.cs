@@ -44,7 +44,8 @@ class Position {
     public void relativeOffset(Vec3 offset){
         Vector<double> vector = DenseVector.OfArray(new double[] { offset.X, offset.Y, offset.Z });
         Vector<double> columnVector = vector.ToColumnMatrix().Column(0);
-        Vector<double> rotatedVector = createZXYMatrix(pitchYawRoll) * columnVector;
+        // Vector<double> rotatedVector = createZXYMatrix(pitchYawRoll) * columnVector;
+        Vector<double> rotatedVector = createZXYMatrix(-pitchYawRoll) * columnVector;
         coords += new Vec3((float)rotatedVector[0], (float)rotatedVector[1], (float)rotatedVector[2]);
     }
 

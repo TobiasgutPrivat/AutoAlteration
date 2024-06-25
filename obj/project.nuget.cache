@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "JzfiBLbePQY=",
+  "dgSpecHash": "hzRWbI+XgOk=",
   "success": true,
-  "projectFilePath": "c:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
+  "projectFilePath": "C:\\Users\\tgu\\OneDrive - This AG\\Dokumente\\Privat\\AutoAlteration\\AutoAlteration.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tgu\\.nuget\\packages\\gbx.net\\2.0.2\\gbx.net.2.0.2.nupkg.sha512",
     "C:\\Users\\tgu\\.nuget\\packages\\gbx.net.lzo\\2.0.0\\gbx.net.lzo.2.0.0.nupkg.sha512",
