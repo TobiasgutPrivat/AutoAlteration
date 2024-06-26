@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System.Drawing;
+using System.Numerics;
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using MathNet.Numerics.LinearAlgebra;
@@ -6,7 +7,7 @@ using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
 //"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
-// Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
+Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
 // Alteration.inventory.checkDuplicates();//TODO
 // Alteration.inventory.analyzeKeywords();
 
@@ -24,7 +25,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// Alteration.alterFile(new Flipped(), sourceFile, "Flipped");
+Alteration.alterFile(new Test(), sourceFile, "Test");
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void testBlock(string Name) {
@@ -43,9 +44,22 @@ void stringToName(string projectFolder) {
 
 class Test : Alteration {
     public override void run(Map map){
-        // EffectAlteration.newplaceCPEffect(map,"Turbo");
-        map.map.PlaceBlock("PlatformTechCheckpoint", new Int3(48,38,48), Direction.North);
-        map.map.PlaceBlock("PlatformTechCheckpoint", new Int3(1,9,1), Direction.North);
+        map.placeRelative(inventory.GetArticle("PlatformTechCheckpoint"),inventory.GetArticle("PlatformTechCheckpoint"),new Position(new Vec3(0,16,0),new Vec3(0,0,0)));
+
+        Position position = new Position(new Vec3(800,100,800),new Vec3(0,0,0));
+        placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
+        position.rotate(new Vec3(PI,0,0));
+        placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
+        position.move(new Vec3(0,-16,0));
+        placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
+        position.rotate(new Vec3(0,-PI*0.5f,0));
+        placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
+        position.move(new Vec3(0,-16,0));
+        placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
+        position.rotate(new Vec3(0,0,PI*0.5f));
+        placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
+        position.move(new Vec3(0,-16,0));
+        placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
         map.placeStagedBlocks();
     }
 
