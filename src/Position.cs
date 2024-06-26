@@ -52,19 +52,19 @@ class Position {
         double z = offset.Z;
 
         // Rotate around Z-axis (Yaw)
-        double x1 = x * Math.Cos(Yaw) - y * Math.Sin(Yaw);
-        double y1 = x * Math.Sin(Yaw) + y * Math.Cos(Yaw);
+        double x1 = x * Math.Cos(Roll) - y * Math.Sin(Roll);
+        double y1 = x * Math.Sin(Roll) + y * Math.Cos(Roll);
         double z1 = z;
 
         // Rotate around X-axis (Roll)
         double x2 = x1;
-        double y2 = y1 * Math.Cos(Roll) - z1 * Math.Sin(Roll);
-        double z2 = y1 * Math.Sin(Roll) + z1 * Math.Cos(Roll);
+        double y2 = y1 * Math.Cos(Pitch) - z1 * Math.Sin(Pitch);
+        double z2 = y1 * Math.Sin(Pitch) + z1 * Math.Cos(Pitch);
 
         // Rotate around Y-axis (Pitch)
-        double x3 = x2 * Math.Cos(Pitch) + z2 * Math.Sin(Pitch);
+        double x3 = x2 * Math.Cos(Yaw) + z2 * Math.Sin(Yaw);
         double y3 = y2;
-        double z3 = -x2 * Math.Sin(Pitch) + z2 * Math.Cos(Pitch);
+        double z3 = -x2 * Math.Sin(Yaw) + z2 * Math.Cos(Yaw);
 
         coords += new Vec3((float)x3, (float)y3, (float)z3);
     }
