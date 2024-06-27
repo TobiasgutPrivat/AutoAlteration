@@ -51,20 +51,35 @@ class Position {
         double y = offset.Y;
         double z = offset.Z;
 
-        // Rotate around Y-axis (Pitch)
-        double x1 = x * Math.Cos(Yaw) + z * Math.Sin(Yaw);
-        double y1 = y;
-        double z1 = -x * Math.Sin(Yaw) + z * Math.Cos(Yaw);
+        // // Rotate around Y-axis (Pitch)
+        // double x1 = x * Math.Cos(Yaw) + z * Math.Sin(Yaw);
+        // double y1 = y;
+        // double z1 = -x * Math.Sin(Yaw) + z * Math.Cos(Yaw);
+
+        // // Rotate around Z-axis (Yaw)
+        // double x2 = x1 * Math.Cos(Roll) - y1 * Math.Sin(Roll);
+        // double y2 = x1 * Math.Sin(Roll) + y1 * Math.Cos(Roll);
+        // double z2 = z1;
+
+        // // Rotate around X-axis (Roll)
+        // double x3 = x2;
+        // double y3 = y2 * Math.Cos(Pitch) - z2 * Math.Sin(Pitch);
+        // double z3 = y2 * Math.Sin(Pitch) + z2 * Math.Cos(Pitch);
 
         // Rotate around Z-axis (Yaw)
-        double x2 = x1 * Math.Cos(Roll) - y1 * Math.Sin(Roll);
-        double y2 = x1 * Math.Sin(Roll) + y1 * Math.Cos(Roll);
-        double z2 = z1;
+        double x1 = x * Math.Cos(Yaw) - y * Math.Sin(Yaw);
+        double y1 = x * Math.Sin(Yaw) + y * Math.Cos(Yaw);
+        double z1 = z;
 
         // Rotate around X-axis (Roll)
-        double x3 = x2;
-        double y3 = y2 * Math.Cos(Pitch) - z2 * Math.Sin(Pitch);
-        double z3 = y2 * Math.Sin(Pitch) + z2 * Math.Cos(Pitch);
+        double x2 = x1;
+        double y2 = y1 * Math.Cos(Roll) - z1 * Math.Sin(Roll);
+        double z2 = y1 * Math.Sin(Roll) + z1 * Math.Cos(Roll);
+
+        // Rotate around Y-axis (Pitch)
+        double x3 = x2 * Math.Cos(Pitch) + z2 * Math.Sin(Pitch);
+        double y3 = y2;
+        double z3 = -x2 * Math.Sin(Pitch) + z2 * Math.Cos(Pitch);
 
         coords += new Vec3((float)x3, (float)y3, (float)z3);
     }
