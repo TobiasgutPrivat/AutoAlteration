@@ -8,7 +8,8 @@ class Alteration {
     public static string[] shapeKeywords;
     public static string[] surfaceKeywords;
     public static Inventory inventory = new Inventory();
-    public static bool devMode;
+    public static bool devMode = false;
+    public static int mapCount;
 
     public static void load(string projectFolder) {
         ProjectFolder = projectFolder;
@@ -36,9 +37,11 @@ class Alteration {
         foreach (Alteration alteration in alterations) {
             alteration.run(map);
         }
+        mapCount++;
     }
     public static void alter(Alteration alteration, Map map) {
         alteration.run(map);
+        mapCount++;
     }
 
     public static void alterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {

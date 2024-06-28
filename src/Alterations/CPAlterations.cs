@@ -1,5 +1,4 @@
 using GBX.NET;
-using GBX.NET.Engines.Game;
 
 class CPBoost : Alteration{
     public override void run(Map map){

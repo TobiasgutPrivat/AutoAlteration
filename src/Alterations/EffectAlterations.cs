@@ -1,21 +1,21 @@
 using GBX.NET;
 class EffectAlteration: Alteration {
-    public static void placeCPEffect(Map map, string Effect,Position position = null){
+    public static void placeCPEffect(Map map, string Effect,Position position = null, string RingAddition = "") {
         if (position == null) position = new Position(new Vec3(0,0,0),new Vec3(0,0,0));
         inventory.select(BlockType.Item).select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Center").remove("v2").add(Effect).placeRelative(map,position);
-        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect),position.clone().move(new Vec3(-16,-16,-16)));
+        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect + RingAddition),position.clone().move(new Vec3(-16,-16,-16)));
         map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
         map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(6,12,0),new Vec3(0,0,PI*-0.5f))));
         map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
         map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(-6,12,0),new Vec3(0,0,PI*0.5f))));
-        map.placeRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect),position);
+        map.placeRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect + RingAddition),position);
 
         map.placeStagedBlocks();
     }
-    public static void placeStartEffect(Map map, string Effect,Position position = null){
+    public static void placeStartEffect(Map map, string Effect,Position position = null, string RingAddition = ""){
         if (position == null) position = new Position(new Vec3(0,0,0),new Vec3(0,0,0));
         Inventory start = inventory.select("MapStart");
-        Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
+        Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect + RingAddition);
         map.placeRelative(start.select("!Water&!(RoadIce)"), GateSpecial,position.clone().move(new Vec3(0,-16,0)));
         map.placeRelative(start.select("RoadIce"), GateSpecial,position.clone().move(new Vec3(0,-8,0)));
         map.placeRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,position.clone().move(new Vec3(0,-16,-2)));
@@ -67,22 +67,22 @@ class NoSteer: EffectAlteration {
 
 class Glider: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"BoostOriented",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)));
-        placeStartEffect(map,"BoostOriented",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)));
+        placeCPEffect(map,"Boost",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)),"Oriented");
+        placeStartEffect(map,"Boost",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)),"Oriented");
     }
 }
 
 class Reactor: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"Boost2Oriented",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)));
-        placeStartEffect(map,"Boost2Oriented",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)));
+        placeCPEffect(map,"Boost2",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)),"Oriented");
+        placeStartEffect(map,"Boost2",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)),"Oriented");
     }
 }
 
 class ReactorDown: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"Boost2",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)));
-        placeStartEffect(map,"Boost2",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)));
+        placeCPEffect(map,"Boost2",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)),"Oriented");
+        placeStartEffect(map,"Boost2",new Position(new Vec3(0,0,1),new Vec3(PI,0,0)),"Oriented");
     }
 }
 
