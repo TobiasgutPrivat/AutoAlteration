@@ -139,9 +139,11 @@ class ReactorDown: EffectAlteration {
 
 class FreeWheel: EffectAlteration {
     public override void run(Map map){
-        placeCPEffect(map,"NoEngine",1,Vec3.Zero);
+        // placeCPEffect(map,"NoEngine",1,Vec3.Zero);
+        newplaceCPEffect(map,"NoEngine",new Position(new Vec3(0,0,1),Vec3.Zero));
         placeStartEffect(map,"NoEngine",3,Vec3.Zero);
-        placeCPEffect(map,"Turbo",0,Vec3.Zero);
+        // placeCPEffect(map,"Turbo",0,Vec3.Zero);
+        newplaceCPEffect(map,"Turbo");
         placeStartEffect(map,"Turbo",0,Vec3.Zero);
     }
 }
