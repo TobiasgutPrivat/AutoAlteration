@@ -1,11 +1,14 @@
 using GBX.NET;
-using GBX.NET.Engines.Game;
 class EffectAlteration: Alteration {
     public static void placeCPEffect(Map map, string Effect,Position position = null){
         if (position == null) position = new Position(new Vec3(0,0,0),new Vec3(0,0,0));
         inventory.select(BlockType.Item).select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Center").remove("v2").add(Effect).placeRelative(map,position);
-        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), inventory.GetArticle("ObstaclePillar2m"),position.clone().move(new Vec3(0,1,0)));//TODO exclude CPRing
-        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger"), inventory.GetArticle("GateSpecial" + Effect),position.clone().move(new Vec3(-16,-16,-16)));
+        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect),position.clone().move(new Vec3(-16,-16,-16)));
+        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
+        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(6,12,0),new Vec3(0,0,PI*-0.5f))));
+        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
+        map.placeRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.clone().addPosition(new Position(new Vec3(-6,12,0),new Vec3(0,0,PI*0.5f))));
+        map.placeRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect),position);
 
         map.placeStagedBlocks();
     }

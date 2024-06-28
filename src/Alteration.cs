@@ -143,13 +143,15 @@ class Alteration {
     private static void addCheckpointTrigger(){
         Inventory CPMLBlock = inventory.select(BlockType.Block).select("Checkpoint|Multilap");
         Vec3 midPlatform = new Vec3(16,2,16);
-        createTriggerArticle(CPMLBlock.select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!(RoadIce)"), midPlatform,Vec3.Zero);
+        createTriggerArticle(CPMLBlock.select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!RoadIce"), midPlatform,Vec3.Zero);
+        createTriggerArticle(CPMLBlock.select("!WithWall&!RoadIce&DiagRight"),new Vec3(48f,0,32f),new Vec3(PI * -0.148f,0f,0));
+        createTriggerArticle(CPMLBlock.select("!WithWall&!RoadIce&DiagLeft"),new Vec3(48f,0,32f),new Vec3(PI * 0.148f,0,0));
         float slope2 = 0.47f;
         createTriggerArticle(CPMLBlock.select("Slope2&Down"), midPlatform + new Vec3(0,8,0),new Vec3(0,slope2,0));
         createTriggerArticle(CPMLBlock.select("Slope2&Up"), midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));
         createTriggerArticle(CPMLBlock.select("Slope2&Right"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
         createTriggerArticle(CPMLBlock.select("Slope2&Left"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
-        float slope = slope2/2;
+        float slope = 0;//slope2/2
         createTriggerArticle(CPMLBlock.select("Slope&Down&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
         createTriggerArticle(CPMLBlock.select("Slope&Up&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
         createTriggerArticle(CPMLBlock.select("Tilt&Right&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
