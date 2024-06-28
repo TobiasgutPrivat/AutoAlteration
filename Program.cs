@@ -1,8 +1,5 @@
-﻿using System.Drawing;
-using System.Numerics;
-using GBX.NET;
+﻿using GBX.NET;
 using GBX.NET.Engines.Game;
-using MathNet.Numerics.LinearAlgebra;
 using Newtonsoft.Json;
 //Initial load
 //"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
@@ -25,7 +22,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new Test(), sourceFile, "Test");
+Alteration.alterFile(new FreeWheel(), sourceFile, "FreeWheel");
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void testBlock(string Name) {
