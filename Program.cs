@@ -46,7 +46,7 @@ class Test : Alteration {
     public override void run(Map map){
         map.placeRelative(inventory.GetArticle("PlatformTechCheckpoint"),inventory.GetArticle("PlatformTechCheckpoint"),new Position(new Vec3(0,16,0),new Vec3(0,0,0)));
 
-        Position position = new Position(new Vec3(800,100,800),new Vec3(0,0,0));
+        Position position = new Position(new Vec3(800,100,900),new Vec3(0,0,0));
         placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);
         position.rotate(new Vec3(PI,0,0));
         placeblock(map,"PlatformTechCheckpoint",position.coords,position.pitchYawRoll);

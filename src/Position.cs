@@ -47,39 +47,24 @@ class Position {
         double Pitch = pitchYawRoll.Y;
 
         // Original vector coordinates
-        double x = offset.X;
-        double y = offset.Y;
-        double z = offset.Z;
-
-        // // Rotate around Y-axis (Pitch)
-        // double x1 = x * Math.Cos(Yaw) + z * Math.Sin(Yaw);
-        // double y1 = y;
-        // double z1 = -x * Math.Sin(Yaw) + z * Math.Cos(Yaw);
-
-        // // Rotate around Z-axis (Yaw)
-        // double x2 = x1 * Math.Cos(Roll) - y1 * Math.Sin(Roll);
-        // double y2 = x1 * Math.Sin(Roll) + y1 * Math.Cos(Roll);
-        // double z2 = z1;
-
-        // // Rotate around X-axis (Roll)
-        // double x3 = x2;
-        // double y3 = y2 * Math.Cos(Pitch) - z2 * Math.Sin(Pitch);
-        // double z3 = y2 * Math.Sin(Pitch) + z2 * Math.Cos(Pitch);
+        double x = offset.X;//west
+        double y = offset.Y;//up
+        double z = offset.Z;//north
 
         // Rotate around Z-axis (Yaw)
-        double x1 = x * Math.Cos(Yaw) - z * Math.Sin(Yaw);
-        double z1 = x * Math.Sin(Yaw) + z * Math.Cos(Yaw);
+        double z1 = z * Math.Cos(Yaw) - x * Math.Sin(Yaw);
+        double x1 = z * Math.Sin(Yaw) + x * Math.Cos(Yaw);
         double y1 = y;
 
         // Rotate around X-axis (Roll)
-        double x2 = x1;
-        double z2 = z1 * Math.Cos(Roll) - y1 * Math.Sin(Roll);
-        double y2 = z1 * Math.Sin(Roll) + y1 * Math.Cos(Roll);
+        double z2 = z1;
+        double x2 = x1 * Math.Cos(Roll) - y1 * Math.Sin(Roll);
+        double y2 = x1 * Math.Sin(Roll) + y1 * Math.Cos(Roll);
 
         // Rotate around Y-axis (Pitch)
-        double x3 = x2 * Math.Cos(Pitch) + y2 * Math.Sin(Pitch);
-        double z3 = z2;
-        double y3 = -x2 * Math.Sin(Pitch) + y2 * Math.Cos(Pitch);
+        double z3 = z2 * Math.Cos(Pitch) + y2 * Math.Sin(Pitch);
+        double x3 = x2;
+        double y3 = -z2 * Math.Sin(Pitch) + y2 * Math.Cos(Pitch);
 
         coords += new Vec3((float)x3, (float)y3, (float)z3);
     }
