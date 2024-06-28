@@ -10,19 +10,19 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 
 //Code for Execution (change for your use)
 //Folder Processing
-string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
+// string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
 // Alteration.alterFolder(new STTF(), sourcefolder, destinationFolder + "Spring 2024 STTF/", "STTF");
 
 //Full Folder Processing
-// string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/Spring_2024_Snowcarswitch";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Carswitch/";
-// Alteration.alterAll(new SnowCarswitchToRally(), sourcefolder, destinationFolder, "Rally");
+string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
+Alteration.alterAll(new FreeWheel(), sourcefolder, destinationFolder, "FreeWheel");
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new FreeWheel(), sourceFile, "FreeWheel");
+// Alteration.alterFile(new FreeWheel(), sourceFile, "FreeWheel");
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void testBlock(string Name) {
