@@ -15,12 +15,12 @@ Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration
 //Full Folder Processing
 string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
-// Alteration.alterAll(new Desert(), sourceFolder, destinationFolder, "Desert");
+// Alteration.alterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
 
 //All Alterations Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
-AllAlterations(sourceFolder, destinationFolder);
+// AllAlterations(sourceFolder, destinationFolder);
 
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
@@ -46,7 +46,7 @@ void AllAlterations(string sourceFolder, string destinationFolder) {
     Alteration.alterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
     Alteration.alterAll(new STTF(), sourceFolder, destinationFolder, "STTF");
     Alteration.alterAll(new CPFull(), sourceFolder, destinationFolder, "CPFull");
-    //Alteration.alterAll(new CPLess(), sourceFolder, destinationFolder, "CPLess");
+    // Alteration.alterAll(new CPLess(), sourceFolder, destinationFolder, "CPLess");
 
     Alteration.alterAll(new OneUP(), sourceFolder, destinationFolder, "(1-UP)");
     Alteration.alterAll(new OneDown(), sourceFolder, destinationFolder, "(1-Down)");
@@ -59,6 +59,7 @@ void AllAlterations(string sourceFolder, string destinationFolder) {
     Console.WriteLine("Done!");
     Console.WriteLine("Map Count: " + Alteration.mapCount);
 }
+// Console.WriteLine(Directory.GetFiles(destinationFolder, "*.map.gbx", SearchOption.AllDirectories).Count());
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void stringToName(string projectFolder) {
