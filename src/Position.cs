@@ -5,7 +5,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 class Position {
     public Vec3 coords;
     public Vec3 pitchYawRoll;
-    public static Position Zero = new (Vec3.Zero,Vec3.Zero);
+    public static Position Zero = new (Vec3.Zero,Vec3.Zero);//TODO maybe issue with changing value
 
     public Position(){
         this.coords = Vec3.Zero;
@@ -21,27 +21,27 @@ class Position {
     }
     public Position addPosition(Position position){
         if (position != null){
-            addPosition(position.coords, position.pitchYawRoll);
+            AddPosition(position.coords, position.pitchYawRoll);
         }
         return this;
     }
-    public Position addPosition(Vec3 coords, Vec3 pitchYawRoll){
-        relativeOffset(coords);
-        addRotation(pitchYawRoll);
+    public Position AddPosition(Vec3 coords, Vec3 pitchYawRoll){
+        RelativeOffset(coords);
+        AddRotation(pitchYawRoll);
         return this;
     }
-    public Position move(Vec3 coords){
-        relativeOffset(coords);
+    public Position Move(Vec3 coords){
+        RelativeOffset(coords);
         return this;
     }
-    public Position rotate(Vec3 pitchYawRoll){
-        addRotation(pitchYawRoll);
+    public Position Rotate(Vec3 pitchYawRoll){
+        AddRotation(pitchYawRoll);
         return this;
     }
-    public Position clone(){
+    public Position Clone(){//TODO overthink
         return new Position(coords, pitchYawRoll);
     }
-    public void relativeOffset(Vec3 offset){
+    public void RelativeOffset(Vec3 offset){
         double Yaw = pitchYawRoll.X;
         double Roll = pitchYawRoll.Z;
         double Pitch = pitchYawRoll.Y;
@@ -69,34 +69,33 @@ class Position {
         coords += new Vec3((float)x3, (float)y3, (float)z3);
     }
 
-    public Position subtractPosition(Position position){
-        addRotation(-position.pitchYawRoll);
-        relativeOffset(-position.coords);
+    public Position SubtractPosition(Position position){
+        AddRotation(-position.pitchYawRoll);
+        RelativeOffset(-position.coords);
         return this;
     }
 
-    public void addRotation(Vec3 rotation) {
+    public void AddRotation(Vec3 rotation) =>
         pitchYawRoll = RotateRelative(pitchYawRoll, rotation);
-    }
 
     public static Vec3 RotateRelative(Vec3 rotation, Vec3 byRotation){
         //Trackmania does like ZXY in https://dugas.ch/transform_viewer/index.html
-        Matrix<double> rotationMatrix = createZXYMatrix(rotation);
-        Matrix<double> byrotationMatrix = createZXYMatrix(byRotation);
+        Matrix<double> rotationMatrix = CreateZXYMatrix(rotation);
+        Matrix<double> byrotationMatrix = CreateZXYMatrix(byRotation);
                   
         rotationMatrix *= byrotationMatrix;
 
-        return getEulerZXY(rotationMatrix);
+        return GetEulerZXY(rotationMatrix);
     }
 
-    public static Vec3 getEulerZXY(Matrix<double> rotationMatrix) {
+    public static Vec3 GetEulerZXY(Matrix<double> rotationMatrix) {
         double extractedRoll = Math.Asin(rotationMatrix[2, 1]);
         double extractedPitch = Math.Atan2(-rotationMatrix[2, 0], rotationMatrix[2, 2]);
         double extractedYaw = Math.Atan2(-rotationMatrix[0, 1], rotationMatrix[1, 1]);
         return new Vec3((float)extractedYaw, (float)extractedPitch, (float)extractedRoll);
     }
 
-    public static Matrix<double> createZXYMatrix(Vec3 rotation) {
+    public static Matrix<double> CreateZXYMatrix(Vec3 rotation) {
         double Yaw = rotation.X;
         double Roll = rotation.Z;
         double Pitch = rotation.Y;

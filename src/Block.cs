@@ -13,22 +13,23 @@ class Block {
     public BlockType blockType;
     public Article article;
     public string name;
-    public Position position;
+    public Position position = Position.Zero;
     public DifficultyColor color;
     public bool IsFree;
     public bool IsClip;
     public bool IsGhost;
     public bool IsGround;
 
-    public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position placePosition)
+    public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position ?placePosition)
     {
         InitBlock(block);
         this.article = article;
         this.name = article.name;
         this.blockType = article.type;
+        
         position.addPosition(fromArticle.position);
-        position.addPosition(placePosition);
-        position.subtractPosition(article.position);
+        position.addPosition(placePosition ?? Position.Zero);
+        position.SubtractPosition(article.position);
     }
 
     private void InitBlock(CGameCtnBlock block) {
@@ -62,14 +63,14 @@ class Block {
         };
     }
 
-    public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position placePosition){
+    public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position ?placePosition){
         InitItem(item);
         this.article = article;
         this.name = article.name;
         this.blockType = article.type;
         position.addPosition(fromArticle.position);
-        position.addPosition(placePosition);
-        position.subtractPosition(article.position);
+        position.addPosition(placePosition ?? Position.Zero);
+        position.SubtractPosition(article.position);
     }
 
     public void InitItem(CGameCtnAnchoredObject item){
@@ -78,20 +79,20 @@ class Block {
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
     }
 
-    public bool isInGrid(){
+    public bool IsInGrid(){
         if (position.coords.X % 32 != 0 || position.coords.Y % 8 != 0 || position.coords.Z % 32 != 0){
         return false;
         }
-        if (round(position.pitchYawRoll.Y) != 0 || round(position.pitchYawRoll.Z) != 0){
+        if (Round(position.pitchYawRoll.Y) != 0 || Round(position.pitchYawRoll.Z) != 0){
         return false;
         }
-        if(round(position.pitchYawRoll.X % ((float)Math.PI/2)) == 0){
+        if(Round(position.pitchYawRoll.X % ((float)Math.PI/2)) == 0){
         return false;
         }
         return true;
     }
 
-    public static float round(float number){
+    public static float Round(float number){
         number = (float)Math.Round(number,3);
         number = Math.Abs(number);
         return number;

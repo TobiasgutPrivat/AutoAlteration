@@ -26,7 +26,7 @@ class Inventory {
     }
 
     public List<Article> GetArticles(string keywordFilter) =>
-        articles.Where(a => a.match(keywordFilter)).ToList();
+        articles.Where(a => a.Match(keywordFilter)).ToList();
 
     public List<Article> GetArticles(string[] keywords) =>
         articles.Where(a => keywords.All(k => a.keywords.Contains(k))).ToList();

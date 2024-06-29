@@ -13,38 +13,28 @@ class Article {
 
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
 
-    public Article() { }
-    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,Position position = null){
+    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,Position ?position = null,int length = 1, int width = 1){
         this.name = name;
         this.type = type;
         this.keywords = keywords;
         this.shape = shape;
         this.toShape = toShape;
         this.surface = surface;
-        this.position.addPosition(position);
+        this.position = position ?? Position.Zero;
+        this.length = length;
+        this.width = width;
     }
     
     public Article(string name,BlockType type){
         this.name = name;
-        loadKeywords();
+        LoadKeywords();
         this.type = type;
     }
 
-    public Article CloneArticle() {
-        Article clonedArticle = new Article();
-        clonedArticle.name = this.name;
-        clonedArticle.position = new Position(this.position.coords, this.position.pitchYawRoll);
-        clonedArticle.length = this.length;
-        clonedArticle.width = this.width;
-        clonedArticle.type = this.type;
-        clonedArticle.keywords = new List<string>(this.keywords);
-        clonedArticle.shape = this.shape;
-        clonedArticle.toShape = this.toShape;
-        clonedArticle.surface = this.surface;
-        return clonedArticle;
-    }
+    public Article CloneArticle() =>
+        new(name,type,keywords,shape,toShape,surface,position,length,width);
 
-    public bool hasKeyword(string keyword) {
+    public bool HasKeyword(string keyword) {
         if (Alteration.shapeKeywords.Contains(keyword)) {
             return shape == keyword || toShape == keyword;
         } else if (Alteration.surfaceKeywords.Contains(keyword)) {
@@ -54,7 +44,7 @@ class Article {
         }
     }
 
-    public bool match(string keywordFilter) {
+    public bool Match(string keywordFilter) {
         string oldKeywordFilter = keywordFilter;
         bool current = false;
         bool and = false;
@@ -79,7 +69,7 @@ class Article {
                 keywordFilter = keywordFilter.Substring(1);
                 break;
             case '(':
-                result = match(keywordFilter.Substring(1, getEndBracePos(keywordFilter) - 1));
+                result = Match(keywordFilter.Substring(1, GetEndBracePos(keywordFilter) - 1));
                 if (invert) {
                     result = !result;
                     invert = false;
@@ -93,11 +83,11 @@ class Article {
                 } else {
                     current = result;
                 }
-                keywordFilter = keywordFilter.Substring(getEndBracePos(keywordFilter) + 1);
+                keywordFilter = keywordFilter.Substring(GetEndBracePos(keywordFilter) + 1);
                 break;
             default:
-                int next = nextPos(keywordFilter);
-                result = hasKeyword(keywordFilter.Substring(0, next));
+                int next = NextPos(keywordFilter);
+                result = HasKeyword(keywordFilter.Substring(0, next));
                 keywordFilter = keywordFilter.Substring(next);
                 if (invert) {
                     result = !result;
@@ -119,12 +109,12 @@ class Article {
         return current;
     }
 
-    private int nextPos(string text) {
+    private static int NextPos(string text) {
         if(text.IndexOfAny(systemCharacters) == -1) {return text.Length;}
         return text.IndexOfAny(systemCharacters);
     }
 
-    private int getEndBracePos(string text) {
+    private static int GetEndBracePos(string text) {
         int depth = 0;
         int i = 0;
         foreach (char character in text)
@@ -143,7 +133,7 @@ class Article {
         return 0;
     }
 
-    public void loadKeywords() {
+    public void LoadKeywords() {
         string name = this.name;
         //toshape
         if(name.Contains("To")){

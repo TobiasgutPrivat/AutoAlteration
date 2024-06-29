@@ -55,7 +55,7 @@ class KeywordEdit {
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.replace(a, article, position);
+                map.Replace(a, article, position);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }
@@ -66,7 +66,7 @@ class KeywordEdit {
         articles.ForEach( a => {
             Article article = Alteration.inventory.alignArticle(a);
             if (article != null) {
-                map.placeRelative(a, article, position);
+                map.PlaceRelative(a, article, position);
             } else {
                 // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
             }

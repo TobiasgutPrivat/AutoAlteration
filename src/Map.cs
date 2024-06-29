@@ -104,7 +104,7 @@ class Map
     Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
 
-  public void placeRelative(string atBlock, string newBlock,Position positionChange = null){
+  public void PlaceRelative(string atBlock, string newBlock,Position ?positionChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){
       stagedBlocks.Add(new Block(ctnBlock,getArticle(atBlock),getArticle(newBlock),positionChange));
     }
@@ -113,16 +113,13 @@ class Map
     }
   }
 
-  public void placeRelative(string[] atBlocks, string newBlock,Position positionChange = null){
-    foreach(var atBlock in atBlocks){
-      placeRelative(atBlock, newBlock, positionChange);
-    }
-  }
-  public void placeRelative(Inventory inventory, string newBlock,Position positionChange = null){
-    placeRelative(inventory.names(), newBlock, positionChange);
-  }
+  public void PlaceRelative(string[] atBlocks, string newBlock,Position ?positionChange = null)=>
+    atBlocks.ToList().ForEach(atBlock => PlaceRelative(atBlock, newBlock, positionChange));
 
-  public void placeRelative(Article atArticle, Article newArticle, Position positionChange = null){
+  public void PlaceRelative(Inventory inventory, string newBlock,Position ?positionChange = null) =>
+    PlaceRelative(inventory.names(), newBlock, positionChange);
+
+  public void PlaceRelative(Article atArticle, Article newArticle, Position ?positionChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.name)){
       stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,positionChange));
     }
@@ -131,31 +128,31 @@ class Map
     }
   }
 
-  public void placeRelative(Inventory inventory, Article newArticle, Position positionChange = null){
-    inventory.articles.ForEach(a => placeRelative(a, newArticle, positionChange));
+  public void PlaceRelative(Inventory inventory, Article newArticle, Position ?positionChange = null){
+    inventory.articles.ForEach(a => PlaceRelative(a, newArticle, positionChange));
   }
 
-  public void replace(string oldBlock, string newBlock,Position positionChange = null){
-    placeRelative(oldBlock, newBlock, positionChange);
+  public void Replace(string oldBlock, string newBlock,Position ?positionChange = null){
+    PlaceRelative(oldBlock, newBlock, positionChange);
     delete(oldBlock);
   }
 
-  public void replace(string[] oldBlocks, string newBlock,Position positionChange = null){
-    placeRelative(oldBlocks, newBlock, positionChange);
+  public void Replace(string[] oldBlocks, string newBlock,Position ?positionChange = null){
+    PlaceRelative(oldBlocks, newBlock, positionChange);
     delete(oldBlocks);
   }
 
-  public void replace(Article oldArticle, Article article, Position positionChange = null){
-    placeRelative(oldArticle, article,positionChange);
+  public void Replace(Article oldArticle, Article article, Position ?positionChange = null){
+    PlaceRelative(oldArticle, article,positionChange);
     delete(oldArticle.name);
   }
 
-  public void replace(Inventory inventory, Article article, Position positionChange = null){
-    placeRelative(inventory, article,positionChange);
+  public void Replace(Inventory inventory, Article article, Position ?positionChange = null){
+    PlaceRelative(inventory, article,positionChange);
     delete(inventory);
   }
 
-  public void move(Article article, Position position)
+  public void Move(Article article, Position position)
   {
     foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == article.name)){
       Position blockPosition = Block.GetBlockPosition(ctnBlock).addPosition(position);
@@ -171,22 +168,22 @@ class Map
     }
   }
 
-  public void move(string[] blocks, Position position)
+  public void Move(string[] blocks, Position position)
   {
     foreach(var block in blocks){
-      move(getArticle(block), position);
+      Move(getArticle(block), position);
     }
   }
-  public void move(Inventory inventory, Position position)
+  public void Move(Inventory inventory, Position position)
   {
-    move(inventory.names(), position);
+    Move(inventory.names(), position);
   }
 
-  public void placeStagedBlocks(){
+  public void PlaceStagedBlocks(){
     foreach (var block in stagedBlocks){
       switch (block.blockType){
         case BlockType.Block:
-          placeBlock(block);
+          PlaceBlock(block);
           break;
         case BlockType.Item:
           map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
@@ -197,7 +194,7 @@ class Map
             embeddedBlocks.Add(block.name);
           }
           block.name += "_CustomBlock";
-          placeBlock(block);
+          PlaceBlock(block);
           break;
         case BlockType.CustomItem:
           if(!embeddedBlocks.Any(x => x == block.name)){
@@ -211,12 +208,12 @@ class Map
     stagedBlocks = new List<Block>();
   }
 
-  private void placeBlock(Block block){
+  private void PlaceBlock(Block block){
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-    if (!block.IsFree && block.isInGrid()){
+    if (!block.IsFree && block.IsInGrid()){
       newBlock.IsFree = false;
       newBlock.IsGround = block.IsGround;
-      switch (Block.round(block.position.pitchYawRoll.X / ((float)Math.PI/2)) % 4){
+      switch (Block.Round(block.position.pitchYawRoll.X / ((float)Math.PI/2)) % 4){
         case 0:
           newBlock.Direction = Direction.North;
           break;

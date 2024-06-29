@@ -4,23 +4,23 @@ class Alteration {
     public static float PI = (float)Math.PI;
     public static string ProjectFolder = "";
     public static string CustomBlocksFolder = "";
-    public static string[] Keywords;
-    public static string[] shapeKeywords;
-    public static string[] surfaceKeywords;
-    public static Inventory inventory = new Inventory();
+    public static string[] Keywords = Array.Empty<string>();
+    public static string[] shapeKeywords = Array.Empty<string>();
+    public static string[] surfaceKeywords = Array.Empty<string>();
+    public static Inventory inventory = new();
     public static bool devMode = false;
     public static int mapCount;
 
-    public static void load(string projectFolder) {
+    public static void Load(string projectFolder) {
         ProjectFolder = projectFolder;
         CustomBlocksFolder = ProjectFolder + "src/CustomBlocks/";
         shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/shapeKeywords.txt");
         surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/surfaceKeywords.txt");
         Keywords = File.ReadAllLines(ProjectFolder + "src/Inventory/Keywords.txt");
-        createInventory();
+        CreateInventory();
     }
 
-    public static Inventory importSerializedInventory(string path)
+    public static Inventory ImportSerializedInventory(string path)
     {
         string filePath = path;
         string json = File.ReadAllText(filePath);
@@ -28,74 +28,70 @@ class Alteration {
         return new Inventory(articles);
     }
     
-    public static Inventory importArrayInventory(string path,BlockType blockType){
+    public static Inventory ImportArrayInventory(string path,BlockType blockType){
         string json = File.ReadAllText(path);
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
         return new Inventory(lines.Select(line => new Article(line,blockType)).ToList());
     }
-    public static void alter(List<Alteration> alterations, Map map) {
+    public static void Alter(List<Alteration> alterations, Map map) {
         foreach (Alteration alteration in alterations) {
-            alteration.run(map);
+            alteration.Run(map);
         }
         mapCount++;
     }
-    public static void alter(Alteration alteration, Map map) {
-        alteration.run(map);
+    public static void Alter(Alteration alteration, Map map) {
+        alteration.Run(map);
         mapCount++;
     }
 
-    public static void alterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        foreach (string mapFile in Directory.GetFiles(mapFolder, "*.map.gbx", SearchOption.TopDirectoryOnly))
-        {
-            alterFile(alterations,mapFile,destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
+    public static void AlterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
+        foreach (string mapFile in Directory.GetFiles(mapFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
+            AlterFile(alterations,mapFile,destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
         }
     }
-    public static void alterFolder(Alteration alteration, string mapFolder, string destinationFolder, string Name) {
-        alterFolder(new List<Alteration>{alteration},mapFolder,destinationFolder,Name);
-    }
+    public static void AlterFolder(Alteration alteration, string mapFolder, string destinationFolder, string Name) =>
+        AlterFolder(new List<Alteration>{alteration},mapFolder,destinationFolder,Name);
+    
     public static void alterAll(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        alterFolder(alterations,mapFolder,destinationFolder + Path.GetFileName(mapFolder) + " - " + Name + "/",Name);
+        AlterFolder(alterations,mapFolder,destinationFolder + Path.GetFileName(mapFolder) + " - " + Name + "/",Name);
         foreach (string Directory in Directory.GetDirectories(mapFolder, "*", SearchOption.TopDirectoryOnly))
         {
             alterAll(alterations,Directory,destinationFolder + Directory.Substring(mapFolder.Length) + "/",Name);
         }
     }
-    public static void alterAll(Alteration alteration, string mapFolder, string destinationFolder, string Name) {
+    public static void alterAll(Alteration alteration, string mapFolder, string destinationFolder, string Name) =>
         alterAll(new List<Alteration>{alteration},mapFolder,destinationFolder,Name);
-    }
-    public static void alterFolder(List<Alteration> alterations, string mapFolder, string Name) {
-        alterFolder(alterations,mapFolder,mapFolder,Name);
-    }
-    public static void alterFolder(Alteration alteration, string mapFolder, string Name) {
-        alterFolder(alteration,mapFolder,mapFolder,Name);
-    }
-    public static void alterFile(List<Alteration> alterations, string mapFile, string destinationFile, string Name) {
+    
+    public static void AlterFolder(List<Alteration> alterations, string mapFolder, string Name) =>
+        AlterFolder(alterations,mapFolder,mapFolder,Name);
+    
+    public static void AlterFolder(Alteration alteration, string mapFolder, string Name) =>
+        AlterFolder(alteration,mapFolder,mapFolder,Name);
+    
+    public static void AlterFile(List<Alteration> alterations, string mapFile, string destinationFile, string Name) {
         Map map = new Map(mapFile);
-        alter(alterations, map);
+        Alter(alterations, map);
         map.map.MapName = Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name;
         map.save(destinationFile);
         Console.WriteLine(destinationFile);
     }
-    public static void alterFile(Alteration alteration, string mapFile, string destinationFile, string Name) {
-        alterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);
-    }
-    public static void alterFile(List<Alteration> alterations, string mapFile, string Name) {
-        alterFile(alterations,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
-    }
-    public static void alterFile(Alteration alteration, string mapFile, string Name) {
-        alterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
-    }
+    public static void AlterFile(Alteration alteration, string mapFile, string destinationFile, string Name) =>
+        AlterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);
+    
+    public static void AlterFile(List<Alteration> alterations, string mapFile, string Name) =>
+        AlterFile(alterations,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
+    
+    public static void alterFile(Alteration alteration, string mapFile, string Name) =>
+        AlterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
 
     public Alteration(){}
-    public virtual void run(Map map) {}
+    public virtual void Run(Map map) {}
 
-    
-
-    public static void createInventory() {
+    public static void CreateInventory() {
         devMode = true;
         //Load Nadeo Articles
-        Inventory items = importArrayInventory(ProjectFolder + "src/Inventory/ItemNames.json",BlockType.Item);
-        Inventory blocks = importArrayInventory(ProjectFolder + "src/Inventory/BlockNames.json",BlockType.Block);
+        Inventory items = ImportArrayInventory(ProjectFolder + "src/Inventory/ItemNames.json",BlockType.Item);
+        Inventory blocks = ImportArrayInventory(ProjectFolder + "src/Inventory/BlockNames.json",BlockType.Block);
 
         //Fix Gate naming
         blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
@@ -110,10 +106,10 @@ class Alteration {
         inventory.select("Special").editOriginal().remove("Special");
 
         //Add Articles with unnecessary keywords removed
-        addCheckpointBlocks();
-        addCheckpointTrigger();
+        AddCheckpointBlocks();
+        AddCheckpointTrigger();
         inventory.addArticles(inventory.select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").remove("Start").add("MapStart"));
-        setSizes();
+        SetSizes();
         
         //Control
         // inventory.checkDuplicates();
@@ -127,65 +123,62 @@ class Alteration {
     }
 
 
-    private static void addCheckpointBlocks(){
+    private static void AddCheckpointBlocks(){
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("Straight").align().remove("Straight"));
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("StraightX2").align().remove("StraightX2"));
         inventory.addArticles(inventory.select("Checkpoint").remove("Checkpoint").add("Base").align().remove("Base"));
-        addRoadNoCPBlocks("Tech");
-        addRoadNoCPBlocks("Dirt");
-        addRoadNoCPBlocks("Bump");
-        addRoadNoCPBlocks("Ice");
-        addPlatformNoCPBlocks("Tech");
-        addPlatformNoCPBlocks("Dirt");
-        addPlatformNoCPBlocks("Plastic");
-        addPlatformNoCPBlocks("Grass");
-        addPlatformNoCPBlocks("Ice");
-        addIceRoadNoCPBlocks();
+        AddRoadNoCPBlocks("Tech");
+        AddRoadNoCPBlocks("Dirt");
+        AddRoadNoCPBlocks("Bump");
+        AddRoadNoCPBlocks("Ice");
+        AddPlatformNoCPBlocks("Tech");
+        AddPlatformNoCPBlocks("Dirt");
+        AddPlatformNoCPBlocks("Plastic");
+        AddPlatformNoCPBlocks("Grass");
+        AddPlatformNoCPBlocks("Ice");
+        AddIceRoadNoCPBlocks();
     }
 
-    private static void addCheckpointTrigger(){
+    private static void AddCheckpointTrigger(){
         Inventory CPMLBlock = inventory.select(BlockType.Block).select("Checkpoint|Multilap");
         Vec3 midPlatform = new Vec3(16,2,16);
-        createTriggerArticle(CPMLBlock.select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!RoadIce"), midPlatform,Vec3.Zero);
-        createTriggerArticle(CPMLBlock.select("!WithWall&!RoadIce&DiagRight"),new Vec3(48f,0,32f),new Vec3(PI * -0.148f,0f,0));
-        createTriggerArticle(CPMLBlock.select("!WithWall&!RoadIce&DiagLeft"),new Vec3(48f,0,32f),new Vec3(PI * 0.148f,0,0));
+        CreateTriggerArticle(CPMLBlock.select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!RoadIce"), midPlatform,Vec3.Zero);
+        CreateTriggerArticle(CPMLBlock.select("!WithWall&!RoadIce&DiagRight"),new Vec3(48f,0,32f),new Vec3(PI * -0.148f,0f,0));
+        CreateTriggerArticle(CPMLBlock.select("!WithWall&!RoadIce&DiagLeft"),new Vec3(48f,0,32f),new Vec3(PI * 0.148f,0,0));
         float slope2 = 0.47f;
-        createTriggerArticle(CPMLBlock.select("Slope2&Down"), midPlatform + new Vec3(0,8,0),new Vec3(0,slope2,0));
-        createTriggerArticle(CPMLBlock.select("Slope2&Up"), midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));
-        createTriggerArticle(CPMLBlock.select("Slope2&Right"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
-        createTriggerArticle(CPMLBlock.select("Slope2&Left"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
+        CreateTriggerArticle(CPMLBlock.select("Slope2&Down"), midPlatform + new Vec3(0,8,0),new Vec3(0,slope2,0));
+        CreateTriggerArticle(CPMLBlock.select("Slope2&Up"), midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));
+        CreateTriggerArticle(CPMLBlock.select("Slope2&Right"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
+        CreateTriggerArticle(CPMLBlock.select("Slope2&Left"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
         float slope = 0;//slope2/2
-        createTriggerArticle(CPMLBlock.select("Slope&Down&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
-        createTriggerArticle(CPMLBlock.select("Slope&Up&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
-        createTriggerArticle(CPMLBlock.select("Tilt&Right&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
-        createTriggerArticle(CPMLBlock.select("Tilt&Left&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
+        CreateTriggerArticle(CPMLBlock.select("Slope&Down&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
+        CreateTriggerArticle(CPMLBlock.select("Slope&Up&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
+        CreateTriggerArticle(CPMLBlock.select("Tilt&Right&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
+        CreateTriggerArticle(CPMLBlock.select("Tilt&Left&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
 
-        createTriggerArticle(CPMLBlock.select("Slope&Down&RoadIce"), midPlatform + new Vec3(0,7,0),new Vec3(0,slope,0));
-        createTriggerArticle(CPMLBlock.select("Slope&Up&RoadIce"), midPlatform + new Vec3(0,7,0),new Vec3(0,-slope,0));
-        createTriggerArticle(CPMLBlock.select("!Slope&!DiagRight&!DiagLeft&!WithWall&RoadIce"), midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
-        createTriggerArticle(CPMLBlock.select("WithWall&RoadIce&!DiagRight&!DiagLeft"), midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
-        createTriggerArticle(CPMLBlock.select("WithWall&RoadIce&DiagRight"),new Vec3(48f,4,32f),new Vec3(PI * -0.148f,0f,0));
-        createTriggerArticle(CPMLBlock.select("WithWall&RoadIce&DiagLeft"),new Vec3(48f,4,32f),new Vec3(PI * 0.148f,0,0));
+        CreateTriggerArticle(CPMLBlock.select("Slope&Down&RoadIce"), midPlatform + new Vec3(0,7,0),new Vec3(0,slope,0));
+        CreateTriggerArticle(CPMLBlock.select("Slope&Up&RoadIce"), midPlatform + new Vec3(0,7,0),new Vec3(0,-slope,0));
+        CreateTriggerArticle(CPMLBlock.select("!Slope&!DiagRight&!DiagLeft&!WithWall&RoadIce"), midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
+        CreateTriggerArticle(CPMLBlock.select("WithWall&RoadIce&!DiagRight&!DiagLeft"), midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
+        CreateTriggerArticle(CPMLBlock.select("WithWall&RoadIce&DiagRight"),new Vec3(48f,4,32f),new Vec3(PI * -0.148f,0f,0));
+        CreateTriggerArticle(CPMLBlock.select("WithWall&RoadIce&DiagLeft"),new Vec3(48f,4,32f),new Vec3(PI * 0.148f,0,0));
 
-        createTriggerArticle(CPMLBlock.select("Platform&Wall&Down"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,0));
-        createTriggerArticle(CPMLBlock.select("Platform&Wall&Up"), new Vec3(16,16,29),new Vec3(0,-PI*0.5f,0));
-        createTriggerArticle(CPMLBlock.select("Platform&Wall&Right"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,PI*0.5f));//should work i think, but some problem with offset
-        createTriggerArticle(CPMLBlock.select("Platform&Wall&Left"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,-PI*0.5f));
-
-        
+        CreateTriggerArticle(CPMLBlock.select("Platform&Wall&Down"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,0));
+        CreateTriggerArticle(CPMLBlock.select("Platform&Wall&Up"), new Vec3(16,16,29),new Vec3(0,-PI*0.5f,0));
+        CreateTriggerArticle(CPMLBlock.select("Platform&Wall&Right"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,PI*0.5f));
+        CreateTriggerArticle(CPMLBlock.select("Platform&Wall&Left"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,-PI*0.5f));
     }
 
-    private static void createTriggerArticle(Inventory selection,Vec3 offset, Vec3 rotation){
+    private static void CreateTriggerArticle(Inventory selection,Vec3 offset, Vec3 rotation) =>
         inventory.addArticles(selection.add("Trigger").changePosition(new Position(offset,rotation)));
-    }
 
-    private static void addRoadNoCPBlocks(string surface){
+    private static void AddRoadNoCPBlocks(string surface){
         inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Up","Slope"},"Road" +surface,"",""));
         inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Down","Slope"},"Road" +surface,"","",new Position(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Left","Tilt"},"Road" +surface,"","",new Position(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Right","Tilt"},"Road" +surface,"",""));
     }
-    private static void addPlatformNoCPBlocks(string surface){
+    private static void AddPlatformNoCPBlocks(string surface){
         inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Up","Slope2"},"Platform","",surface));
         inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Down","Slope2"},"Platform","",surface,new Position(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Right","Slope2"},"Platform","",surface,new Position(new Vec3(32,0,0), new Vec3(PI*1.5f,0,0))));
@@ -195,7 +188,7 @@ class Alteration {
         inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Right","Wall"},"Platform","",surface,new Position(new Vec3(0,0,32), new Vec3(PI*0.5f,0,0))));
         inventory.articles.Add(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Left","Wall"},"Platform","",surface,new Position(new Vec3(0,0,32), new Vec3(PI*0.5f,0,0))));
     }
-    private static void addIceRoadNoCPBlocks(){
+    private static void AddIceRoadNoCPBlocks(){
         inventory.articles.Add(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Left","WithWall"},"RoadIce","",""));
         inventory.articles.Add(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Right","WithWall"},"RoadIce","","",new Position(new Vec3(32,0,32), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Right","WithWall"},"RoadIce","",""));
@@ -204,7 +197,7 @@ class Alteration {
         inventory.articles.Add(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Left","WithWall"},"RoadIce","",""));
     }
     
-    private static void setSizes(){
+    private static void SetSizes(){
         // Road Type
         inventory.select(BlockType.Block).select("Road&Curve2&(!In|!Out)").editOriginal().width(2).length(2); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
         inventory.select(BlockType.Block).select("Road&Curve3&(!In|!Out)").editOriginal().width(3).length(3); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
