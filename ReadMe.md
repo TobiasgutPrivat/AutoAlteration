@@ -50,6 +50,32 @@ You can apply Multiple Alterations at once by making a list of them like this:
 This for example alterates the maps with FreeWheel and OneUp:
 >AutoAlteration.alterFolder(new List<Alteration>{new FreeWheel(), new OneUP()}, sourcefolder, destinationFolder, "FreeWheel (1-UP)");
 
+### Available Alterations
+All implemented and fully to semi tested Alterations
+
+- Stadium
+- Snow
+- Rally
+- Desert
+- NoBrake
+- Cruise
+- Fragile
+- SlowMo
+- NoSteer
+- Glider
+- Reactor
+- ReactorDown
+- FreeWheel
+- CPBoost
+- STTF
+- CPFull
+- OneUP
+- OneDown
+- OneLeft
+- OneRight
+- TwoUP
+- YepTree
+
 ### Implementation of Alterations
 You can freely make new Alterations, your also asked to share them (see Contribution below) This will require some basic 
 

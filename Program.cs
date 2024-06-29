@@ -25,7 +25,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// Alteration.alterFile(new FreeWheel(), sourceFile, "FreeWheel");
+Alteration.alterFile(new STTF(), sourceFile, "STTF");
 
 void AllAlterations(string sourceFolder, string destinationFolder) {
     Alteration.alterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");

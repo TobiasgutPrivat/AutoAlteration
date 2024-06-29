@@ -22,7 +22,7 @@ class Block {
 
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position placePosition)
     {
-        initBlock(block,fromArticle);
+        InitBlock(block);
         this.article = article;
         this.name = article.name;
         this.blockType = article.type;
@@ -31,7 +31,7 @@ class Block {
         position.subtractPosition(article.position);
     }
 
-    private void initBlock(CGameCtnBlock block, Article fromArticle) {
+    private void InitBlock(CGameCtnBlock block) {
         color = block.Color;
         blockType = BlockType.Block;
         name = block.BlockModel.Id;
@@ -39,48 +39,31 @@ class Block {
         IsClip = block.IsClip;
         IsGhost = block.IsGhost;
         IsGround = block.IsGround;
-        Vec3 absolutePosition;
-        Vec3 pitchYawRoll;
-        if (block.IsFree){
-            absolutePosition = (Vec3)block.AbsolutePositionInMap;
-            pitchYawRoll = (Vec3)block.PitchYawRoll;
-        }else{
-            getDirectionOffset(fromArticle,block.Direction,out absolutePosition,out pitchYawRoll);
-            absolutePosition += new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32);
-        }
-        position = new Position(absolutePosition,pitchYawRoll);
+        position = GetBlockPosition(block);
     }
 
-    public static void getDirectionOffset(Article article, Direction direction, out Vec3 absolutePosition, out Vec3 pitchYawRoll) {
-        switch (direction){
-            case Direction.North:
-                pitchYawRoll = new Vec3(0,0,0);
-                absolutePosition = new (-32,0,-32);
-                break;
-            case Direction.East:
-                pitchYawRoll = new Vec3(Alteration.PI * 1.5f,0,0);
-                absolutePosition = new (0,0,-32);
-                absolutePosition += new Vec3((article.length - 1) * 32,0,0); 
-                break;
-            case Direction.South:
-                pitchYawRoll = new Vec3(Alteration.PI,0,0);
-                absolutePosition = new (0,0,0);
-                absolutePosition += new Vec3((article.width - 1)*32,0,(article.length - 1)*32); 
-                break;
-            case Direction.West:
-                pitchYawRoll = new Vec3(Alteration.PI * 0.5f,0,0);
-                absolutePosition = new (-32,0,0);
-                absolutePosition += new Vec3(0,0,(article.width - 1)*32);
-                break;
-            default:
-                pitchYawRoll = new Vec3(0,0,0);
-                absolutePosition = new(0,0,0);
-                break;
+    public static Position GetBlockPosition(CGameCtnBlock block) {
+        if (block.IsFree){
+            return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
+        } else {
+            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).addPosition(GetDirectionOffset(block));
         }
+    }
+
+    public static Position GetDirectionOffset(CGameCtnBlock block) {
+        Article article = Alteration.inventory.GetArticle(block.BlockModel.Id);
+        return block.Direction switch
+        {
+            Direction.North => new((-32, 0, -32), Vec3.Zero),
+            Direction.East => new(((article.length - 1) * 32, 0, -32), (Alteration.PI * 1.5f, 0, 0)),
+            Direction.South => new(((article.width - 1) * 32, 0, (article.length - 1) * 32), (Alteration.PI, 0, 0)),
+            Direction.West => new((-32, 0, (article.width - 1) * 32), (Alteration.PI * 0.5f, 0, 0)),
+            _ => Position.Zero,
+        };
     }
 
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position placePosition){
-        initBlock(item);
+        InitItem(item);
         this.article = article;
         this.name = article.name;
         this.blockType = article.type;
@@ -89,7 +72,7 @@ class Block {
         position.subtractPosition(article.position);
     }
 
-    public void initBlock(CGameCtnAnchoredObject item){
+    public void InitItem(CGameCtnAnchoredObject item){
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);

@@ -155,42 +155,31 @@ class Map
     delete(inventory);
   }
 
-  public void move(string block, Vec3 offset, Vec3 rotation)
+  public void move(Article article, Position position)
   {
-    foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == block)){
-      ctnBlock.AbsolutePositionInMap += offset;
-      ctnBlock.Coord += new Int3((int)offset.X/32, (int)offset.Y/8, (int)offset.Z/32);
-      ctnBlock.PitchYawRoll += rotation;
+    foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == article.name)){
+      Position blockPosition = Block.GetBlockPosition(ctnBlock).addPosition(position);
+      ctnBlock.AbsolutePositionInMap = blockPosition.coords;
+      ctnBlock.Coord = new Int3((int)blockPosition.coords.X/32, (int)blockPosition.coords.Y/8, (int)blockPosition.coords.Z/32);
+      ctnBlock.PitchYawRoll = blockPosition.pitchYawRoll;
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == block)){
-      ctnItem.AbsolutePositionInMap += offset;
-      ctnItem.PitchYawRoll += rotation;
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == article.name)){
+      Position blockPosition = new Position(ctnItem.AbsolutePositionInMap,ctnItem.PitchYawRoll);
+      blockPosition.addPosition(position);
+      ctnItem.AbsolutePositionInMap = blockPosition.coords;
+      ctnItem.PitchYawRoll = blockPosition.pitchYawRoll;
     }
   }
 
-  public void move(string[] blocks, Vec3 offset, Vec3 rotation)
+  public void move(string[] blocks, Position position)
   {
     foreach(var block in blocks){
-      move(block, offset, rotation);
+      move(getArticle(block), position);
     }
   }
-  public void move(Inventory inventory, Vec3 offset, Vec3 rotation)
+  public void move(Inventory inventory, Position position)
   {
-    move(inventory.names(), offset, rotation);
-  }
-
-  public void move(string block, Vec3 offset)
-  {
-    move(block, offset, Vec3.Zero);
-  }
-
-  public void move(string[] blocks, Vec3 offset)
-  {
-    move(blocks, offset, Vec3.Zero);
-  }
-  public void move(Inventory inventory, Vec3 offset)
-  {
-    move(inventory.names(), offset, Vec3.Zero);
+    move(inventory.names(), position);
   }
 
   public void placeStagedBlocks(){
@@ -244,9 +233,7 @@ class Map
           Console.WriteLine("Unknown Direction");
           break;
       }
-      Vec3 offset;
-      Block.getDirectionOffset(block.article,newBlock.Direction,out offset,out _);
-      Vec3 coords = block.position.coords - offset;
+      Vec3 coords = block.position.coords - Block.GetDirectionOffset(newBlock).coords;
       newBlock.Coord += new Int3((int)coords.X/32, (int)coords.Y/8 + 8, (int)coords.Z/32);
     } else{
       newBlock.IsFree = true;
@@ -285,11 +272,6 @@ class Map
     delete(inventory.names());
   }
 
-  public static Article getArticle(string name){
-    Article article = Alteration.inventory.articles.FirstOrDefault(x => x.name == name);
-    if (article == null){
-      throw new Exception("Article not found: " + name);
-    }
-    return article;
-  }
+  public static Article getArticle(string name) =>
+    Alteration.inventory.GetArticle(name);
 }

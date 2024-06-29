@@ -14,9 +14,9 @@ class Alteration {
     public static void load(string projectFolder) {
         ProjectFolder = projectFolder;
         CustomBlocksFolder = ProjectFolder + "src/CustomBlocks/";
-        shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/shapeKeywords.txt");
-        surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/surfaceKeywords.txt");
-        Keywords = File.ReadAllLines(ProjectFolder + "src/Vanilla/Keywords.txt");
+        shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/shapeKeywords.txt");
+        surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/surfaceKeywords.txt");
+        Keywords = File.ReadAllLines(ProjectFolder + "src/Inventory/Keywords.txt");
         createInventory();
     }
 
@@ -93,9 +93,9 @@ class Alteration {
 
     public static void createInventory() {
         devMode = true;
-        //Load Vanilla Articles
-        Inventory items = importArrayInventory(ProjectFolder + "src/Vanilla/ItemNames.json",BlockType.Item);
-        Inventory blocks = importArrayInventory(ProjectFolder + "src/Vanilla/BlockNames.json",BlockType.Block);
+        //Load Nadeo Articles
+        Inventory items = importArrayInventory(ProjectFolder + "src/Inventory/ItemNames.json",BlockType.Item);
+        Inventory blocks = importArrayInventory(ProjectFolder + "src/Inventory/BlockNames.json",BlockType.Block);
 
         //Fix Gate naming
         blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
@@ -121,7 +121,7 @@ class Alteration {
         //save
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
         string json = JsonConvert.SerializeObject(inventory.articles);
-        File.WriteAllText(ProjectFolder + "src/Inventory.json", json);
+        File.WriteAllText(ProjectFolder + "dev/Inventory.json", json);
 
         devMode = false;
     }

@@ -5,19 +5,19 @@ using MathNet.Numerics.LinearAlgebra.Double;
 class Position {
     public Vec3 coords;
     public Vec3 pitchYawRoll;
-
+    public static Position Zero = new (Vec3.Zero,Vec3.Zero);
 
     public Position(){
         this.coords = Vec3.Zero;
         this.pitchYawRoll = Vec3.Zero;
     }
-    public Position( Vec3 coords){
-        this.coords = coords;
+    public Position( Vec3 ?coords){
+        this.coords = coords ?? Vec3.Zero;
         this.pitchYawRoll = Vec3.Zero;
     }
-    public Position( Vec3 coords, Vec3 pitchYawRoll){
-        this.coords = coords;
-        this.pitchYawRoll = pitchYawRoll;
+    public Position(Vec3 ?coords, Vec3 ?pitchYawRoll){
+        this.coords = coords ?? Vec3.Zero;
+        this.pitchYawRoll = pitchYawRoll ?? Vec3.Zero;
     }
     public Position addPosition(Position position){
         if (position != null){
