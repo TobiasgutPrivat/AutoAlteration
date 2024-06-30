@@ -18,11 +18,11 @@ class Map
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
   }
 
-  public void save(string path)
+  public void Save(string path)
   { 
-    cleanDupes();
-    newMapUid();
-    removeAuthor();
+    CleanDupes();
+    NewMapUid();
+    RemoveAuthor();
     map.RemovePassword();
     if (!Directory.Exists(Path.GetDirectoryName(path)))
       {
@@ -31,7 +31,7 @@ class Map
     gbx.Save(path);
   }
 
-  private void removeAuthor(){
+  private void RemoveAuthor(){
     map.AuthorTime = null;
     map.GoldTime = null;
     map.SilverTime = null;
@@ -44,7 +44,7 @@ class Map
     map.AuthorZone = null;
   }
 
-  private void cleanDupes()
+  private void CleanDupes()
   {
     if (map.Blocks is List<CGameCtnBlock> blocks){
       blocks.RemoveAll(x =>
@@ -58,7 +58,7 @@ class Map
     }
   }
 
-  private void newMapUid()
+  private void NewMapUid()
   {
     var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
     var stringChars = new char[27];
@@ -71,7 +71,7 @@ class Map
     map.MapUid = new string(stringChars);
   }
 
-  private void embedBlock(string name){//TODO overthink getting path
+  private void EmbedBlock(string name){//TODO overthink getting path
     List<string> customBlocks = Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x) == name).ToList();
     if (customBlocks.Count != 1){
       Console.WriteLine("Found " + customBlocks.Count + " custom blocks for " + name);
@@ -87,7 +87,7 @@ class Map
     });
     Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
-  private void embedItem(string name){//TODO overthink getting path
+  private void EmbedItem(string name){//TODO overthink getting path
     List<string> customBlocks = Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x) == name).ToList();
     if (customBlocks.Count != 1){
       Console.WriteLine("Found " + customBlocks.Count + " custom blocks for " + name);
@@ -190,7 +190,7 @@ class Map
           break;
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x == block.name)){
-            embedBlock(block.name);
+            EmbedBlock(block.name);
             embeddedBlocks.Add(block.name);
           }
           block.name += "_CustomBlock";
@@ -198,7 +198,7 @@ class Map
           break;
         case BlockType.CustomItem:
           if(!embeddedBlocks.Any(x => x == block.name)){
-            embedItem(block.name);
+            EmbedItem(block.name);
             embeddedBlocks.Add(block.name);
           }
           map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);

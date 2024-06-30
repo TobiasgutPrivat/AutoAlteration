@@ -25,36 +25,36 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.alterFile(new STTF(), sourceFile, "STTF");
+Alteration.AlterFile(new STTF(), sourceFile, "STTF");
 
 void AllAlterations(string sourceFolder, string destinationFolder) {
-    Alteration.alterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
-    Alteration.alterAll(new Snow(), sourceFolder, destinationFolder, "Snow");
-    Alteration.alterAll(new Rally(), sourceFolder, destinationFolder, "Rally");
-    Alteration.alterAll(new Desert(), sourceFolder, destinationFolder, "Desert");
+    Alteration.AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
+    Alteration.AlterAll(new Snow(), sourceFolder, destinationFolder, "Snow");
+    Alteration.AlterAll(new Rally(), sourceFolder, destinationFolder, "Rally");
+    Alteration.AlterAll(new Desert(), sourceFolder, destinationFolder, "Desert");
 
-    Alteration.alterAll(new NoBrake(), sourceFolder, destinationFolder, "NoBrake");
-    Alteration.alterAll(new Cruise(), sourceFolder, destinationFolder, "Cruise");
-    Alteration.alterAll(new Fragile(), sourceFolder, destinationFolder, "Fragile");
-    Alteration.alterAll(new SlowMo(), sourceFolder, destinationFolder, "SlowMo");
-    Alteration.alterAll(new NoSteer(), sourceFolder, destinationFolder, "NoSteer");
-    Alteration.alterAll(new Glider(), sourceFolder, destinationFolder, "Glider");
-    Alteration.alterAll(new Reactor(), sourceFolder, destinationFolder, "Reactor");
-    Alteration.alterAll(new ReactorDown(), sourceFolder, destinationFolder, "ReactorDown");
-    Alteration.alterAll(new FreeWheel(), sourceFolder, destinationFolder, "FreeWheel");
+    Alteration.AlterAll(new NoBrake(), sourceFolder, destinationFolder, "NoBrake");
+    Alteration.AlterAll(new Cruise(), sourceFolder, destinationFolder, "Cruise");
+    Alteration.AlterAll(new Fragile(), sourceFolder, destinationFolder, "Fragile");
+    Alteration.AlterAll(new SlowMo(), sourceFolder, destinationFolder, "SlowMo");
+    Alteration.AlterAll(new NoSteer(), sourceFolder, destinationFolder, "NoSteer");
+    Alteration.AlterAll(new Glider(), sourceFolder, destinationFolder, "Glider");
+    Alteration.AlterAll(new Reactor(), sourceFolder, destinationFolder, "Reactor");
+    Alteration.AlterAll(new ReactorDown(), sourceFolder, destinationFolder, "ReactorDown");
+    Alteration.AlterAll(new FreeWheel(), sourceFolder, destinationFolder, "FreeWheel");
     
-    Alteration.alterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
-    Alteration.alterAll(new STTF(), sourceFolder, destinationFolder, "STTF");
-    Alteration.alterAll(new CPFull(), sourceFolder, destinationFolder, "CPFull");
+    Alteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
+    Alteration.AlterAll(new STTF(), sourceFolder, destinationFolder, "STTF");
+    Alteration.AlterAll(new CPFull(), sourceFolder, destinationFolder, "CPFull");
     // Alteration.alterAll(new CPLess(), sourceFolder, destinationFolder, "CPLess");
 
-    Alteration.alterAll(new OneUP(), sourceFolder, destinationFolder, "(1-UP)");
-    Alteration.alterAll(new OneDown(), sourceFolder, destinationFolder, "(1-Down)");
-    Alteration.alterAll(new OneLeft(), sourceFolder, destinationFolder, "(1-Left)");
-    Alteration.alterAll(new OneRight(), sourceFolder, destinationFolder, "(1-Right)");
-    Alteration.alterAll(new TwoUP(), sourceFolder, destinationFolder, "(2-UP)");
+    Alteration.AlterAll(new OneUP(), sourceFolder, destinationFolder, "(1-UP)");
+    Alteration.AlterAll(new OneDown(), sourceFolder, destinationFolder, "(1-Down)");
+    Alteration.AlterAll(new OneLeft(), sourceFolder, destinationFolder, "(1-Left)");
+    Alteration.AlterAll(new OneRight(), sourceFolder, destinationFolder, "(1-Right)");
+    Alteration.AlterAll(new TwoUP(), sourceFolder, destinationFolder, "(2-UP)");
 
-    Alteration.alterAll(new YepTree(), sourceFolder, destinationFolder, "YepTree");
+    Alteration.AlterAll(new YepTree(), sourceFolder, destinationFolder, "YepTree");
 
     Console.WriteLine("Done!");
     Console.WriteLine("Map Count: " + Alteration.mapCount);

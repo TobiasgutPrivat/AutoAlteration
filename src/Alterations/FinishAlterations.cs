@@ -28,3 +28,8 @@ class OneDown: FinishAlteration {
         map.Move(finishArticles, new(new Vec3(0,-8,0)));
     }
 }
+class OneBack: FinishAlteration {
+    public override void Run(Map map){
+        map.Move(finishArticles, new(new Vec3(0,0,32)));
+    }
+}
