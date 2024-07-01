@@ -39,7 +39,7 @@ class KeywordEdit {
         return this;
     }
     public KeywordEdit changePosition(Position position) {
-        articles.ForEach(a => a.position.addPosition(position));
+        articles.ForEach(a => a.position.AddPosition(position));
         return this;
     }
     public KeywordEdit width(int width) {

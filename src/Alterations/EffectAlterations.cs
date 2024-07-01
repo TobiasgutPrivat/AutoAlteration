@@ -4,10 +4,10 @@ class EffectAlteration: Alteration {
         if (position == null) position = new Position(new Vec3(0,0,0),new Vec3(0,0,0));
         inventory.select(BlockType.Item).select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Center").remove("v2").add(Effect).placeRelative(map,position);
         map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect + RingAddition),position.Clone().Move(new Vec3(-16,-16,-16)));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().addPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().addPosition(new Position(new Vec3(6,12,0),new Vec3(0,0,PI*-0.5f))));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().addPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().addPosition(new Position(new Vec3(-6,12,0),new Vec3(0,0,PI*0.5f))));
+        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
+        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(6,12,0),new Vec3(0,0,PI*-0.5f))));
+        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
+        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(-6,12,0),new Vec3(0,0,PI*0.5f))));
         map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect + RingAddition),position);
 
         map.PlaceStagedBlocks();
@@ -133,6 +133,13 @@ class SnowCarswitchToDesert: EffectAlteration {
 class SnowCarswitchToRally: EffectAlteration {
     public override void Run(Map map){
         inventory.select("Gameplay&Snow").remove("Snow").add("Rally").replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
+
+class AntiBooster: Alteration {
+    public override void Run(Map map){
+        inventory.select("Boost|Boost2|Turbo|Turbo2|TurboRoulette").edit().replace(map,new(new Vec3(32,0,32),new Vec3(PI,0,0),true));
         map.PlaceStagedBlocks();
     }
 }

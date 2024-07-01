@@ -27,8 +27,13 @@ class Block {
         this.name = article.name;
         this.blockType = article.type;
         
-        position.addPosition(fromArticle.position);
-        position.addPosition(placePosition ?? Position.Zero);
+        position.AddPosition(fromArticle.position);
+        placePosition ??= Position.Zero;
+        if (placePosition.multiplyBySize){
+            position.AddPosition(new Position(new Vec3(placePosition.coords.X * article.width, placePosition.coords.Y, placePosition.coords.Z * article.length), placePosition.pitchYawRoll));
+        } else {
+            position.AddPosition(placePosition);
+        }
         position.SubtractPosition(article.position);
     }
 
@@ -47,7 +52,7 @@ class Block {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
-            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).addPosition(GetDirectionOffset(block));
+            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
         }
     }
 
@@ -68,8 +73,8 @@ class Block {
         this.article = article;
         this.name = article.name;
         this.blockType = article.type;
-        position.addPosition(fromArticle.position);
-        position.addPosition(placePosition ?? Position.Zero);
+        position.AddPosition(fromArticle.position);
+        position.AddPosition(placePosition ?? Position.Zero);
         position.SubtractPosition(article.position);
     }
 

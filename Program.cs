@@ -25,7 +25,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.AlterFile(new STTF(), sourceFile, "STTF");
+Alteration.AlterFile(new AntiBooster(), sourceFile, "AntiBooster");
 
 void AllAlterations(string sourceFolder, string destinationFolder) {
     Alteration.AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");

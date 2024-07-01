@@ -155,14 +155,14 @@ class Map
   public void Move(Article article, Position position)
   {
     foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == article.name)){
-      Position blockPosition = Block.GetBlockPosition(ctnBlock).addPosition(position);
+      Position blockPosition = Block.GetBlockPosition(ctnBlock).AddPosition(position);
       ctnBlock.AbsolutePositionInMap = blockPosition.coords;
       ctnBlock.Coord = new Int3((int)blockPosition.coords.X/32, (int)blockPosition.coords.Y/8, (int)blockPosition.coords.Z/32);
       ctnBlock.PitchYawRoll = blockPosition.pitchYawRoll;
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == article.name)){
       Position blockPosition = new Position(ctnItem.AbsolutePositionInMap,ctnItem.PitchYawRoll);
-      blockPosition.addPosition(position);
+      blockPosition.AddPosition(position);
       ctnItem.AbsolutePositionInMap = blockPosition.coords;
       ctnItem.PitchYawRoll = blockPosition.pitchYawRoll;
     }

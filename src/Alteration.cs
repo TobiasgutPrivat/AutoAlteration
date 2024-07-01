@@ -92,7 +92,7 @@ class Alteration {
         //Load Nadeo Articles
         Inventory items = ImportArrayInventory(ProjectFolder + "src/Inventory/ItemNames.json",BlockType.Item);
         Inventory blocks = ImportArrayInventory(ProjectFolder + "src/Inventory/BlockNames.json",BlockType.Block);
-
+        
         //Fix Gate naming
         blocks.select("Gate").editOriginal().remove("Gate").add("Ring");
 
