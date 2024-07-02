@@ -4,14 +4,14 @@ Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirect
 
 //Code for Execution (change for your use)
 //Folder Processing
-// string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
-// Alteration.alterFolder(new STTF(), sourcefolder, destinationFolder + "Spring 2024 STTF/", "STTF");
+string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
+// Alteration.AlterFolder(new Boosterless(), sourcefolder, destinationFolder + "Spring 2024 Boosterless/", "Boosterless");
 
 //Full Folder Processing
-string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
-// Alteration.alterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
+// string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
+// Alteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
 
 //All Alterations Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -21,7 +21,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.AlterFile(new AntiBooster(), sourceFile, "AntiBooster");
+Alteration.AlterFile(new Boosterless(), sourceFile, "Boosterless");
 
 void AllAlterations(string sourceFolder, string destinationFolder) {
     Alteration.AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
@@ -38,6 +38,7 @@ void AllAlterations(string sourceFolder, string destinationFolder) {
     Alteration.AlterAll(new Reactor(), sourceFolder, destinationFolder, "Reactor");
     Alteration.AlterAll(new ReactorDown(), sourceFolder, destinationFolder, "ReactorDown");
     Alteration.AlterAll(new FreeWheel(), sourceFolder, destinationFolder, "FreeWheel");
+    Alteration.AlterAll(new AntiBooster(), sourceFolder, destinationFolder, "AntiBooster");
     
     Alteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
     Alteration.AlterAll(new STTF(), sourceFolder, destinationFolder, "STTF");

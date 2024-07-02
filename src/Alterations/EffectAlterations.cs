@@ -143,3 +143,17 @@ class AntiBooster: Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class Boosterless: Alteration {
+    public override void Run(Map map){
+        map.Delete(inventory.Select(BlockType.Item).Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
+        Inventory blocks = inventory.Select(BlockType.Block);
+        map.Delete(blocks.Select("GateExpandable&(Boost|Boost2|Turbo|Turbo2|TurboRoulette)"));
+        blocks.Select("Boost").RemoveKeyword("Boost").Replace(map);
+        blocks.Select("Boost2").RemoveKeyword("Boost2").Replace(map);
+        blocks.Select("Turbo").RemoveKeyword("Turbo").Replace(map);
+        blocks.Select("Turbo2").RemoveKeyword("Turbo2").Replace(map);
+        blocks.Select("TurboRoulette").RemoveKeyword("TurboRoulette").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}

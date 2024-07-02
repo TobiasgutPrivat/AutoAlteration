@@ -52,6 +52,9 @@ class Article {
         } else if (Alteration.surfaceKeywords.Contains(keyword)) {
             return Surfaces.Any(k => k == keyword);
         } else{
+            if (!Alteration.Keywords.Contains(keyword)) {
+                Console.WriteLine("Keyword doesnt exist: " + keyword);
+            }
             return Keywords.Any(k => k == keyword);
         }
     }
