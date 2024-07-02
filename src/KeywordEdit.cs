@@ -1,97 +1,112 @@
 class KeywordEdit {
-    public List<Article> articles = new List<Article>();
+    public List<Article> articles = new();
 
     public KeywordEdit() {}
-    public KeywordEdit(List<Article> articles) {this.articles = articles;}
+    public KeywordEdit(List<Article> articles) {
+        this.articles = articles;
+    }
 
-    public KeywordEdit add(string Keyword) {
-        articles.ForEach(a => a.keywords.Add(Keyword));
+    public KeywordEdit AddKeyword(string keyword) {
+        articles.ForEach(a => a.Keywords.Add(keyword));
         return this;
     }
 
-    public KeywordEdit add(string[] Keywords) {
-        articles.ForEach(a => a.keywords.AddRange(Keywords));
+    public KeywordEdit AddKeyword(string[] keywords) {
+        articles.ForEach(a => a.Keywords.AddRange(keywords));
         return this;
     }
     
-    public KeywordEdit remove(string Keyword) {
-        articles.ForEach(a => a.keywords.Remove(Keyword));
+    public KeywordEdit RemoveKeyword(string keyword) {
+        articles.ForEach(a => a.Keywords.Remove(keyword));
         return this;
     }
 
-    public KeywordEdit remove(string[] Keywords) {
-        Keywords.ToList().ForEach(k => articles.ForEach(a => a.keywords.Remove(k)));
+    public KeywordEdit RemoveKeyword(string[] keywords) {
+        keywords.ToList().ForEach(k => articles.ForEach(a => a.Keywords.Remove(k)));
         return this;
     }
     
-    public KeywordEdit surface(string surface) {
-        articles.ForEach(a => a.surface = surface);
+    public KeywordEdit AddSurface(string surface) {
+        articles.ForEach(a => a.Surfaces.Add(surface));
+        return this;
+    }
+    public KeywordEdit RemoveSurface(string surface) {
+        articles.ForEach(a => a.Surfaces.Remove(surface));
         return this;
     }
 
-    public KeywordEdit shape(string shape) {
-        articles.ForEach(a => a.shape = shape);
+    public KeywordEdit AddShape(string shape) {
+        articles.ForEach(a => a.Shapes.Add(shape));
+        return this;
+    }
+    public KeywordEdit RemoveShape(string shape) {
+        articles.ForEach(a => a.Shapes.Remove(shape));
         return this;
     }
 
-    public KeywordEdit toShape(string toShape) {
-        articles.ForEach(a => a.toShape = toShape);
+    public KeywordEdit AddToShape(string toShape) {
+        articles.ForEach(a => a.ToShapes.Add(toShape));
         return this;
     }
-    public KeywordEdit changePosition(Position position) {
-        articles.ForEach(a => a.position.AddPosition(position));
-        return this;
-    }
-    public KeywordEdit width(int width) {
-        articles.ForEach(a => a.width = width);
-        return this;
-    }
-    public KeywordEdit length(int length) {
-        articles.ForEach(a => a.length = length);
+    public KeywordEdit RemoveToShape(string toShape) {
+        articles.ForEach(a => a.ToShapes.Remove(toShape));
         return this;
     }
 
-    public void replace(Map map,Position position = null){
+    public KeywordEdit ChangePosition(Position position) {
+        articles.ForEach(a => a.Position.AddPosition(position));
+        return this;
+    }
+    public KeywordEdit Width(int width) {
+        articles.ForEach(a => a.Width = width);
+        return this;
+    }
+    public KeywordEdit Length(int length) {
+        articles.ForEach(a => a.Length = length);
+        return this;
+    }
+
+    public void Replace(Map map,Position ?position = null){
         articles.ForEach( a => {
-            Article article = Alteration.inventory.alignArticle(a);
+            Article ?article = Alteration.inventory.AlignArticle(a);
             if (article != null) {
                 map.Replace(a, article, position);
             } else {
-                // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
+                // Console.WriteLine("No matching article found for: " + a.KeywordString());
             }
         });
     }
 
-    public void placeRelative(Map map,Position position = null){
+    public void PlaceRelative(Map map,Position ?position = null){
         articles.ForEach( a => {
-            Article article = Alteration.inventory.alignArticle(a);
+            Article ?article = Alteration.inventory.AlignArticle(a);
             if (article != null) {
                 map.PlaceRelative(a, article, position);
             } else {
-                // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
+                // Console.WriteLine("No matching article found for: " + a.KeywordString());
             }
         });
     }
 
-    public Inventory align() {
-        List<Article> newarticles = new List<Article>();
+    public Inventory Align() {
+        List<Article> newarticles = new();
         articles.ForEach( a => {
-            Article article = Alteration.inventory.alignArticle(a);
+            Article ?article = Alteration.inventory.AlignArticle(a);
             if (article != null) {
                 newarticles.Add(article);
             } else {
-                // Console.WriteLine("No matching article found for: " + string.Join(", ", string.Join(", ", a.Keywords),a.Surface,a.Shape,a.ToShape));
+                // Console.WriteLine("No matching article found for: " + a.KeywordString());
             }
         });
         return new Inventory(newarticles);
     }
 
-    public string[] names() =>
-        align().articles.Select(a => a.name).ToArray();
+    public string[] Names() =>
+        Align().articles.Select(a => a.Name).ToArray();
 
-    public KeywordEdit print() {
+    public KeywordEdit Print() {
         articles.ForEach(article => {
-            Console.WriteLine(article.name + ": " + string.Join(", ", string.Join(", ", article.keywords),article.surface,article.shape,article.toShape));
+            Console.WriteLine(article.Name + ": " + article.KeywordString());
         });
         return this;
     }

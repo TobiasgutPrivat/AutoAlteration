@@ -24,17 +24,17 @@ class Block {
     {
         InitBlock(block);
         this.article = article;
-        this.name = article.name;
-        this.blockType = article.type;
+        this.name = article.Name;
+        this.blockType = article.Type;
         
-        position.AddPosition(fromArticle.position);
+        position.AddPosition(fromArticle.Position);
         placePosition ??= Position.Zero;
         if (placePosition.multiplyBySize){
-            position.AddPosition(new Position(new Vec3(placePosition.coords.X * article.width, placePosition.coords.Y, placePosition.coords.Z * article.length), placePosition.pitchYawRoll));
+            position.AddPosition(new Position(new Vec3(placePosition.coords.X * article.Width, placePosition.coords.Y, placePosition.coords.Z * article.Length), placePosition.pitchYawRoll));
         } else {
             position.AddPosition(placePosition);
         }
-        position.SubtractPosition(article.position);
+        position.SubtractPosition(article.Position);
     }
 
     private void InitBlock(CGameCtnBlock block) {
@@ -57,13 +57,17 @@ class Block {
     }
 
     public static Position GetDirectionOffset(CGameCtnBlock block) {
-        Article article = Alteration.inventory.GetArticle(block.BlockModel.Id);
+        Article ?article = Alteration.inventory.GetArticle(block.BlockModel.Id);
+        if (article == null){
+            Console.WriteLine("No article found for model: " + block.BlockModel.Id);
+            return Position.Zero;
+        }
         return block.Direction switch
         {
             Direction.North => new((-32, 0, -32), Vec3.Zero),
-            Direction.East => new(((article.length - 1) * 32, 0, -32), (Alteration.PI * 1.5f, 0, 0)),
-            Direction.South => new(((article.width - 1) * 32, 0, (article.length - 1) * 32), (Alteration.PI, 0, 0)),
-            Direction.West => new((-32, 0, (article.width - 1) * 32), (Alteration.PI * 0.5f, 0, 0)),
+            Direction.East => new(((article.Length - 1) * 32, 0, -32), (Alteration.PI * 1.5f, 0, 0)),
+            Direction.South => new(((article.Width - 1) * 32, 0, (article.Length - 1) * 32), (Alteration.PI, 0, 0)),
+            Direction.West => new((-32, 0, (article.Width - 1) * 32), (Alteration.PI * 0.5f, 0, 0)),
             _ => Position.Zero,
         };
     }
@@ -71,11 +75,11 @@ class Block {
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position ?placePosition){
         InitItem(item);
         this.article = article;
-        this.name = article.name;
-        this.blockType = article.type;
-        position.AddPosition(fromArticle.position);
+        this.name = article.Name;
+        this.blockType = article.Type;
+        position.AddPosition(fromArticle.Position);
         position.AddPosition(placePosition ?? Position.Zero);
-        position.SubtractPosition(article.position);
+        position.SubtractPosition(article.Position);
     }
 
     public void InitItem(CGameCtnAnchoredObject item){

@@ -106,10 +106,10 @@ class Map
 
   public void PlaceRelative(string atBlock, string newBlock,Position ?positionChange = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnBlock,getArticle(atBlock),getArticle(newBlock),positionChange));
+      stagedBlocks.Add(new Block(ctnBlock,GetArticle(atBlock),GetArticle(newBlock),positionChange));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnItem,getArticle(atBlock),getArticle(newBlock),positionChange));
+      stagedBlocks.Add(new Block(ctnItem,GetArticle(atBlock),GetArticle(newBlock),positionChange));
     }
   }
 
@@ -117,13 +117,13 @@ class Map
     atBlocks.ToList().ForEach(atBlock => PlaceRelative(atBlock, newBlock, positionChange));
 
   public void PlaceRelative(Inventory inventory, string newBlock,Position ?positionChange = null) =>
-    PlaceRelative(inventory.names(), newBlock, positionChange);
+    PlaceRelative(inventory.Names(), newBlock, positionChange);
 
   public void PlaceRelative(Article atArticle, Article newArticle, Position ?positionChange = null){
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.name)){
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){
       stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,positionChange));
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.name)){
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.Name)){
       stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,positionChange));
     }
   }
@@ -134,33 +134,33 @@ class Map
 
   public void Replace(string oldBlock, string newBlock,Position ?positionChange = null){
     PlaceRelative(oldBlock, newBlock, positionChange);
-    delete(oldBlock);
+    Delete(oldBlock);
   }
 
   public void Replace(string[] oldBlocks, string newBlock,Position ?positionChange = null){
     PlaceRelative(oldBlocks, newBlock, positionChange);
-    delete(oldBlocks);
+    Delete(oldBlocks);
   }
 
   public void Replace(Article oldArticle, Article article, Position ?positionChange = null){
     PlaceRelative(oldArticle, article,positionChange);
-    delete(oldArticle.name);
+    Delete(oldArticle.Name);
   }
 
   public void Replace(Inventory inventory, Article article, Position ?positionChange = null){
     PlaceRelative(inventory, article,positionChange);
-    delete(inventory);
+    Delete(inventory);
   }
 
   public void Move(Article article, Position position)
   {
-    foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == article.name)){
+    foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == article.Name)){
       Position blockPosition = Block.GetBlockPosition(ctnBlock).AddPosition(position);
       ctnBlock.AbsolutePositionInMap = blockPosition.coords;
       ctnBlock.Coord = new Int3((int)blockPosition.coords.X/32, (int)blockPosition.coords.Y/8, (int)blockPosition.coords.Z/32);
       ctnBlock.PitchYawRoll = blockPosition.pitchYawRoll;
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == article.name)){
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == article.Name)){
       Position blockPosition = new Position(ctnItem.AbsolutePositionInMap,ctnItem.PitchYawRoll);
       blockPosition.AddPosition(position);
       ctnItem.AbsolutePositionInMap = blockPosition.coords;
@@ -171,12 +171,12 @@ class Map
   public void Move(string[] blocks, Position position)
   {
     foreach(var block in blocks){
-      Move(getArticle(block), position);
+      Move(GetArticle(block), position);
     }
   }
   public void Move(Inventory inventory, Position position)
   {
-    Move(inventory.names(), position);
+    Move(inventory.Names(), position);
   }
 
   public void PlaceStagedBlocks(){
@@ -242,7 +242,7 @@ class Map
     newBlock.Color = block.color;
   }
 
-  public void delete(string Block){
+  public void Delete(string Block){
     List<int> indexes;
     List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
     indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == Block).Select(block => modifiedblocks.IndexOf(block)).ToList();
@@ -260,15 +260,15 @@ class Map
     }
     map.AnchoredObjects = modifiedItems;
   }
-  public void delete(string[] blocks){
+  public void Delete(string[] blocks){
     foreach(var block in blocks){
-      delete(block);
+      Delete(block);
     }
   }
-  public void delete(Inventory inventory){
-    delete(inventory.names());
+  public void Delete(Inventory inventory){
+    Delete(inventory.Names());
   }
 
-  public static Article getArticle(string name) =>
+  public static Article GetArticle(string name) =>
     Alteration.inventory.GetArticle(name);
 }

@@ -2,33 +2,33 @@ using GBX.NET;
 class EffectAlteration: Alteration {
     public static void placeCPEffect(Map map, string Effect,Position position = null, string RingAddition = "") {
         if (position == null) position = new Position(new Vec3(0,0,0),new Vec3(0,0,0));
-        inventory.select(BlockType.Item).select("Checkpoint").remove("Checkpoint").remove("Left").remove("Right").remove("Center").remove("v2").add(Effect).placeRelative(map,position);
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect + RingAddition),position.Clone().Move(new Vec3(-16,-16,-16)));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(6,12,0),new Vec3(0,0,PI*-0.5f))));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
-        map.PlaceRelative(inventory.select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(-6,12,0),new Vec3(0,0,PI*0.5f))));
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword("Left").RemoveKeyword("Right").RemoveKeyword("Center").RemoveKeyword("v2").AddKeyword(Effect).PlaceRelative(map,position);
+        map.PlaceRelative(inventory.Select("Checkpoint|Multilap&Trigger&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect + RingAddition),position.Clone().Move(new Vec3(-16,-16,-16)));
+        map.PlaceRelative(inventory.Select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
+        map.PlaceRelative(inventory.Select("Checkpoint|Multilap&Trigger&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(6,12,0),new Vec3(0,0,PI*-0.5f))));
+        map.PlaceRelative(inventory.Select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(0,7,0),new Vec3(0,0,PI))));
+        map.PlaceRelative(inventory.Select("Checkpoint|Multilap&Trigger&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),position.Clone().AddPosition(new Position(new Vec3(-6,12,0),new Vec3(0,0,PI*0.5f))));
         map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect + RingAddition),position);
 
         map.PlaceStagedBlocks();
     }
     public static void placeStartEffect(Map map, string Effect,Position position = null, string RingAddition = ""){
         if (position == null) position = new Position(new Vec3(0,0,0),new Vec3(0,0,0));
-        Inventory start = inventory.select("MapStart");
+        Inventory start = inventory.Select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect + RingAddition);
-        map.PlaceRelative(start.select("!Water&!(RoadIce)"), GateSpecial,position.Clone().Move(new Vec3(0,-16,0)));
-        map.PlaceRelative(start.select("RoadIce"), GateSpecial,position.Clone().Move(new Vec3(0,-8,0)));
+        map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,position.Clone().Move(new Vec3(0,-16,0)));
+        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,position.Clone().Move(new Vec3(0,-8,0)));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,position.Clone().Move(new Vec3(0,-16,-2)));
-        inventory.select("MapStart&Gate").add(Effect).remove(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).placeRelative(map,position.Clone().Move(new Vec3(0,0,-10)));
+        inventory.Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,position.Clone().Move(new Vec3(0,0,-10)));
         map.PlaceStagedBlocks();
     }
     public static void placeStartGamePlay(Map map, string GamePlay){
-        Inventory start = inventory.select(BlockType.Block).select("MapStart");
+        Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateGameplay" + GamePlay);
-        map.PlaceRelative(start.select("!Water&!(RoadIce)"), GateSpecial,new Position(new Vec3(0,-16,0)));
-        map.PlaceRelative(start.select("RoadIce"), GateSpecial,new Position(new Vec3(0,-8,0)));
+        map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,new Position(new Vec3(0,-16,0)));
+        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,new Position(new Vec3(0,-8,0)));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,new Position(new Vec3(0,-16,-2)));
-        inventory.select("MapStart&Gate").add("Gameplay").add(GamePlay).remove(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).placeRelative(map,new Position(new Vec3(0,0,-10)));
+        inventory.Select("MapStart&Gate").AddKeyword("Gameplay").AddKeyword(GamePlay).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,new Position(new Vec3(0,0,-10)));
         map.PlaceStagedBlocks();
     }
 }
@@ -97,28 +97,28 @@ class FreeWheel: EffectAlteration {
 
 class Rally: EffectAlteration {
     public override void Run(Map map){
-        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Rally").replace(map);
+        inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword("Rally").Replace(map);
         map.PlaceStagedBlocks();
         placeStartGamePlay(map,"Rally");
     }
 }
 class Snow: EffectAlteration {
     public override void Run(Map map){
-        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Snow").replace(map);
+        inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword("Snow").Replace(map);
         map.PlaceStagedBlocks();
         placeStartGamePlay(map,"Snow");
     }
 }
 class Desert: EffectAlteration {
     public override void Run(Map map){
-        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Desert").replace(map);
+        inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword("Desert").Replace(map);
         map.PlaceStagedBlocks();
         placeStartGamePlay(map,"Desert");
     }
 }
 class Stadium: EffectAlteration {
     public override void Run(Map map){
-        inventory.select("Gameplay").remove("Snow").remove("Desert").remove("Rally").remove("Stadium").add("Stadium").replace(map);
+        inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword("Stadium").Replace(map);
         map.PlaceStagedBlocks();
         placeStartGamePlay(map,"Stadium");
     }
@@ -126,20 +126,20 @@ class Stadium: EffectAlteration {
 
 class SnowCarswitchToDesert: EffectAlteration {
     public override void Run(Map map){
-        inventory.select("Gameplay&Snow").remove("Snow").add("Desert").replace(map);
+        inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Desert").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 class SnowCarswitchToRally: EffectAlteration {
     public override void Run(Map map){
-        inventory.select("Gameplay&Snow").remove("Snow").add("Rally").replace(map);
+        inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Rally").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 
 class AntiBooster: Alteration {
     public override void Run(Map map){
-        inventory.select("Boost|Boost2|Turbo|Turbo2|TurboRoulette").edit().replace(map,new(new Vec3(32,0,32),new Vec3(PI,0,0),true));
+        inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette").Edit().Replace(map,new(new Vec3(32,0,32),new Vec3(PI,0,0),true));
         map.PlaceStagedBlocks();
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 //Initial load
-//"C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/"
-//"C:/Users/tgu/OneDrive - This AG/Dokumente/Privat/AutoAlteration/"
-Alteration.Load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
-// Alteration.inventory.checkDuplicates();//TODO
-// Alteration.inventory.analyzeKeywords();
+Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")) + "/");
 
 //Code for Execution (change for your use)
 //Folder Processing

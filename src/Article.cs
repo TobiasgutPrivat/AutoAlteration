@@ -1,46 +1,58 @@
 class Article {
-    public string name;
-    public Position position = new Position();
-    public BlockType type;
-    public List<string> keywords = new List<string>();
-    public string shape = "";
-    public string toShape = "";
-    public string surface = "";
-    public int width = 1;
-    public int length = 1;
+    public string Name;
+    public Position Position = new();
+    public BlockType Type;
+    public List<string> Keywords = new();
+    public List<string> Shapes = new();
+    public List<string> ToShapes = new();
+    public List<string> Surfaces = new();
+    public int Width = 1;
+    public int Length = 1;
+    public bool Original = false;
 
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
 
     public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
 
+    public Article(string name,BlockType type,List<string> keywords,List<string> shape,List<string> toShape,List<string> surface,Position ?position = null,int length = 1, int width = 1){
+        Name = name;
+        Type = type;
+        Keywords = keywords;
+        Shapes = shape;
+        ToShapes = toShape;
+        Surfaces = surface;
+        Position = position ?? Position.Zero;
+        Length = length;
+        Width = width;
+    }
     public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,Position ?position = null,int length = 1, int width = 1){
-        this.name = name;
-        this.type = type;
-        this.keywords = keywords;
-        this.shape = shape;
-        this.toShape = toShape;
-        this.surface = surface;
-        this.position = position ?? Position.Zero;
-        this.length = length;
-        this.width = width;
+        Name = name;
+        Type = type;
+        Keywords = keywords;
+        Shapes = new List<string>{shape};
+        ToShapes = new List<string>{toShape};
+        Surfaces = new List<string>{surface};
+        Position = position ?? Position.Zero;
+        Length = length;
+        Width = width;
     }
     
     public Article(string name,BlockType type){
-        this.name = name;
+        Name = name;
         LoadKeywords();
-        this.type = type;
+        Type = type;
     }
 
     public Article CloneArticle() =>
-        new(name,type,keywords,shape,toShape,surface,position,length,width);
+        new(Name,Type,Keywords.ToList(),Shapes.ToList(),ToShapes.ToList(),Surfaces.ToList(),Position,Length,Width);
 
     public bool HasKeyword(string keyword) {
         if (Alteration.shapeKeywords.Contains(keyword)) {
-            return shape == keyword || toShape == keyword;
+            return Shapes.Any(k => k == keyword);
         } else if (Alteration.surfaceKeywords.Contains(keyword)) {
-            return surface == keyword;
+            return Surfaces.Any(k => k == keyword);
         } else{
-            return keywords.Any(k => k == keyword);
+            return Keywords.Any(k => k == keyword);
         }
     }
 
@@ -58,18 +70,18 @@ class Article {
             switch (keywordFilter[0]) {
             case '&':
                 and = true;
-                keywordFilter = keywordFilter.Substring(1);
+                keywordFilter = keywordFilter[1..];
                 break;
             case '|':
                 or = true;
-                keywordFilter = keywordFilter.Substring(1);
+                keywordFilter = keywordFilter[1..];
                 break;
             case '!':
                 invert = true;
-                keywordFilter = keywordFilter.Substring(1);
+                keywordFilter = keywordFilter[1..];
                 break;
             case '(':
-                result = Match(keywordFilter.Substring(1, GetEndBracePos(keywordFilter) - 1));
+                result = Match(keywordFilter[1..GetEndBracePos(keywordFilter)]);
                 if (invert) {
                     result = !result;
                     invert = false;
@@ -83,12 +95,12 @@ class Article {
                 } else {
                     current = result;
                 }
-                keywordFilter = keywordFilter.Substring(GetEndBracePos(keywordFilter) + 1);
+                keywordFilter = keywordFilter[(GetEndBracePos(keywordFilter) + 1)..];
                 break;
             default:
                 int next = NextPos(keywordFilter);
-                result = HasKeyword(keywordFilter.Substring(0, next));
-                keywordFilter = keywordFilter.Substring(next);
+                result = HasKeyword(keywordFilter[..next]);
+                keywordFilter = keywordFilter[next..];
                 if (invert) {
                     result = !result;
                     invert = false;
@@ -133,82 +145,93 @@ class Article {
         return 0;
     }
 
+    public bool Match(Article article) {
+        if (Type != article.Type) {
+            return false;
+        };
+        if (Keywords.Count != article.Keywords.Count || Shapes.Count != article.Shapes.Count || ToShapes.Count != article.ToShapes.Count || Surfaces.Count != article.Surfaces.Count) {
+            return false;
+        }
+        foreach (var keyword in Keywords) {
+            if (Keywords.Where(k => k == keyword).Count() != article.Keywords.Where(k => k == keyword).Count()) {
+                return false;
+            }
+        }
+        foreach (var shape in Shapes) {
+            if (Shapes.Where(k => k == shape).Count() != article.Shapes.Where(k => k == shape).Count()) {
+                return false;
+            }
+        }
+        foreach (var toShape in ToShapes) {
+            if (ToShapes.Where(k => k == toShape).Count() != article.ToShapes.Where(k => k == toShape).Count()) {
+                return false;
+            }
+        }
+        foreach (var surface in Surfaces) {
+            if (Surfaces.Where(k => k == surface).Count() != article.Surfaces.Where(k => k == surface).Count()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void LoadKeywords() {
-        string name = this.name;
+        string name = Name;
         //toshape
-        if(name.Contains("To")){
+        if(name.Contains("To") && !Alteration.Keywords.Where(k => k.Contains("To")).Where(k => k.Length <= name[name.IndexOf("To")..].Length).ToList().Any(k => name[name.IndexOf("To")..][..k.Length] == k)){
             int toPos = name.IndexOf("To");
-            string[] toshapes = Alteration.shapeKeywords.Where(x => name.Substring(toPos + 2).Contains(x)).ToArray();
-            if (toshapes.Count() >= 1){
-                toShape = toshapes.First();
-                String ToString = name.Substring(toPos + 2);
-                name = name.Substring(0,toPos) + ToString.Remove(ToString.IndexOf(toShape), toShape.Length);
-            }
-            toshapes = Alteration.shapeKeywords.Where(x => name.Substring(toPos).Contains(x)).ToArray();
-            if (toshapes.Count() > 1) {
-                Console.WriteLine("more than 1 To-shape: " + name);
-            }
+            string ToString = name[(toPos + 2)..];
+            Alteration.shapeKeywords.ToList().ForEach(k => {
+                if (ToString.Contains(k)) {
+                    ToShapes.Add(k);
+                    ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
+                }
+            });
+            name = name[..toPos] + ToString;
         }
         
         //Keywords
         foreach (var keywordLine in Alteration.Keywords) {
-            if (name.Contains(keywordLine) && this.name.Contains(keywordLine)) {
+            if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
                 if (Alteration.shapeKeywords.Contains(keywordLine)) {
-                    if (shape != "") {
-                        Console.WriteLine("Article " + this.name + " contains multiple Shapes: " + shape + " and " + keywordLine);
-                        keywords.Add(keywordLine);
-                    } else {
-                        shape = keywordLine;
-                    }
+                    Shapes.Add(keywordLine);
                 } else if (Alteration.surfaceKeywords.Contains(keywordLine)) {
-                    if (surface != "") {
-                        Console.WriteLine("Article " + this.name + " contains multiple Surfaces: " + surface + " and " + keywordLine);
-                        keywords.Add(keywordLine);
-                    } else {
-                        surface = keywordLine;
-                    }
+                    Surfaces.Add(keywordLine);
                 } else {
-                    keywords.Add(keywordLine);
+                    Keywords.Add(keywordLine);
                 }
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
             }
-            if (name.Contains(keywordLine) && this.name.Contains(keywordLine)) {
+            if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
                 if (Alteration.shapeKeywords.Contains(keywordLine)) {
-                    if (shape != "") {
-                        Console.WriteLine("Article " + this.name + " contains multiple Shapes: " + shape + " and " + keywordLine);
-                        keywords.Add(keywordLine);
-                    } else {
-                        shape = keywordLine;
-                    }
+                    Shapes.Add(keywordLine);
                 } else if (Alteration.surfaceKeywords.Contains(keywordLine)) {
-                    if (surface != "") {
-                        Console.WriteLine("Article " + this.name + " contains multiple Surfaces: " + surface + " and " + keywordLine);
-                        keywords.Add(keywordLine);
-                    } else {
-                        surface = keywordLine;
-                    }
+                    Surfaces.Add(keywordLine);
                 } else {
-                    keywords.Add(keywordLine);
+                    Keywords.Add(keywordLine);
                 }
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
             }
-            if (name.Contains(keywordLine) && this.name.Contains(keywordLine)) {
-                Console.WriteLine("Article " + this.name + " contains Keyword: " + keywordLine + " three Times");
+            if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
+                Console.WriteLine("Article " + Name + " contains Keyword: " + keywordLine + " three Times");
             }
         }
         
         CheckFullNameCoverage();
     }
     private void CheckFullNameCoverage() {
-        int nameLength = name.Length;
-        int keywordLength = keywords.Sum(k => k.Length) + toShape.Length + shape.Length + surface.Length;
-        if (toShape != ""){
+        int nameLength = Name.Length;
+        int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length) + Shapes.Sum(k => k.Length) + Surfaces.Sum(k => k.Length);
+        if (ToShapes.Count > 0) {
             keywordLength += 2;
         };
         if (nameLength == keywordLength) {
-            // Console.WriteLine($"Name {Name} is fully covered by keywords: {string.Join(", ", Keywords.Select(k => k))}");
+            // Console.WriteLine($"Name {Name} is fully covered by keywords: " + KeywordString());
         } else {
-            Console.WriteLine($"Name {name} is not fully covered by keywords. keywords: {string.Join(", ", keywords.Select(k => k))}, surface: {surface}, shape: {shape}, toshape: {toShape}");
+            Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }
+
+    public string KeywordString() =>
+        string.Join(", ", Keywords.Select(k => k)) + " " + string.Join(", ", Shapes) + " " + string.Join(", ", ToShapes) + " " + string.Join(", ", Surfaces);
 }
