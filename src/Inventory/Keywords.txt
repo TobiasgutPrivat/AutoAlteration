@@ -255,6 +255,7 @@ Show
 Demi
 Tall
 Flat
+Loop11X
 Loop6X
 Loop
 Diag1
@@ -297,7 +298,6 @@ Ice
 Fir
 Out
 Top
-11X
 Up1
 Up
 v2

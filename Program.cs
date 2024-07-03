@@ -6,7 +6,7 @@ Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirect
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
-// Alteration.AlterFolder(new Boosterless(), sourcefolder, destinationFolder + "Spring 2024 Boosterless/", "Boosterless");
+Alteration.AlterFolder(new Broken(), sourcefolder, destinationFolder + "Spring 2024 Broken/", "Broken");
 
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -21,7 +21,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.AlterFile(new Boosterless(), sourceFile, "Boosterless");
+// Alteration.AlterFile(new Broken(), sourceFile, "Broken");
 
 void AllAlterations(string sourceFolder, string destinationFolder) {
     Alteration.AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");

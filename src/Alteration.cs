@@ -209,16 +209,16 @@ class Alteration {
         inventory.Select(BlockType.Block).Select("Road&Curve4&(!In|!Out)").EditOriginal().Width(4).Length(4); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
         inventory.Select(BlockType.Block).Select("Road&Curve5&(!In|!Out)").EditOriginal().Width(5).Length(5); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
 
-        inventory.Select(BlockType.Block).Select("Road&Chicane&X2").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Road&Chicane&X3").EditOriginal().Width(2).Length(3);
+        inventory.Select(BlockType.Block).Select("Road&ChicaneX2").EditOriginal().Width(2).Length(2);
+        inventory.Select(BlockType.Block).Select("Road&ChicaneX3").EditOriginal().Width(2).Length(3);
 
-        inventory.Select(BlockType.Block).Select("Road&Branch&Straigt&X4").EditOriginal().Width(2).Length(4);
+        inventory.Select(BlockType.Block).Select("Road&Branch&Straight&X4").EditOriginal().Width(2).Length(4);
         inventory.Select(BlockType.Block).Select("Road&Branch&Curve3").EditOriginal().Width(3).Length(3); // Redundant because of Curve3
         inventory.Select(BlockType.Block).Select("Road&Branch&YShaped&2X3").EditOriginal().Width(2).Length(3); // Redundant because of 2X3
-        inventory.Select(BlockType.Block).Select("Road&BranchTo&Diag&(Left|Right)").EditOriginal().Width(1).Length(2);
+        inventory.Select(BlockType.Block).Select("Road&Branch&Diag&(Left|Right)").EditOriginal().Width(1).Length(2);
 
         inventory.Select(BlockType.Block).Select("Road&Slope&(Base|Start|End)&2x1").EditOriginal().Width(2).Length(1); // Redundant because of 2x1
-        inventory.Select(BlockType.Block).Select("Road&Slope&(UTop|UBottom)&2X").EditOriginal().Width(2).Length(2); // Redundant because of 2X // InGround vaiant not included, but should still be caught by UBottom
+        inventory.Select(BlockType.Block).Select("Road&Slope&(UTopX2|UBottomX2)").EditOriginal().Width(2).Length(2); // Redundant because of 2X // InGround vaiant not included, but should still be caught by UBottom
 
         inventory.Select(BlockType.Block).Select("Road&Tilt&Transition2&((Up|Down)&(Left|Right))").EditOriginal().Width(1).Length(2);
         inventory.Select(BlockType.Block).Select("Road&Tilt&Transition2&Curve&(In|Out)").EditOriginal().Width(1).Length(2);
@@ -243,10 +243,10 @@ class Alteration {
 
 
         // Platform
-        inventory.Select(BlockType.Block).Select("Platform&Curve2In").EditOriginal().Width(1).Length(1); // Should be included "Platform[Surface]Curve2In" is 1x1
-        inventory.Select(BlockType.Block).Select("Platform&Curve3In").EditOriginal().Width(2).Length(2);
+        inventory.Select(BlockType.Block).Select("Platform&Curve2&In").EditOriginal().Width(1).Length(1); // Should be included "Platform[Surface]Curve2In" is 1x1
+        inventory.Select(BlockType.Block).Select("Platform&Curve3&In").EditOriginal().Width(2).Length(2);
 
-        inventory.Select(BlockType.Block).Select("Platform&To&Road&Tech&Diag&(Right|Left)").EditOriginal().Width(2).Length(1); // Don't rememver how the 'To' works :xdd:
+        inventory.Select(BlockType.Block).Select("Platform&Road&Tech&Diag&(Right|Left)").EditOriginal().Width(2).Length(1); // Don't rememver how the 'To' works :xdd:
 
         inventory.Select(BlockType.Block).Select("Platform&Slope2&Curve2&(Out|In)").EditOriginal().Width(2).Length(2);
         inventory.Select(BlockType.Block).Select("Platform&Slope2&Curve3&(Out|In)").EditOriginal().Width(3).Length(3);
@@ -301,7 +301,7 @@ class Alteration {
         inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&(Start2|End2)&Curve2").EditOriginal().Width(2).Length(2);
         inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&(Start2|End2)&Curve4").EditOriginal().Width(4).Length(4);
 
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&Base&To&Slope2&Base2").EditOriginal().Width(1).Length(2);
+        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&Base&Slope2&Base2").EditOriginal().Width(1).Length(2);
         //                                        DecoPlatform Slope2 Base To Slope2 Base2 (right / left)
         inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&Curve2").EditOriginal().Width(2).Length(2);
         //                                        DecoPlatform Slope2 Start Curve2In (right / left)

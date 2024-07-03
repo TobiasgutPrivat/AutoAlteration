@@ -157,3 +157,10 @@ class Boosterless: Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class Broken: Alteration {
+    public override void Run(Map map){
+        inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("NoEngine").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
