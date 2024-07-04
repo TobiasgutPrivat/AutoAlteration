@@ -164,3 +164,11 @@ class Broken: Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class Fast: Alteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Turbo2").Replace(map,new Position(new Vec3(-16,-2,-16),Vec3.Zero));
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(new string[] { "Checkpoint","Left","Right","Center","V2"}).AddKeyword("Turbo2").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
