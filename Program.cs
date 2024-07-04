@@ -4,9 +4,9 @@ Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirect
 
 //Code for Execution (change for your use)
 //Folder Processing
-string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Spring 2024/";
-// Alteration.AlterFolder(new Broken(), sourcefolder, destinationFolder + "Spring 2024 Broken/", "Broken");
+string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
+// Alteration.AlterFolder(new Fast(), sourcefolder, destinationFolder + "Summer 2024 Fast/", "Fast");
 
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -19,7 +19,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // AllAlterations(sourceFolder, destinationFolder);
 
 // //Single File Processing
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Danstrecki.Map.Gbx";
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
 Alteration.AlterFile(new Fast(), sourceFile, "Fast");
 

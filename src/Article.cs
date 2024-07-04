@@ -44,7 +44,7 @@ class Article {
     }
 
     public Article CloneArticle() =>
-        new(Name,Type,Keywords.ToList(),Shapes.ToList(),ToShapes.ToList(),Surfaces.ToList(),Position,Length,Width);
+        new(Name,Type,Keywords.ToList(),Shapes.ToList(),ToShapes.ToList(),Surfaces.ToList(),Position.Clone(),Length,Width);
 
     public bool HasKeyword(string keyword) {
         if (Alteration.shapeKeywords.Contains(keyword)) {

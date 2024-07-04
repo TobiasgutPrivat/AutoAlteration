@@ -145,37 +145,38 @@ class Alteration {
     }
 
     private static void AddCheckpointTrigger(){
-        Inventory CPMLBlock = inventory.Select(BlockType.Block).Select("Checkpoint|Multilap");
-        Vec3 midPlatform = new Vec3(16,2,16);
-        CreateTriggerArticle(CPMLBlock.Select("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!RoadIce"), midPlatform,Vec3.Zero);
-        CreateTriggerArticle(CPMLBlock.Select("!WithWall&!RoadIce&DiagRight"),new Vec3(48f,0,32f),new Vec3(PI * -0.148f,0f,0));
-        CreateTriggerArticle(CPMLBlock.Select("!WithWall&!RoadIce&DiagLeft"),new Vec3(48f,0,32f),new Vec3(PI * 0.148f,0,0));
+        Vec3 midPlatform = new(16,2,16);
+        CreateTriggerArticle("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!RoadIce", midPlatform,Vec3.Zero);
+        CreateTriggerArticle("!WithWall&!RoadIce&DiagRight",new Vec3(48f,0,32f),new Vec3(PI * -0.148f,0f,0));
+        CreateTriggerArticle("!WithWall&!RoadIce&DiagLeft",new Vec3(48f,0,32f),new Vec3(PI * 0.148f,0,0));
         float slope2 = 0.47f;
-        CreateTriggerArticle(CPMLBlock.Select("Slope2&Down"), midPlatform + new Vec3(0,8,0),new Vec3(0,slope2,0));
-        CreateTriggerArticle(CPMLBlock.Select("Slope2&Up"), midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));
-        CreateTriggerArticle(CPMLBlock.Select("Slope2&Right"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
-        CreateTriggerArticle(CPMLBlock.Select("Slope2&Left"), midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
+        CreateTriggerArticle("Slope2&Down", midPlatform + new Vec3(0,8,0),new Vec3(0,slope2,0));
+        CreateTriggerArticle("Slope2&Up", midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));
+        CreateTriggerArticle("Slope2&Right", midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
+        CreateTriggerArticle("Slope2&Left", midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
         float slope = 0;//slope2/2
-        CreateTriggerArticle(CPMLBlock.Select("Slope&Down&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
-        CreateTriggerArticle(CPMLBlock.Select("Slope&Up&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
-        CreateTriggerArticle(CPMLBlock.Select("Tilt&Right&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
-        CreateTriggerArticle(CPMLBlock.Select("Tilt&Left&!RoadIce"), midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
+        CreateTriggerArticle("Slope&Down&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
+        CreateTriggerArticle("Slope&Up&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
+        CreateTriggerArticle("Tilt&Right&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
+        CreateTriggerArticle("Tilt&Left&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
 
-        CreateTriggerArticle(CPMLBlock.Select("Slope&Down&RoadIce"), midPlatform + new Vec3(0,7,0),new Vec3(0,slope,0));
-        CreateTriggerArticle(CPMLBlock.Select("Slope&Up&RoadIce"), midPlatform + new Vec3(0,7,0),new Vec3(0,-slope,0));
-        CreateTriggerArticle(CPMLBlock.Select("!Slope&!DiagRight&!DiagLeft&!WithWall&RoadIce"), midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
-        CreateTriggerArticle(CPMLBlock.Select("WithWall&RoadIce&!DiagRight&!DiagLeft"), midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
-        CreateTriggerArticle(CPMLBlock.Select("WithWall&RoadIce&DiagRight"),new Vec3(48f,4,32f),new Vec3(PI * -0.148f,0f,0));
-        CreateTriggerArticle(CPMLBlock.Select("WithWall&RoadIce&DiagLeft"),new Vec3(48f,4,32f),new Vec3(PI * 0.148f,0,0));
+        CreateTriggerArticle("Slope&Down&RoadIce", midPlatform + new Vec3(0,7,0),new Vec3(0,slope,0));
+        CreateTriggerArticle("Slope&Up&RoadIce", midPlatform + new Vec3(0,7,0),new Vec3(0,-slope,0));
+        CreateTriggerArticle("!Slope&!DiagRight&!DiagLeft&!WithWall&RoadIce", midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
+        CreateTriggerArticle("WithWall&RoadIce&!DiagRight&!DiagLeft", midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
+        CreateTriggerArticle("WithWall&RoadIce&DiagRight",new Vec3(48f,4,32f),new Vec3(PI * -0.148f,0f,0));
+        CreateTriggerArticle("WithWall&RoadIce&DiagLeft",new Vec3(48f,4,32f),new Vec3(PI * 0.148f,0,0));
 
-        CreateTriggerArticle(CPMLBlock.Select("Platform&Wall&Down"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,0));
-        CreateTriggerArticle(CPMLBlock.Select("Platform&Wall&Up"), new Vec3(16,16,29),new Vec3(0,-PI*0.5f,0));
-        CreateTriggerArticle(CPMLBlock.Select("Platform&Wall&Right"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,PI*0.5f));
-        CreateTriggerArticle(CPMLBlock.Select("Platform&Wall&Left"), new Vec3(16,16,29),new Vec3(PI,PI*0.5f,-PI*0.5f));
+        CreateTriggerArticle("Platform&Wall&Down", new Vec3(16,16,29),new Vec3(PI,PI*0.5f,0));
+        CreateTriggerArticle("Platform&Wall&Up", new Vec3(16,16,29),new Vec3(0,-PI*0.5f,0));
+        CreateTriggerArticle("Platform&Wall&Right", new Vec3(16,16,29),new Vec3(PI,PI*0.5f,PI*0.5f));
+        CreateTriggerArticle("Platform&Wall&Left", new Vec3(16,16,29),new Vec3(PI,PI*0.5f,-PI*0.5f));
     }
 
-    private static void CreateTriggerArticle(Inventory selection,Vec3 offset, Vec3 rotation) =>
-        inventory.AddArticles(selection.AddKeyword("Trigger").ChangePosition(new Position(offset,rotation)));
+    private static void CreateTriggerArticle(string selection,Vec3 offset, Vec3 rotation) {
+        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Checkpoint").Select(selection).RemoveKeyword("Checkpoint").AddKeyword("CheckpointTrigger").ChangePosition(new Position(offset,rotation)));
+        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Multilap").Select(selection).RemoveKeyword("Multilap").AddKeyword("MultilapTrigger").ChangePosition(new Position(offset,rotation)));
+    }
 
     private static void AddRoadNoCPBlocks(string surface){
         inventory.articles.Add(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Up","Slope"},"Road" +surface,"",""));
