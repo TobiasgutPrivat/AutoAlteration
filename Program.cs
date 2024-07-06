@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Security.Cryptography.X509Certificates;
+using GBX.NET.Engines.Game;
+using Newtonsoft.Json;
 //Initial load
 Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")) + "/");
 
@@ -6,7 +8,7 @@ Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirect
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
-// Alteration.AlterFolder(new Fast(), sourcefolder, destinationFolder + "Summer 2024 Fast/", "Fast");
+// Alteration.AlterFolder(new FreeWheel(), sourcefolder, destinationFolder + "Summer 2024 FreeWheel/", "FreeWheel");
 
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -21,7 +23,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-Alteration.AlterFile(new Fast(), sourceFile, "Fast");
+Alteration.AlterFile(new Test(), sourceFile, "Test");
 
 void AllAlterations(string sourceFolder, string destinationFolder) {
     Alteration.AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
@@ -65,4 +67,16 @@ void stringToName(string projectFolder) {
     string[] articles = lines.Select(line => line.Split('/')[line.Split('/').Length-1].Trim()).ToArray();
     json = JsonConvert.SerializeObject(articles);
     File.WriteAllText(projectFolder + "src/Vanilla/ItemNames.json", json);
+}
+
+class Test : Alteration {
+    public override void Run(Map map)
+    {
+        map.map.BakedBlocks = new List<CGameCtnBlock>();
+        map.Delete("DecoWallBasePillar");
+        map.PlaceRelative("PlatformTechCheckpoint","RoadTechToThemeSnowRoadMagnet");
+        map.PlaceRelative("PlatformTechCheckpoint","SnowBridgeSlope2BaseMagnet",new Position(new (0,100,0)));
+        inventory.Edit().Replace(map);
+        map.PlaceStagedBlocks();
+    }
 }

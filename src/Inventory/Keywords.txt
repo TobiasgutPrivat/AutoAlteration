@@ -1,5 +1,3 @@
-.Block.Gbx
-.Item.Gbx
 RallyRoadDirtHigh
 RallyRoadDirtLow
 RallyCastleRoad
@@ -131,6 +129,7 @@ Deadend
 Plastic
 LoopEnd
 TShaped
+Magnet
 Narrow
 Corner
 Prefab
@@ -303,7 +302,6 @@ Up
 v2
 No
 On
-To
 X1
 X5
 1D

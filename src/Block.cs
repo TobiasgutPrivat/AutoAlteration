@@ -19,6 +19,7 @@ class Block {
     public bool IsClip;
     public bool IsGhost;
     public bool IsGround;
+    public string Path = "";
 
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position ?placePosition)
     {
@@ -26,6 +27,7 @@ class Block {
         this.article = article;
         this.name = article.Name;
         this.blockType = article.Type;
+        this.Path = article.Path;
         
         position.AddPosition(fromArticle.Position);
         placePosition ??= Position.Zero;

@@ -14,12 +14,12 @@ class EffectAlteration: Alteration {
     }
     public static void PlaceStartEffect(Map map, string Effect,Position position = null, string RingAddition = ""){
         if (position == null) position = new Position(new Vec3(0,0,0),new Vec3(0,0,0));
-        Inventory start = inventory.Select("MapStart");
+        Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect + RingAddition);
         map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,position.Clone().Move(new Vec3(0,-16,0)));
         map.PlaceRelative(start.Select("RoadIce"), GateSpecial,position.Clone().Move(new Vec3(0,-8,0)));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,position.Clone().Move(new Vec3(0,-16,-2)));
-        inventory.Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,position.Clone().Move(new Vec3(0,0,-10)));
+        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,position.Clone().Move(new Vec3(0,0,-10)));
         map.PlaceStagedBlocks();
     }
     public static void PlaceStartGamePlay(Map map, string GamePlay){
@@ -91,7 +91,7 @@ class FreeWheel: EffectAlteration {
         PlaceCPEffect(map,"Turbo");
         PlaceStartEffect(map,"Turbo");
         PlaceCPEffect(map,"NoEngine",new Position(new Vec3(0,0,1),Vec3.Zero));
-        PlaceStartEffect(map,"NoEngine",new Position(new Vec3(0,0,1),Vec3.Zero));
+        PlaceStartEffect(map,"NoEngine",new Position(new Vec3(0,0,3),Vec3.Zero));
     }
 }
 

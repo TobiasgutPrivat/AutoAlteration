@@ -71,32 +71,20 @@ class Map
     map.MapUid = new string(stringChars);
   }
 
-  private void EmbedBlock(string name){//TODO overthink getting path
-    List<string> customBlocks = Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x) == name).ToList();
-    if (customBlocks.Count != 1){
-      Console.WriteLine("Found " + customBlocks.Count + " custom blocks for " + name);
-      return;
-    }
-    string path = customBlocks.First();
+  private void EmbedBlock(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
-      ZipArchiveEntry entry = zipArchive.CreateEntry("Blocks\\" + name);
+      ZipArchiveEntry entry = zipArchive.CreateEntry("Blocks\\" + name + ".Block.Gbx");
         using Stream entryStream = entry.Open();
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
     Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
-  private void EmbedItem(string name){//TODO overthink getting path
-    List<string> customBlocks = Directory.GetFiles(Alteration.CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Where(x => Path.GetFileName(x) == name).ToList();
-    if (customBlocks.Count != 1){
-      Console.WriteLine("Found " + customBlocks.Count + " custom blocks for " + name);
-      return;
-    }
-    string path = customBlocks.First();
+  private void EmbedItem(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
-      ZipArchiveEntry entry = zipArchive.CreateEntry("Items\\" + name);
+      ZipArchiveEntry entry = zipArchive.CreateEntry("Items\\" + name + ".Item.Gbx");
         using Stream entryStream = entry.Open();
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
@@ -190,18 +178,18 @@ class Map
           break;
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x == block.name)){
-            EmbedBlock(block.name);
+            EmbedBlock(block.name,block.Path);
             embeddedBlocks.Add(block.name);
           }
-          block.name += "_CustomBlock";
+          block.name += ".Block.Gbx_CustomBlock";
           PlaceBlock(block);
           break;
         case BlockType.CustomItem:
           if(!embeddedBlocks.Any(x => x == block.name)){
-            EmbedItem(block.name);
+            EmbedItem(block.name,block.Path);
             embeddedBlocks.Add(block.name);
           }
-          map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
+          map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
           break;
       }
     } 
@@ -210,33 +198,33 @@ class Map
 
   private void PlaceBlock(Block block){
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-    if (!block.IsFree && block.IsInGrid()){
-      newBlock.IsFree = false;
-      newBlock.IsGround = block.IsGround;
-      switch (Block.Round(block.position.pitchYawRoll.X / ((float)Math.PI/2)) % 4){
-        case 0:
-          newBlock.Direction = Direction.North;
-          break;
-        case 1:
-          newBlock.Direction = Direction.East;
-          break;
-        case 2:
-          newBlock.Direction = Direction.South;
-          break;
-        case 3:
-          newBlock.Direction = Direction.West;
-          break;
-        default:
-          Console.WriteLine("Unknown Direction");
-          break;
-      }
-      Vec3 coords = block.position.coords - Block.GetDirectionOffset(newBlock).coords;
-      newBlock.Coord += new Int3((int)coords.X/32, (int)coords.Y/8 + 8, (int)coords.Z/32);
-    } else{
+    // if (!block.IsFree && block.IsInGrid()){
+    //   newBlock.IsFree = false;
+    //   newBlock.IsGround = block.IsGround;
+    //   switch (Block.Round(block.position.pitchYawRoll.X / ((float)Math.PI/2)) % 4){
+    //     case 0:
+    //       newBlock.Direction = Direction.North;
+    //       break;
+    //     case 1:
+    //       newBlock.Direction = Direction.East;
+    //       break;
+    //     case 2:
+    //       newBlock.Direction = Direction.South;
+    //       break;
+    //     case 3:
+    //       newBlock.Direction = Direction.West;
+    //       break;
+    //     default:
+    //       Console.WriteLine("Unknown Direction");
+    //       break;
+    //   }
+    //   Vec3 coords = block.position.coords - Block.GetDirectionOffset(newBlock).coords;
+    //   newBlock.Coord += new Int3((int)coords.X/32, (int)coords.Y/8 + 8, (int)coords.Z/32);
+    // } else{
       newBlock.IsFree = true;
       newBlock.AbsolutePositionInMap = block.position.coords;
       newBlock.PitchYawRoll = block.position.pitchYawRoll;
-    }
+    // }
     newBlock.IsGhost = block.IsGhost;
     newBlock.IsClip = block.IsClip;
     newBlock.Color = block.color;

@@ -99,8 +99,8 @@ class Alteration {
         inventory.AddArticles(items.articles);
         inventory.AddArticles(blocks.articles);
         //CustomBlocks
-        inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x), BlockType.CustomBlock)).ToList());
-        inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x), BlockType.CustomItem)).ToList());
+        inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
 
         inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
 

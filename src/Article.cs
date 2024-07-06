@@ -9,6 +9,7 @@ class Article {
     public int Width = 1;
     public int Length = 1;
     public bool Original = false;
+    public string Path = "";
 
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
 
@@ -39,6 +40,13 @@ class Article {
     
     public Article(string name,BlockType type){
         Name = name;
+        LoadKeywords();
+        Type = type;
+    }
+
+    public Article(string name,BlockType type, string Path){
+        Name = name;
+        this.Path = Path;
         LoadKeywords();
         Type = type;
     }
@@ -180,17 +188,20 @@ class Article {
 
     public void LoadKeywords() {
         string name = Name;
-        //toshape
-        if(name.Contains("To") && !Alteration.Keywords.Where(k => k.Contains("To")).Where(k => k.Length <= name[name.IndexOf("To")..].Length).ToList().Any(k => name[name.IndexOf("To")..][..k.Length] == k)){
+        //toshape 
+        if(name.Contains("To")){//TODO Probably issue when having To-Keyword like Torch before To Keyword
             int toPos = name.IndexOf("To");
             string ToString = name[(toPos + 2)..];
-            Alteration.shapeKeywords.ToList().ForEach(k => {
-                if (ToString.Contains(k)) {
-                    ToShapes.Add(k);
-                    ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
-                }
-            });
-            name = name[..toPos] + ToString;
+            if (!Alteration.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].IndexOf(k) == 0)) {
+                Alteration.shapeKeywords.ToList().ForEach(k => {
+                    if (ToString.Contains(k)) {
+                        ToShapes.Add(k);
+                        ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
+                    }
+                });
+                Keywords.Add("To");
+                name = name[..toPos] + ToString;
+            };
         }
         
         //Keywords
@@ -225,9 +236,6 @@ class Article {
     private void CheckFullNameCoverage() {
         int nameLength = Name.Length;
         int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length) + Shapes.Sum(k => k.Length) + Surfaces.Sum(k => k.Length);
-        if (ToShapes.Count > 0) {
-            keywordLength += 2;
-        };
         if (nameLength == keywordLength) {
             // Console.WriteLine($"Name {Name} is fully covered by keywords: " + KeywordString());
         } else {
