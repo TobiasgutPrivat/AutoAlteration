@@ -171,6 +171,7 @@ class Map
     foreach (var block in stagedBlocks){
       switch (block.blockType){
         case BlockType.Block:
+        case BlockType.Pillar:
           PlaceBlock(block);
           break;
         case BlockType.Item:
