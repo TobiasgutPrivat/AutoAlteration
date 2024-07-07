@@ -7,7 +7,8 @@ enum BlockType
     Block,
     Item,
     CustomBlock,
-    CustomItem
+    CustomItem,
+    Pillar
 }
 
 class Block {

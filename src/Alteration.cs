@@ -92,12 +92,14 @@ class Alteration {
         //Load Nadeo Articles
         Inventory items = ImportArrayInventory(ProjectFolder + "src/Inventory/ItemNames.json",BlockType.Item);
         Inventory blocks = ImportArrayInventory(ProjectFolder + "src/Inventory/BlockNames.json",BlockType.Block);
+        Inventory pillars = ImportArrayInventory(ProjectFolder + "src/Inventory/PillarNames.json",BlockType.Pillar);
         //Fix Gate naming
         blocks.Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
 
         //Init Inventory
         inventory.AddArticles(items.articles);
         inventory.AddArticles(blocks.articles);
+        inventory.AddArticles(pillars.articles);
         //CustomBlocks
         inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
         inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
