@@ -19,7 +19,8 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // AllAlterations(sourceFolder, destinationFolder);
 
 // //Single File Processing
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/Summer 2024 - 18.Map.Gbx";
+// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
 Alteration.AlterFile(new Test(), sourceFile, "Test");
 
@@ -70,7 +71,6 @@ void stringToName(string projectFolder) {
 class Test : Alteration {
     public override void Run(Map map)
     {
-        // inventory.Edit().PlaceRelative(map);
         map.Delete(inventory);
         map.PlaceStagedBlocks();
     }

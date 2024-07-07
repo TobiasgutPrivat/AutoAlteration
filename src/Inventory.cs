@@ -105,33 +105,6 @@ class Inventory {
             }
         });
     }
-    public void AnalyzeKeywords(){
-        List<string> keywords = File.ReadAllLines("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/src/Vanilla/Keywords.txt").ToList();
-        keywords.ForEach(k => {
-            int count = 0;
-            foreach (Article article in articles)
-            {
-                if (article.Keywords.Contains(k))
-                {
-                    count++;
-                }
-            }
-            Console.WriteLine($"'{k}' count: {count}");
-        });
-        articles.ForEach(article => {
-            article.Keywords.ForEach(k => {
-                if (article.Keywords.Where(k2 => k == k2).Count() > 1) {
-                    Console.WriteLine(article.Name + " contains " + k + " multiple Times");
-                } 
-            });
-            article.Keywords.ForEach(keyword => {
-                if (keywords.Contains(keyword)) {
-                    keywords.RemoveAll(k => k == keyword);
-                }
-            });
-        });
-        Console.WriteLine("Unused Keywords: " + string.Join(", ", keywords));
-    }
 
     public Inventory Print() {
         articles.ForEach(article => {

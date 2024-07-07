@@ -119,7 +119,7 @@ class Alteration {
         SetSizes();
         
         //Control
-        // inventory.checkDuplicates();
+        // inventory.CheckDuplicates();
 
         //save
         inventory.articles.ForEach(x => x.cacheFilter.Clear());

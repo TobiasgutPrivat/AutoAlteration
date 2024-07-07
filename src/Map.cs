@@ -7,8 +7,8 @@ class Map
 {
   Gbx<CGameCtnChallenge> gbx;
   public CGameCtnChallenge map;
-  public List<Block> stagedBlocks = new List<Block>();
-  public List<string> embeddedBlocks = new List<string>();
+  public List<Block> stagedBlocks = new();
+  public List<string> embeddedBlocks = new();
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
@@ -169,10 +169,16 @@ class Map
 
   public void PlaceStagedBlocks(){
     foreach (var block in stagedBlocks){
-      switch (block.blockType){
+      PlaceBlock(block);
+    } 
+    stagedBlocks = new List<Block>();
+  }
+
+  public void PlaceBlock(Block block){
+    switch (block.blockType){
         case BlockType.Block:
         case BlockType.Pillar:
-          PlaceBlock(block);
+          PlaceTypeBlock(block);
           break;
         case BlockType.Item:
           map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
@@ -183,7 +189,7 @@ class Map
             embeddedBlocks.Add(block.name);
           }
           block.name += ".Block.Gbx_CustomBlock";
-          PlaceBlock(block);
+          PlaceTypeBlock(block);
           break;
         case BlockType.CustomItem:
           if(!embeddedBlocks.Any(x => x == block.name)){
@@ -193,11 +199,9 @@ class Map
           map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
           break;
       }
-    } 
-    stagedBlocks = new List<Block>();
   }
 
-  private void PlaceBlock(Block block){
+  private void PlaceTypeBlock(Block block){
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
     newBlock.IsFree = true;
     newBlock.AbsolutePositionInMap = block.position.coords;

@@ -26,7 +26,16 @@ class Block {
 
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position ?placePosition)
     {
-        InitBlock(block);
+        color = block.Color;
+        blockType = BlockType.Block;
+        name = block.BlockModel.Id;
+        IsFree = block.IsFree;
+        IsClip = block.IsClip;
+        IsGround = block.IsGround;
+        Skin = block.Skin;
+        IsAir = block.Bit21;
+        position = GetBlockPosition(block);
+
         this.article = article;
         this.name = article.Name;
         this.blockType = article.Type;
@@ -40,22 +49,6 @@ class Block {
             position.AddPosition(placePosition);
         }
         position.SubtractPosition(article.Position);
-    }
-
-    private void InitBlock(CGameCtnBlock block) {
-        color = block.Color;
-        blockType = BlockType.Block;
-        name = block.BlockModel.Id;
-        IsFree = block.IsFree;
-        IsClip = block.IsClip;
-        IsGround = block.IsGround;
-        Skin = block.Skin;
-        
-        if (block.Bit17){
-            Console.WriteLine("Air");
-        }
-        IsAir = block.Bit21;
-        position = GetBlockPosition(block);
     }
 
     public static Position GetBlockPosition(CGameCtnBlock block) {
@@ -83,19 +76,16 @@ class Block {
     }
 
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position ?placePosition){
-        InitItem(item);
+        blockType = BlockType.Item;
+        name = item.ItemModel.Id;
+        color = item.Color;
+        position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         this.article = article;
         this.name = article.Name;
         this.blockType = article.Type;
         position.AddPosition(fromArticle.Position);
         position.AddPosition(placePosition ?? Position.Zero);
         position.SubtractPosition(article.Position);
-    }
-
-    public void InitItem(CGameCtnAnchoredObject item){
-        blockType = BlockType.Item;
-        name = item.ItemModel.Id;
-        position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
     }
 
     public bool IsInGrid(){
