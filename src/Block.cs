@@ -1,5 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
+using GBX.NET.Engines.GameData;
 
 enum BlockType
 {
@@ -17,8 +18,9 @@ class Block {
     public DifficultyColor color;
     public bool IsFree;
     public bool IsClip;
-    public bool IsGhost;
     public bool IsGround;
+    public bool IsAir;
+    public CGameCtnBlockSkin? Skin;
     public string Path = "";
 
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position ?placePosition)
@@ -45,8 +47,13 @@ class Block {
         name = block.BlockModel.Id;
         IsFree = block.IsFree;
         IsClip = block.IsClip;
-        IsGhost = block.IsGhost;
         IsGround = block.IsGround;
+        Skin = block.Skin;
+        
+        if (block.Bit17){
+            Console.WriteLine("Air");
+        }
+        IsAir = block.Bit21;
         position = GetBlockPosition(block);
     }
 

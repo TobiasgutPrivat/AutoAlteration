@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using GBX.NET.Engines.Game;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 //Initial load
 Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")) + "/");
 
@@ -72,11 +70,12 @@ void stringToName(string projectFolder) {
 class Test : Alteration {
     public override void Run(Map map)
     {
-        map.map.BakedBlocks = new List<CGameCtnBlock>();
-        map.Delete("DecoWallBasePillar");
-        map.PlaceRelative("PlatformTechCheckpoint","RoadTechToThemeSnowRoadMagnet");
-        map.PlaceRelative("PlatformTechCheckpoint","SnowBridgeSlope2BaseMagnet",new Position(new (0,100,0)));
-        inventory.Edit().Replace(map);
+        map.PlaceRelative("PlatformTechCheckpointSlope2Down","PlatformTechCheckpointSlope2Right",new Position(new (0,50,0)));
+        // map.map.BakedBlocks = new List<CGameCtnBlock>();
+        // map.Delete("DecoWallBasePillar");
+        // map.PlaceRelative("PlatformTechCheckpoint","RoadTechToThemeSnowRoadMagnet");
+        // map.PlaceRelative("PlatformTechCheckpoint","SnowBridgeSlope2BaseMagnet",new Position(new (0,100,0)));
+        // inventory.Edit().Replace(map);
         map.PlaceStagedBlocks();
     }
 }

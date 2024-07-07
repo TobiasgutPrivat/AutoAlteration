@@ -198,36 +198,14 @@ class Map
 
   private void PlaceBlock(Block block){
     CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-    // if (!block.IsFree && block.IsInGrid()){
-    //   newBlock.IsFree = false;
-    //   newBlock.IsGround = block.IsGround;
-    //   switch (Block.Round(block.position.pitchYawRoll.X / ((float)Math.PI/2)) % 4){
-    //     case 0:
-    //       newBlock.Direction = Direction.North;
-    //       break;
-    //     case 1:
-    //       newBlock.Direction = Direction.East;
-    //       break;
-    //     case 2:
-    //       newBlock.Direction = Direction.South;
-    //       break;
-    //     case 3:
-    //       newBlock.Direction = Direction.West;
-    //       break;
-    //     default:
-    //       Console.WriteLine("Unknown Direction");
-    //       break;
-    //   }
-    //   Vec3 coords = block.position.coords - Block.GetDirectionOffset(newBlock).coords;
-    //   newBlock.Coord += new Int3((int)coords.X/32, (int)coords.Y/8 + 8, (int)coords.Z/32);
-    // } else{
-      newBlock.IsFree = true;
-      newBlock.AbsolutePositionInMap = block.position.coords;
-      newBlock.PitchYawRoll = block.position.pitchYawRoll;
-    // }
-    newBlock.IsGhost = block.IsGhost;
+    newBlock.IsFree = true;
+    newBlock.AbsolutePositionInMap = block.position.coords;
+    newBlock.PitchYawRoll = block.position.pitchYawRoll;
+    newBlock.IsGhost = false;
     newBlock.IsClip = block.IsClip;
     newBlock.Color = block.color;
+    newBlock.Skin = block.Skin;
+    newBlock.Bit21 = block.IsAir;
   }
 
   public void Delete(string Block){
