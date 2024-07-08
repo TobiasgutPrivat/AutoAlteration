@@ -84,6 +84,40 @@ class Alteration {
     public static void AlterFile(Alteration alteration, string mapFile, string Name) =>
         AlterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
 
+    public static void AllAlterations(string sourceFolder, string destinationFolder) {
+        Alteration.AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
+        Alteration.AlterAll(new Snow(), sourceFolder, destinationFolder, "Snow");
+        Alteration.AlterAll(new Rally(), sourceFolder, destinationFolder, "Rally");
+        Alteration.AlterAll(new Desert(), sourceFolder, destinationFolder, "Desert");
+
+        Alteration.AlterAll(new NoBrake(), sourceFolder, destinationFolder, "NoBrake");
+        Alteration.AlterAll(new Cruise(), sourceFolder, destinationFolder, "Cruise");
+        Alteration.AlterAll(new Fragile(), sourceFolder, destinationFolder, "Fragile");
+        Alteration.AlterAll(new SlowMo(), sourceFolder, destinationFolder, "SlowMo");
+        Alteration.AlterAll(new NoSteer(), sourceFolder, destinationFolder, "NoSteer");
+        Alteration.AlterAll(new Glider(), sourceFolder, destinationFolder, "Glider");
+        Alteration.AlterAll(new Reactor(), sourceFolder, destinationFolder, "Reactor");
+        Alteration.AlterAll(new ReactorDown(), sourceFolder, destinationFolder, "ReactorDown");
+        Alteration.AlterAll(new FreeWheel(), sourceFolder, destinationFolder, "FreeWheel");
+        Alteration.AlterAll(new AntiBooster(), sourceFolder, destinationFolder, "AntiBooster");
+        
+        Alteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
+        Alteration.AlterAll(new STTF(), sourceFolder, destinationFolder, "STTF");
+        Alteration.AlterAll(new CPFull(), sourceFolder, destinationFolder, "CPFull");
+        // Alteration.alterAll(new CPLess(), sourceFolder, destinationFolder, "CPLess");
+
+        Alteration.AlterAll(new OneUP(), sourceFolder, destinationFolder, "(1-UP)");
+        Alteration.AlterAll(new OneDown(), sourceFolder, destinationFolder, "(1-Down)");
+        Alteration.AlterAll(new OneLeft(), sourceFolder, destinationFolder, "(1-Left)");
+        Alteration.AlterAll(new OneRight(), sourceFolder, destinationFolder, "(1-Right)");
+        Alteration.AlterAll(new TwoUP(), sourceFolder, destinationFolder, "(2-UP)");
+
+        Alteration.AlterAll(new YepTree(), sourceFolder, destinationFolder, "YepTree");
+
+        Console.WriteLine("Done!");
+        Console.WriteLine("Map Count: " + Alteration.mapCount);
+    }
+
     public Alteration(){}
     public virtual void Run(Map map) {}
 

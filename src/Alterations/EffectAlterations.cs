@@ -165,10 +165,9 @@ class Broken: Alteration {
     }
 }
 
-class Fast: Alteration {
+class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Turbo2").Replace(map);
-        // inventory.Select(BlockType.Block).Select("Checkpoint&Platform&(Right|Left)").RemoveKeyword("Checkpoint").AddKeyword("Turbo2").AddKeyword("Tilt").Replace(map);//TODO TiltPlatform and Wall
         inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(new string[] { "Checkpoint","Left","Right","Center","V2"}).AddKeyword("Turbo2").Replace(map);
         map.PlaceStagedBlocks();
     }

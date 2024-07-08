@@ -40,7 +40,7 @@ class Position {
         AddRotation(pitchYawRoll);
         return this;
     }
-    public Position Clone(){//TODO overthink
+    public Position Clone(){
         return new Position(coords, pitchYawRoll);
     }
     public void RelativeOffset(Vec3 offset){
