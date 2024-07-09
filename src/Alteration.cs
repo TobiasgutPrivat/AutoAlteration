@@ -85,37 +85,37 @@ class Alteration {
         AlterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
 
     public static void AllAlterations(string sourceFolder, string destinationFolder) {
-        Alteration.AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
-        Alteration.AlterAll(new Snow(), sourceFolder, destinationFolder, "Snow");
-        Alteration.AlterAll(new Rally(), sourceFolder, destinationFolder, "Rally");
-        Alteration.AlterAll(new Desert(), sourceFolder, destinationFolder, "Desert");
+        AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
+        AlterAll(new Snow(), sourceFolder, destinationFolder, "Snow");
+        AlterAll(new Rally(), sourceFolder, destinationFolder, "Rally");
+        AlterAll(new Desert(), sourceFolder, destinationFolder, "Desert");
 
-        Alteration.AlterAll(new NoBrake(), sourceFolder, destinationFolder, "NoBrake");
-        Alteration.AlterAll(new Cruise(), sourceFolder, destinationFolder, "Cruise");
-        Alteration.AlterAll(new Fragile(), sourceFolder, destinationFolder, "Fragile");
-        Alteration.AlterAll(new SlowMo(), sourceFolder, destinationFolder, "SlowMo");
-        Alteration.AlterAll(new NoSteer(), sourceFolder, destinationFolder, "NoSteer");
-        Alteration.AlterAll(new Glider(), sourceFolder, destinationFolder, "Glider");
-        Alteration.AlterAll(new Reactor(), sourceFolder, destinationFolder, "Reactor");
-        Alteration.AlterAll(new ReactorDown(), sourceFolder, destinationFolder, "ReactorDown");
-        Alteration.AlterAll(new FreeWheel(), sourceFolder, destinationFolder, "FreeWheel");
-        Alteration.AlterAll(new AntiBooster(), sourceFolder, destinationFolder, "AntiBooster");
+        AlterAll(new NoBrake(), sourceFolder, destinationFolder, "NoBrake");
+        AlterAll(new Cruise(), sourceFolder, destinationFolder, "Cruise");
+        AlterAll(new Fragile(), sourceFolder, destinationFolder, "Fragile");
+        AlterAll(new SlowMo(), sourceFolder, destinationFolder, "SlowMo");
+        AlterAll(new NoSteer(), sourceFolder, destinationFolder, "NoSteer");
+        AlterAll(new Glider(), sourceFolder, destinationFolder, "Glider");
+        AlterAll(new Reactor(), sourceFolder, destinationFolder, "Reactor");
+        AlterAll(new ReactorDown(), sourceFolder, destinationFolder, "ReactorDown");
+        AlterAll(new FreeWheel(), sourceFolder, destinationFolder, "FreeWheel");
+        AlterAll(new AntiBooster(), sourceFolder, destinationFolder, "AntiBooster");
         
-        Alteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
-        Alteration.AlterAll(new STTF(), sourceFolder, destinationFolder, "STTF");
-        Alteration.AlterAll(new CPFull(), sourceFolder, destinationFolder, "CPFull");
-        // Alteration.alterAll(new CPLess(), sourceFolder, destinationFolder, "CPLess");
+        AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
+        AlterAll(new STTF(), sourceFolder, destinationFolder, "STTF");
+        AlterAll(new CPFull(), sourceFolder, destinationFolder, "CPFull");
+        // alterAll(new CPLess(), sourceFolder, destinationFolder, "CPLess");
 
-        Alteration.AlterAll(new OneUP(), sourceFolder, destinationFolder, "(1-UP)");
-        Alteration.AlterAll(new OneDown(), sourceFolder, destinationFolder, "(1-Down)");
-        Alteration.AlterAll(new OneLeft(), sourceFolder, destinationFolder, "(1-Left)");
-        Alteration.AlterAll(new OneRight(), sourceFolder, destinationFolder, "(1-Right)");
-        Alteration.AlterAll(new TwoUP(), sourceFolder, destinationFolder, "(2-UP)");
+        AlterAll(new OneUP(), sourceFolder, destinationFolder, "(1-UP)");
+        AlterAll(new OneDown(), sourceFolder, destinationFolder, "(1-Down)");
+        AlterAll(new OneLeft(), sourceFolder, destinationFolder, "(1-Left)");
+        AlterAll(new OneRight(), sourceFolder, destinationFolder, "(1-Right)");
+        AlterAll(new TwoUP(), sourceFolder, destinationFolder, "(2-UP)");
 
-        Alteration.AlterAll(new YepTree(), sourceFolder, destinationFolder, "YepTree");
+        AlterAll(new YepTree(), sourceFolder, destinationFolder, "YepTree");
 
         Console.WriteLine("Done!");
-        Console.WriteLine("Map Count: " + Alteration.mapCount);
+        Console.WriteLine("Map Count: " + mapCount);
     }
 
     public Alteration(){}
@@ -128,7 +128,6 @@ class Alteration {
         Inventory blocks = ImportArrayInventory(ProjectFolder + "src/Inventory/BlockNames.json",BlockType.Block);
         Inventory pillars = ImportArrayInventory(ProjectFolder + "src/Inventory/PillarNames.json",BlockType.Pillar);
         //Fix Gate naming
-        blocks.Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
 
         //Init Inventory
         inventory.AddArticles(items.articles);
@@ -138,18 +137,19 @@ class Alteration {
         inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
         inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
 
-        inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
 
-        inventory.articles.ForEach(x => x.Original = true);
         //save Dev Inventory
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
         string json = JsonConvert.SerializeObject(inventory.articles);
         File.WriteAllText(ProjectFolder + "dev/Initial_Inventory.json", json);
 
-        //Add Articles with unnecessary keywords removed
+
+        //Inventory Changes
+        blocks.Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
+        inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
         AddCheckpointBlocks();
         AddCheckpointTrigger();
-        inventory.AddArticles(inventory.Select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").RemoveKeyword("Start").AddKeyword("MapStart"));
+        inventory.Select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").EditOriginal().RemoveKeyword("Start").AddKeyword("MapStart");
         SetSizes();
         
         //Control
@@ -165,9 +165,9 @@ class Alteration {
 
 
     private static void AddCheckpointBlocks(){
-        inventory.AddArticles(inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Straight").Align().RemoveKeyword("Straight"));
-        inventory.AddArticles(inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align().RemoveKeyword("StraightX2"));
-        inventory.AddArticles(inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Base").Align().RemoveKeyword("Base"));
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Straight").Align().EditOriginal().RemoveKeyword("Straight");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align().EditOriginal().RemoveKeyword("StraightX2");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Base").Align().EditOriginal().RemoveKeyword("Base");
         AddRoadNoCPBlocks("Tech");
         AddRoadNoCPBlocks("Dirt");
         AddRoadNoCPBlocks("Bump");
@@ -190,16 +190,15 @@ class Alteration {
         CreateTriggerArticle("Slope2&Up", midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));
         CreateTriggerArticle("Slope2&Right", midPlatform + new Vec3(0,8,0),new Vec3(0,0,slope2));
         CreateTriggerArticle("Slope2&Left", midPlatform + new Vec3(0,8,0),new Vec3(0,0,-slope2));
-        float slope = 0;//slope2/2
-        CreateTriggerArticle("Slope&Down&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,slope,0));
-        CreateTriggerArticle("Slope&Up&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,-slope,0));
-        CreateTriggerArticle("Tilt&Right&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,0,-slope));
-        CreateTriggerArticle("Tilt&Left&!RoadIce", midPlatform + new Vec3(0,4,0),new Vec3(0,0,slope));
+        CreateTriggerArticle("Slope&Down&!RoadIce", midPlatform + new Vec3(0,4,0),Vec3.Zero);
+        CreateTriggerArticle("Slope&Up&!RoadIce", midPlatform + new Vec3(0,4,0),Vec3.Zero);
+        CreateTriggerArticle("Tilt&Right&!RoadIce", midPlatform + new Vec3(0,4,0),Vec3.Zero);
+        CreateTriggerArticle("Tilt&Left&!RoadIce", midPlatform + new Vec3(0,4,0),Vec3.Zero);
 
-        CreateTriggerArticle("Slope&Down&RoadIce", midPlatform + new Vec3(0,7,0),new Vec3(0,slope,0));
-        CreateTriggerArticle("Slope&Up&RoadIce", midPlatform + new Vec3(0,7,0),new Vec3(0,-slope,0));
-        CreateTriggerArticle("!Slope&!DiagRight&!DiagLeft&!WithWall&RoadIce", midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
-        CreateTriggerArticle("WithWall&RoadIce&!DiagRight&!DiagLeft", midPlatform + new Vec3(0,2,0),new Vec3(0,0,0));
+        CreateTriggerArticle("Slope&Down&RoadIce", midPlatform + new Vec3(0,7,0),Vec3.Zero);
+        CreateTriggerArticle("Slope&Up&RoadIce", midPlatform + new Vec3(0,7,0),Vec3.Zero);
+        CreateTriggerArticle("!Slope&!DiagRight&!DiagLeft&!WithWall&RoadIce", midPlatform + new Vec3(0,2,0),Vec3.Zero);
+        CreateTriggerArticle("WithWall&RoadIce&!DiagRight&!DiagLeft", midPlatform + new Vec3(0,2,0),Vec3.Zero);
         CreateTriggerArticle("WithWall&RoadIce&DiagRight",new Vec3(48f,4,32f),new Vec3(PI * -0.148f,0f,0));
         CreateTriggerArticle("WithWall&RoadIce&DiagLeft",new Vec3(48f,4,32f),new Vec3(PI * 0.148f,0,0));
 

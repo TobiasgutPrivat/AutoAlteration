@@ -8,7 +8,6 @@ class Article {
     public List<string> Surfaces = new();
     public int Width = 1;
     public int Length = 1;
-    public bool Original = false;
     public string Path = "";
 
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };

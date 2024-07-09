@@ -33,3 +33,10 @@ class Flipped: Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class NoItems: Alteration {
+    public override void Run(Map map){
+        map.Delete(inventory.Select(BlockType.Item).Select("!MapStart&!Finish").Names());
+        map.PlaceStagedBlocks();
+    }
+}

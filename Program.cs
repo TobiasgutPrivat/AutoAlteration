@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
 //Initial load
 Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..")) + "/");
-CLI.Run();
+// CLI.Run();
 
 //Code for Execution (change for your use)
 //Folder Processing
-// string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
-// Alteration.AlterFolder(new Fast(), sourcefolder, destinationFolder + "Summer 2024 Fast/", "Fast");
+string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
+new AlterationConfig(new NoItems(), sourcefolder, destinationFolder + "Summer 2024 NoItems/", "NoItems").AlterFolder();
 
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";

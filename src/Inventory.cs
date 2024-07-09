@@ -31,7 +31,7 @@ class Inventory {
     public Article? AlignArticle(Article article) {
         List<Article> matchArticles = articles.Where(a => article.Match(a)).ToList();
         if (matchArticles.Count > 1) {
-            Console.WriteLine("More than one found article with keywords: " + article.KeywordString() + "\nFound Articles: " + string.Join(", ", matchArticles.Select(a => a.Name  + " Original: " + a.Original).ToArray()));
+            Console.WriteLine("More than one found article with keywords: " + article.KeywordString() + "\nFound Articles: " + string.Join(", ", matchArticles.Select(a => a.Name).ToArray()));
             return null;
         } else if (matchArticles.Count == 1) {
             return matchArticles.First();
