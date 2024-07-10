@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 //Initial load
 Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../..\..")) + "/");
-// CLI.Run();
+CLI.Run();
 
 //Code for Execution (change for your use)
 //Folder Processing
@@ -22,7 +22,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
+// AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
