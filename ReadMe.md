@@ -5,58 +5,41 @@ This Project is based on the GBX.NET Framework from BigBang (Nationsconverter Gu
 
 It's still in early development, so there will probably be some Bugs and Problems. Contribution to the repository is very welcome, feel free to create pull requests.
 
-If this Instruction leaves some Questions or you have some ideas contact me on Discord (Tobias2g#5288)
+If you encounter problems or you have some questions/ideas etc. please contact me on Discord <strong>(Tobias2g#5288)</strong>
 ## How to use
-Some basic knowledge of Coding will be usefull but not required.
+The tool comes with a basic CLI but some Software is required.
+
+So far it's only tested and supported on Windows
 
 ### Installation
-1. Clone this GitHub Repository
-2. You need some form of IDE, I recommend VSCode with C# Dev Kit 
-3. You need Dotnet 7.0 and Nuget installed, also make sure to have correct package source using (dotnet nuget add source https://api.nuget.org/v3/index.json) in Console
-4. After installation you can write your code in Program.cs and execute it with F5
+1. Install git if you haven't: https://git-scm.com/downloads
+2. Install Dotnet 7.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/7.0
+3. Clone this GitHub Repository into any Folder (you can use this Command in cmd)
+> git clone https://github.com/TobiasgutPrivat/AutoAlteration.git /{path/to/your/directory}
+
+4. Make initial build by executing "build.bat" script in cloned folder
+<!--
+There can be an issue with nuget source.
+In that case make sure you have correct package source using:
+> dotnet nuget add source https://api.nuget.org/v3/index.json
+-->
 
 ### Usage
-The Tool can be used by writting Code in Program.cs
+Run the "start.bat" script
 
-#### Load
-First the Inventory needs to be loaded with
-> Alteration.load("currentProjectFolder");
+This will open up a basic CLI guiding you through altering your maps
 
-for example
-
-> Alteration.load("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/");
-
-#### Alteration
-There are multiple Functions for Alterations in the AutoAlteration class
-
-Example Alter All Maps in a Folder to FreeWheel:
-> string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Spring 2024/";\
-> string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Nadeo/Spring 2024/Spring 2024 FreeWheel/";\
-> AutoAlteration.alterFolder(new FreeWheel(), sourcefolder, destinationFolder, "FreeWheel");
-
-sourceFolder: the Folder the Maps are in
-
-destinationfolder: the Folder the Maps will be saved in
-
-new FreeWheel(): declaration that the FreeWheel Alteration should be applied
-
-Name: The Name that will be put at the end of the Map- and Filename
-
-#### Multiple Alterations
-You can apply Multiple Alterations at once by making a list of them like this:
-
-> new List<Alteration>{new anAlteration(), new otherAlterations(), ...}
-
-This for example alterates the maps with FreeWheel and OneUp:
->AutoAlteration.alterFolder(new List<Alteration>{new FreeWheel(), new OneUP()}, sourcefolder, destinationFolder, "FreeWheel (1-UP)");
+To update the project run the "update.bat" script
 
 ### Available Alterations
-All implemented and fully to semi tested Alterations
+Those are the currently available Alterations (for CLI Copy names from here)
 
+<strong>Environment Alterations</strong>
 - Stadium
 - Snow
 - Rally
 - Desert
+<strong>Effect Alterations</strong>
 - NoBrake
 - Cruise
 - Fragile
@@ -67,81 +50,21 @@ All implemented and fully to semi tested Alterations
 - ReactorDown
 - FreeWheel
 - CPBoost
+<strong>Checkpoint Alterations</strong>
 - STTF
 - CPFull
+<strong>Finish Alterations</strong>
 - OneUP
 - OneDown
 - OneLeft
 - OneRight
 - TwoUP
+<strong>Other Alterations</strong>
 - YepTree
-
-### Implementation of Alterations
-You can freely make new Alterations, your also asked to share them (see Contribution below) This will require some basic 
-
-The Alterations can be edited or new ones can be created within the "Alterations" Folder
-
-They should be in a reasonable called class and need to inherit the class Alteration and implement the run(Map map) function
-
-Example for OneUp:
-> class OneUP: Alteration {\
->    public override void run(Map map){\
->        map.move(Blocks.select("Finish"), new Vec3(0,8,0));\
->    }
->}
-
-Within this Function you can use the Functions provided in the Map to alter it.
-\
-Here are some basic uses explained:
-
-Generally BlockModelId is required to identify Blocks
-
-**Delete** all Blocks off one type
-> map.delete(yourBlockModelId);
-
-This doesn't delete the Platform Blocks below it.
-
-Example: delete all CheckpointRings:
-> map.delete("GateCheckpoint");
-
-**PlaceRelativ** : places a Block positioned relative to all Blocks off one Type
-> map.placeRelative(BlockToAddTo, newBlock, BlockType, new BlockMove(positionOffset, rotationOffset));
-
-The BlockMove defines the new Block to be placed.
-
-Example: place a BoostRing at every RoadTechCheckpoint with an offset of 1m forwards
-> map.placeRelative("RoadTechCheckpoint", "GateSpecialTurbo", BlockType.Block, new BlockMove(new Vec3(0,-12,1),Vec3.Zero));
-
-All placed Blocks get staged and need to be placed later by calling:
-
-> map.placeStagedBlocks();
-
-**Replace** uses placeRelative and delete to replace the specified Blocks
-
-Example: replace a RoadTechCheckpoint with a Booster
-> map.replace("RoadTechCheckpoint","RoadTechSpecialTurbo",BlockType.Block);
-
-#### Block Selction
-
-There is also the option to select Blocks by Keywords
-
-Example place a Turboring at every CP or Multilap Block:
-
-> map.placeRelative(Blocks.select("Checkpoint|Multilap"), "GateSpecialTurbo");
-
-**Further Functionality** : please look at other Alterations how to do it.
-
-**Helper** 
-\
-https://github.com/TobiasgutPrivat/Auto-Alteration-Helper
-\
-I also made a Plugin to get the selected BlockModelId in editor (Also there will be more functionality added to it)
-\
-To install: Clone it into your Plugin Folder (Its not released yet)
+- NoItems
 
 ## Known Issues/Bugs
-- When deleting Blocks the base Platform stays there. (Good for replacing but bad for CPLess)
-- Some Issue With incorrect Relative Offset in complex Rotations
+- Macroblocks are not supported yet
 
 ## Contribution
 You are welcome to contribute to the Project by creating Pull Requests on GitHub
@@ -149,3 +72,5 @@ You are welcome to contribute to the Project by creating Pull Requests on GitHub
 For mature functionality or questions to your contribution please contact me on Discord (Tobias2g#5288)
 
 Your Feedback or Ideas are also valueable, so you can write me that too.
+
+A guide to implementing Alterations will come soon

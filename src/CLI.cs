@@ -48,21 +48,20 @@ class CLI {
             Console.WriteLine("Exiting");
             return;
         }
-        AlterationConfig config = new(Alterations, source, destination, name);
         switch (type){
             case AlterationConfigType.File:
-                config.AlterFile();
+                AutoAlteration.AlterFile(Alterations, source, destination, name);
                 break;
             case AlterationConfigType.Folder:
-                config.AlterFolder();
+                AutoAlteration.AlterFolder(Alterations, source, destination, name);
                 break;
             case AlterationConfigType.All:
-                config.AlterAll();
+                AutoAlteration.AlterAll(Alterations, source, destination, name);
                 break;
         }
         Console.WriteLine("Alteration Complete");
-        Console.WriteLine("Altered maps:" + AlterationConfig.mapCount);
-        AlterationConfig.mapCount = 0;
+        Console.WriteLine("Altered maps:" + AutoAlteration.mapCount);
+        AutoAlteration.mapCount = 0;
     }
 
     static List<Alteration> SelectAlterations(){
