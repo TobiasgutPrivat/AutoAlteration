@@ -8,7 +8,7 @@ CLI.Run();
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
 // AutoAlteration.AlterAll(new NoItems(), sourcefolder, destinationFolder + "Summer 2024 NoItems/", "NoItems");
-
+// new CustomBlock("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/src/CustomBlocks/RoadTechToThemeSnowRoadX2Magnet.Block.Gbx");
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";

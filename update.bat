@@ -20,7 +20,3 @@ git fetch
 :: Pull updates from the remote repository
 echo Pulling updates from the remote repository...
 git pull
-
-:: Call the build script
-echo Calling build.bat...
-call build.bat
