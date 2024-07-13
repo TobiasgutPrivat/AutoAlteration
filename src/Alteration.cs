@@ -57,6 +57,22 @@ class Alteration {
     public virtual void Run(Map map) {}
     public virtual void AddArticles() {}
 
+    public static MoveChain Move(Vec3 vector) {
+        MoveChain moveChain = new();
+        moveChain.Move(vector);
+        return moveChain;
+    }
+    public static MoveChain Rotate(Vec3 vector) {
+        MoveChain moveChain = new();
+        moveChain.Rotate(vector);
+        return moveChain;
+    }
+    public static MoveChain RotateMid(Vec3 vector) {
+        MoveChain moveChain = new();
+        moveChain.RotateMid(vector);
+        return moveChain;
+    }
+
     public static void CreateInventory() {
         devMode = true;
         //Load Nadeo Articles

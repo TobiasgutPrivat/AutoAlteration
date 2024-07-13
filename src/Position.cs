@@ -1,6 +1,7 @@
 using GBX.NET;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
+using Microsoft.VisualBasic;
 
 class Position {
     public Vec3 coords;
@@ -38,6 +39,12 @@ class Position {
     }
     public Position Rotate(Vec3 pitchYawRoll){
         AddRotation(pitchYawRoll);
+        return this;
+    }
+    public Position RotateMid(Vec3 pitchYawRoll, Article article){
+        RelativeOffset(new Vec3(article.Width * 16, article.Height * 4, article.Length / 16));
+        AddRotation(pitchYawRoll);
+        RelativeOffset(new Vec3(-article.Width * 16, -article.Height * 4, -article.Length / 16));
         return this;
     }
     public Position Clone(){
