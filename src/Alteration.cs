@@ -32,6 +32,26 @@ class Alteration {
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
         return new Inventory(lines.Select(line => new Article(line,blockType)).ToList());
     }
+    public static Inventory ImportVanillaInventory(string path){
+        string json = File.ReadAllText(path);
+        json = json.Replace("PlatformGrassSlope2UTop", "PlatformGrasssSlope2UTop");
+        json = json.Replace("PlatForm", "Platform");
+        json = json.Replace("ShowFogger8M", "ShowFogger8m");
+        json = json.Replace("ShowFogger16M", "ShowFogger16m");
+        json = json.Replace("CheckPoint", "Checkpoint");
+        json = json.Replace("DecoHillSlope2curve2Out", "DecoHillSlope2Curve2Out");
+        json = json.Replace("RoadIceWithWallDiagLeftStraight", "RoadIceDiagLeftWithWallStraight");
+        json = json.Replace("RoadIceWithWallDiagRightStraight", "RoadIceDiagRightWithWallStraight");
+        json = json[..1] + "{\"Height\":1,\"Width\":1,\"Length\":1,\"type\":\"Block\",\"Name\":\"OpenIceRoadToZoneLeft\",\"Theme\":false,\"DefaultRotation\":false}," + json[1..];
+        
+        var jsonArray = JsonConvert.DeserializeObject<dynamic[]>(json);
+        Inventory temp = new();
+        foreach (var item in jsonArray)
+        {
+            temp.articles.Add(new Article((int)item.Height, (int)item.Width, (int)item.Length, (string)item.type, (string)item.Name, (bool)item.Theme, (bool)item.DefaultRotation));
+        }
+        return temp;
+    }
 
     public Alteration(){}
     public virtual void Run(Map map) {}
@@ -39,19 +59,11 @@ class Alteration {
     public static void CreateInventory() {
         devMode = true;
         //Load Nadeo Articles
-        Inventory items = ImportArrayInventory(ProjectFolder + "src/Inventory/ItemNames.json",BlockType.Item);
-        Inventory blocks = ImportArrayInventory(ProjectFolder + "src/Inventory/BlockNames.json",BlockType.Block);
-        Inventory pillars = ImportArrayInventory(ProjectFolder + "src/Inventory/PillarNames.json",BlockType.Pillar);
-        //Fix Gate naming
+        inventory = ImportVanillaInventory(ProjectFolder + "src/Inventory/BlockData.json");
 
-        //Init Inventory
-        inventory.AddArticles(items.articles);
-        inventory.AddArticles(blocks.articles);
-        inventory.AddArticles(pillars.articles);
         //CustomBlocks
         inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
         inventory.AddArticles(Directory.GetFiles(CustomBlocksFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
-
 
         //save Dev Inventory
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
@@ -60,12 +72,11 @@ class Alteration {
 
 
         //Inventory Changes
-        blocks.Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
+        inventory.Select(BlockType.Block).Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
         inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
         AddCheckpointBlocks();
         AddCheckpointTrigger();
         inventory.Select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").EditOriginal().RemoveKeyword("Start").AddKeyword("MapStart");
-        SetSizes();
         
         //Control
         // inventory.CheckDuplicates();
@@ -151,157 +162,5 @@ class Alteration {
         inventory.articles.Add(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Right","WithWall"},"RoadIce","","",new Position(new Vec3(96,0,64), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Left","WithWall"},"RoadIce","","",new Position(new Vec3(96,0,64), new Vec3(PI,0,0))));
         inventory.articles.Add(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Left","WithWall"},"RoadIce","",""));
-    }
-    
-    private static void SetSizes(){
-        // Road Type
-        inventory.Select(BlockType.Block).Select("Road&Curve2&(!In|!Out)").EditOriginal().Width(2).Length(2); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
-        inventory.Select(BlockType.Block).Select("Road&Curve3&(!In|!Out)").EditOriginal().Width(3).Length(3); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
-        inventory.Select(BlockType.Block).Select("Road&Curve4&(!In|!Out)").EditOriginal().Width(4).Length(4); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
-        inventory.Select(BlockType.Block).Select("Road&Curve5&(!In|!Out)").EditOriginal().Width(5).Length(5); // Might need a `&(!In|!Out)`, not tested yet... // Also catches 3-nn
-
-        inventory.Select(BlockType.Block).Select("Road&ChicaneX2").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Road&ChicaneX3").EditOriginal().Width(2).Length(3);
-
-        inventory.Select(BlockType.Block).Select("Road&Branch&Straight&X4").EditOriginal().Width(2).Length(4);
-        inventory.Select(BlockType.Block).Select("Road&Branch&Curve3").EditOriginal().Width(3).Length(3); // Redundant because of Curve3
-        inventory.Select(BlockType.Block).Select("Road&Branch&YShaped&2X3").EditOriginal().Width(2).Length(3); // Redundant because of 2X3
-        inventory.Select(BlockType.Block).Select("Road&Branch&Diag&(Left|Right)").EditOriginal().Width(1).Length(2);
-
-        inventory.Select(BlockType.Block).Select("Road&Slope&(Base|Start|End)&2x1").EditOriginal().Width(2).Length(1); // Redundant because of 2x1
-        inventory.Select(BlockType.Block).Select("Road&Slope&(UTopX2|UBottomX2)").EditOriginal().Width(2).Length(2); // Redundant because of 2X // InGround vaiant not included, but should still be caught by UBottom
-
-        inventory.Select(BlockType.Block).Select("Road&Tilt&Transition2&((Up|Down)&(Left|Right))").EditOriginal().Width(1).Length(2);
-        inventory.Select(BlockType.Block).Select("Road&Tilt&Transition2&Curve&(In|Out)").EditOriginal().Width(1).Length(2);
-
-        inventory.Select(BlockType.Block).Select("(RoadTech|RoadDirt|RoadBump|RoadIce)&(DiagLeft|DiagRight)").EditOriginal().Width(3).Length(2); // Original example by Tobias
-
-        inventory.Select(BlockType.Block).Select("Road&Diag&(Left|Right)&Chicane&Right").EditOriginal().Width(2).Length(1);
-        inventory.Select(BlockType.Block).Select("Road&Diag&(Left|Right)&Chicane&Left").EditOriginal().Width(3).Length(1);
-
-        inventory.Select(BlockType.Block).Select("Road&Diag&(Left|Right)&Start&Straight&X2").EditOriginal().Width(2).Length(1);
-        inventory.Select(BlockType.Block).Select("Road&Diag&(Left|Right)&Start&Curve1&In").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Road&Diag&(Left|Right)&Start&Curve2&In").EditOriginal().Width(2).Length(3);
-
-        inventory.Select(BlockType.Block).Select("Road&Diag&(Left|Right)&Start&Curve1&Out").EditOriginal().Width(2).Length(1);
-        inventory.Select(BlockType.Block).Select("Road&Diag&(Left|Right)&Start&Curve2&Out").EditOriginal().Width(3).Length(2);
-
-        inventory.Select(BlockType.Block).Select("Road&Diag&Switch&Curve1").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Road&Diag&Switch&Curve2").EditOriginal().Width(3).Length(3);
-
-        inventory.Select(BlockType.Block).Select("Road&Loop6X").EditOriginal().Width(3).Length(1);
-        inventory.Select(BlockType.Block).Select("Road&Loop11X").EditOriginal().Width(4).Length(2);
-
-
-        // Platform
-        inventory.Select(BlockType.Block).Select("Platform&Curve2&In").EditOriginal().Width(1).Length(1); // Should be included "Platform[Surface]Curve2In" is 1x1
-        inventory.Select(BlockType.Block).Select("Platform&Curve3&In").EditOriginal().Width(2).Length(2);
-
-        inventory.Select(BlockType.Block).Select("Platform&Road&Tech&Diag&(Right|Left)").EditOriginal().Width(2).Length(1); // Don't rememver how the 'To' works :xdd:
-
-        inventory.Select(BlockType.Block).Select("Platform&Slope2&Curve2&(Out|In)").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Slope2&Curve3&(Out|In)").EditOriginal().Width(3).Length(3);
-
-        inventory.Select(BlockType.Block).Select("Platform&Tilt&Transition2").EditOriginal().Width(1).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Slope2&(Start2|End2)").EditOriginal().Width(1).Length(2);
-
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&Curve2&In").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&Curve3&In").EditOriginal().Width(3).Length(3);
-
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&Curve1&Out").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&Curve2&Out").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&Curve3&Out").EditOriginal().Width(4).Length(4);
-
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x2&Curve2&In").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x2&Curve3&In").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x2&Curve1&Out").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x2&Curve2&Out").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x1&Curve2&In").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x1&Curve3&In").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x1&Curve1&Out").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Start&1x1&Curve2&Out").EditOriginal().Width(3).Length(3);
-
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Out&Start&Curve1").EditOriginal().Width(2).Length(2); // Counts for Curve1In too
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Out&Start&Curve2").EditOriginal().Width(3).Length(3); // Counts for Curve2In too
-        inventory.Select(BlockType.Block).Select("Platform&Loop&Out&Start&Curve3").EditOriginal().Width(4).Length(4); // Counts for Curve3In too
-
-        inventory.Select(BlockType.Block).Select("Platform&Loop&End&Curve2&In").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&End&Curve3&In").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&End&Curve1&Out").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&End&Curve2&Out").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("Platform&Loop&End&Curve3&Out").EditOriginal().Width(4).Length(4);
-
-        inventory.Select(BlockType.Block).Select("Platform&Wall&Curve2").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Platform&Wall&Curve3").EditOriginal().Width(3).Length(3);
-
-
-
-        // Deco platform
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Curve2").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Curve3").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Curve4").EditOriginal().Width(4).Length(4);
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Curve5").EditOriginal().Width(5).Length(5);
-        //                                        DecoPlatform Curve
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Curve2&In").EditOriginal().Width(1).Length(1); // Should be included "Platform[Surface]Curve2In" is 1x1
-
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Curve3&In").EditOriginal().Width(2).Length(2);
-
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&Start&Curve2&(In|Out)").EditOriginal().Width(2).Length(2);
-
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&(Start2|End2)&!Curve").EditOriginal().Width(1).Length(2);
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&(Start2|End2)&Curve2").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&(Start2|End2)&Curve4").EditOriginal().Width(4).Length(4);
-
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&Base&Slope2&Base2").EditOriginal().Width(1).Length(2);
-        //                                        DecoPlatform Slope2 Base To Slope2 Base2 (right / left)
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&Curve2").EditOriginal().Width(2).Length(2);
-        //                                        DecoPlatform Slope2 Start Curve2In (right / left)
-
-        inventory.Select(BlockType.Block).Select("DecoPlatform&Slope2&Curve2").EditOriginal().Width(2).Length(2);
-        // Deco Hill
-        inventory.Select(BlockType.Block).Select("Deco&Hill&Slope2&StraightX2").EditOriginal().Width(2).Length(1);
-        inventory.Select(BlockType.Block).Select("Deco&Hill&Slope2&Curve2").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Deco&Hill&Slope2&ChicaneX2").EditOriginal().Width(2).Length(2); // Might be &Chicane&X2 or &((Chicane&X2)| (ChicaneX2), not tested yet
-        //                                        Deco Hill Slope2 ChicaneX2
-        inventory.Select(BlockType.Block).Select("Deco&Hill&Slope4&Base4&Curve").EditOriginal().Width(4).Length(4);
-        inventory.Select(BlockType.Block).Select("Deco&Hill&Slope2&Start2&Base5").EditOriginal().Width(4).Length(4);
-        
-        // Deco Cliff
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&Straight&!Small").EditOriginal().Width(4).Length(2); // Original example by Tobias
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&Straight&Small").EditOriginal().Width(1).Length(2); // Original example by Tobias
-
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&Corner&In&!Small").EditOriginal().Width(4).Length(4);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&Corner&In&Small").EditOriginal().Width(2).Length(2);
-        //                                        Deco Cliff10 Corner In
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&Corner&Out&!Small").EditOriginal().Width(2).Length(2); // Testing 2x2, might be 3x3 xdd
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&Corner&Out&Small").EditOriginal().Width(2).Length(2);
-
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&DiagOut&!Small").EditOriginal().Width(3).Length(3);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&DiagOut&Small").EditOriginal().Width(2).Length(2);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&DiagIn&!Small").EditOriginal().Width(4).Length(4);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&DiagIn&Small").EditOriginal().Width(2).Length(2);
-
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&End").EditOriginal().Width(6).Length(2);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff10&End&!Mirror").EditOriginal().Width(6).Length(2); // Is redundant
-
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&Straight&!Small").EditOriginal().Width(4).Length(2);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&Straight&Small").EditOriginal().Width(1).Length(2);
-        //                                        Deco Cliff8 No Hill Straight
-
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&Corner&In&!Small").EditOriginal().Width(4).Length(4);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&Corner&In&Small").EditOriginal().Width(2).Length(2);
-
-
-        // inventory.select(BlockType.Block).select("Deco&Cliff8&No&Hill&Corner&Out&!Simple").editOriginal().width(4).length(4); // Does not actually exist, but might in the future
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&Corner&Out").EditOriginal().Width(2).Length(2);
-        //                                        Deco Cliff8 No Hill Corner Out  Simple
-
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&Diag&Out&!Small").EditOriginal().Width(4).Length(4); // Does not actually exist, but might in the future
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&Diag&Out&Small").EditOriginal().Width(2).Length(2);
-        //                                        Deco Cliff8 No Hill Diag Out Small
-        //                                        Deco Cliff8 No Hill Diag Out
-
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&DiagIn&!Small").EditOriginal().Width(4).Length(4);
-        inventory.Select(BlockType.Block).Select("Deco&Cliff8&No&Hill&DiagIn").EditOriginal().Width(2).Length(2);
     }
 }

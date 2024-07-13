@@ -1,3 +1,6 @@
+using System.Text.Json.Serialization;
+using GBX.NET.Exceptions;
+
 class Article {
     public string Name;
     public Position Position = new();
@@ -8,11 +11,14 @@ class Article {
     public List<string> Surfaces = new();
     public int Width = 1;
     public int Length = 1;
+    public int Height = 1;
     public string Path = "";
+    public bool DefaultRotation;
+    public bool Theme;
 
     public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
 
-    public Dictionary<string,bool> cacheFilter = new Dictionary<string, bool>();
+    public Dictionary<string,bool> cacheFilter = new();
 
     public Article(string name,BlockType type,List<string> keywords,List<string> shape,List<string> toShape,List<string> surface,Position ?position = null,int length = 1, int width = 1){
         Name = name;
@@ -41,6 +47,26 @@ class Article {
         Name = name;
         LoadKeywords();
         Type = type;
+    }
+    public Article(int Height, int Width, int Length, string type, string Name, bool Theme, bool DefaultRotation){
+        this.Name = Name;
+        LoadKeywords();
+        switch (type) {
+            case "Block":
+                Type = BlockType.Block;
+                break;
+            case "Item":
+                Type = BlockType.Item;
+                break;
+            case "Pillar":
+                Type = BlockType.Pillar;
+                break;
+        }
+        this.Length = Length;
+        this.Width = Width;
+        this.Height = Height;
+        this.DefaultRotation = DefaultRotation;
+        this.Theme = Theme;
     }
 
     public Article(string name,BlockType type, string Path){

@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using GBX.NET;
+using Newtonsoft.Json;
 //Initial load
 Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../..\..")) + "/");
-CLI.Run();
+// CLI.Run();
 
 //Code for Execution (change for your use)
 //Folder Processing
@@ -22,7 +23,7 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
+AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
@@ -41,8 +42,12 @@ void stringToName(string projectFolder) {
 class Test : Alteration {
     public override void Run(Map map)
     {
-        map.PlaceRelative(new string[] { "DecoHillSlope2ChicaneX2Left", "DecoHillDirtSlope2ChicaneX2Left" }, "DecoHillIceSlope2ChicaneX2Left", new(new(0,30,0)));
-        map.Replace(new string[] { "DecoHillSlope2ChicaneX2Left", "DecoHillDirtSlope2ChicaneX2Left" }, "DecoHillIceSlope2ChicaneX2Left");
+        // map.PlaceRelative(new string[] { "DecoHillIceSlope2ChicaneX2Left" }, "PlatFormTechLoopEndCurve3In", new(new(0,30,0)));
+        // map.Replace(new string[] { "DecoHillIceSlope2ChicaneX2Left" }, "PlatformGrassSlope2UTop");
+        // map.map.PlaceBlock("DecoHillSlope2curve2Out", new Int3(20,10,20),Direction.North);
+        map.map.PlaceBlock("RoadIceWithWallDiagLeftStraight", new Int3(20,12,20),Direction.North);
+        map.map.PlaceAnchoredObject(new Ident("ShowFogger8m", new Id(26), "Nadeo"), new Vec3(800,120,800),Vec3.Zero);
+        map.map.PlaceAnchoredObject(new Ident("ShowFogger16m", new Id(26), "Nadeo"), new Vec3(800,120,800),Vec3.Zero);
         map.PlaceStagedBlocks();
     }
 }

@@ -129,6 +129,7 @@ Deadend
 Plastic
 LoopEnd
 TShaped
+VeryBig
 Magnet
 Narrow
 Corner
@@ -285,6 +286,7 @@ Tree
 Tall
 Snow
 90X2
+Disk
 Mid
 Med
 Mat0
