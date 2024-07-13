@@ -1,5 +1,3 @@
-using GBX.NET;
-
 class CPBoost : Alteration{
     public override void Run(Map map){
         
@@ -9,7 +7,7 @@ class CPBoost : Alteration{
         inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(new[] {"Right","Left","Center","Checkpoint","v2"}).AddKeyword("Turbo").Replace(map);
         inventory.Select(BlockType.Item).Select("Turbo").AddKeyword("Center").RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(map);
         inventory.Select(BlockType.Item).Select("Turbo2").AddKeyword("Center").RemoveKeyword("Turbo2").AddKeyword("Checkpoint").Replace(map);
-        map.Replace("GateSpecial4mTurbo","GateCheckpointCenter8mv2",new Position(new Vec3(2,0,0),Vec3.Zero));//untested
+        map.Replace("GateSpecial4mTurbo","GateCheckpointCenter8mv2",Move(2,0,0));//untested
         map.PlaceStagedBlocks();
     }
 }

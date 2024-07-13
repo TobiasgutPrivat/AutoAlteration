@@ -6,33 +6,23 @@ using Microsoft.VisualBasic;
 class Position {
     public Vec3 coords;
     public Vec3 pitchYawRoll;
-    public bool multiplyBySize = false;
     public static Position Zero = new (Vec3.Zero,Vec3.Zero);//TODO maybe issue with changing value
 
-    public Position(){
-        this.coords = Vec3.Zero;
-        this.pitchYawRoll = Vec3.Zero;
-    }
     public Position( Vec3 ?coords){
         this.coords = coords ?? Vec3.Zero;
         this.pitchYawRoll = Vec3.Zero;
     }
-    public Position(Vec3 ?coords, Vec3 ?pitchYawRoll,bool rotateYawInMid = false){
+    public Position(Vec3 ?coords, Vec3 ?pitchYawRoll){
         this.coords = coords ?? Vec3.Zero;
         this.pitchYawRoll = pitchYawRoll ?? Vec3.Zero;
-        this.multiplyBySize = rotateYawInMid;
     }
+
     public Position AddPosition(Position position){
-        if (position != null){
-            AddPosition(position.coords, position.pitchYawRoll);
-        }
+        RelativeOffset(position.coords);
+        AddRotation(position.pitchYawRoll);
         return this;
     }
-    public Position AddPosition(Vec3 coords, Vec3 pitchYawRoll){
-        RelativeOffset(coords);
-        AddRotation(pitchYawRoll);
-        return this;
-    }
+    
     public Position Move(Vec3 coords){
         RelativeOffset(coords);
         return this;
@@ -42,13 +32,10 @@ class Position {
         return this;
     }
     public Position RotateMid(Vec3 pitchYawRoll, Article article){
-        RelativeOffset(new Vec3(article.Width * 16, article.Height * 4, article.Length / 16));
+        RelativeOffset(new Vec3(article.Width * 16, article.Height * 4, article.Length * 16));
         AddRotation(pitchYawRoll);
-        RelativeOffset(new Vec3(-article.Width * 16, -article.Height * 4, -article.Length / 16));
+        RelativeOffset(new Vec3(-article.Width * 16, -article.Height * 4, -article.Length * 16));
         return this;
-    }
-    public Position Clone(){
-        return new Position(coords, pitchYawRoll);
     }
     public void RelativeOffset(Vec3 offset){
         double Yaw = pitchYawRoll.X;
@@ -76,12 +63,6 @@ class Position {
         double y3 = y2;
 
         coords += new Vec3((float)x3, (float)y3, (float)z3);
-    }
-
-    public Position SubtractPosition(Position position){
-        AddRotation(-position.pitchYawRoll);
-        RelativeOffset(-position.coords);
-        return this;
     }
 
     public void AddRotation(Vec3 rotation) =>

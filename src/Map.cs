@@ -92,80 +92,65 @@ class Map
     Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
 
-  public void PlaceRelative(string atBlock, string newBlock,Position ?positionChange = null){
+  public void PlaceRelative(string atBlock, string newBlock,MoveChain ?moveChain = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnBlock,GetArticle(atBlock),GetArticle(newBlock),positionChange));
+      stagedBlocks.Add(new Block(ctnBlock,GetArticle(atBlock),GetArticle(newBlock),moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnItem,GetArticle(atBlock),GetArticle(newBlock),positionChange));
+      stagedBlocks.Add(new Block(ctnItem,GetArticle(atBlock),GetArticle(newBlock),moveChain));
     }
   }
 
-  public void PlaceRelative(string[] atBlocks, string newBlock,Position ?positionChange = null)=>
-    atBlocks.ToList().ForEach(atBlock => PlaceRelative(atBlock, newBlock, positionChange));
+  public void PlaceRelative(string[] atBlocks, string newBlock,MoveChain ?moveChain = null)=>
+    atBlocks.ToList().ForEach(atBlock => PlaceRelative(atBlock, newBlock, moveChain));
 
-  public void PlaceRelative(Inventory inventory, string newBlock,Position ?positionChange = null) =>
-    PlaceRelative(inventory.Names(), newBlock, positionChange);
+  public void PlaceRelative(Inventory inventory, string newBlock,MoveChain ?moveChain = null) =>
+    PlaceRelative(inventory.Names(), newBlock, moveChain);
 
-  public void PlaceRelative(Article atArticle, Article newArticle, Position ?positionChange = null){
+  public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){
-      stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,positionChange));
+      stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.Name)){
-      stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,positionChange));
+      stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,moveChain));
     }
   }
 
-  public void PlaceRelative(Inventory inventory, Article newArticle, Position ?positionChange = null){
-    inventory.articles.ForEach(a => PlaceRelative(a, newArticle, positionChange));
+  public void PlaceRelative(Inventory inventory, Article newArticle, MoveChain ?moveChain = null){
+    inventory.articles.ForEach(a => PlaceRelative(a, newArticle, moveChain));
   }
 
-  public void Replace(string oldBlock, string newBlock,Position ?positionChange = null){
-    PlaceRelative(oldBlock, newBlock, positionChange);
+  public void Replace(string oldBlock, string newBlock,MoveChain ?moveChain = null){
+    PlaceRelative(oldBlock, newBlock, moveChain);
     Delete(oldBlock);
   }
 
-  public void Replace(string[] oldBlocks, string newBlock,Position ?positionChange = null){
-    PlaceRelative(oldBlocks, newBlock, positionChange);
+  public void Replace(string[] oldBlocks, string newBlock,MoveChain ?moveChain = null){
+    PlaceRelative(oldBlocks, newBlock, moveChain);
     Delete(oldBlocks);
   }
 
-  public void Replace(Article oldArticle, Article article, Position ?positionChange = null){
-    PlaceRelative(oldArticle, article,positionChange);
+  public void Replace(Article oldArticle, Article article, MoveChain ?moveChain = null){
+    PlaceRelative(oldArticle, article,moveChain);
     Delete(oldArticle.Name);
   }
 
-  public void Replace(Inventory inventory, Article article, Position ?positionChange = null){
-    PlaceRelative(inventory, article,positionChange);
+  public void Replace(Inventory inventory, Article article, MoveChain ?moveChain = null){
+    PlaceRelative(inventory, article,moveChain);
     Delete(inventory);
   }
 
-  public void Move(Article article, Position position)
-  {
-    foreach (CGameCtnBlock ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == article.Name)){
-      Position blockPosition = Block.GetBlockPosition(ctnBlock).AddPosition(position);
-      ctnBlock.AbsolutePositionInMap = blockPosition.coords;
-      ctnBlock.Coord = new Int3((int)blockPosition.coords.X/32, (int)blockPosition.coords.Y/8, (int)blockPosition.coords.Z/32);
-      ctnBlock.PitchYawRoll = blockPosition.pitchYawRoll;
-    }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == article.Name)){
-      Position blockPosition = new Position(ctnItem.AbsolutePositionInMap,ctnItem.PitchYawRoll);
-      blockPosition.AddPosition(position);
-      ctnItem.AbsolutePositionInMap = blockPosition.coords;
-      ctnItem.PitchYawRoll = blockPosition.pitchYawRoll;
-    }
-  }
+  public void Move(Article article, MoveChain moveChain) =>
+    Replace(article, article, moveChain);
 
-  public void Move(string[] blocks, Position position)
-  {
-    foreach(var block in blocks){
-      Move(GetArticle(block), position);
-    }
-  }
-  public void Move(Inventory inventory, Position position)
-  {
-    Move(inventory.Names(), position);
-  }
+  public void Move(string block, MoveChain moveChain) =>
+    Replace(block,block, moveChain);
+    
+  public void Move(string[] blocks, MoveChain moveChain) =>
+    blocks.ToList().ForEach(block => Move(block, moveChain));
+  
+  public void Move(Inventory inventory, MoveChain moveChain) =>
+    inventory.articles.ForEach(a => Move(a, moveChain));
 
   public void PlaceStagedBlocks(){
     foreach (var block in stagedBlocks){

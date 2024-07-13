@@ -3,7 +3,7 @@ using GBX.NET.Exceptions;
 
 class Article {
     public string Name;
-    public Position Position = new();
+    public MoveChain MoveChain = new();
     public BlockType Type;
     public List<string> Keywords = new();
     public List<string> Shapes = new();
@@ -21,25 +21,25 @@ class Article {
 
     public Dictionary<string,bool> cacheFilter = new();
 
-    public Article(string name,BlockType type,List<string> keywords,List<string> shape,List<string> toShape,List<string> surface,Position ?position = null,int length = 1, int width = 1){
+    public Article(string name,BlockType type,List<string> keywords,List<string> shape,List<string> toShape,List<string> surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
         Name = name;
         Type = type;
         Keywords = keywords;
         Shapes = shape;
         ToShapes = toShape;
         Surfaces = surface;
-        Position = position ?? Position.Zero;
+        MoveChain = moveChain ?? new MoveChain();
         Length = length;
         Width = width;
     }
-    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,Position ?position = null,int length = 1, int width = 1){
+    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
         Name = name;
         Type = type;
         Keywords = keywords;
         Shapes = new List<string>{shape};
         ToShapes = new List<string>{toShape};
         Surfaces = new List<string>{surface};
-        Position = position ?? Position.Zero;
+        MoveChain = moveChain ?? new MoveChain();
         Length = length;
         Width = width;
     }
@@ -78,7 +78,7 @@ class Article {
     }
 
     public Article CloneArticle() =>
-        new(Name,Type,Keywords.ToList(),Shapes.ToList(),ToShapes.ToList(),Surfaces.ToList(),Position.Clone(),Length,Width);
+        new(Name,Type,Keywords.ToList(),Shapes.ToList(),ToShapes.ToList(),Surfaces.ToList(),MoveChain.Clone(),Length,Width);
 
     public bool HasKeyword(string keyword) {
         if (Alteration.shapeKeywords.Contains(keyword)) {

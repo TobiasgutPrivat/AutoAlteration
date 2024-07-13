@@ -1,6 +1,5 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
-using GBX.NET.Engines.GameData;
 
 enum BlockType
 {
@@ -24,7 +23,7 @@ class Block {
     public CGameCtnBlockSkin? Skin;
     public string Path = "";
 
-    public Block(CGameCtnBlock block,Article fromArticle,  Article article, Position ?placePosition)
+    public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
     {
         color = block.Color;
         blockType = BlockType.Block;
@@ -41,14 +40,9 @@ class Block {
         this.blockType = article.Type;
         this.Path = article.Path;
         
-        position.AddPosition(fromArticle.Position);
-        placePosition ??= Position.Zero;
-        if (placePosition.multiplyBySize){
-            position.AddPosition(new Position(new Vec3(placePosition.coords.X * article.Width, placePosition.coords.Y, placePosition.coords.Z * article.Length), placePosition.pitchYawRoll));
-        } else {
-            position.AddPosition(placePosition);
-        }
-        position.SubtractPosition(article.Position);
+        fromArticle.MoveChain.Apply(position,article);
+        moveChain?.Apply(position,article);
+        article.MoveChain.Subtract(position,article);
     }
 
     public static Position GetBlockPosition(CGameCtnBlock block) {
@@ -75,7 +69,7 @@ class Block {
         };
     }
 
-    public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,Position ?placePosition){
+    public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
         color = item.Color;
@@ -83,9 +77,9 @@ class Block {
         this.article = article;
         this.name = article.Name;
         this.blockType = article.Type;
-        position.AddPosition(fromArticle.Position);
-        position.AddPosition(placePosition ?? Position.Zero);
-        position.SubtractPosition(article.Position);
+        fromArticle.MoveChain.Apply(position,article);
+        moveChain?.Apply(position,article);
+        article.MoveChain.Subtract(position,article);
     }
 
     public bool IsInGrid(){

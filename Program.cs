@@ -24,7 +24,7 @@ AutoAlteration.AlterFolder(new FreeWheel(), sourcefolder, destinationFolder + "S
 //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// AutoAlteration.AlterFile(new NoBrake(), sourceFile, "NoBrake");
+// AutoAlteration.AlterFile(new AntiBooster(), sourceFile, "AntiBooster");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");

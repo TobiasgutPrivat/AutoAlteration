@@ -3,80 +3,80 @@ class EffectAlteration: Alteration {
     public override void AddArticles() {
         AddCheckpointTrigger();
     }
-    public static void PlaceCPEffect(Map map, string Effect,Position ?position = null) {
-        position ??= Position.Zero;
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(new string[] {"Left", "Right", "Center", "v2" }).AddKeyword(Effect).PlaceRelative(map,position);
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect),new Position(new Vec3(-16,-16,-16)).AddPosition(position));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),new Position(new Vec3(0,7,0),new Vec3(0,0,PI)).AddPosition(position));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),new Position(new Vec3(6,12,0),new Vec3(0,0,PI*-0.5f)).AddPosition(position));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),new Position(new Vec3(0,7,0),new Vec3(0,0,PI)).AddPosition(position));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),new Position(new Vec3(-6,12,0),new Vec3(0,0,PI*0.5f)).AddPosition(position));
-        map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect),position);
+    public static void PlaceCPEffect(Map map, string Effect,MoveChain ?moveChain = null) {
+        moveChain ??= new();
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(new string[] {"Left", "Right", "Center", "v2" }).AddKeyword(Effect).PlaceRelative(map,moveChain);
+        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect),Move(-16,-16,-16).AddChain(moveChain));
+        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
+        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(6,12,0).Rotate(0,0,PI*-0.5f).AddChain(moveChain));
+        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
+        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(-6,12,0).Rotate(0,0,PI*0.5f).AddChain(moveChain));
+        map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect),moveChain);
 
         map.PlaceStagedBlocks();
     }
-    public static void PlaceStartEffect(Map map, string Effect,Position ?position = null){
-        position ??= Position.Zero;
+    public static void PlaceStartEffect(Map map, string Effect,MoveChain ?moveChain = null){
+        moveChain ??= new();
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
-        map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,new Position(new Vec3(0,-16,0)).AddPosition(position));
-        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,new Position(new Vec3(0,-8,0)).AddPosition(position));
-        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,new Position(new Vec3(0,-16,-2)).AddPosition(position));
-        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,new Position(new Vec3(0,0,-10)).AddPosition(position));
+        map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
+        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,0).AddChain(moveChain));
+        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
+        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
         map.PlaceStagedBlocks();
     }
 }
 class NoBrake: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"NoBrake",new Position(new Vec3(0,0,1),Vec3.Zero));
-        PlaceStartEffect(map,"NoBrake",Position.Zero);
+        PlaceCPEffect(map,"NoBrake",Move(0,0,1));
+        PlaceStartEffect(map,"NoBrake");
     }
 }
 class Cruise: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Cruise",new Position(new Vec3(0,0,1),Vec3.Zero));
+        PlaceCPEffect(map,"Cruise",Move(0,0,1));
     }
 }
 
 class Fragile: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Fragile",new Position(new Vec3(0,0,1),Vec3.Zero));
-        PlaceStartEffect(map,"Fragile",Position.Zero);
+        PlaceCPEffect(map,"Fragile",Move(0,0,1));
+        PlaceStartEffect(map,"Fragile");
     }
 }
 
 class SlowMo: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"SlowMotion",new Position(new Vec3(0,0,1),Vec3.Zero));
-        PlaceStartEffect(map,"SlowMotion",Position.Zero);
+        PlaceCPEffect(map,"SlowMotion",Move(0,0,1));
+        PlaceStartEffect(map,"SlowMotion");
     }
 }
 
 class NoSteer: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"NoSteering",new Position(new Vec3(0,0,1),Vec3.Zero));
-        PlaceStartEffect(map,"NoSteering",Position.Zero);
+        PlaceCPEffect(map,"NoSteering",Move(0,0,1));
+        PlaceStartEffect(map,"NoSteering");
     }
 }
 
 class Glider: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Boost",Position.Zero);
-        PlaceStartEffect(map,"Boost",Position.Zero);
+        PlaceCPEffect(map,"Boost");
+        PlaceStartEffect(map,"Boost");
     }
 }
 
 class Reactor: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Boost2",Position.Zero);
-        PlaceStartEffect(map,"Boost2",Position.Zero);
+        PlaceCPEffect(map,"Boost2");
+        PlaceStartEffect(map,"Boost2");
     }
 }
 
 class ReactorDown: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Boost2",new Position(Vec3.Zero,new Vec3(PI,0,0)));
-        PlaceStartEffect(map,"Boost2",new Position(Vec3.Zero,new Vec3(PI,0,0)));
+        PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0));
+        PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0));
     }
 }
 
@@ -84,14 +84,14 @@ class FreeWheel: EffectAlteration {
     public override void Run(Map map){
         PlaceCPEffect(map,"Turbo");
         PlaceStartEffect(map,"Turbo");
-        PlaceCPEffect(map,"NoEngine",new Position(new Vec3(0,0,1),Vec3.Zero));
-        PlaceStartEffect(map,"NoEngine",new Position(new Vec3(0,0,3),Vec3.Zero));
+        PlaceCPEffect(map,"NoEngine",Move(0,0,1));
+        PlaceStartEffect(map,"NoEngine",Move(0,0,3));
     }
 }
 
 class AntiBooster: Alteration {
     public override void Run(Map map){
-        inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette").Edit().Replace(map,new(new Vec3(32,0,32),new Vec3(PI,0,0),true));
+        inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette").Edit().Replace(map,RotateMid(PI,0,0));
         //TODO Diagonals
         map.PlaceStagedBlocks();
     }

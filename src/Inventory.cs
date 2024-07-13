@@ -59,8 +59,10 @@ class Inventory {
         Edit().AddToShape(keyword);
     public KeywordEdit RemoveToShape(string keyword) =>
         Edit().RemoveToShape(keyword);
-    public KeywordEdit ChangePosition(Position position) =>
-        Edit().ChangePosition(position);
+    public KeywordEdit SetChain(MoveChain moveChain) =>
+        Edit().SetChain(moveChain);
+    public KeywordEdit AddChain(MoveChain moveChain) =>
+        Edit().AddChain(moveChain);
     public KeywordEdit Width(int width) =>
         Edit().Width(width);
     public KeywordEdit Length(int length) =>

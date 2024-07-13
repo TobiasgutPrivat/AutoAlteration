@@ -17,7 +17,7 @@ class YepTree: Alteration {
         Trees = Trees.Append("Summer").ToArray();
         Trees = Trees.Append("Winter").ToArray();
         Trees = Trees.Append("Fall").ToArray();
-        map.PlaceRelative(Trees,"GateCheckpointCenter8mv2",new Position(Vec3.Zero,Vec3.Zero));
+        map.PlaceRelative(Trees,"GateCheckpointCenter8mv2");
         map.PlaceStagedBlocks();
     }
 }

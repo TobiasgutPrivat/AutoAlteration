@@ -53,12 +53,19 @@ class KeywordEdit {
         return this;
     }
 
-    public KeywordEdit ChangePosition(Position position) {
-        articles.ForEach(a => a.Position.AddPosition(position));
+    public KeywordEdit SetChain(MoveChain moveChain) {
+        articles.ForEach(a => a.MoveChain = moveChain.Clone());
         return this;
     }
+
+    public KeywordEdit AddChain(MoveChain moveChain) {
+        articles.ForEach(a => a.MoveChain.AddChain(moveChain));
+        return this;
+    }
+
     public KeywordEdit Width(int width) {
         articles.ForEach(a => a.Width = width);
+       
         return this;
     }
     public KeywordEdit Length(int length) {
@@ -66,22 +73,22 @@ class KeywordEdit {
         return this;
     }
 
-    public void Replace(Map map,Position ?position = null){
+    public void Replace(Map map,MoveChain ?moveChain = null){
         articles.ForEach( a => {
             Article ?article = Alteration.inventory.AlignArticle(a);
             if (article != null) {
-                map.Replace(a, article, position);
+                map.Replace(a, article, moveChain);
             } else {
                 // Console.WriteLine("No matching article found for: " + a.KeywordString());
             }
         });
     }
 
-    public void PlaceRelative(Map map,Position ?position = null){
+    public void PlaceRelative(Map map,MoveChain ?moveChain = null){
         articles.ForEach( a => {
             Article ?article = Alteration.inventory.AlignArticle(a);
             if (article != null) {
-                map.PlaceRelative(a, article, position);
+                map.PlaceRelative(a, article, moveChain);
             } else {
                 // Console.WriteLine("No matching article found for: " + a.KeywordString());
             }
