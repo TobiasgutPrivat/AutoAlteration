@@ -1,8 +1,14 @@
 class AutoAlteration {
     public static int mapCount = 0;
+    private static Alteration ?lastAlteration;
     public static void Alter(List<Alteration> alterations, Map map) {
         foreach (Alteration alteration in alterations) {
+            if (lastAlteration == null || (alteration.GetType() != lastAlteration.GetType())) {
+                Alteration.inventory.RemoveTemp();
+                alteration.AddArticles();
+            }
             alteration.Run(map);
+            lastAlteration = alteration;
         }
         mapCount++;
     }
@@ -13,7 +19,7 @@ class AutoAlteration {
 
     public static void AlterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(mapFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,destinationFolder + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
+            AlterFile(alterations,mapFile,destinationFolder + Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
         }
     }
     public static void AlterFolder(Alteration alteration, string mapFolder, string destinationFolder, string Name) =>
@@ -23,7 +29,7 @@ class AutoAlteration {
         AlterFolder(alterations,mapFolder,destinationFolder + Path.GetFileName(mapFolder) + " - " + Name + "/",Name);
         foreach (string Directory in Directory.GetDirectories(mapFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,destinationFolder + Directory.Substring(mapFolder.Length) + "/",Name);
+            AlterAll(alterations,Directory,destinationFolder + Directory[mapFolder.Length..] + "/",Name);
         }
     }
     public static void AlterAll(Alteration alteration, string mapFolder, string destinationFolder, string Name) =>
@@ -36,9 +42,9 @@ class AutoAlteration {
         AlterFolder(alteration,mapFolder,mapFolder,Name);
     
     public static void AlterFile(List<Alteration> alterations, string mapFile, string destinationFile, string Name) {
-        Map map = new Map(mapFile);
+        Map map = new(mapFile);
         Alter(alterations, map);
-        map.map.MapName = Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name;
+        map.map.MapName = Path.GetFileName(mapFile)[..^8] + " " + Name;
         map.Save(destinationFile);
         Console.WriteLine(destinationFile);
     }
@@ -46,10 +52,10 @@ class AutoAlteration {
         AlterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);
     
     public static void AlterFile(List<Alteration> alterations, string mapFile, string Name) =>
-        AlterFile(alterations,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
+        AlterFile(alterations,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
     
     public static void AlterFile(Alteration alteration, string mapFile, string Name) =>
-        AlterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile).Substring(0, Path.GetFileName(mapFile).Length - 8) + " " + Name + ".map.gbx",Name);
+        AlterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
 
     public static void AllAlterations(string sourceFolder, string destinationFolder) {
         AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");

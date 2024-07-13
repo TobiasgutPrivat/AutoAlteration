@@ -72,6 +72,8 @@ Transition
 PenaltyIce
 DiagSwitch
 ConnectorX6
+ConnectorX5
+ConnectorX3
 Connector
 Turnstile
 DiagRight
@@ -242,6 +244,7 @@ Cone
 Road
 Deco
 Flip
+Park
 Hill
 Tube
 Lamp1
@@ -286,6 +289,7 @@ Tree
 Tall
 Snow
 90X2
+16x9
 Disk
 Mid
 Med

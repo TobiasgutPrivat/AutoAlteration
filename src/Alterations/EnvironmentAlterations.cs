@@ -1,0 +1,49 @@
+using GBX.NET;
+
+class EnvironmentAlterations: Alteration {
+    public static void SetGamePlay(Map map, string GamePlay){
+        inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword(GamePlay).Replace(map);
+        Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
+        Article GateSpecial = inventory.GetArticle("GateGameplay" + GamePlay);
+        map.PlaceRelative(start.Select("!Water&!RoadIce"), GateSpecial,new Position(new Vec3(0,-16,0)));
+        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,new Position(new Vec3(0,-8,0)));
+        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,new Position(new Vec3(0,-16,-2)));
+        inventory.Select("MapStart&Gate").AddKeyword("Gameplay").AddKeyword(GamePlay).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,new Position(new Vec3(0,0,-10)));
+        map.PlaceStagedBlocks();
+        map.Delete(inventory.Select("Gameplay&!" + GamePlay));
+    }
+}
+
+class Rally: EnvironmentAlterations {
+    public override void Run(Map map){
+        SetGamePlay(map,"Rally");
+    }
+}
+class Snow: EnvironmentAlterations {
+    public override void Run(Map map){
+        SetGamePlay(map,"Snow");
+    }
+}
+class Desert: EnvironmentAlterations {
+    public override void Run(Map map){
+        SetGamePlay(map,"Desert");
+    }
+}
+class Stadium: EnvironmentAlterations {
+    public override void Run(Map map){
+        SetGamePlay(map,"Stadium");
+    }
+}
+
+class SnowCarswitchToDesert: Alteration {
+    public override void Run(Map map){
+        inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Desert").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
+class SnowCarswitchToRally: Alteration {
+    public override void Run(Map map){
+        inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Rally").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}

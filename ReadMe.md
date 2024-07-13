@@ -17,7 +17,6 @@ So far it's only tested and supported on Windows
 3. Clone this GitHub Repository into any Folder (you can use this Command in cmd)
 > git clone https://github.com/TobiasgutPrivat/AutoAlteration.git /{path/to/your/directory}
 
-4. Make initial build by executing "build.bat" script in cloned folder
 <!--
 There can be an issue with nuget source.
 In that case make sure you have correct package source using:
@@ -39,6 +38,7 @@ Those are the currently available Alterations (for CLI Copy names from here)
 - Snow
 - Rally
 - Desert
+
 <strong>Effect Alterations</strong>
 - NoBrake
 - Cruise
@@ -49,16 +49,19 @@ Those are the currently available Alterations (for CLI Copy names from here)
 - Reactor
 - ReactorDown
 - FreeWheel
-- CPBoost
+
 <strong>Checkpoint Alterations</strong>
 - STTF
 - CPFull
+- CPBoost
+
 <strong>Finish Alterations</strong>
 - OneUP
 - OneDown
 - OneLeft
 - OneRight
 - TwoUP
+
 <strong>Other Alterations</strong>
 - YepTree
 - NoItems

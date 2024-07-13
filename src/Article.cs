@@ -13,6 +13,7 @@ class Article {
     public int Length = 1;
     public int Height = 1;
     public string Path = "";
+    public bool Temp;
     public bool DefaultRotation;
     public bool Theme;
 

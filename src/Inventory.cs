@@ -71,23 +71,25 @@ class Inventory {
         return new KeywordEdit(articleClone);
     }
 
+    public Inventory AddTemp(List<Article> newArticles) {
+        newArticles.ForEach(a => a.Temp = true);
+        articles.AddRange(newArticles);
+        return this;
+    }
+    public Inventory AddTemp(Article newArticle) {
+        newArticle.Temp = true;
+        articles.Add(newArticle);
+        return this;
+    }
+    public Inventory AddTemp(KeywordEdit inventory) =>
+        AddTemp(inventory.articles);
+
+    public Inventory RemoveTemp() {
+        articles = articles.Where(a => !a.Temp).ToList();
+        return this;
+    }
+
     //Development Section ------------------------------------------------------------------------------------------------------
-    public Inventory AddArticles(List<Article> newArticles) {
-        if (!Alteration.devMode){
-            Console.WriteLine("Adding Articles only available in devMode");
-        } else {
-            articles.AddRange(newArticles);
-        }
-        return this;
-    }
-    public Inventory AddArticles(KeywordEdit keywordEdit) {
-        if (!Alteration.devMode){
-            Console.WriteLine("Adding Articles only available in devMode");
-        } else {
-            articles.AddRange(keywordEdit.articles);
-        }
-        return this;
-    }
     public KeywordEdit EditOriginal(){
         if (!Alteration.devMode){
             Console.WriteLine("Edit Original only available in devMode");

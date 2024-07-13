@@ -8,8 +8,9 @@ Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirect
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
-// AutoAlteration.AlterAll(new NoItems(), sourcefolder, destinationFolder + "Summer 2024 NoItems/", "NoItems");
-// new CustomBlock("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/src/CustomBlocks/RoadTechToThemeSnowRoadX2Magnet.Block.Gbx");
+AutoAlteration.AlterFolder(new ReactorDown(), sourcefolder, destinationFolder + "Summer 2024 ReactorDown/", "ReactorDown");
+AutoAlteration.AlterFolder(new FreeWheel(), sourcefolder, destinationFolder + "Summer 2024 FreeWheel/", "FreeWheel");
+
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
@@ -23,10 +24,13 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
+// AutoAlteration.AlterFile(new NoBrake(), sourceFile, "NoBrake");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
+
+//CustomBlock
+// new CustomBlock("C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/src/CustomBlocks/RoadTechToThemeSnowRoadX2Magnet.Block.Gbx");
 
 // Console.WriteLine(Directory.GetFiles(destinationFolder, "*.map.gbx", SearchOption.AllDirectories).Count());
 
