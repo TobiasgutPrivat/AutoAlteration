@@ -180,9 +180,6 @@ class Article {
     }
 
     public bool Match(Article article) {
-        if (Name == "RoadTechDiagRightCheckpoint" && article.Name == "RoadTechDiagRightStraightX2" && Alteration.devMode) {
-            Console.WriteLine("Debug");
-        }
         if (Type != article.Type) {
             return false;
         };

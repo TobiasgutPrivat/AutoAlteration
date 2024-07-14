@@ -2,19 +2,13 @@
 using Newtonsoft.Json;
 //Initial load
 Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../..\..")) + "/");
-// CLI.Run();
+CLI.Run();
 // Alteration.TestInventory();
 //Code for Execution (change for your use)
 //Folder Processing
-string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new OneUP(), sourcefolder, destinationFolder + "Summer 2024 OneUP/", "OneUP");
-AutoAlteration.AlterFolder(new OneDown(), sourcefolder, destinationFolder + "Summer 2024 OneDown/", "OneDown");
-AutoAlteration.AlterFolder(new OneLeft(), sourcefolder, destinationFolder + "Summer 2024 OneLeft/", "OneLeft");
-AutoAlteration.AlterFolder(new OneRight(), sourcefolder, destinationFolder + "Summer 2024 OneRight/", "OneRight");
-AutoAlteration.AlterFolder(new TwoUP(), sourcefolder, destinationFolder + "Summer 2024 TwoUP/", "TwoUP");
-// AutoAlteration.AlterFolder(new YepTree(), sourcefolder, destinationFolder + "Summer 2024 YepTree/", "YepTree");
-// AutoAlteration.AlterFolder(new NoItems(), sourcefolder, destinationFolder + "Summer 2024 NoItems/", "NoItems");
+// string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
+// AutoAlteration.AlterFolder(new OneUP(), sourcefolder, destinationFolder + "Summer 2024 OneUP/", "OneUP");
 
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -27,7 +21,7 @@ AutoAlteration.AlterFolder(new TwoUP(), sourcefolder, destinationFolder + "Summe
 // AutoAlteration.AllAlterations(sourceFolder, destinationFolder);
 
 //Single File Processing
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
+// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
 // AutoAlteration.AlterFile(new STTF(), sourceFile, "STTF");
 
