@@ -3,22 +3,33 @@ class EffectAlteration: Alteration {
     public override void AddArticles() {
         AddCheckpointTrigger();
     }
-    public static void PlaceCPEffect(Map map, string Effect,MoveChain ?moveChain = null) {
+    public static void PlaceCPEffect(Map map, string Effect,MoveChain ?moveChain = null, bool oriented = false) {
         moveChain ??= new();
+        Article GateSpecial;
+        if (oriented) {
+            GateSpecial = inventory.GetArticle("GateSpecial" + Effect + "Oriented");
+        } else{
+            GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
+        }
         inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(new string[] {"Left", "Right", "Center", "v2" }).AddKeyword(Effect).PlaceRelative(map,moveChain);
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&!Ring&!WithWall"), inventory.GetArticle("GateSpecial" + Effect),Move(-16,-16,-16).AddChain(moveChain));
+        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&!Ring&!WithWall"), GateSpecial,Move(-16,-16,-16).AddChain(moveChain));
         map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
         map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(6,12,0).Rotate(0,0,PI*-0.5f).AddChain(moveChain));
         map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
         map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(-6,12,0).Rotate(0,0,PI*0.5f).AddChain(moveChain));
-        map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), inventory.GetArticle("GateSpecial" + Effect),moveChain);
+        map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial,moveChain);
 
         map.PlaceStagedBlocks();
     }
-    public static void PlaceStartEffect(Map map, string Effect,MoveChain ?moveChain = null){
+    public static void PlaceStartEffect(Map map, string Effect,MoveChain ?moveChain = null, bool oriented = false){
         moveChain ??= new();
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
-        Article GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
+        Article GateSpecial;
+        if (oriented) {
+            GateSpecial = inventory.GetArticle("GateSpecial" + Effect + "Oriented");
+        } else{
+            GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
+        }
         map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
         map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,0).AddChain(moveChain));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
@@ -61,22 +72,22 @@ class NoSteer: EffectAlteration {
 
 class Glider: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Boost");
-        PlaceStartEffect(map,"Boost");
+        PlaceCPEffect(map,"Boost",oriented: true);
+        PlaceStartEffect(map,"Boost",oriented: true);
     }
 }
 
 class Reactor: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Boost2");
-        PlaceStartEffect(map,"Boost2");
+        PlaceCPEffect(map,"Boost2",oriented: true);
+        PlaceStartEffect(map,"Boost2",oriented: true);
     }
 }
 
 class ReactorDown: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0));
-        PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0));
+        PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
+        PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
     }
 }
 

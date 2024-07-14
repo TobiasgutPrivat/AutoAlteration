@@ -32,13 +32,13 @@ class Article {
         Length = length;
         Width = width;
     }
-    public Article(string name,BlockType type,List<string> keywords,string shape,string toShape,string surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
+    public Article(string name,BlockType type,List<string> ?keywords,string ?shape,string ?toShape,string ?surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
         Name = name;
         Type = type;
-        Keywords = keywords;
-        Shapes = new List<string>{shape};
-        ToShapes = new List<string>{toShape};
-        Surfaces = new List<string>{surface};
+        Keywords = keywords ?? new List<string>();
+        if (shape != null) Shapes = new List<string>{shape};
+        if (toShape != null) ToShapes = new List<string>{toShape};
+        if (surface != null) Surfaces = new List<string>{surface};
         MoveChain = moveChain ?? new MoveChain();
         Length = length;
         Width = width;
@@ -86,9 +86,6 @@ class Article {
         } else if (Alteration.surfaceKeywords.Contains(keyword)) {
             return Surfaces.Any(k => k == keyword);
         } else{
-            // if (!Alteration.Keywords.Contains(keyword)) {
-            //     Console.WriteLine("Keyword doesnt exist: " + keyword);
-            // }
             return Keywords.Any(k => k == keyword);
         }
     }
@@ -183,6 +180,9 @@ class Article {
     }
 
     public bool Match(Article article) {
+        if (Name == "RoadTechDiagRightCheckpoint" && article.Name == "RoadTechDiagRightStraightX2" && Alteration.devMode) {
+            Console.WriteLine("Debug");
+        }
         if (Type != article.Type) {
             return false;
         };

@@ -4,11 +4,16 @@ class Inventory {
 
     public Inventory() {}
     public Inventory(List<Article> articles) {this.articles = articles;}
+
+    public void Export() =>
+        File.WriteAllText(Alteration.ProjectFolder + "dev/Inventory.json", JsonConvert.SerializeObject(articles));
     
     public Inventory Select(string keywordFilter) =>
         new(GetArticles(keywordFilter));
     public Inventory Select(BlockType blockType) =>
         new(articles.Where(a => a.Type == blockType).ToList());
+    public Inventory SelectTemp() =>
+        new(articles.Where(a => a.Temp).ToList());
 
     public Inventory SelectString(string nameString) =>
         new(articles.Where(a => a.Name.Contains(nameString)).ToList());
@@ -85,6 +90,11 @@ class Inventory {
     }
     public Inventory AddTemp(KeywordEdit inventory) =>
         AddTemp(inventory.articles);
+
+    public Inventory RemoveArticles(Inventory removeInventory) {
+        articles = articles.Where(a => !removeInventory.articles.Contains(a)).ToList();
+        return this;
+    }
 
     public Inventory RemoveTemp() {
         articles = articles.Where(a => !a.Temp).ToList();

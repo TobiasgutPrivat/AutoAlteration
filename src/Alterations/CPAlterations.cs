@@ -1,6 +1,5 @@
 class CPBoost : Alteration{
     public override void Run(Map map){
-        
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Turbo").Replace(map);
         inventory.Select(BlockType.Block).Select("Turbo").RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(map);
         inventory.Select(BlockType.Block).Select("Turbo2").RemoveKeyword("Turbo2").AddKeyword("Checkpoint").Replace(map);
@@ -22,12 +21,20 @@ class STTF : Alteration{
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
     }
+
+    public override void AddArticles(){
+        AddNoCPBlocks();
+        inventory.Export();
+    }
 }
 
 class CPFull : Alteration{
     public override void Run(Map map){
         inventory.Select(BlockType.Block).AddKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
+    }
+    public override void AddArticles(){
+        AddNoCPBlocks();
     }
 }
 

@@ -3,13 +3,18 @@ using Newtonsoft.Json;
 //Initial load
 Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../..\..")) + "/");
 // CLI.Run();
-
+// Alteration.TestInventory();
 //Code for Execution (change for your use)
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new ReactorDown(), sourcefolder, destinationFolder + "Summer 2024 ReactorDown/", "ReactorDown");
-AutoAlteration.AlterFolder(new FreeWheel(), sourcefolder, destinationFolder + "Summer 2024 FreeWheel/", "FreeWheel");
+AutoAlteration.AlterFolder(new OneUP(), sourcefolder, destinationFolder + "Summer 2024 OneUP/", "OneUP");
+AutoAlteration.AlterFolder(new OneDown(), sourcefolder, destinationFolder + "Summer 2024 OneDown/", "OneDown");
+AutoAlteration.AlterFolder(new OneLeft(), sourcefolder, destinationFolder + "Summer 2024 OneLeft/", "OneLeft");
+AutoAlteration.AlterFolder(new OneRight(), sourcefolder, destinationFolder + "Summer 2024 OneRight/", "OneRight");
+AutoAlteration.AlterFolder(new TwoUP(), sourcefolder, destinationFolder + "Summer 2024 TwoUP/", "TwoUP");
+// AutoAlteration.AlterFolder(new YepTree(), sourcefolder, destinationFolder + "Summer 2024 YepTree/", "YepTree");
+// AutoAlteration.AlterFolder(new NoItems(), sourcefolder, destinationFolder + "Summer 2024 NoItems/", "NoItems");
 
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -24,7 +29,7 @@ AutoAlteration.AlterFolder(new FreeWheel(), sourcefolder, destinationFolder + "S
 //Single File Processing
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string destinationFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test CPBoost.Map.Gbx";
-// AutoAlteration.AlterFile(new AntiBooster(), sourceFile, "AntiBooster");
+// AutoAlteration.AlterFile(new STTF(), sourceFile, "STTF");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
@@ -49,9 +54,9 @@ class Test : Alteration {
         // map.PlaceRelative(new string[] { "DecoHillIceSlope2ChicaneX2Left" }, "PlatFormTechLoopEndCurve3In", new(new(0,30,0)));
         // map.Replace(new string[] { "DecoHillIceSlope2ChicaneX2Left" }, "PlatformGrassSlope2UTop");
         // map.map.PlaceBlock("DecoHillSlope2curve2Out", new Int3(20,10,20),Direction.North);
-        map.map.PlaceBlock("RoadIceWithWallDiagLeftStraight", new Int3(20,12,20),Direction.North);
-        map.map.PlaceAnchoredObject(new Ident("ShowFogger8m", new Id(26), "Nadeo"), new Vec3(800,120,800),Vec3.Zero);
-        map.map.PlaceAnchoredObject(new Ident("ShowFogger16m", new Id(26), "Nadeo"), new Vec3(800,120,800),Vec3.Zero);
+        // map.map.PlaceBlock("GateFinish16m", new Int3(20,12,20),Direction.North);
+        map.map.PlaceAnchoredObject(new Ident("GateFinish16m", new Id(26), "Nadeo"), new Vec3(800,220,800),Vec3.Zero);
+        map.map.PlaceAnchoredObject(new Ident("GateCheckpointCenter16m", new Id(26), "Nadeo"), new Vec3(800,220,800),Vec3.Zero);
         map.PlaceStagedBlocks();
     }
 }
