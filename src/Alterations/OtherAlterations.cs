@@ -23,12 +23,12 @@ class YepTree: Alteration {
 }
 
 class Flipped: Alteration {
-    public override void Run(Map map){//Prototype
+    public override void Run(Map map){//Prototype TODO a lot
         //Dimensions normal Stadium
         // (1,9,1)
         // (48,38,48)
         inventory.Edit().Replace(map);
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(1536-x.position.coords.X, 240-x.position.coords.Y, 1536-x.position.coords.Z));  
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, 240-x.position.coords.Y, 1536-x.position.coords.Z));  //X: 1536-
         map.stagedBlocks.ForEach(x => x.position.Rotate(new Vec3(0, PI, 0)));
         map.PlaceStagedBlocks();
     }

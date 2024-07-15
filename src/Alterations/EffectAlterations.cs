@@ -102,8 +102,8 @@ class FreeWheel: EffectAlteration {
 
 class AntiBooster: Alteration {
     public override void Run(Map map){
+        //TODO Tilted, Wall, RotateMid for items
         inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette").Edit().Replace(map,RotateMid(PI,0,0));
-        //TODO Diagonals
         map.PlaceStagedBlocks();
     }
 }

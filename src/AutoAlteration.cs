@@ -44,7 +44,7 @@ class AutoAlteration {
     public static void AlterFile(List<Alteration> alterations, string mapFile, string destinationFile, string Name) {
         Map map = new(mapFile);
         Alter(alterations, map);
-        map.map.MapName = Path.GetFileName(mapFile)[..^8] + " " + Name;
+        map.map.MapName = map.map.MapName + " " + Name;
         map.Save(destinationFile);
         Console.WriteLine(destinationFile);
     }
@@ -52,7 +52,7 @@ class AutoAlteration {
         AlterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);
     
     public static void AlterFile(List<Alteration> alterations, string mapFile, string Name) =>
-        AlterFile(alterations,mapFile,Path.GetDirectoryName(mapFile) + Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
+        AlterFile(alterations,mapFile,Path.GetDirectoryName(mapFile)  + "\\" +  Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
     
     public static void AlterFile(Alteration alteration, string mapFile, string Name) =>
         AlterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);

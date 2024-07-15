@@ -21,6 +21,11 @@ class Block {
     public bool IsGround;
     public bool IsAir;
     public CGameCtnBlockSkin? Skin;
+    public CGameCtnAnchoredObject? SnappedOnItem;
+    public CGameCtnBlock? SnappedOnBlock;
+    public CGameCtnAnchoredObject? PlacedOnItem;
+    public Vec3 PivotPosition;
+    public Byte3 BlockUnitCoord;
     public string Path = "";
 
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
@@ -70,8 +75,16 @@ class Block {
     }
 
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
+        // Console.WriteLine(item.PivotPosition);//TODO Check if needed
+        Console.WriteLine(item.PlacedOnItem);
+        
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
+        SnappedOnBlock = item.SnappedOnBlock;
+        SnappedOnItem = item.SnappedOnItem;
+        PlacedOnItem = item.PlacedOnItem;
+        PivotPosition = item.PivotPosition;
+        BlockUnitCoord = item.BlockUnitCoord;
         color = item.Color;
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         this.article = article;

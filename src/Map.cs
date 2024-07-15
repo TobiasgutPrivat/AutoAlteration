@@ -181,7 +181,12 @@ class Map
             EmbedItem(block.name,block.Path);
             embeddedBlocks.Add(block.name);
           }
-          map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
+          CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
+          item.SnappedOnItem = block.SnappedOnItem;
+          item.SnappedOnBlock = block.SnappedOnBlock;
+          item.PlacedOnItem = block.PlacedOnItem;
+          item.PivotPosition = block.PivotPosition;
+          item.BlockUnitCoord = block.BlockUnitCoord;
           break;
       }
   }
