@@ -1,6 +1,6 @@
 using GBX.NET;
 class EffectAlteration: Alteration {
-    public override void AddArticles() {
+    public override void ChangeInventory() {
         AddCheckpointTrigger();
     }
     public static void PlaceCPEffect(Map map, string Effect,MoveChain ?moveChain = null, bool oriented = false) {

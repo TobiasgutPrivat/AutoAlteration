@@ -22,7 +22,7 @@ class STTF : Alteration{
         map.PlaceStagedBlocks();
     }
 
-    public override void AddArticles(){
+    public override void ChangeInventory(){
         AddNoCPBlocks();
         inventory.Export();
     }
@@ -33,7 +33,7 @@ class CPFull : Alteration{
         inventory.Select(BlockType.Block).AddKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
     }
-    public override void AddArticles(){
+    public override void ChangeInventory(){
         AddNoCPBlocks();
     }
 }

@@ -1,7 +1,7 @@
 ﻿using GBX.NET;
 using Newtonsoft.Json;
 //Initial load
-Alteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../..\..")) + "/");
+AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../..\..")) + "/");
 // CLI.Run();
 // Alteration.TestInventory();
 //Code for Execution (change for your use)
@@ -21,11 +21,11 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 // AutoAlteration.AllAlterations(sourceFolder, destinationFolder);
 
 //Single File Processing
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Deep_Dip_2r1.Map.Gbx";
-// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template FreeWheel.Map.Gbx";
+// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Deep_Dip_2r1.Map.Gbx";
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/Summer 2024 - 18.Map.Gbx";
 // AutoAlteration.AlterFile(new List<Alteration>{new FreeWheel()}, sourceFile, "FreeWheel");
-AutoAlteration.AlterFile(new List<Alteration>{new Test()}, sourceFile, "Yeet");
+AutoAlteration.AlterFile(new List<Alteration>{new STTF()}, sourceFile, "STTF");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");

@@ -2,22 +2,7 @@ using GBX.NET;
 using Newtonsoft.Json;
 class Alteration {
     public static float PI = (float)Math.PI;
-    public static string ProjectFolder = "";
-    public static string CustomBlocksFolder = "";
-    public static string[] Keywords = Array.Empty<string>();
-    public static string[] shapeKeywords = Array.Empty<string>();
-    public static string[] surfaceKeywords = Array.Empty<string>();
     public static Inventory inventory = new();
-    public static bool devMode = false;
-
-    public static void Load(string projectFolder) {
-        ProjectFolder = projectFolder;
-        CustomBlocksFolder = ProjectFolder + "src/CustomBlocks/";
-        shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/shapeKeywords.txt");
-        surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/surfaceKeywords.txt");
-        Keywords = File.ReadAllLines(ProjectFolder + "src/Inventory/Keywords.txt");
-        CreateInventory();
-    }
 
     public static Inventory ImportSerializedInventory(string path)
     {
@@ -58,7 +43,7 @@ class Alteration {
 
     public Alteration(){}
     public virtual void Run(Map map) {}
-    public virtual void AddArticles() {}
+    public virtual void ChangeInventory() {}
 
     public static MoveChain Move(float x, float y, float z) =>
         Move(new Vec3(x,y,z));
@@ -88,9 +73,8 @@ class Alteration {
     }
 
     public static void CreateInventory() {
-        devMode = true;
         //Load Nadeo Articles
-        inventory = ImportVanillaInventory(ProjectFolder + "src/Inventory/BlockData.json");
+        inventory = ImportVanillaInventory(AutoAlteration.ProjectFolder + "src/Inventory/BlockData.json");
 
         //Inventory Changes
         inventory.Select(BlockType.Block).Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
@@ -108,7 +92,6 @@ class Alteration {
         //save
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
         inventory.Export();
-        devMode = false;
     }
 
     public static void TestInventory(){
@@ -126,13 +109,13 @@ class Alteration {
     }
 
     public static void AddCustomBlocks(string subFolder){
-        inventory.AddTemp(Directory.GetFiles(CustomBlocksFolder + subFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
-        inventory.AddTemp(Directory.GetFiles(CustomBlocksFolder + subFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(AutoAlteration.CustomBlocksFolder + subFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(AutoAlteration.CustomBlocksFolder + subFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
     }
 
     public static void AddNoCPBlocks(){
         Inventory tempInventory = new();
-        tempInventory.AddTemp(inventory.Select(BlockType.Item).Select("Center&(Checkpoint|Multilap|MapStart)").RemoveKeyword("Center"));
+        tempInventory.AddArticles(inventory.Select(BlockType.Item).Select("Center&(Checkpoint|Multilap|MapStart)").RemoveKeyword("Center"));
         AddRoadNoCPBlocks(tempInventory,"Tech");
         AddRoadNoCPBlocks(tempInventory,"Dirt");
         AddRoadNoCPBlocks(tempInventory,"Bump");
@@ -143,12 +126,12 @@ class Alteration {
         AddPlatformNoCPBlocks(tempInventory,"Grass");
         AddPlatformNoCPBlocks(tempInventory,"Ice");
         AddIceRoadNoCPBlocks(tempInventory);
-        tempInventory.SelectTemp().Select("DiagRight|DiagLeft").articles.ForEach(x => {x.Width = 3;x.Height = 1;x.Length = 2;});
-        tempInventory.SelectTemp().Select("Slope2").articles.ForEach(x => {x.Width = 1;x.Height = 3;x.Length = 1;});
-        tempInventory.SelectTemp().Select("Slope|Tilt").articles.ForEach(x => {x.Width = 1;x.Height = 2;x.Length = 1;});
-        tempInventory.SelectTemp().Select("Wall").articles.ForEach(x => {x.Width = 1;x.Height = 4;x.Length = 1;});
-        tempInventory.SelectTemp().Select("!(DiagRight|DiagLeft|Slope2|Slope|Wall|Tilt)").articles.ForEach(x => {x.Width = 1;x.Height = 1;x.Length = 1;});
-        inventory.AddTemp(tempInventory.articles);
+        tempInventory.Select("DiagRight|DiagLeft").articles.ForEach(x => {x.Width = 3;x.Height = 1;x.Length = 2;});
+        tempInventory.Select("Slope2").articles.ForEach(x => {x.Width = 1;x.Height = 3;x.Length = 1;});
+        tempInventory.Select("Slope|Tilt").articles.ForEach(x => {x.Width = 1;x.Height = 2;x.Length = 1;});
+        tempInventory.Select("Wall").articles.ForEach(x => {x.Width = 1;x.Height = 4;x.Length = 1;});
+        tempInventory.Select("!(DiagRight|DiagLeft|Slope2|Slope|Wall|Tilt)").articles.ForEach(x => {x.Width = 1;x.Height = 1;x.Length = 1;});
+        inventory.AddArticles(tempInventory.articles);
     }
 
     public static void AddCheckpointTrigger(){
@@ -180,32 +163,32 @@ class Alteration {
     }
 
     private static void CreateTriggerArticle(string selection,Vec3 offset, Vec3 rotation) {
-        inventory.AddTemp(inventory.Select(BlockType.Block).Select("Checkpoint").Select(selection).RemoveKeyword("Checkpoint").AddKeyword("CheckpointTrigger").SetChain(Move(offset).Rotate(rotation)));
-        inventory.AddTemp(inventory.Select(BlockType.Block).Select("Multilap").Select(selection).RemoveKeyword("Multilap").AddKeyword("MultilapTrigger").SetChain(Move(offset).Rotate(rotation)));
+        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Checkpoint").Select(selection).RemoveKeyword("Checkpoint").AddKeyword("CheckpointTrigger").SetChain(Move(offset).Rotate(rotation)));
+        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Multilap").Select(selection).RemoveKeyword("Multilap").AddKeyword("MultilapTrigger").SetChain(Move(offset).Rotate(rotation)));
     }
 
     private static void AddRoadNoCPBlocks(Inventory tempInventory, string surface){
-        tempInventory.AddTemp(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Up","Slope"},"Road" +surface,null,null));
-        tempInventory.AddTemp(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Down","Slope"},"Road" +surface,null,null,Move(32,0,32).Rotate(PI,0,0)));
-        tempInventory.AddTemp(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Left","Tilt"},"Road" +surface,null,null,Move(32,0,32).Rotate(PI,0,0)));
-        tempInventory.AddTemp(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Right","Tilt"},"Road" +surface,null,null));
+        tempInventory.AddArticles(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Up","Slope"},"Road" +surface,null,null));
+        tempInventory.AddArticles(new Article("Road" +surface+"SlopeStraight",BlockType.Block,new List<string> {"Down","Slope"},"Road" +surface,null,null,Move(32,0,32).Rotate(PI,0,0)));
+        tempInventory.AddArticles(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Left","Tilt"},"Road" +surface,null,null,Move(32,0,32).Rotate(PI,0,0)));
+        tempInventory.AddArticles(new Article("Road" +surface+"TiltStraight",BlockType.Block,new List<string> {"Right","Tilt"},"Road" +surface,null,null));
     }
     private static void AddPlatformNoCPBlocks(Inventory tempInventory, string surface){
-        tempInventory.AddTemp(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Up","Slope2"},"Platform",null,surface));
-        tempInventory.AddTemp(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Down","Slope2"},"Platform",null,surface,Move(32,0,32).Rotate(PI,0,0)));
-        tempInventory.AddTemp(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Right","Slope2"},"Platform",null,surface,Move(32,0,0).Rotate(PI*1.5f,0,0)));
-        tempInventory.AddTemp(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Left","Slope2"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
-        tempInventory.AddTemp(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Up","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
-        tempInventory.AddTemp(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Down","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
-        tempInventory.AddTemp(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Right","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
-        tempInventory.AddTemp(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Left","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
+        tempInventory.AddArticles(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Up","Slope2"},"Platform",null,surface));
+        tempInventory.AddArticles(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Down","Slope2"},"Platform",null,surface,Move(32,0,32).Rotate(PI,0,0)));
+        tempInventory.AddArticles(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Right","Slope2"},"Platform",null,surface,Move(32,0,0).Rotate(PI*1.5f,0,0)));
+        tempInventory.AddArticles(new Article("Platform" +surface+"Slope2Straight",BlockType.Block,new List<string> {"Left","Slope2"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
+        tempInventory.AddArticles(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Up","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
+        tempInventory.AddArticles(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Down","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
+        tempInventory.AddArticles(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Right","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
+        tempInventory.AddArticles(new Article("Platform" +surface+"WallStraight4",BlockType.Block,new List<string> {"Left","Wall"},"Platform",null,surface,Move(0,0,32).Rotate(PI*0.5f,0,0)));
     }
     private static void AddIceRoadNoCPBlocks(Inventory tempInventory){
-        tempInventory.AddTemp(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Left","WithWall"},"RoadIce",null,null));
-        tempInventory.AddTemp(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Right","WithWall"},"RoadIce",null,null,Move(32,0,32).Rotate(PI,0,0)));
-        tempInventory.AddTemp(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Right","WithWall"},"RoadIce",null,null));
-        tempInventory.AddTemp(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Right","WithWall"},"RoadIce",null,null,Move(96,0,64).Rotate(PI,0,0)));
-        tempInventory.AddTemp(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Left","WithWall"},"RoadIce",null,null,Move(96,0,64).Rotate(PI,0,0)));
-        tempInventory.AddTemp(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Left","WithWall"},"RoadIce",null,null));
+        tempInventory.AddArticles(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Left","WithWall"},"RoadIce",null,null));
+        tempInventory.AddArticles(new Article("RoadIceWithWallStraight",BlockType.Block,new List<string> {"Right","WithWall"},"RoadIce",null,null,Move(32,0,32).Rotate(PI,0,0)));
+        tempInventory.AddArticles(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Right","WithWall"},"RoadIce",null,null));
+        tempInventory.AddArticles(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Right","WithWall"},"RoadIce",null,null,Move(96,0,64).Rotate(PI,0,0)));
+        tempInventory.AddArticles(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,new List<string> {"DiagRight","Left","WithWall"},"RoadIce",null,null,Move(96,0,64).Rotate(PI,0,0)));
+        tempInventory.AddArticles(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,new List<string> {"DiagLeft","Left","WithWall"},"RoadIce",null,null));
     }
 }

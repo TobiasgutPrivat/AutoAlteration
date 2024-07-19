@@ -13,7 +13,6 @@ class Article {
     public int Length = 1;
     public int Height = 1;
     public string Path = "";
-    public bool Temp;
     public bool DefaultRotation;
     public bool Theme;
 
@@ -81,9 +80,9 @@ class Article {
         new(Name,Type,Keywords.ToList(),Shapes.ToList(),ToShapes.ToList(),Surfaces.ToList(),MoveChain.Clone(),Length,Width);
 
     public bool HasKeyword(string keyword) {
-        if (Alteration.shapeKeywords.Contains(keyword)) {
+        if (AutoAlteration.shapeKeywords.Contains(keyword)) {
             return Shapes.Any(k => k == keyword);
-        } else if (Alteration.surfaceKeywords.Contains(keyword)) {
+        } else if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
             return Surfaces.Any(k => k == keyword);
         } else{
             return Keywords.Any(k => k == keyword);
@@ -215,8 +214,8 @@ class Article {
         if(name.Contains("To")){//TODO Probably issue when having To-Keyword like Torch before To Keyword
             int toPos = name.IndexOf("To");
             string ToString = name[(toPos + 2)..];
-            if (!Alteration.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].IndexOf(k) == 0)) {
-                Alteration.shapeKeywords.ToList().ForEach(k => {
+            if (!AutoAlteration.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].IndexOf(k) == 0)) {
+                AutoAlteration.shapeKeywords.ToList().ForEach(k => {
                     if (ToString.Contains(k)) {
                         ToShapes.Add(k);
                         ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
@@ -228,11 +227,11 @@ class Article {
         }
         
         //Keywords
-        foreach (var keywordLine in Alteration.Keywords) {
+        foreach (var keywordLine in AutoAlteration.Keywords) {
             if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
-                if (Alteration.shapeKeywords.Contains(keywordLine)) {
+                if (AutoAlteration.shapeKeywords.Contains(keywordLine)) {
                     Shapes.Add(keywordLine);
-                } else if (Alteration.surfaceKeywords.Contains(keywordLine)) {
+                } else if (AutoAlteration.surfaceKeywords.Contains(keywordLine)) {
                     Surfaces.Add(keywordLine);
                 } else {
                     Keywords.Add(keywordLine);
@@ -240,9 +239,9 @@ class Article {
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
             }
             if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
-                if (Alteration.shapeKeywords.Contains(keywordLine)) {
+                if (AutoAlteration.shapeKeywords.Contains(keywordLine)) {
                     Shapes.Add(keywordLine);
-                } else if (Alteration.surfaceKeywords.Contains(keywordLine)) {
+                } else if (AutoAlteration.surfaceKeywords.Contains(keywordLine)) {
                     Surfaces.Add(keywordLine);
                 } else {
                     Keywords.Add(keywordLine);

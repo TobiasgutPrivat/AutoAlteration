@@ -75,9 +75,6 @@ class Block {
     }
 
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
-        // Console.WriteLine(item.PivotPosition);//TODO Check if needed
-        Console.WriteLine(item.PlacedOnItem);
-        
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
         SnappedOnBlock = item.SnappedOnBlock;

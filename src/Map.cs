@@ -135,6 +135,11 @@ class Map
     Delete(oldArticle.Name);
   }
 
+  public void Replace(Inventory inventory, string newBlock, MoveChain ?moveChain = null){
+    PlaceRelative(inventory, GetArticle(newBlock),moveChain);
+    Delete(inventory);
+  }
+  
   public void Replace(Inventory inventory, Article article, MoveChain ?moveChain = null){
     PlaceRelative(inventory, article,moveChain);
     Delete(inventory);

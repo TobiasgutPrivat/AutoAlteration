@@ -1,11 +1,28 @@
 class AutoAlteration {
     public static int mapCount = 0;
     private static Alteration ?lastAlteration;
+    public static bool devMode = false;
+    public static string ProjectFolder = "";
+    public static string CustomBlocksFolder = "";
+    public static string[] Keywords = Array.Empty<string>();
+    public static string[] shapeKeywords = Array.Empty<string>();
+    public static string[] surfaceKeywords = Array.Empty<string>();
+
+    public static void Load(string projectFolder) {
+        ProjectFolder = projectFolder;
+        CustomBlocksFolder = ProjectFolder + "src/CustomBlocks/";
+        shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/shapeKeywords.txt");
+        surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/surfaceKeywords.txt");
+        Keywords = File.ReadAllLines(ProjectFolder + "src/Inventory/Keywords.txt");
+    }
+
     public static void Alter(List<Alteration> alterations, Map map) {
         foreach (Alteration alteration in alterations) {
             if (lastAlteration == null || (alteration.GetType() != lastAlteration.GetType())) {
-                Alteration.inventory.RemoveTemp();
-                alteration.AddArticles();
+                devMode = true;
+                Alteration.CreateInventory();
+                alteration.ChangeInventory();
+                devMode = false;
             }
             alteration.Run(map);
             lastAlteration = alteration;
