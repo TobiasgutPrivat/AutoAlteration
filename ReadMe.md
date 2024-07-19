@@ -6,6 +6,8 @@ This Project is based on the GBX.NET Framework from BigBang (Nationsconverter Gu
 It's still in early development, so there will probably be some Bugs and Problems. Contribution to the repository is very welcome, feel free to create pull requests.
 
 If you encounter problems or you have some questions/ideas etc. please contact me on Discord <strong>(Tobias2g#5288)</strong>
+
+Guide to implementing Alterations https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing
 ## How to use
 The tool comes with a basic CLI but some Software is required.
 
