@@ -1,5 +1,4 @@
-﻿using GBX.NET;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 //Initial load
 AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../..\..")) + "/");
 // CLI.Run();
@@ -22,10 +21,10 @@ string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto A
 
 //Single File Processing
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Deep_Dip_2r1.Map.Gbx";
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
-// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/Summer 2024 - 18.Map.Gbx";
+// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Thread of Ariadne.Map.Gbx";
 // AutoAlteration.AlterFile(new List<Alteration>{new FreeWheel()}, sourceFile, "FreeWheel");
-AutoAlteration.AlterFile(new List<Alteration>{new STTF()}, sourceFile, "STTF");
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
+AutoAlteration.AlterFile(new AntiBooster(), sourceFile, "AntiBooster");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
@@ -48,9 +47,9 @@ class Test : Alteration {
     public override void Run(Map map)
     {
         // inventory.Edit().PlaceRelative(map);
-        inventory.Select("!Ring").Select("Boost|NoEngine|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","NoEngine","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("Boost2").Replace(map);
-        inventory.Select("Ring").Select("Boost|NoEngine|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","NoEngine","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("Boost2").AddKeyword("Oriented").Replace(map);
-        map.PlaceStagedBlocks();
+        // inventory.Select("!Ring").Select("Boost|NoEngine|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","NoEngine","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("Boost2").Replace(map);
+        // inventory.Select("Ring").Select("Boost|NoEngine|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","NoEngine","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("Boost2").AddKeyword("Oriented").Replace(map);
+        // map.PlaceStagedBlocks();
     }
 }
 

@@ -51,6 +51,7 @@ Those are the currently available Alterations (for CLI Copy names from here)
 - Reactor
 - ReactorDown
 - FreeWheel
+- Antibooster
 
 <strong>Checkpoint Alterations</strong>
 - STTF
@@ -68,8 +69,9 @@ Those are the currently available Alterations (for CLI Copy names from here)
 - YepTree
 - NoItems
 
-## Known Issues/Bugs
-- Macroblocks are not supported yet
+## Known Issues
+- The position of Items which are snapped onto something are read incorrectly, resulting in small offsets.
+- Some Map Templates have different height offset for normal placed blocks
 
 ## Contribution
 You are welcome to contribute to the Project by creating Pull Requests on GitHub

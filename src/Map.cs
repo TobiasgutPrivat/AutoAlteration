@@ -20,7 +20,6 @@ class Map
 
   public void Save(string path)
   { 
-    CleanDupes();
     NewMapUid();
     RemoveAuthor();
     map.RemovePassword();
@@ -42,20 +41,6 @@ class Map
     map.AuthorNickname = null;
     map.AuthorVersion = 0;
     map.AuthorZone = null;
-  }
-
-  private void CleanDupes()
-  {
-    if (map.Blocks is List<CGameCtnBlock> blocks){
-      blocks.RemoveAll(x =>
-      {
-        if (x.Name == "PlatformTechBase")
-          foreach (var block in map.Blocks)
-            if (block.Coord == x.Coord && block.Name == "DecoWallBasePillar")
-              return true;
-        return false;
-      });
-    }
   }
 
   private void NewMapUid()
@@ -116,9 +101,11 @@ class Map
     }
   }
 
-  public void PlaceRelative(Inventory inventory, Article newArticle, MoveChain ?moveChain = null){
+  public void PlaceRelative(Inventory inventory, Article newArticle, MoveChain ?moveChain = null)=>
     inventory.articles.ForEach(a => PlaceRelative(a, newArticle, moveChain));
-  }
+  
+  public void PlaceRelative(KeywordEdit keywordEdit, MoveChain ?moveChain = null) =>
+    keywordEdit.PlaceRelative(this,moveChain);
 
   public void Replace(string oldBlock, string newBlock,MoveChain ?moveChain = null){
     PlaceRelative(oldBlock, newBlock, moveChain);
@@ -144,6 +131,9 @@ class Map
     PlaceRelative(inventory, article,moveChain);
     Delete(inventory);
   }
+
+  public void Replace(KeywordEdit keywordEdit, MoveChain ?moveChain = null) =>
+    keywordEdit.Replace(this,moveChain);
 
   public void Move(Article article, MoveChain moveChain) =>
     Replace(article, article, moveChain);
