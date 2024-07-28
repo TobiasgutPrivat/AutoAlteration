@@ -40,3 +40,10 @@ class NoItems: Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class Rotated: Alteration {
+    public override void Run(Map map){
+        map.Move(inventory.Select(BlockType.Block),RotateMid(PI,0,0));
+        map.PlaceStagedBlocks();
+    }
+}

@@ -11,12 +11,14 @@ class EffectAlteration: Alteration {
         } else{
             GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         }
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(new string[] {"Left", "Right", "Center", "v2" }).AddKeyword(Effect).PlaceRelative(map,moveChain);
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&!Ring&!WithWall"), GateSpecial,Move(-16,-16,-16).AddChain(moveChain));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(6,12,0).Rotate(0,0,PI*-0.5f).AddChain(moveChain));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
-        map.PlaceRelative(inventory.Select("(CheckpointTrigger|MultilapTrigger)&WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(-6,12,0).Rotate(0,0,PI*0.5f).AddChain(moveChain));
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(new string[] {"Left", "Right", "Center" }).AddKeyword(Effect).PlaceRelative(map,moveChain);
+
+        Inventory triggers = inventory.Select("(CheckpointTrigger|MultilapTrigger)");
+        map.PlaceRelative(triggers.Select("!Ring&!WithWall"), GateSpecial,Move(-16,-16,-16).AddChain(moveChain));
+        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
+        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(6,12,0).Rotate(0,0,PI*-0.5f).AddChain(moveChain));
+        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
+        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(-6,12,0).Rotate(0,0,PI*0.5f).AddChain(moveChain));
         map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial,moveChain);
 
         map.PlaceStagedBlocks();
@@ -33,7 +35,7 @@ class EffectAlteration: Alteration {
         map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
         map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,0).AddChain(moveChain));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
-        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center", "v2" }).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
+        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center" }).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
         map.PlaceStagedBlocks();
     }
 }

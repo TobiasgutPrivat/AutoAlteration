@@ -7,40 +7,38 @@ class KeywordEdit {
     }
 
     public KeywordEdit AddKeyword(string keyword) {
-        articles.ForEach(a => a.Keywords.Add(keyword));
+        if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
+            articles.ForEach(a => a.Surfaces.Add(keyword));
+        } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
+            articles.ForEach(a => a.Shapes.Add(keyword));
+        } else if (AutoAlteration.Keywords.Contains(keyword)) {
+            articles.ForEach(a => a.Keywords.Add(keyword));
+        } else {
+            Console.WriteLine("Keyword not found: " + keyword);
+        }
         return this;
     }
 
     public KeywordEdit AddKeyword(string[] keywords) {
-        articles.ForEach(a => a.Keywords.AddRange(keywords));
+        keywords.ToList().ForEach(a => AddKeyword(a));
         return this;
     }
     
     public KeywordEdit RemoveKeyword(string keyword) {
-        articles.ForEach(a => a.Keywords.Remove(keyword));
+        if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
+            articles.ForEach(a => a.Surfaces.Remove(keyword));
+        } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
+            articles.ForEach(a => a.Shapes.Remove(keyword));
+        } else if (AutoAlteration.Keywords.Contains(keyword)) {
+            articles.ForEach(a => a.Keywords.Remove(keyword));
+        } else {
+            Console.WriteLine("Keyword not found: " + keyword);
+        }
         return this;
     }
 
     public KeywordEdit RemoveKeyword(string[] keywords) {
-        keywords.ToList().ForEach(k => articles.ForEach(a => a.Keywords.Remove(k)));
-        return this;
-    }
-    
-    public KeywordEdit AddSurface(string surface) {
-        articles.ForEach(a => a.Surfaces.Add(surface));
-        return this;
-    }
-    public KeywordEdit RemoveSurface(string surface) {
-        articles.ForEach(a => a.Surfaces.Remove(surface));
-        return this;
-    }
-
-    public KeywordEdit AddShape(string shape) {
-        articles.ForEach(a => a.Shapes.Add(shape));
-        return this;
-    }
-    public KeywordEdit RemoveShape(string shape) {
-        articles.ForEach(a => a.Shapes.Remove(shape));
+        keywords.ToList().ForEach(k => RemoveKeyword(k));
         return this;
     }
 

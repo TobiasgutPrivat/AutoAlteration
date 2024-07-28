@@ -107,6 +107,7 @@ InGround
 Speakers
 Obstacle
 EndRight
+MapStart
 EndLeft
 Speaker
 Special
@@ -226,6 +227,7 @@ Scale
 Light4
 Light
 Small
+Ring
 Wing
 Sign
 Race

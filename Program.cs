@@ -6,25 +6,25 @@ AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDi
 //Code for Execution (change for your use)
 //Folder Processing
 string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/Summer 2024/";
-// AutoAlteration.AlterFolder(new Flipped(), sourcefolder, destinationFolder + "Summer 2024 Flipped/", "Flipped");
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
+AutoAlteration.AlterFolder(new SnowScenery(), sourcefolder, destinationFolder + "Summer 2024 SnowScenery/", "SnowScenery");
 
 //Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/";
 // AutoAlteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
 
 //All Alterations Full Folder Processing
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto Altered Nadeo/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/";
 // AutoAlteration.AllAlterations(sourceFolder, destinationFolder);
 
 //Single File Processing
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Deep_Dip_2r1.Map.Gbx";
-// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Thread of Ariadne.Map.Gbx";
+string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Thread of Ariadne.Map.Gbx";
 // AutoAlteration.AlterFile(new List<Alteration>{new FreeWheel()}, sourceFile, "FreeWheel");
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
-AutoAlteration.AlterFile(new AntiBooster(), sourceFile, "AntiBooster");
+// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
+// AutoAlteration.AlterFile(new SnowScenery(), sourceFile, "SnowScenery");
 
 // Unvalidated
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");

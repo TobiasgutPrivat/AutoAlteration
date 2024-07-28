@@ -52,14 +52,6 @@ class Inventory {
         Edit().RemoveKeyword(keyword);
     public KeywordEdit RemoveKeyword(string[] keyword) =>
         Edit().RemoveKeyword(keyword);
-    public KeywordEdit AddSurface(string keyword) =>
-        Edit().AddSurface(keyword);
-    public KeywordEdit RemoveSurface(string keyword) =>
-        Edit().RemoveSurface(keyword);
-    public KeywordEdit AddShape(string keyword) =>
-        Edit().AddShape(keyword);
-    public KeywordEdit RemoveShape(string keyword) =>
-        Edit().RemoveShape(keyword);
     public KeywordEdit AddToShape(string keyword) =>
         Edit().AddToShape(keyword);
     public KeywordEdit RemoveToShape(string keyword) =>
