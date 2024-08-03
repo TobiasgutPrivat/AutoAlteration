@@ -128,11 +128,21 @@ class Boosterless: Alteration {
         blocks.Select("TurboRoulette").RemoveKeyword("TurboRoulette").Replace(map);
         map.PlaceStagedBlocks();
     }
+
+    public override void ChangeInventory(){
+        AddNoCPBlocks();
+    }
+}
+
+class SpeedLimit: Alteration {
+    public override void Run(Map map){
+        map.Delete(inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
+    }
 }
 
 class Broken: Alteration {
     public override void Run(Map map){
-        inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("NoEngine").Replace(map);
+        inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up","Oriented" }).AddKeyword("NoEngine").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
@@ -140,7 +150,7 @@ class Broken: Alteration {
 class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Turbo2").Replace(map);
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(new string[] { "Checkpoint","Left","Right","Center","V2"}).AddKeyword("Turbo2").Replace(map);
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(new string[] { "Checkpoint","Left","Right","Center"}).AddKeyword("Turbo2").Replace(map);
         map.PlaceStagedBlocks();
     }
 }

@@ -52,6 +52,8 @@ RoadIce
 3x6
 4x1
 6x1
+CheckpointTrigger
+MultilapTrigger
 GateExpandable
 TurboRoulette
 EndLargeRight
