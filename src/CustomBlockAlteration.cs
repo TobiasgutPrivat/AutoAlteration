@@ -1,5 +1,7 @@
+using System.Text.RegularExpressions;
 using GBX.NET;
 using GBX.NET.Engines.Plug;
+using GBX.NET.Extensions;
 
 class CustomBlockAlteration {
     public static string[] DrivableMaterials = new string[] {
@@ -25,7 +27,7 @@ class CustomBlockAlteration {
         "Stadium\\Media\\Material\\RoadIce",
         // "Stadium\\Media\\Material\\RoadTechSubIce",
     };
-    public virtual void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {}
+    public virtual void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {}
     public virtual void Run(CustomBlock customBlock) {}
     public virtual void AlterBlock(CustomBlock customBlock) {}
     public virtual void AlterItem(CustomBlock customBlock) {}
@@ -37,6 +39,13 @@ class CustomBlockAlteration {
         float Front = mesh.Positions.Max(x => x.Z);
         float Back = mesh.Positions.Min(x => x.Z);
         return new Vec3((Right + Left) / 2, top, (Front + Back) / 2);
+    }
+
+    public static void MakeSingleLayer(CustomBlock customBlock){
+        customBlock.Layers.RemoveAll(x => !(x.GetType() == typeof(CPlugCrystal.GeometryLayer)));
+        while (customBlock.Layers.Count > 1) {
+            customBlock.Layers.RemoveAt(1);
+        }
     }
 }
 
@@ -61,67 +70,81 @@ class MaterialInfo : CustomBlockAlteration {
 }
 
 class HeavyDirt : CustomBlockAlteration {
-    public override void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {
+    public override void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         if (customBlock.Name.Contains("Road")) {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadDirt");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadDirt");
         } else {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech");
         }
     }
 }
 
 class HeavyGrass : CustomBlockAlteration {
-    public override void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {
-        mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech");
+    public override void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
+        layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech");
     }
 }
 
 class HeavyTech : CustomBlockAlteration {
-    public override void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {
+    public override void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         if (customBlock.Name.Contains("Road")) {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadTech");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadTech");
         } else if (customBlock.Name.Contains("RoadBump")){
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadBump");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadBump");
         } else {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\PlatformTech");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\PlatformTech");
         }    
     }
 }
 
 class LightTech : CustomBlockAlteration {
-    public override void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {
-        mesh.Faces = mesh.Faces.ToList().Where(x => DrivableMaterials.Contains(x.Material.MaterialUserInst.Link)).ToArray();
+    public override void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
+        layer.Crystal.Faces = layer.Crystal.Faces.ToList().Where(x => DrivableMaterials.Contains(x.Material.MaterialUserInst.Link)).ToArray();
         if (customBlock.Name.Contains("RoadBump")) {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadBump");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadBump");
         } else if (customBlock.Name.Contains("Road")){
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadTech");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadTech");
         } else {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\PlatformTech");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\PlatformTech");
         }
-        Vec3 topMiddle = GetTopMiddle(mesh);
-        mesh.Positions = mesh.Positions.ToList().Select(x => new Vec3(x.X,x.Y + 0.01f,x.Z) * 0.99f + topMiddle * 0.01f).ToArray();
+        Vec3 topMiddle = GetTopMiddle(layer.Crystal);
+        layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => new Vec3(x.X,x.Y + 0.01f,x.Z) * 0.99f + topMiddle * 0.01f).ToArray();
         //Will have issues with surfaces looking away from topmiddle point
     }
 }
 
 class HeavyIce : CustomBlockAlteration {
-    public override void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {
+    public override void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         if (customBlock.Name.Contains("Road")) {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadIce");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Material\\RoadIce");
         } else {
-            mesh.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech");
+            layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech");
         }
     }
 }
 
 class SupersizedBlock : CustomBlockAlteration {
-    public override void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {
-        mesh.Positions = mesh.Positions.ToList().Select(x => new Vec3(x.X * 2, x.Y * 2, x.Z * 2)).ToArray();
+    public override void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
+        layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => new Vec3(x.X * 2, x.Y * 2, x.Z * 2)).ToArray();
     }
 }
 
 class MiniBlock : CustomBlockAlteration {
-    public override void AlterMesh(CustomBlock customBlock, CPlugCrystal.Crystal mesh) {
-        mesh.Positions = mesh.Positions.ToList().Select(x => new Vec3(x.X / 2, x.Y / 2, x.Z / 2)).ToArray();
+    public override void AlterLayer(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
+        layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => new Vec3(x.X / 2, x.Y / 2, x.Z / 2)).ToArray();
+    }
+}
+class InvisibleBlock : CustomBlockAlteration {
+    public override void Run(CustomBlock customBlock) {
+        MakeSingleLayer(customBlock);
+        CPlugCrystal.GeometryLayer invisible = (CPlugCrystal.GeometryLayer)customBlock.Layers[0];
+        invisible.Collidable = true;
+        invisible.IsVisible = false;
+        CPlugCrystal.GeometryLayer visible = new(){
+            Collidable = false,
+            IsVisible = true,
+            Crystal = new(){IsEmbeddedCrystal = true},
+        };
+        customBlock.Layers.Add(visible);
     }
 }

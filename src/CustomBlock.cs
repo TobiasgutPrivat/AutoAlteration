@@ -9,6 +9,7 @@ class CustomBlock
   public CGameBlockItem Block;
   public string Name;
   public CGameCommonItemEntityModelEdition Item;
+  public IList<CPlugCrystal.Layer> Layers;
   public BlockType Type;
   public CustomBlock(string blockPath)
   { 
@@ -20,10 +21,12 @@ class CustomBlock
       Type = BlockType.Block;
       Block = (CGameBlockItem)customBlock.EntityModelEdition;
       Name = Path.GetFileName(blockPath)[..^10];
+      Layers = Block.CustomizedVariants[0].Crystal.Layers;
     }
     else if (blockPath.Contains(".Item.gbx", StringComparison.OrdinalIgnoreCase)){
       Type = BlockType.Item;
       Item = (CGameCommonItemEntityModelEdition)customBlock.EntityModelEdition;
+      Layers = Item.MeshCrystal.Layers;
       Name = Path.GetFileName(blockPath)[..^9];
     }
   }

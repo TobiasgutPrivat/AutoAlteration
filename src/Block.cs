@@ -54,7 +54,7 @@ class Block {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
-            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 8,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));// 64m offset depends on Map Template i think
+            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));// 64m offset depends on Map Template i think
         }
     }
 

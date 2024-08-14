@@ -2,38 +2,37 @@
 //Initial load
 AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..")) + "/");
 // CLI.Run();
-// Alteration.TestInventory();
-//Code for Execution (change for your use)
-//Folder Processing
-string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Items/RoadDeadEnd/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Items/RoadDeadEnd/";
-// string sourcefolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new MiniBlock(), sourcefolder, destinationFolder + "MiniBlock/", "MiniBlock");
-// File.WriteAllText(AutoAlteration.ProjectFolder + "src/Inventory/Materials.json", JsonConvert.SerializeObject(Info.materials));
 
-//Full Folder Processing
+// ----------- Code for Execution (change for your use) ----------- //
+
+//Folder Processing -------------
+// string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
+// AutoAlteration.AlterFolder(new InvisibleBlock(), sourceFolder, destinationFolder + "InvisibleBlock/", "InvisibleBlock");
+
+//Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/";
 // AutoAlteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
 
-//All Alterations Full Folder Processing
+//All Alterations Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
 // string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/";
 // AutoAlteration.AllAlterations(sourceFolder, destinationFolder);
 
-//Single File Processing
+//Single File Processing -------------
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Deep_Dip_2r1.Map.Gbx";
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Thread of Ariadne.Map.Gbx";
-// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Items/RoadDeadEnd/RoadBumpDeadEnd.Item.Gbx";
-// AutoAlteration.AlterFile(new HeavyDirt(), sourceFile, "HeavyDirt");
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
 // AutoAlteration.AlterFile(new Boosterless(), sourceFile, "Boosterless");
 
-// Unvalidated
-// AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
+//Customblocks -------------
+string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/src/CustomBlocks/Vanilla";
+string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/GBX Test/AutoAlteration/src/CustomBlocks/Surface/Dirt";
+AutoAlteration.AlterAll(new LightTech(), sourceFolder, destinationFolder, "LightTech");
 
-// Console.WriteLine(Directory.GetFiles(destinationFolder, "*.map.gbx", SearchOption.AllDirectories).Count());
+// Unvalidated -------------
+// AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void stringToName(string projectFolder) {

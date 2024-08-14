@@ -38,16 +38,16 @@ class AutoAlteration {
             switch (customBlock.Type) {
                 case BlockType.Block:
                     alteration.AlterBlock(customBlock);
-                    customBlock.Block.CustomizedVariants[0].Crystal.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
+                    customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
                         CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
-                        alteration.AlterMesh(customBlock, layer.Crystal);
+                        alteration.AlterLayer(customBlock, layer);
                     });
                     break;
                 case BlockType.Item:
                     alteration.AlterItem(customBlock);
-                    customBlock.Item.MeshCrystal.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
+                    customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
                         CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
-                        alteration.AlterMesh(customBlock, layer.Crystal);
+                        alteration.AlterLayer(customBlock, layer);
                     });
                     break;
             }
