@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Net.Http.Headers;
 using GBX.NET.Engines.Plug;
 
@@ -10,6 +11,7 @@ class AutoAlteration {
     public static string[] Keywords = Array.Empty<string>();
     public static string[] shapeKeywords = Array.Empty<string>();
     public static string[] surfaceKeywords = Array.Empty<string>();
+    public static string[] specialKeywords = Array.Empty<string>();
 
     public static void Load(string projectFolder) {
         ProjectFolder = projectFolder;
@@ -17,6 +19,7 @@ class AutoAlteration {
         shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/shapeKeywords.txt");
         surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/surfaceKeywords.txt");
         Keywords = File.ReadAllLines(ProjectFolder + "src/Inventory/Keywords.txt");
+        specialKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/SpecialKeywords.txt");
     }
 
     public static void Alter(List<Alteration> alterations, Map map) {
@@ -25,6 +28,8 @@ class AutoAlteration {
                 devMode = true;
                 Alteration.CreateInventory();
                 alteration.ChangeInventory();
+                Alteration.InventoryChanges();
+                Alteration.inventory.Export(alteration.GetType().Name);
                 devMode = false;
             }
             alteration.Run(map);
@@ -32,27 +37,29 @@ class AutoAlteration {
         }
         mapCount++;
     }
-    public static void Alter(List<CustomBlockAlteration> alterations, CustomBlock customBlock) {
+    public static bool Alter(List<CustomBlockAlteration> alterations, CustomBlock customBlock) {
+        bool changed = false;
         foreach (CustomBlockAlteration alteration in alterations) {
-            alteration.Run(customBlock);
+            changed = alteration.Run(customBlock);
             switch (customBlock.Type) {
                 case BlockType.Block:
-                    alteration.AlterBlock(customBlock);
+                    changed = changed || alteration.AlterBlock(customBlock);
                     customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
                         CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
-                        alteration.AlterLayer(customBlock, layer);
+                        changed = changed || alteration.AlterLayer(customBlock, layer);
                     });
                     break;
                 case BlockType.Item:
-                    alteration.AlterItem(customBlock);
+                    changed = changed || alteration.AlterItem(customBlock);
                     customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
                         CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
-                        alteration.AlterLayer(customBlock, layer);
+                        changed = changed || alteration.AlterLayer(customBlock, layer);
                     });
                     break;
             }
         }
         mapCount++;
+        return changed;
     }
 
     public static void AlterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
@@ -81,7 +88,7 @@ class AutoAlteration {
         }
     }
     public static void AlterAll(List<CustomBlockAlteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        AlterFolder(alterations,mapFolder,destinationFolder + Path.GetFileName(mapFolder) + " - " + Name + "/",Name);
+        AlterFolder(alterations,mapFolder,destinationFolder,Name);
         foreach (string Directory in Directory.GetDirectories(mapFolder, "*", SearchOption.TopDirectoryOnly))
         {
             AlterAll(alterations,Directory,destinationFolder + Directory[mapFolder.Length..] + "/",Name);
@@ -110,11 +117,20 @@ class AutoAlteration {
         Console.WriteLine(destinationFile);
     }
     public static void AlterFile(List<CustomBlockAlteration> alterations, string blockFile, string destinationFile, string Name) {
-        CustomBlock customBlock = new(blockFile);
-        Alter(alterations, customBlock);
-        customBlock.customBlock.Name = customBlock.customBlock.Name + " " + Name;
-        customBlock.Save(destinationFile);
-        Console.WriteLine(destinationFile);
+        CustomBlock customBlock;
+        try {
+            customBlock = new(blockFile);
+        } catch {
+            Console.WriteLine("Load Error");
+            return;
+        }
+        if (Alter(alterations, customBlock)){
+            customBlock.customBlock.Name = customBlock.customBlock.Name + " " + Name;
+            customBlock.Save(destinationFile);
+            Console.WriteLine(destinationFile);
+        } else {
+            Console.WriteLine(customBlock.Name + " unchanged");
+        };
     }
     public static void AlterFile(Alteration alteration, string mapFile, string destinationFile, string Name) =>
         AlterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);

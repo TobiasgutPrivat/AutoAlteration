@@ -5,10 +5,10 @@ class Article {
     public string Name;
     public MoveChain MoveChain = new();
     public BlockType Type;
-    public List<string> Keywords = new();
-    public List<string> Shapes = new();
-    public List<string> ToShapes = new();
-    public List<string> Surfaces = new();
+    public List<string> Keywords = [];
+    public List<string> Shapes = [];
+    public List<string> ToShapes = [];
+    public List<string> Surfaces = [];
     public int Width = 1;
     public int Length = 1;
     public int Height = 1;
@@ -16,9 +16,9 @@ class Article {
     public bool DefaultRotation;
     public bool Theme;
 
-    public static char[] systemCharacters = new char[] { '&', '|', '!', '(', ')' };
+    public static char[] systemCharacters = ['&', '|', '!', '(', ')'];
 
-    public Dictionary<string,bool> cacheFilter = new();
+    public Dictionary<string,bool> cacheFilter = [];
 
     public Article(string name,BlockType type,List<string> keywords,List<string> shape,List<string> toShape,List<string> surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
         Name = name;
@@ -34,10 +34,10 @@ class Article {
     public Article(string name,BlockType type,List<string> ?keywords,string ?shape,string ?toShape,string ?surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
         Name = name;
         Type = type;
-        Keywords = keywords ?? new List<string>();
-        if (shape != null) Shapes = new List<string>{shape};
-        if (toShape != null) ToShapes = new List<string>{toShape};
-        if (surface != null) Surfaces = new List<string>{surface};
+        Keywords = keywords ?? [];
+        if (shape != null) Shapes = [shape];
+        if (toShape != null) ToShapes = [toShape];
+        if (surface != null) Surfaces = [surface];
         MoveChain = moveChain ?? new MoveChain();
         Length = length;
         Width = width;
@@ -74,6 +74,14 @@ class Article {
         this.Path = Path;
         LoadKeywords();
         Type = type;
+        string vanillaName = Name;
+        AutoAlteration.specialKeywords.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        Article vanillaVersion = Alteration.inventory.GetArticle(vanillaName);
+        if (vanillaVersion != null) {
+            Width = vanillaVersion.Width;
+            Length = vanillaVersion.Length;
+            Height = vanillaVersion.Height;
+        }
     }
 
     public Article CloneArticle() =>
@@ -179,9 +187,12 @@ class Article {
     }
 
     public bool Match(Article article) {
-        if (Type != article.Type) {
-            return false;
-        };
+        if (Name == "DecoPlatformDirtSlopeBaseCurve1InFull" && article.Name == "DecoPlatformDirtSlopeBaseCurve1InFullHeavyDirt") {
+            Console.WriteLine("Debug");
+        }
+        // if (Type != article.Type) {
+        //     return false;
+        // };
         if (Keywords.Count != article.Keywords.Count || Shapes.Count != article.Shapes.Count || ToShapes.Count != article.ToShapes.Count || Surfaces.Count != article.Surfaces.Count) {
             return false;
         }

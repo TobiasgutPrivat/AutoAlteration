@@ -7,8 +7,8 @@ class Map
 {
   Gbx<CGameCtnChallenge> gbx;
   public CGameCtnChallenge map;
-  public List<Block> stagedBlocks = new();
-  public List<string> embeddedBlocks = new();
+  public List<Block> stagedBlocks = [];
+  public List<string> embeddedBlocks = [];
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
@@ -64,7 +64,7 @@ class Map
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
-    Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
+    // Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
   private void EmbedItem(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
@@ -74,7 +74,7 @@ class Map
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
-    Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
+    // Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
 
   public void PlaceRelative(string atBlock, string newBlock,MoveChain ?moveChain = null){
@@ -151,7 +151,7 @@ class Map
     foreach (var block in stagedBlocks){
       PlaceBlock(block);
     } 
-    stagedBlocks = new List<Block>();
+    stagedBlocks = [];
   }
 
   public void PlaceBlock(Block block){

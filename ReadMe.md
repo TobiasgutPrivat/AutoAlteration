@@ -15,7 +15,7 @@ So far it's only tested and supported on Windows
 
 ### Installation
 1. Install git if you haven't: https://git-scm.com/downloads
-2. Install Dotnet 7.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/7.0
+2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 3. Clone this GitHub Repository into any Folder (you can use this Command in cmd)
 > git clone https://github.com/TobiasgutPrivat/AutoAlteration.git /{path/to/your/directory}
 

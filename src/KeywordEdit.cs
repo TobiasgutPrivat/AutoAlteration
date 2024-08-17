@@ -1,5 +1,5 @@
 class KeywordEdit {
-    public List<Article> articles = new();
+    public List<Article> articles = [];
 
     public KeywordEdit() {}
     public KeywordEdit(List<Article> articles) {
@@ -94,7 +94,7 @@ class KeywordEdit {
     }
 
     public Inventory Align() {
-        List<Article> newarticles = new();
+        List<Article> newarticles = [];
         articles.ForEach( a => {
             Article ?article = Alteration.inventory.AlignArticle(a);
             if (article != null) {

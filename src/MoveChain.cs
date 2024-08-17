@@ -1,7 +1,7 @@
 using GBX.NET;
 
 class MoveChain {
-    public List<Move> moves = new();
+    public List<Move> moves = [];
     public MoveChain(){}
     public MoveChain Clone() {
         MoveChain clone = new();

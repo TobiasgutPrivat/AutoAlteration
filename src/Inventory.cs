@@ -1,13 +1,13 @@
 using Newtonsoft.Json;
 class Inventory {
-    public List<Article> articles = new List<Article>();
+    public List<Article> articles = [];
 
     public Inventory() {}
     public Inventory(List<Article> articles) {this.articles = articles;}
 
-    public void Export() {
+    public void Export(string Name) {
         Directory.CreateDirectory(AutoAlteration.ProjectFolder + "dev/");
-        File.WriteAllText(AutoAlteration.ProjectFolder + "dev/Inventory.json", JsonConvert.SerializeObject(articles));
+        File.WriteAllText(AutoAlteration.ProjectFolder + "dev/Inventory" + Name + ".json", JsonConvert.SerializeObject(articles));
     }
     
     public Inventory Select(string keywordFilter) =>
@@ -33,7 +33,7 @@ class Inventory {
     public List<Article> GetArticles(string keywordFilter) =>
         articles.Where(a => a.Match(keywordFilter)).ToList();
 
-    public Article? AlignArticle(Article article) {
+    public Article? AlignArticle(Article article) {//TODO make Cache
         List<Article> matchArticles = articles.Where(a => article.Match(a)).ToList();
         if (matchArticles.Count > 1) {
             Console.WriteLine("More than one found article with keywords: " + article.KeywordString() + "\nFound Articles: " + string.Join(", ", matchArticles.Select(a => a.Name).ToArray()));

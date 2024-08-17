@@ -66,10 +66,10 @@ class Block {
         }
         return block.Direction switch
         {
-            Direction.North => new((-32, 0, -32), Vec3.Zero),
-            Direction.East => new(((article.Length - 1) * 32, 0, -32), (Alteration.PI * 1.5f, 0, 0)),
-            Direction.South => new(((article.Width - 1) * 32, 0, (article.Length - 1) * 32), (Alteration.PI, 0, 0)),
-            Direction.West => new((-32, 0, (article.Width - 1) * 32), (Alteration.PI * 0.5f, 0, 0)),
+            Direction.North => new((0, 0, 0), Vec3.Zero),
+            Direction.East => new((article.Length * 32, 0, 0), (Alteration.PI * 1.5f, 0, 0)),
+            Direction.South => new((article.Width * 32, 0, article.Length * 32), (Alteration.PI, 0, 0)),
+            Direction.West => new((0, 0, article.Width * 32), (Alteration.PI * 0.5f, 0, 0)),
             _ => Position.Zero,
         };
     }

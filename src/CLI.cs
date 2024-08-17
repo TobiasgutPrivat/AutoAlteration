@@ -65,7 +65,7 @@ class CLI {
     }
 
     static List<Alteration> SelectAlterations(){
-        List<Alteration> Alterations = new();
+        List<Alteration> Alterations = [];
         Alteration selectedAlteration;
         do {
             selectedAlteration = SelectAlteration();
