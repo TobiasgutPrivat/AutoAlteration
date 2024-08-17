@@ -8,7 +8,7 @@ AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDi
 //Folder Processing -------------
 string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new Tech(), sourceFolder, destinationFolder + "Summer 2024 Tech/", "Tech");
+AutoAlteration.AlterFolder(new Mini(), sourceFolder, destinationFolder + "Summer 2024 Mini/", "Mini");
 
 //Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -28,8 +28,8 @@ string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template
 
 //Customblocks -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Vanilla";
-// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Surface/LightTech";
-// AutoAlteration.AlterAll(new LightTech(), sourceFolder, destinationFolder, "LightTech");
+// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Size/MiniBlock";
+// AutoAlteration.AlterAll(new MiniBlock(), sourceFolder, destinationFolder, "MiniBlock");
 
 // Unvalidated -------------
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");

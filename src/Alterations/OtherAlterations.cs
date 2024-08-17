@@ -47,3 +47,17 @@ class Rotated: Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class Mini : Alteration {
+    public override void Run(Map map){
+        inventory.AddKeyword("MiniBlock").Replace(map);
+        map.Delete(inventory);
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X / 2, x.position.coords.Y / 2, x.position.coords.Z / 2));
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("Size/MiniBlock");
+    }
+}
