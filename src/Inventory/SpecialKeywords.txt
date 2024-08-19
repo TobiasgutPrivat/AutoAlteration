@@ -2,3 +2,8 @@ LightTech
 HeavyDirt
 MiniBlock
 SingleLayer
+LightGrass
+LightPlastic
+LightTech
+LightDirt
+LightIce

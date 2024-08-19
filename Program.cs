@@ -6,9 +6,9 @@ AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDi
 // ----------- Code for Execution (change for your use) ----------- //
 
 //Folder Processing -------------
-// string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
-// AutoAlteration.AlterFolder(new Mini(), sourceFolder, destinationFolder + "Summer 2024 Mini/", "Mini");
+string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
+AutoAlteration.AlterFolder(new Grass(), sourceFolder, destinationFolder + "Summer 2024 Grass/", "Grass");
 
 //Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -24,17 +24,19 @@ AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDi
 // string sourceFile = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Vanilla/Roads/RoadBump/Slopes/SlopeU/RoadBumpSlopeUBottomX2/RoadBumpSlopeUBottomX2.Item.Gbx";
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Thread of Ariadne.Map.Gbx";
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
-AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
+// AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
 
 //Customblocks -------------
-string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/dev/Water";
-string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/MiniBlock";
-// AutoAlteration.AlterAll(new MiniBlock(), sourceFolder, destinationFolder, "MiniBlock");
+// string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Vanilla";
+// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Surface/LightGrass";
+// AutoAlteration.AlterAll(new LightGrass(), sourceFolder, destinationFolder, "LightGrass");
 
-//Materials Log using MaterialInfo
+// Materials Log using MaterialInfo
 // string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Vanilla";
 // string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/MaterialInfo";
 // AutoAlteration.AlterAll(new MaterialInfo(), sourceFolder, destinationFolder, "MaterialInfo");
+// File.WriteAllText(AutoAlteration.ProjectFolder + "src/Inventory/SurfacePhysicIds.json", JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
+// File.WriteAllText(AutoAlteration.ProjectFolder + "src/Inventory/SurfaceGameplayIds.json", JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
 // File.WriteAllText(AutoAlteration.ProjectFolder + "src/Inventory/Materials.json", JsonConvert.SerializeObject(MaterialInfo.materials));
 
 // Unvalidated -------------

@@ -1,25 +1,65 @@
-using GBX.NET;
-
-class Dirt : Alteration {
-    public override void Run(Map map){
-        inventory.Select("!HeavyDirt").AddKeyword("HeavyDirt").Replace(map);
-        map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlocks("Surface/HeavyDirt");
+class SurfaceAlteration : Alteration {
+    public void AlterLightSurface(Map map, string Surface) {
+        inventory.Select("!Light" + Surface + "&(RoadTech|RoadBump|RoadDirt|RoadIce|OpenGrassRoad|OpenDirtRoad|OpenTechRoad|OpenIceRoad|OpenGrassZone|OpenDirtZone|OpenTechZone|OpenIceZone)").AddKeyword("Light" + Surface).PlaceRelative(map);
+        inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
     }
 }
-class Tech : Alteration {
+class Tech : SurfaceAlteration {
     public override void Run(Map map){
-        inventory.Select("!LightTech&(RoadDirt|RoadIce|OpenDirtRoad|OpenTechRoad|OpenIceRoad|OpenDirtZone|OpenTechZone|OpenIceZone)").AddKeyword("LightTech").PlaceRelative(map);
-        inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice"]).AddKeyword("Tech").Replace(map);
+        AlterLightSurface(map, "Tech");
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
         AddCustomBlocks("Surface/LightTech");
+    }
+}
+
+class Dirt : SurfaceAlteration {
+    public override void Run(Map map){
+        AlterLightSurface(map, "Dirt");
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("Surface/LightDirt");
+    }
+
+}
+class Grass : SurfaceAlteration {
+    public override void Run(Map map){
+        AlterLightSurface(map, "Grass");
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("Surface/LightGrass");
+    }
+}
+
+class Plastic : SurfaceAlteration {
+    public override void Run(Map map){
+        AlterLightSurface(map, "Plastic");
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("Surface/LightPlastic");
+    }
+}
+
+class Ice : SurfaceAlteration {
+    public override void Run(Map map){
+        AlterLightSurface(map, "Ice");
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("Surface/LightIce");
     }
 }

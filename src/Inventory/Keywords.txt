@@ -61,6 +61,11 @@ EndLargeLeft
 SignWrongWay
 SingleLayer
 PenaltyDirt
+LightGrass
+LightPlastic
+LightTech
+LightDirt
+LightIce
 Rectangular
 Battlements
 SwitchRight

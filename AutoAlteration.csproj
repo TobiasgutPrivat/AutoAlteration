@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GBX.NET" Version="2.0.7" />
+    <PackageReference Include="GBX.NET" Version="2.0.8-nightly.20240819.49c1282" />
     <PackageReference Include="GBX.NET.LZO" Version="2.1.1" />
     <PackageReference Include="GBX.NET.ZLib" Version="1.1.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
