@@ -71,7 +71,7 @@ Those are the currently available Alterations (for CLI Copy names from here)
 
 ## Known Issues
 - The position of Items which are snapped onto something are read incorrectly, resulting in small offsets.
-- Some Map Templates have different height offset for normal placed blocks
+- Some Map Templates have different height offset when transforming to freeblock mode
 
 ## Contribution
 You are welcome to contribute to the Project by creating Pull Requests on GitHub

@@ -52,12 +52,23 @@ class Mini : Alteration {
     public override void Run(Map map){
         inventory.AddKeyword("MiniBlock").Replace(map);
         map.Delete(inventory);
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X / 2, x.position.coords.Y / 2, x.position.coords.Z / 2));
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X / 2, x.position.coords.Y / 2 + 4, x.position.coords.Z / 2));//4 is offset for normal stadium
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Size/MiniBlock");
+        AddCustomBlocks("MiniBlock");
+    }
+}
+class Invisible : Alteration {
+    public override void Run(Map map){
+        inventory.Select("!MapStart&!Finish&!Checkpoint").AddKeyword("InvisibleBlock").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("InvisibleBlock");
     }
 }

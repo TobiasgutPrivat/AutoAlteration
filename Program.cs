@@ -6,9 +6,9 @@ AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDi
 // ----------- Code for Execution (change for your use) ----------- //
 
 //Folder Processing -------------
-string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new Mini(), sourceFolder, destinationFolder + "Summer 2024 Mini/", "Mini");
+// string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
+// AutoAlteration.AlterFolder(new Mini(), sourceFolder, destinationFolder + "Summer 2024 Mini/", "Mini");
 
 //Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -24,12 +24,18 @@ AutoAlteration.AlterFolder(new Mini(), sourceFolder, destinationFolder + "Summer
 // string sourceFile = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Vanilla/Roads/RoadBump/Slopes/SlopeU/RoadBumpSlopeUBottomX2/RoadBumpSlopeUBottomX2.Item.Gbx";
 // string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Thread of Ariadne.Map.Gbx";
 string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
-// AutoAlteration.AlterFile(new Dirt(), sourceFile, "Dirt");
+AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
 
 //Customblocks -------------
-// string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Vanilla";
-// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Size/MiniBlock";
+string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/dev/Water";
+string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/MiniBlock";
 // AutoAlteration.AlterAll(new MiniBlock(), sourceFolder, destinationFolder, "MiniBlock");
+
+//Materials Log using MaterialInfo
+// string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/Vanilla";
+// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/src/CustomBlocks/MaterialInfo";
+// AutoAlteration.AlterAll(new MaterialInfo(), sourceFolder, destinationFolder, "MaterialInfo");
+// File.WriteAllText(AutoAlteration.ProjectFolder + "src/Inventory/Materials.json", JsonConvert.SerializeObject(MaterialInfo.materials));
 
 // Unvalidated -------------
 // AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
@@ -43,16 +49,6 @@ void stringToName(string projectFolder) {
     File.WriteAllText(projectFolder + "src/Vanilla/ItemNames.json", json);
 }
 
-class Test : Alteration {
-    public override void Run(Map map)
-    {
-        // inventory.Edit().PlaceRelative(map);
-        // inventory.Select("!Ring").Select("Boost|NoEngine|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","NoEngine","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("Boost2").Replace(map);
-        // inventory.Select("Ring").Select("Boost|NoEngine|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","NoEngine","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up" }).AddKeyword("Boost2").AddKeyword("Oriented").Replace(map);
-        // map.PlaceStagedBlocks();
-    }
-}
-
 class Replace : Alteration {
     public override void Run(Map map)
     {
@@ -60,10 +56,15 @@ class Replace : Alteration {
         map.PlaceStagedBlocks();
     }
 }
-class Delete : Alteration {
+
+class Test : Alteration {
     public override void Run(Map map)
     {
-        map.Delete(inventory);
+        map.PlaceRelative("PlatformTechCheckpoint","DiagWaterEnterMiniBlock",Move(0,16,0));
         map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory(){
+        AddCustomBlocks("dev/Water");
     }
 }

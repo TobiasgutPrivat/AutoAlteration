@@ -59,6 +59,7 @@ TurboRoulette
 EndLargeRight
 EndLargeLeft
 SignWrongWay
+SingleLayer
 PenaltyDirt
 Rectangular
 Battlements

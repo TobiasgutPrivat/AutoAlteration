@@ -76,11 +76,11 @@ class Article {
         Type = type;
         string vanillaName = Name;
         AutoAlteration.specialKeywords.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
-        Article vanillaVersion = Alteration.inventory.GetArticle(vanillaName);
-        if (vanillaVersion != null) {
-            Width = vanillaVersion.Width;
-            Length = vanillaVersion.Length;
-            Height = vanillaVersion.Height;
+        List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList();
+        if (vanillaVersion.Count > 0) {
+            Width = vanillaVersion.First().Width;
+            Length = vanillaVersion.First().Length;
+            Height = vanillaVersion.First().Height;
         }
     }
 

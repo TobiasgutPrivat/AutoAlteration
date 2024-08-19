@@ -41,22 +41,18 @@ class AutoAlteration {
         bool changed = false;
         foreach (CustomBlockAlteration alteration in alterations) {
             changed = alteration.Run(customBlock);
-            switch (customBlock.Type) {
-                case BlockType.Block:
-                    changed = changed || alteration.AlterBlock(customBlock);
-                    customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
-                        CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
-                        changed = changed || alteration.AlterLayer(customBlock, layer);
-                    });
-                    break;
-                case BlockType.Item:
-                    changed = changed || alteration.AlterItem(customBlock);
-                    customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
-                        CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
-                        changed = changed || alteration.AlterLayer(customBlock, layer);
-                    });
-                    break;
-            }
+            customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
+                CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
+                changed = alteration.AlterGeometry(customBlock, layer) || changed;
+            });
+            customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.TriggerLayer)).ToList().ForEach(x => {
+                CPlugCrystal.TriggerLayer layer = (CPlugCrystal.TriggerLayer)x;
+                changed = alteration.AlterTrigger(customBlock, layer) || changed;
+            });
+            customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.SpawnPositionLayer)).ToList().ForEach(x => {
+                CPlugCrystal.SpawnPositionLayer layer = (CPlugCrystal.SpawnPositionLayer)x;
+                changed = alteration.AlterSpawn(customBlock, layer) || changed;
+            });
         }
         mapCount++;
         return changed;

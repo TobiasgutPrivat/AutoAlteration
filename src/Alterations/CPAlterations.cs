@@ -18,7 +18,7 @@ class CPLess : Alteration{
 class STTF : Alteration{
     public override void Run(Map map){
         map.Delete(inventory.Select("Checkpoint&(Ring|Gate)"));
-        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").PlaceRelative(map);
+        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
     }
 

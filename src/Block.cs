@@ -84,9 +84,12 @@ class Block {
         BlockUnitCoord = item.BlockUnitCoord;
         color = item.Color;
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
+
         this.article = article;
         this.name = article.Name;
         this.blockType = article.Type;
+        this.Path = article.Path;
+
         fromArticle.MoveChain.Apply(position,article);
         moveChain?.Apply(position,article);
         article.MoveChain.Subtract(position,article);
