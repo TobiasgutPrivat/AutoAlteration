@@ -46,20 +46,15 @@ class MiniBlock : CustomBlockAlteration {
 }
 
 class InvisibleBlock : CustomBlockAlteration {
-    // public override bool Run(CustomBlock customBlock) {
-    //     MakeSingleLayer(customBlock);
-    //     CPlugCrystal.GeometryLayer invisible = (CPlugCrystal.GeometryLayer)customBlock.Layers[0];
-    //     invisible.Collidable = true;
-    //     invisible.IsVisible = false;
-    //     CPlugCrystal.GeometryLayer visible = new(){
-    //         Collidable = false,
-    //         IsVisible = true,
-    //         Crystal = new(){IsEmbeddedCrystal = true},
-    //     };
-    //     customBlock.Layers.Add(visible);
-    //     return true;
-    // }
+    public override bool Run(CustomBlock customBlock) {
+        CustomBlock LowCube = new CustomBlock(AutoAlteration.ProjectFolder + "data/LowCubeLayer.Item.Gbx");
+        CPlugCrystal.GeometryLayer layer = LowCube.Layers[0] as CPlugCrystal.GeometryLayer;
+        layer.Crystal.Positions = layer.Crystal.Positions.Select(x => new Vec3(x.X * 0.1f, x.Y * 0.1f - 1000, x.Z * 0.1f)).ToArray();
+        customBlock.MeshCrystal.Layers.Add(layer);
+        return true;
+    }
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
+        
         layer.Crystal.Faces.ToList().ForEach(x => x.Material.MaterialUserInst.Link = "Stadium\\Media\\Modifier\\InvisibleDecal\\InvisibleDecal");
         return true;
     }

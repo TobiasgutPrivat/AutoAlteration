@@ -12,7 +12,7 @@ AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDi
 //Folder Processing -------------
 string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new Wood(), sourceFolder, destinationFolder + "Summer 2024 Wood/", "Wood");
+AutoAlteration.AlterFolder(new Invisible(), sourceFolder, destinationFolder + "Summer 2024 Invisible/", "Invisible");
 
 //Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -32,8 +32,8 @@ string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template
 
 //Customblocks -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Vanilla";
-// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Surface/HeavyWood";
-// AutoAlteration.AlterAll(new HeavyWood(), sourceFolder, destinationFolder, "HeavyWood");
+// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/InvisibleBlock";
+// AutoAlteration.AlterAll(new InvisibleBlock(), sourceFolder, destinationFolder, "InvisibleBlock");
 
 // Materials Log using MaterialInfo
 // string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Vanilla";

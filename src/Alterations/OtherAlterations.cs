@@ -63,7 +63,7 @@ class Mini : Alteration {
 }
 class Invisible : Alteration {
     public override void Run(Map map){
-        inventory.Select("!MapStart&!Finish&!Checkpoint").AddKeyword("InvisibleBlock").Replace(map);
+        inventory.Select("!MapStart&!Finish&!Checkpoint&!Gameplay").AddKeyword("InvisibleBlock").Replace(map);
         map.PlaceStagedBlocks();
     }
 

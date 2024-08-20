@@ -1,3 +1,6 @@
+InvisibleBlock
+MiniBlock
+HeavyWood
 RallyRoadDirtHigh
 RallyRoadDirtLow
 RallyCastleRoad
@@ -59,14 +62,7 @@ TurboRoulette
 EndLargeRight
 EndLargeLeft
 SignWrongWay
-SingleLayer
 PenaltyDirt
-LightGrass
-LightPlastic
-LightTech
-LightDirt
-LightIce
-HeavyWood
 Rectangular
 Battlements
 SwitchRight
@@ -95,7 +91,6 @@ Screen155
 Oscillate
 LightTech
 HeavyDirt
-MiniBlock
 Cylinder
 DiagLeft
 Sponsors
