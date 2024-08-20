@@ -74,7 +74,7 @@ public class Alteration {
 
     public static void CreateInventory() {
         //Load Nadeo Articles
-        inventory = ImportVanillaInventory(AutoAlteration.ProjectFolder + "src/Inventory/BlockData.json");
+        inventory = ImportVanillaInventory(AutoAlteration.ProjectFolder + "data/Inventory/BlockData.json");
         
         //Control
         // inventory.CheckDuplicates();

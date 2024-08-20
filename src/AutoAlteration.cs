@@ -13,11 +13,11 @@ public class AutoAlteration {
 
     public static void Load(string projectFolder) {
         ProjectFolder = projectFolder;
-        CustomBlocksFolder = ProjectFolder + "src/CustomBlocks/";
-        shapeKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/shapeKeywords.txt");
-        surfaceKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/surfaceKeywords.txt");
-        Keywords = File.ReadAllLines(ProjectFolder + "src/Inventory/Keywords.txt");
-        specialKeywords = File.ReadAllLines(ProjectFolder + "src/Inventory/SpecialKeywords.txt");
+        CustomBlocksFolder = ProjectFolder + "data/CustomBlocks/";
+        shapeKeywords = File.ReadAllLines(ProjectFolder + "data/Inventory/shapeKeywords.txt");
+        surfaceKeywords = File.ReadAllLines(ProjectFolder + "data/Inventory/surfaceKeywords.txt");
+        Keywords = File.ReadAllLines(ProjectFolder + "data/Inventory/Keywords.txt");
+        specialKeywords = File.ReadAllLines(ProjectFolder + "data/Inventory/SpecialKeywords.txt");
     }
 
     public static void Alter(List<Alteration> alterations, Map map) {
