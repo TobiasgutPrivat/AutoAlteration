@@ -152,38 +152,42 @@ public class AutoAlteration {
         }
     }
 
-    public static void AllAlterations(string sourceFolder, string destinationFolder) {
-        AlterAll(new Stadium(), sourceFolder, destinationFolder, "Stadium");
-        AlterAll(new Snow(), sourceFolder, destinationFolder, "Snow");
-        AlterAll(new Rally(), sourceFolder, destinationFolder, "Rally");
-        AlterAll(new Desert(), sourceFolder, destinationFolder, "Desert");
-
-        AlterAll(new NoBrake(), sourceFolder, destinationFolder, "NoBrake");
-        AlterAll(new Cruise(), sourceFolder, destinationFolder, "Cruise");
-        AlterAll(new Fragile(), sourceFolder, destinationFolder, "Fragile");
-        AlterAll(new SlowMo(), sourceFolder, destinationFolder, "SlowMo");
-        AlterAll(new NoSteer(), sourceFolder, destinationFolder, "NoSteer");
-        AlterAll(new Glider(), sourceFolder, destinationFolder, "Glider");
-        AlterAll(new Reactor(), sourceFolder, destinationFolder, "Reactor");
-        AlterAll(new ReactorDown(), sourceFolder, destinationFolder, "ReactorDown");
-        AlterAll(new FreeWheel(), sourceFolder, destinationFolder, "FreeWheel");
-        AlterAll(new AntiBooster(), sourceFolder, destinationFolder, "AntiBooster");
-        
-        AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
-        AlterAll(new STTF(), sourceFolder, destinationFolder, "STTF");
-        AlterAll(new CPFull(), sourceFolder, destinationFolder, "CPFull");
-        // alterAll(new CPLess(), sourceFolder, destinationFolder, "CPLess");
-
-        AlterAll(new OneUP(), sourceFolder, destinationFolder, "(1-UP)");
-        AlterAll(new OneDown(), sourceFolder, destinationFolder, "(1-Down)");
-        AlterAll(new OneLeft(), sourceFolder, destinationFolder, "(1-Left)");
-        AlterAll(new OneRight(), sourceFolder, destinationFolder, "(1-Right)");
-        AlterAll(new TwoUP(), sourceFolder, destinationFolder, "(2-UP)");
-
-        AlterAll(new YepTree(), sourceFolder, destinationFolder, "YepTree");
-
-        Console.WriteLine("Done!");
-        Console.WriteLine("Map Count: " + mapCount);
+    public static List<Alteration> GetImplementedAlterations() {
+        return [
+            new Stadium(),
+            new Snow(),
+            new Rally(),
+            new Desert(),
+            new NoBrake(),
+            new Cruise(),
+            new Fragile(),
+            new SlowMo(),
+            new NoSteer(),
+            new Glider(),
+            new Reactor(),
+            new ReactorDown(),
+            new FreeWheel(),
+            new AntiBooster(),
+            new CPBoost(),
+            new STTF(),
+            new CPFull(),
+            new OneUP(),
+            new OneDown(),
+            new OneLeft(),
+            new OneRight(),
+            new TwoUP(),
+            new YepTree()
+        ];
+    }
+    public static List<CustomBlockAlteration> GetImplementedBlockAlterations() {
+        return [
+            new HeavyDirt(),
+            new HeavyGrass(),
+            new HeavyIce(),
+            new HeavyMagnet(),
+            new HeavyPlastic(),
+            new HeavyTech()
+        ];
     }
 }
 
