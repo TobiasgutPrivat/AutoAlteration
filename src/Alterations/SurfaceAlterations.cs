@@ -63,3 +63,14 @@ class Ice : SurfaceAlteration {
         AddCustomBlocks("Surface/LightIce");
     }
 }
+class Wood : SurfaceAlteration {
+    public override void Run(Map map){
+        inventory.Select("!SnowRoad").AddKeyword("HeavyWood").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("Surface/HeavyWood");
+    }
+}

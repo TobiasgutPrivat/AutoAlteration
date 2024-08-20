@@ -7,3 +7,4 @@ LightPlastic
 LightTech
 LightDirt
 LightIce
+HeavyWood
