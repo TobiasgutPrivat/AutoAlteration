@@ -1,7 +1,4 @@
-using System.Text.Json.Serialization;
-using GBX.NET.Exceptions;
-
-class Article {
+public class Article {
     public string Name;
     public MoveChain MoveChain = new();
     public BlockType Type;

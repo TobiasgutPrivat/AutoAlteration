@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-class Inventory {
+public class Inventory {
     public List<Article> articles = [];
 
     public Inventory() {}

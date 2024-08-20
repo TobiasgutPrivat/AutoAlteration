@@ -1,9 +1,8 @@
 using GBX.NET;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
-using Microsoft.VisualBasic;
 
-class Position {
+public class Position {
     public Vec3 coords;
     public Vec3 pitchYawRoll;
     public static Position Zero = new (Vec3.Zero,Vec3.Zero);//TODO maybe issue with changing value

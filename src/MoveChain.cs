@@ -1,6 +1,6 @@
 using GBX.NET;
 
-class MoveChain {
+public class MoveChain {
     public List<Move> moves = [];
     public MoveChain(){}
     public MoveChain Clone() {
@@ -68,7 +68,7 @@ class MoveChain {
         return this;
     }
 }
-class Move{
+public class Move{
     public MoveType type;
     public Vec3 vector;
     public Move(MoveType type, Vec3 vector) {
@@ -77,7 +77,7 @@ class Move{
     }
 }
 
-enum MoveType{
+public enum MoveType{
     Move,
     Rotate,
     RotateMid

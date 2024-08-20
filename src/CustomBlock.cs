@@ -3,7 +3,7 @@ using GBX.NET.LZO;
 using GBX.NET.ZLib;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
-class CustomBlock
+public class CustomBlock
 {
   public CGameItemModel customBlock;
   public CGameBlockItem Block;

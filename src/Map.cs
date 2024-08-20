@@ -3,7 +3,7 @@ using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
 using System.IO.Compression;
 using GBX.NET.ZLib;
-class Map
+public class Map
 {
   Gbx<CGameCtnChallenge> gbx;
   public CGameCtnChallenge map;

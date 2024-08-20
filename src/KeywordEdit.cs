@@ -1,4 +1,4 @@
-class KeywordEdit {
+public class KeywordEdit {
     public List<Article> articles = [];
 
     public KeywordEdit() {}

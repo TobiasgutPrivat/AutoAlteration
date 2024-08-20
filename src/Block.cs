@@ -1,7 +1,7 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
 
-enum BlockType
+public enum BlockType
 {
     Block,
     Item,
@@ -10,7 +10,7 @@ enum BlockType
     Pillar
 }
 
-class Block {
+public class Block {
     public BlockType blockType;
     public Article article;
     public string name;

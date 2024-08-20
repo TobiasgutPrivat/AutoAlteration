@@ -1,8 +1,6 @@
-using System.ComponentModel;
-using System.Net.Http.Headers;
 using GBX.NET.Engines.Plug;
 
-class AutoAlteration {
+public class AutoAlteration {
     public static int mapCount = 0;
     private static Alteration ?lastAlteration;
     public static bool devMode = false;

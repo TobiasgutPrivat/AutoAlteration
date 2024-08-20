@@ -1,6 +1,6 @@
 using GBX.NET;
 using Newtonsoft.Json;
-class Alteration {
+public class Alteration {
     public static float PI = (float)Math.PI;
     public static Inventory inventory = new();
 
