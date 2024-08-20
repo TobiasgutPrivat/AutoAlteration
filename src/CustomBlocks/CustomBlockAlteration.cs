@@ -5,6 +5,7 @@ public class CustomBlockAlteration {
     public virtual bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {return false;}
     public virtual bool AlterTrigger(CustomBlock customBlock, CPlugCrystal.TriggerLayer layer) {return false;}
     public virtual bool AlterSpawn(CustomBlock customBlock, CPlugCrystal.SpawnPositionLayer layer) {return false;}
+    public virtual bool AlterMeshCrystal(CustomBlock customBlock, CPlugCrystal MeshCrystal) {return false;}
     public virtual bool Run(CustomBlock customBlock) {return false;}
 
     public static Vec3 GetTopMiddle(CPlugCrystal.Crystal mesh) {
@@ -16,14 +17,14 @@ public class CustomBlockAlteration {
         return new Vec3((Right + Left) / 2, top, (Front + Back) / 2);
     }
 
-    public static bool MakeGeometryOnly(CustomBlock customBlock){
+    public static bool MakeGeometryOnly(CustomBlock customBlock, CPlugCrystal MeshCrystal){
         bool changed = false;
         if (customBlock.customBlock.WaypointType != GBX.NET.Engines.GameData.CGameItemModel.EWaypointType.None){
             customBlock.customBlock.WaypointType = GBX.NET.Engines.GameData.CGameItemModel.EWaypointType.None;
             changed = true;
         }
-        if (customBlock.Layers.Any(x => x is not CPlugCrystal.GeometryLayer)){
-            customBlock.Layers.Where(x => x is not CPlugCrystal.GeometryLayer).ToList().ForEach(x => customBlock.Layers.Remove(x));
+        if (MeshCrystal.Layers.Any(x => x is not CPlugCrystal.GeometryLayer)){
+            MeshCrystal.Layers.Where(x => x is not CPlugCrystal.GeometryLayer).ToList().ForEach(x => MeshCrystal.Layers.Remove(x));
             changed = true;
         }
         return changed;

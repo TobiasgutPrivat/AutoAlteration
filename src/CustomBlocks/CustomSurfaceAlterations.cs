@@ -92,47 +92,10 @@ class HeavyWood : CustomSurfaceAlteration {
 }
 
 class LightTech : CustomSurfaceAlteration {
-    public override bool Run(CustomBlock customBlock) {
-        return MakeGeometryOnly(customBlock);
+    public override bool AlterMeshCrystal(CustomBlock customBlock,CPlugCrystal crystal) {
+        return MakeGeometryOnly(customBlock, crystal);
     }
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return LightSurface(customBlock, layer,"Stadium\\Media\\Material\\PlatformTech", "Stadium\\Media\\Material\\RoadTech",CPlugSurface.MaterialId.Tech);
-    }
-}
-class LightDirt : CustomSurfaceAlteration {
-    public override bool Run(CustomBlock customBlock) {
-        return MakeGeometryOnly(customBlock);
-    }
-    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
-        return LightSurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech", "Stadium\\Media\\Material\\RoadDirt",CPlugSurface.MaterialId.Dirt);
-    }
-}
-class LightGrass : CustomSurfaceAlteration {
-    public override bool Run(CustomBlock customBlock) {
-        return MakeGeometryOnly(customBlock);
-    }
-    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
-        return LightSurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech","Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech",CPlugSurface.MaterialId.Green);
-    }
-}
-class LightIce : CustomSurfaceAlteration {
-    public override bool Run(CustomBlock customBlock) {
-        return MakeGeometryOnly(customBlock);
-    }
-    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
-        return LightSurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech", "Stadium\\Media\\Material\\RoadIce",CPlugSurface.MaterialId.Ice);
-    }
-}
-class LightPlastic : CustomSurfaceAlteration {
-    public override bool Run(CustomBlock customBlock) {
-        return MakeGeometryOnly(customBlock);
-    }
-    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
-        return LightSurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech", "Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech",CPlugSurface.MaterialId.Plastic);
-    }
-}
-class LightMagnet : CustomSurfaceAlteration {
-    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
-        return LightSurface(customBlock, layer,"Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic", "Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic",CPlugSurface.MaterialId.TechSuperMagnetic);
     }
 }

@@ -39,20 +39,33 @@ public class AutoAlteration {
         bool changed = false;
         foreach (CustomBlockAlteration alteration in alterations) {
             changed = alteration.Run(customBlock);
-            customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
-                CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
-                changed = alteration.AlterGeometry(customBlock, layer) || changed;
-            });
-            customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.TriggerLayer)).ToList().ForEach(x => {
-                CPlugCrystal.TriggerLayer layer = (CPlugCrystal.TriggerLayer)x;
-                changed = alteration.AlterTrigger(customBlock, layer) || changed;
-            });
-            customBlock.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.SpawnPositionLayer)).ToList().ForEach(x => {
-                CPlugCrystal.SpawnPositionLayer layer = (CPlugCrystal.SpawnPositionLayer)x;
-                changed = alteration.AlterSpawn(customBlock, layer) || changed;
-            });
+            if (customBlock.Type == BlockType.Block) {
+                customBlock.Block.CustomizedVariants.ToList().ForEach(x => {
+                    changed = AlterMeshCrystal(alteration, customBlock, x.Crystal) || changed;
+                });
+            } else {
+                changed = AlterMeshCrystal(alteration, customBlock, customBlock.Item.MeshCrystal) || changed;
+            }
         }
         mapCount++;
+        return changed;
+    }
+
+    private static bool AlterMeshCrystal(CustomBlockAlteration alteration, CustomBlock customBlock, CPlugCrystal MeshCrystal) {
+        bool changed = false;
+        alteration.AlterMeshCrystal(customBlock, MeshCrystal);
+        MeshCrystal.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).ToList().ForEach(x => {
+            CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x;
+            changed = alteration.AlterGeometry(customBlock, layer) || changed;
+        });
+        MeshCrystal.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.TriggerLayer)).ToList().ForEach(x => {
+            CPlugCrystal.TriggerLayer layer = (CPlugCrystal.TriggerLayer)x;
+            changed = alteration.AlterTrigger(customBlock, layer) || changed;
+        });
+        MeshCrystal.Layers.Where(x => x.GetType() == typeof(CPlugCrystal.SpawnPositionLayer)).ToList().ForEach(x => {
+            CPlugCrystal.SpawnPositionLayer layer = (CPlugCrystal.SpawnPositionLayer)x;
+            changed = alteration.AlterSpawn(customBlock, layer) || changed;
+        });
         return changed;
     }
 

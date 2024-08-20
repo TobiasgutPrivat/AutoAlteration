@@ -46,11 +46,11 @@ class MiniBlock : CustomBlockAlteration {
 }
 
 class InvisibleBlock : CustomBlockAlteration {
-    public override bool Run(CustomBlock customBlock) {
+    public override bool AlterMeshCrystal(CustomBlock customBlock, CPlugCrystal MeshCrystal) {
         CustomBlock LowCube = new CustomBlock(AutoAlteration.ProjectFolder + "data/LowCubeLayer.Item.Gbx");
-        CPlugCrystal.GeometryLayer layer = LowCube.Layers[0] as CPlugCrystal.GeometryLayer;
+        CPlugCrystal.GeometryLayer layer = LowCube.Item.MeshCrystal.Layers[0] as CPlugCrystal.GeometryLayer;
         layer.Crystal.Positions = layer.Crystal.Positions.Select(x => new Vec3(x.X * 0.1f, x.Y * 0.1f - 1000, x.Z * 0.1f)).ToArray();
-        customBlock.MeshCrystal.Layers.Add(layer);
+        MeshCrystal.Layers.Add(layer);
         return true;
     }
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
