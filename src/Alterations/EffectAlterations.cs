@@ -1,5 +1,5 @@
-using GBX.NET;
 class EffectAlteration: Alteration {
+    public string AllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
     public override void ChangeInventory() {
         AddCheckpointTrigger();
     }
@@ -11,7 +11,7 @@ class EffectAlteration: Alteration {
         } else{
             GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         }
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(new string[] {"Left", "Right", "Center" }).AddKeyword(Effect).PlaceRelative(map,moveChain);
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(map,moveChain);
 
         Inventory triggers = inventory.Select("(CheckpointTrigger|MultilapTrigger)");
         map.PlaceRelative(triggers.Select("!Ring&!WithWall"), GateSpecial,Move(-16,-16,-16).AddChain(moveChain));
@@ -35,14 +35,8 @@ class EffectAlteration: Alteration {
         map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
         map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,0).AddChain(moveChain));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
-        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(new string[] {"MapStart", "Left", "Right", "Center" }).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
+        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
         map.PlaceStagedBlocks();
-    }
-}
-class NoBrake: EffectAlteration {
-    public override void Run(Map map){
-        PlaceCPEffect(map,"NoBrake",Move(0,0,1));
-        PlaceStartEffect(map,"NoBrake");
     }
 }
 class Cruise: EffectAlteration {
@@ -58,17 +52,14 @@ class Fragile: EffectAlteration {
     }
 }
 
-class SlowMo: EffectAlteration {
-    public override void Run(Map map){
-        PlaceCPEffect(map,"SlowMotion",Move(0,0,1));
-        PlaceStartEffect(map,"SlowMotion");
-    }
-}
+//TODO 100 Fragile, Fragile + remove reset + start Macroblock
 
-class NoSteer: EffectAlteration {
+class FreeWheel: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"NoSteering",Move(0,0,1));
-        PlaceStartEffect(map,"NoSteering");
+        PlaceCPEffect(map,"Turbo");
+        PlaceStartEffect(map,"Turbo");
+        PlaceCPEffect(map,"NoEngine",Move(0,0,1));
+        PlaceStartEffect(map,"NoEngine",Move(0,0,3));
     }
 }
 
@@ -78,6 +69,39 @@ class Glider: EffectAlteration {
         PlaceStartEffect(map,"Boost",oriented: true);
     }
 }
+
+class NoBrake: EffectAlteration {
+    public override void Run(Map map){
+        PlaceCPEffect(map,"NoBrake",Move(0,0,1));
+        PlaceStartEffect(map,"NoBrake");
+    }
+}
+
+class NoEffect: EffectAlteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Block).Select(AllEffects)
+            .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]).Replace(map);
+        map.Delete(inventory.Select(BlockType.Item).Select(AllEffects));
+        map.PlaceStagedBlocks();
+    }
+    public override void ChangeInventory()
+    {
+        AddNoCPBlocks();
+    }
+}
+
+//TODO no-grip
+
+class NoSteer: EffectAlteration {
+    public override void Run(Map map){
+        PlaceCPEffect(map,"NoSteering",Move(0,0,1));
+        PlaceStartEffect(map,"NoSteering");
+    }
+}
+
+//TODO random-dankness
+
+//TODO random-effects
 
 class Reactor: EffectAlteration {
     public override void Run(Map map){
@@ -93,64 +117,28 @@ class ReactorDown: EffectAlteration {
     }
 }
 
-class FreeWheel: EffectAlteration {
+class RedEffects: EffectAlteration {
     public override void Run(Map map){
-        PlaceCPEffect(map,"Turbo");
-        PlaceStartEffect(map,"Turbo");
-        PlaceCPEffect(map,"NoEngine",Move(0,0,1));
-        PlaceStartEffect(map,"NoEngine",Move(0,0,3));
-    }
-}
-
-class AntiBooster: Alteration {
-    public override void Run(Map map){
-        Inventory boosters = inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette");
-        Inventory tiltedBoosters = boosters.Select("Slope|Slope2|Tilt|Tilt2");
-        map.Replace(tiltedBoosters.Select("Up").RemoveKeyword("Up").AddKeyword("Down"));
-        map.Replace(tiltedBoosters.Select("Down").RemoveKeyword("Down").AddKeyword("Up"));
-        map.Replace(tiltedBoosters.Select("Left").RemoveKeyword("Left").AddKeyword("Right"));
-        map.Replace(tiltedBoosters.Select("Right").RemoveKeyword("Right").AddKeyword("Left"));
-        map.PlaceStagedBlocks();
-        map.Move(boosters,RotateMid(PI,0,0));
+        inventory.Select(AllEffects).RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]).AddKeyword("Turbo2").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 
-class Boosterless: Alteration {
+class RngBooster: EffectAlteration {
     public override void Run(Map map){
-        map.Delete(inventory.Select(BlockType.Item).Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
-        Inventory blocks = inventory.Select(BlockType.Block);
-        map.Delete(blocks.Select("GateExpandable&(Boost|Boost2|Turbo|Turbo2|TurboRoulette)"));
-        blocks.Select("Boost").RemoveKeyword("Boost").Replace(map);
-        blocks.Select("Boost2").RemoveKeyword("Boost2").Replace(map);
-        blocks.Select("Turbo").RemoveKeyword("Turbo").Replace(map);
-        blocks.Select("Turbo2").RemoveKeyword("Turbo2").Replace(map);
-        blocks.Select("TurboRoulette").RemoveKeyword("TurboRoulette").Replace(map);
-        map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory(){
-        AddNoCPBlocks();
-    }
-}
-
-class SpeedLimit: Alteration {
-    public override void Run(Map map){
-        map.Delete(inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
-    }
-}
-
-class Broken: Alteration {
-    public override void Run(Map map){
-        inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset").RemoveKeyword(new string[] { "Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up","Oriented" }).AddKeyword("NoEngine").Replace(map);
+        inventory.Select(AllEffects).RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]).AddKeyword("TurboRoulette").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 
-class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
+
+class SlowMo: EffectAlteration {
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Turbo2").Replace(map);
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(new string[] { "Checkpoint","Left","Right","Center"}).AddKeyword("Turbo2").Replace(map);
-        map.PlaceStagedBlocks();
+        PlaceCPEffect(map,"SlowMotion",Move(0,0,1));
+        PlaceStartEffect(map,"SlowMotion");
     }
 }
+
+//TODO WetWheels
+
+//TODO Worn-tires, similair to 100 fragile

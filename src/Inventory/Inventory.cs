@@ -6,8 +6,7 @@ public class Inventory {
     public Inventory(List<Article> articles) {this.articles = articles;}
 
     public void Export(string Name) {
-        // Directory.CreateDirectory(AutoAlteration.ProjectFolder + "dev/");
-        // Directory.CreateDirectory(AutoAlteration.ProjectFolder + "dev/Inventory/");
+        Directory.CreateDirectory(AutoAlteration.ProjectFolder + "dev/Inventory/");
         File.WriteAllText(AutoAlteration.ProjectFolder + "dev/Inventory/Inventory" + Name + ".json", JsonConvert.SerializeObject(articles));
     }
     
@@ -18,6 +17,12 @@ public class Inventory {
 
     public Inventory SelectString(string nameString) =>
         new(articles.Where(a => a.Name.Contains(nameString)).ToList());
+
+    public Inventory Add(Inventory inventory) =>
+        new(articles.Concat(inventory.articles).ToList());
+        
+    public Inventory Sub(Inventory inventory) =>
+        new(articles.Except(inventory.articles).ToList());
 
     public string[] Names() =>
         articles.Select(a => a.Name).ToArray();

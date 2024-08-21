@@ -1,69 +1,93 @@
-class SurfaceAlteration : Alteration {
-    public void AlterLightSurface(Map map, string Surface) {
-        inventory.Select("!Light" + Surface + "&(RoadTech|RoadBump|RoadDirt|RoadIce|OpenGrassRoad|OpenDirtRoad|OpenTechRoad|OpenIceRoad|OpenGrassZone|OpenDirtZone|OpenTechZone|OpenIceZone)").AddKeyword("Light" + Surface).PlaceRelative(map);
-        inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
-    }
-}
-class Tech : SurfaceAlteration {
+// class LightSurface : Alteration {
+//     public void AlterLightSurface(Map map, string Surface) {
+//         inventory.Select("!Light" + Surface + "&(RoadTech|RoadBump|RoadDirt|RoadIce|OpenGrassRoad|OpenDirtRoad|OpenTechRoad|OpenIceRoad|OpenGrassZone|OpenDirtZone|OpenTechZone|OpenIceZone)").AddKeyword("Light" + Surface).PlaceRelative(map);
+//         inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
+//     }
+// }
+
+using GBX.NET;
+
+class Dirt : Alteration {
     public override void Run(Map map){
-        AlterLightSurface(map, "Tech");
+        inventory.Select("!Dirt&!OpenDirtRoad&!OpenDirtZone&!RoadDirt").AddKeyword("HeavyDirt").Replace(map);
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/LightTech");
+        AddCustomBlocks("Surface/HeavyDirt");
     }
 }
 
-class Dirt : SurfaceAlteration {
+//TODO Fast-Magnet
+
+//flooded manual
+
+class Grass : Alteration {
     public override void Run(Map map){
-        AlterLightSurface(map, "Dirt");
+        inventory.Select("!Grass&!OpenGrassRoad&!OpenGrassZone").AddKeyword("HeavyGrass").Replace(map);
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/LightDirt");
+        AddCustomBlocks("Surface/HeavyGrass");
     }
-
 }
-class Grass : SurfaceAlteration {
+
+class Ice : Alteration {
     public override void Run(Map map){
-        AlterLightSurface(map, "Grass");
+        inventory.Select("!Ice&!OpenIceRoad&!OpenIceZone&!RoadIce").AddKeyword("HeavyIce").Replace(map);
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/LightGrass");
+        AddCustomBlocks("Surface/HeavyIce");
     }
 }
 
-class Plastic : SurfaceAlteration {
+class Magnet : Alteration {
     public override void Run(Map map){
-        AlterLightSurface(map, "Plastic");
+        inventory.AddKeyword("HeavyMagnet").Replace(map);
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/LightPlastic");
+        AddCustomBlocks("Surface/HeavyMagnet");
     }
 }
 
-class Ice : SurfaceAlteration {
+//mixed manual
+
+//TODO penalty
+
+class Plastic : Alteration {
     public override void Run(Map map){
-        AlterLightSurface(map, "Ice");
+        inventory.Select("!Plastic&!OpenPlasticRoad&!OpenPlasticZone&!RoadPlastic").AddKeyword("HeavyPlastic").Replace(map);
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/LightIce");
+        AddCustomBlocks("Surface/HeavyPlastic");
     }
 }
-class Wood : SurfaceAlteration {
+
+class Road : Alteration {
+    public override void Run(Map map){
+        inventory.Select("!Tech&!OpenTechRoad&!OpenTechZone&!RoadTech").AddKeyword("HeavyTech").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("Surface/HeavyTech");
+    }
+}
+
+class Wood : Alteration {
     public override void Run(Map map){
         inventory.Select("!SnowRoad").AddKeyword("HeavyWood").Replace(map);
         map.PlaceStagedBlocks();
@@ -74,3 +98,35 @@ class Wood : SurfaceAlteration {
         AddCustomBlocks("Surface/HeavyWood");
     }
 }
+
+class Bobsleigh : Alteration { //half manual
+    public override void Run(Map map){
+        inventory.Select("RoadBump|RoadDirt|RoadTech").RemoveKeyword(["RoadBump","RoadDirt","RoadTech"]).AddKeyword("RoadIce").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
+
+//pipe manual
+
+class Sausage : Alteration { //half manual
+    public override void Run(Map map){
+        inventory.Select("RoadIce|RoadDirt|RoadTech").RemoveKeyword(["RoadIce","RoadDirt","RoadTech"]).AddKeyword("RoadBump").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
+
+//slot-track manual
+
+class Surfaceless: Alteration {
+    public override void Run(Map map){    
+        Inventory Blocks = inventory.Select(BlockType.Block);
+        map.PlaceRelative(Blocks.Select("MapStart"),"GateStartCenter32m");
+        map.PlaceRelative(Blocks.Select("Checkpoint"),"GateCheckpointCenter32m");
+        map.PlaceRelative(Blocks.Select("Finish"),"GateFinishCenter32m");
+        inventory.Select(BlockType.Item).Select("MapStart&Finish&Checkpoint").Edit().PlaceRelative(map);
+        map.Delete(inventory.Sub(inventory.Select(BlockType.Pillar)));
+        map.PlaceStagedBlocks();
+    }
+}
+
+//TODO underwater (Macroblock)

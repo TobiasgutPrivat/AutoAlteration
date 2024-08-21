@@ -5,14 +5,15 @@ using GBX.NET.LZO;
 using GBX.NET.ZLib;
 using Newtonsoft.Json;
 //Initial load
-AutoAlteration.Load(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + "/");
+AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..")) + "/");
+// AutoAlteration.Load(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + "/");
 // CLI.Run();
 // ----------- Code for Execution (change for your use) ----------- //
 
 //Folder Processing -------------
 string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
 string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new Invisible(), sourceFolder, destinationFolder + "Summer 2024 Invisible/", "Invisible");
+AutoAlteration.AlterFolder(new NoEffect(), sourceFolder, destinationFolder + "Summer 2024 NoEffect/", "NoEffect");
 
 //Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";

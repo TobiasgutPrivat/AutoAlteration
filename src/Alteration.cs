@@ -93,6 +93,7 @@ public class Alteration {
         inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Base").Align().EditOriginal().RemoveKeyword("Base");
         inventory.RemoveArticles(inventory.Select("v2").RemoveKeyword("v2").Align());
         inventory.Select("v2").EditOriginal().RemoveKeyword("v2");
+        inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
     }
 
     public static void TestInventory(){
