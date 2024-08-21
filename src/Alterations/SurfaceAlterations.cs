@@ -5,8 +5,6 @@
 //     }
 // }
 
-using GBX.NET;
-
 class Dirt : Alteration {
     public override void Run(Map map){
         inventory.Select("!Dirt&!OpenDirtRoad&!OpenDirtZone&!RoadDirt").AddKeyword("HeavyDirt").Replace(map);
@@ -15,7 +13,7 @@ class Dirt : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/HeavyDirt");
+        AddCustomBlocks("HeavyDirt");
     }
 }
 
@@ -31,7 +29,7 @@ class Grass : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/HeavyGrass");
+        AddCustomBlocks("HeavyGrass");
     }
 }
 
@@ -43,7 +41,7 @@ class Ice : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/HeavyIce");
+        AddCustomBlocks("HeavyIce");
     }
 }
 
@@ -55,7 +53,7 @@ class Magnet : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/HeavyMagnet");
+        AddCustomBlocks("HeavyMagnet");
     }
 }
 
@@ -71,7 +69,7 @@ class Plastic : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/HeavyPlastic");
+        AddCustomBlocks("HeavyPlastic");
     }
 }
 
@@ -83,7 +81,7 @@ class Road : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/HeavyTech");
+        AddCustomBlocks("HeavyTech");
     }
 }
 
@@ -95,7 +93,7 @@ class Wood : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("Surface/HeavyWood");
+        AddCustomBlocks("HeavyWood");
     }
 }
 
@@ -130,3 +128,17 @@ class Surfaceless: Alteration {
 }
 
 //TODO underwater (Macroblock)
+
+
+class RouteOnly: Alteration {
+    public override void Run(Map map){
+        inventory.AddKeyword("RouteOnlyBlock").Replace(map);
+        map.Delete(inventory.Sub(inventory.Select(BlockType.Item).Select("MapStart|Finish|Checkpoint")));
+        map.PlaceStagedBlocks();
+    }
+
+    public override void ChangeInventory()
+    {
+        AddCustomBlocks("RouteOnlyBlock");
+    }
+}

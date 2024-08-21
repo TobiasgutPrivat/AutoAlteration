@@ -6,3 +6,4 @@ HeavyDirt
 HeavyIce
 HeavyWood
 HeavyMagnet
+RouteOnlyBlock
