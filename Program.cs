@@ -5,7 +5,7 @@ using GBX.NET.LZO;
 using GBX.NET.ZLib;
 using Newtonsoft.Json;
 //Initial load
-AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..")) + "/");
+AutoAlteration.Load(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + "/");
 // CLI.Run();
 // ----------- Code for Execution (change for your use) ----------- //
 
