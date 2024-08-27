@@ -27,7 +27,9 @@ public class AutoAlteration {
                 Alteration.CreateInventory();
                 alteration.ChangeInventory();
                 Alteration.InventoryChanges();
-                Alteration.inventory.Export(alteration.GetType().Name);
+                if (devMode){
+                    Alteration.inventory.Export(alteration.GetType().Name);
+                }
                 devMode = false;
             }
             alteration.Run(map);
@@ -41,7 +43,9 @@ public class AutoAlteration {
             changed = alteration.Run(customBlock);
             if (customBlock.Type == BlockType.Block) {
                 customBlock.Block.CustomizedVariants.ToList().ForEach(x => {
-                    changed = AlterMeshCrystal(alteration, customBlock, x.Crystal) || changed;
+                    if (x.Crystal != null) {
+                        changed = AlterMeshCrystal(alteration, customBlock, x.Crystal) || changed;
+                    }
                 });
             } else {
                 changed = AlterMeshCrystal(alteration, customBlock, customBlock.Item.MeshCrystal) || changed;
@@ -167,39 +171,41 @@ public class AutoAlteration {
 
     public static List<Alteration> GetImplementedAlterations() {
         return [
-            new Stadium(),
-            new Snow(),
-            new Rally(),
-            new Desert(),
-            new NoBrake(),
-            new Cruise(),
-            new Fragile(),
-            new SlowMo(),
-            new NoSteer(),
-            new Glider(),
-            new Reactor(),
-            new ReactorDown(),
-            new FreeWheel(),
             new AntiBooster(),
-            new CPBoost(),
-            new STTF(),
+            new Boosterless(),
+            new Broken(),
             new CPFull(),
-            new OneUP(),
+            new CPBoost(),
+            new Cruise(),
+            new Desert(),
+            new Fast(),
+            new Fragile(),
+            new FreeWheel(),
+            new Glider(),
+            new NoBrake(),
+            new NoEffect(),
+            new NoItems(),
+            new NoSteer(),
+            new OneBack(),
             new OneDown(),
             new OneLeft(),
             new OneRight(),
+            new OneUP(),
+            new Rally(),
+            new Reactor(),
+            new ReactorDown(),
+            new RedEffects(),
+            new RngBooster(),
+            new SlowMo(),
+            new Stadium(),
+            new STTF(),
+            new Snow(),
             new TwoUP(),
             new YepTree()
         ];
     }
     public static List<CustomBlockAlteration> GetImplementedBlockAlterations() {
         return [
-            new HeavyDirt(),
-            new HeavyGrass(),
-            new HeavyIce(),
-            new HeavyMagnet(),
-            new HeavyPlastic(),
-            new HeavyTech()
         ];
     }
 }

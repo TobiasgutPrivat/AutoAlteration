@@ -5,15 +5,16 @@ using GBX.NET.LZO;
 using GBX.NET.ZLib;
 using Newtonsoft.Json;
 //Initial load
-AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..")) + "/");
-// AutoAlteration.Load(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory) + "/");
-// CLI.Run();
+AutoAlteration.devMode = true;
+// AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..")) + "/");
+AutoAlteration.Load(Path.GetFullPath(AppContext.BaseDirectory) + "/");
+CLI.Run();
 // ----------- Code for Execution (change for your use) ----------- //
 
 //Folder Processing -------------
-string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Summer 2024/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Summer 2024/";
-AutoAlteration.AlterFolder(new NoEffect(), sourceFolder, destinationFolder + "Summer 2024 NoEffect/", "NoEffect");
+string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Training/";
+string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Training/";
+// AutoAlteration.AlterFolder(new Mini(), sourceFolder, destinationFolder + "Training Mini/", "Mini");
 
 //Full Folder Processing -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
@@ -33,8 +34,8 @@ string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template
 
 //Customblocks -------------
 // string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Vanilla";
-// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/InvisibleBlock";
-// AutoAlteration.AlterAll(new InvisibleBlock(), sourceFolder, destinationFolder, "InvisibleBlock");
+// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/MiniBlock";
+// AutoAlteration.AlterAll(new MiniBlock(), sourceFolder, destinationFolder, "MiniBlock");
 
 // Materials Log using MaterialInfo
 // string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Vanilla";

@@ -81,7 +81,9 @@ public class Alteration {
 
         //save
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
-        inventory.Export("Vanilla");
+        if (AutoAlteration.devMode){
+            inventory.Export("Vanilla");
+        }
     }
 
     public static void InventoryChanges(){

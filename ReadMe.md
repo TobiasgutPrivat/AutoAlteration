@@ -7,11 +7,13 @@ It's still in early development, so there will probably be some Bugs and Problem
 
 If you encounter problems or you have some questions/ideas etc. please contact me on Discord <strong>(Tobias2g#5288)</strong>
 
-Guide to implementing Alterations https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing
+[Guide to implementing Alterations](https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing)
 ## How to use
-The tool comes with a basic CLI but some Software is required.
+Download [AutoAlteration.zip](https://1drv.ms/u/c/bf971998d3da6c52/EXVZ6v4tErxPhovHlDeiXYcB3csKGUuD40zuxP0gXosc8g?e=hlYO8E) and unpack in a local Folder.
 
-So far it's only tested and supported on Windows
+In there you can either use AutoAlterationUI.exe for proper UI or AutoAlteration.exe for CLI
+
+To have more control, or to develop some stuff you need to setup the full Project (see Installation)
 
 ### Installation
 1. Install git if you haven't: https://git-scm.com/downloads
@@ -81,3 +83,6 @@ For mature functionality or questions to your contribution please contact me on 
 Your Feedback or Ideas are also valueable, so you can write me that too.
 
 A guide to implementing Alterations will come soon
+
+# Temp
+github Acces token: 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
