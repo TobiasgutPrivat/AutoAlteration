@@ -1,0 +1,9 @@
+InvisibleBlock
+MiniBlock
+HeavyTech
+HeavyGrass
+HeavyDirt
+HeavyIce
+HeavyWood
+HeavyMagnet
+RouteOnlyBlock

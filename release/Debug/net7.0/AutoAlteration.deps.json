@@ -1,15 +1,15 @@
 {
   "runtimeTarget": {
-    "name": ".NETCoreApp,Version=v7.0",
+    "name": ".NETCoreApp,Version=v8.0",
     "signature": ""
   },
   "compilationOptions": {},
   "targets": {
-    ".NETCoreApp,Version=v7.0": {
+    ".NETCoreApp,Version=v8.0": {
       "AutoAlteration/1.0.0": {
         "dependencies": {
-          "GBX.NET": "2.0.5",
-          "GBX.NET.LZO": "2.0.0",
+          "GBX.NET": "2.0.8-nightly.20240819.49c1282",
+          "GBX.NET.LZO": "2.1.1",
           "GBX.NET.ZLib": "1.1.0",
           "MathNet.Numerics": "5.0.0",
           "Newtonsoft.Json": "13.0.3"
@@ -18,36 +18,37 @@
           "AutoAlteration.dll": {}
         }
       },
-      "GBX.NET/2.0.5": {
+      "GBX.NET/2.0.8-nightly.20240819.49c1282": {
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.1",
-          "TmEssentials": "2.4.2"
+          "TmEssentials": "2.5.0"
         },
         "runtime": {
-          "lib/net6.0/GBX.NET.dll": {
-            "assemblyVersion": "2.0.5.0",
-            "fileVersion": "2.0.5.0"
+          "lib/net8.0/GBX.NET.dll": {
+            "assemblyVersion": "2.0.8.0",
+            "fileVersion": "2.0.8.0"
           }
         }
       },
-      "GBX.NET.LZO/2.0.0": {
+      "GBX.NET.LZO/2.1.1": {
         "dependencies": {
-          "GBX.NET": "2.0.5"
+          "GBX.NET": "2.0.8-nightly.20240819.49c1282",
+          "NativeSharpLzo": "0.3.3"
         },
         "runtime": {
-          "lib/net6.0/GBX.NET.LZO.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.0.0"
+          "lib/net8.0/GBX.NET.LZO.dll": {
+            "assemblyVersion": "2.1.1.0",
+            "fileVersion": "2.1.1.0"
           }
         }
       },
       "GBX.NET.ZLib/1.1.0": {
         "dependencies": {
-          "GBX.NET": "2.0.5",
+          "GBX.NET": "2.0.8-nightly.20240819.49c1282",
           "Iconic.Zlib.Netstandard": "1.0.0"
         },
         "runtime": {
-          "lib/net6.0/GBX.NET.ZLib.dll": {
+          "lib/net8.0/GBX.NET.ZLib.dll": {
             "assemblyVersion": "1.1.0.0",
             "fileVersion": "1.1.0.0"
           }
@@ -74,7 +75,7 @@
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/8.0.1": {
         "runtime": {
-          "lib/net7.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+          "lib/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.324.11423"
           }
@@ -85,7 +86,7 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.1"
         },
         "runtime": {
-          "lib/net7.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+          "lib/net8.0/Microsoft.Extensions.Logging.Abstractions.dll": {
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.324.11423"
           }
@@ -98,6 +99,46 @@
           "Microsoft.NETCore.Platforms": "1.0.1",
           "Microsoft.NETCore.Targets": "1.0.1",
           "System.Runtime": "4.1.0"
+        }
+      },
+      "NativeSharpLzo/0.3.3": {
+        "runtime": {
+          "lib/net8.0/SharpLzo.dll": {
+            "assemblyVersion": "0.3.3.0",
+            "fileVersion": "0.3.3.0"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/browser-wasm/native/liblzo2.a": {
+            "rid": "browser-wasm",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-arm/native/liblzo2.so": {
+            "rid": "linux-arm",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-arm64/native/liblzo2.so": {
+            "rid": "linux-arm64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/linux-x64/native/liblzo2.so": {
+            "rid": "linux-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x64/native/liblzo2.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win-x86/native/liblzo2.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "0.0.0.0"
+          }
         }
       },
       "NETStandard.Library/1.6.0": {
@@ -744,11 +785,11 @@
           "System.Xml.ReaderWriter": "4.0.11"
         }
       },
-      "TmEssentials/2.4.2": {
+      "TmEssentials/2.5.0": {
         "runtime": {
-          "lib/net7.0/TmEssentials.dll": {
-            "assemblyVersion": "2.4.2.0",
-            "fileVersion": "2.4.2.0"
+          "lib/net8.0/TmEssentials.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.0.0"
           }
         }
       }
@@ -760,19 +801,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "GBX.NET/2.0.5": {
+    "GBX.NET/2.0.8-nightly.20240819.49c1282": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-3zdS+Y9vQRXu9WTERHEcIQOT0qQiUooTF/BwY+69hHEnU/OvrzhpaSIaihCZzpfqQMUxGlmJAI4rN4JnACCDOw==",
-      "path": "gbx.net/2.0.5",
-      "hashPath": "gbx.net.2.0.5.nupkg.sha512"
+      "sha512": "sha512-U0ni2aDz6mXUyB6TbO62R+M6s34PwGmH8fF4w92eGooi1gye0wX6dicjqTGkvy+p8Rka8cJ52IqYbni9LyQStQ==",
+      "path": "gbx.net/2.0.8-nightly.20240819.49c1282",
+      "hashPath": "gbx.net.2.0.8-nightly.20240819.49c1282.nupkg.sha512"
     },
-    "GBX.NET.LZO/2.0.0": {
+    "GBX.NET.LZO/2.1.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-p0pQODoRT+kX1dCtosxMkXYGoIlgOL86eoqiMIHSMFhxf7fMEQe/hmGxay21jVb7q94VfmuaYbxzKTVw4AcasQ==",
-      "path": "gbx.net.lzo/2.0.0",
-      "hashPath": "gbx.net.lzo.2.0.0.nupkg.sha512"
+      "sha512": "sha512-ixa6xQ4a8qe8FStxKKPagUcUlQT4dyY8hr2ReBtxXe9kV2RcjSTQyb0jwBPtH3JViDXVa5xMyq4gQMTc/5EsXQ==",
+      "path": "gbx.net.lzo/2.1.1",
+      "hashPath": "gbx.net.lzo.2.1.1.nupkg.sha512"
     },
     "GBX.NET.ZLib/1.1.0": {
       "type": "package",
@@ -829,6 +870,13 @@
       "sha512": "sha512-fQnBHO9DgcmkC9dYSJoBqo6sH1VJwJprUHh8F3hbcRlxiQiBUuTntdk8tUwV490OqC2kQUrinGwZyQHTieuXRA==",
       "path": "microsoft.win32.primitives/4.0.1",
       "hashPath": "microsoft.win32.primitives.4.0.1.nupkg.sha512"
+    },
+    "NativeSharpLzo/0.3.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HI3QueAxBKjoilJpQyDlQHP/eiteQj/sGSBHLfsIBzbGR488zGwifZNDXf1Cj0VNW0oQZqHrWEgBqDa9uLsE5w==",
+      "path": "nativesharplzo/0.3.3",
+      "hashPath": "nativesharplzo.0.3.3.nupkg.sha512"
     },
     "NETStandard.Library/1.6.0": {
       "type": "package",
@@ -1243,12 +1291,12 @@
       "path": "system.xml.xdocument/4.0.11",
       "hashPath": "system.xml.xdocument.4.0.11.nupkg.sha512"
     },
-    "TmEssentials/2.4.2": {
+    "TmEssentials/2.5.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-KS2Y+m0i6eKrXW++jRqHGqUOoBK1VOMrGRY9pI6j6wPLUak5yGTjH6MsougGq3DnTiC/TeED2cuVw6fRjb5uhw==",
-      "path": "tmessentials/2.4.2",
-      "hashPath": "tmessentials.2.4.2.nupkg.sha512"
+      "sha512": "sha512-uNuwNSqcw7a0eQ2lgkkNtZAe+4JgaCJ/qeLHE8Pynq9TpRnr3O9j4QolcOK3wnRLcQBV4nxfChuzMA75X2Tt0w==",
+      "path": "tmessentials/2.5.0",
+      "hashPath": "tmessentials.2.5.0.nupkg.sha512"
     }
   }
 }

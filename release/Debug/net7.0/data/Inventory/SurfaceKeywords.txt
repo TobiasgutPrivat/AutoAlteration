@@ -1,0 +1,9 @@
+PenaltyDirt
+PenaltyIce
+Plastic
+Penalty
+Magnet
+Grass
+Tech
+Dirt
+Ice
