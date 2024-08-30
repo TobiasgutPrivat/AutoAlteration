@@ -9,7 +9,7 @@ If you encounter problems or you have some questions/ideas etc. please contact m
 
 [Guide to implementing Alterations](https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing)
 ## How to use
-Download [AutoAlteration.zip](https://1drv.ms/u/c/bf971998d3da6c52/EXVZ6v4tErxPhovHlDeiXYcB3csKGUuD40zuxP0gXosc8g?e=hlYO8E) and unpack in a local Folder.
+Download [AutoAlteration.zip](https://1drv.ms/u/c/bf971998d3da6c52/EawUp_m-mMBArOU9dfqaMd0BG_KeENyjzspocBdIMc6WiA?e=VavPGC) and unpack in a local Folder.
 
 In there you can either use AutoAlterationUI.exe for proper UI or AutoAlteration.exe for CLI
 
