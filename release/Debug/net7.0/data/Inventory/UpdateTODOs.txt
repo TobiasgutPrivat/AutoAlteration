@@ -1,3 +1,0 @@
-Update Blockdata
-get new CustomBlocks
-copy and rename pillar blocks

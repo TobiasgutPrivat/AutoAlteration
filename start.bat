@@ -1,1 +1,0 @@
-.\release\Debug\net7.0\AutoAlteration.exe
