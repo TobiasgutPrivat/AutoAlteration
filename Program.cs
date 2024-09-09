@@ -6,8 +6,8 @@ using GBX.NET.ZLib;
 using Newtonsoft.Json;
 //Initial load
 AutoAlteration.devMode = true;
-// AutoAlteration.Load(Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..")) + "/");
-AutoAlteration.Load(Path.GetFullPath(AppContext.BaseDirectory) + "/");
+AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","dev");
+AutoAlteration.Load(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AutoAlteration", "data"));
 CLI.Run();
 // ----------- Code for Execution (change for your use) ----------- //
 

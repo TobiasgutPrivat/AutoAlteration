@@ -74,7 +74,7 @@ public class Alteration {
 
     public static void CreateInventory() {
         //Load Nadeo Articles
-        inventory = ImportVanillaInventory(AutoAlteration.ProjectFolder + "data/Inventory/BlockData.json");
+        inventory = ImportVanillaInventory(Path.Combine(AutoAlteration.DataFolder, "Inventory","BlockData.json"));
         
         //Control
         // inventory.CheckDuplicates();
@@ -113,8 +113,8 @@ public class Alteration {
     }
 
     public static void AddCustomBlocks(string subFolder){
-        inventory.AddArticles(Directory.GetFiles(AutoAlteration.CustomBlocksFolder + subFolder, "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
-        inventory.AddArticles(Directory.GetFiles(AutoAlteration.CustomBlocksFolder + subFolder, "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
     }
 
     public static void AddNoCPBlocks(){

@@ -3,21 +3,22 @@ using GBX.NET.Engines.Plug;
 public class AutoAlteration {
     public static int mapCount = 0;
     private static Alteration ?lastAlteration;
+    public static string devPath = "";
     public static bool devMode = false;
-    public static string ProjectFolder = "";
+    public static string DataFolder = "";
     public static string CustomBlocksFolder = "";
-    public static string[] Keywords = Array.Empty<string>();
-    public static string[] shapeKeywords = Array.Empty<string>();
-    public static string[] surfaceKeywords = Array.Empty<string>();
-    public static string[] specialKeywords = Array.Empty<string>();
+    public static string[] Keywords = [];
+    public static string[] shapeKeywords = [];
+    public static string[] surfaceKeywords = [];
+    public static string[] specialKeywords = [];
 
     public static void Load(string projectFolder) {
-        ProjectFolder = projectFolder;
-        CustomBlocksFolder = ProjectFolder + "data/CustomBlocks/";
-        shapeKeywords = File.ReadAllLines(ProjectFolder + "data/Inventory/shapeKeywords.txt");
-        surfaceKeywords = File.ReadAllLines(ProjectFolder + "data/Inventory/surfaceKeywords.txt");
-        Keywords = File.ReadAllLines(ProjectFolder + "data/Inventory/Keywords.txt");
-        specialKeywords = File.ReadAllLines(ProjectFolder + "data/Inventory/SpecialKeywords.txt");
+        DataFolder = projectFolder;
+        CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
+        shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt"));
+        surfaceKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","surfaceKeywords.txt"));
+        Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt"));
+        specialKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","SpecialKeywords.txt"));
     }
 
     public static void Alter(List<Alteration> alterations, Map map) {
@@ -73,64 +74,54 @@ public class AutoAlteration {
         return changed;
     }
 
-    public static void AlterFolder(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        foreach (string mapFile in Directory.GetFiles(mapFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,destinationFolder + Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
+    public static void AlterFolder(List<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
+            AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
         }
     }
-    public static void AlterFolder(List<CustomBlockAlteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        foreach (string mapFile in Directory.GetFiles(mapFolder, "*.item.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,GetNewCustomBlockName(destinationFolder + Path.GetFileName(mapFile),Name),Name);
+    public static void AlterFolder(List<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.item.gbx", SearchOption.TopDirectoryOnly)){
+            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name);
         }
-        foreach (string mapFile in Directory.GetFiles(mapFolder, "*.block.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,GetNewCustomBlockName(destinationFolder + Path.GetFileName(mapFile),Name),Name);
+        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.block.gbx", SearchOption.TopDirectoryOnly)){
+            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name);
         }
     }
-    public static void AlterFolder(Alteration alteration, string mapFolder, string destinationFolder, string Name) =>
-        AlterFolder(new List<Alteration>{alteration},mapFolder,destinationFolder,Name);
-    public static void AlterFolder(CustomBlockAlteration alteration, string mapFolder, string destinationFolder, string Name) =>
-        AlterFolder(new List<CustomBlockAlteration>{alteration},mapFolder,destinationFolder,Name);
+    public static void AlterFolder(Alteration alteration, string sourceFolder, string destinationFolder, string Name) =>
+        AlterFolder(new List<Alteration>{alteration},sourceFolder,destinationFolder,Name);
+    public static void AlterFolder(CustomBlockAlteration alteration, string sourceFolder, string destinationFolder, string Name) =>
+        AlterFolder(new List<CustomBlockAlteration>{alteration},sourceFolder,destinationFolder,Name);
     
-    public static void AlterAll(List<Alteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        AlterFolder(alterations,mapFolder,destinationFolder + Path.GetFileName(mapFolder) + " - " + Name + "/",Name);
-        foreach (string Directory in Directory.GetDirectories(mapFolder, "*", SearchOption.TopDirectoryOnly))
+    public static void AlterAll(List<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+        AlterFolder(alterations,sourceFolder,Path.Combine(destinationFolder, Path.GetFileName(sourceFolder) + " - " + Name),Name);
+        foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,destinationFolder + Directory[mapFolder.Length..] + "/",Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Directory[sourceFolder.Length..]),Name);
         }
     }
-    public static void AlterAll(List<CustomBlockAlteration> alterations, string mapFolder, string destinationFolder, string Name) {
-        AlterFolder(alterations,mapFolder,destinationFolder,Name);
-        foreach (string Directory in Directory.GetDirectories(mapFolder, "*", SearchOption.TopDirectoryOnly))
+    public static void AlterAll(List<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+        AlterFolder(alterations,sourceFolder,destinationFolder,Name);
+        foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,destinationFolder + Directory[mapFolder.Length..] + "/",Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Directory[sourceFolder.Length..]),Name);
         }
     }
-    public static void AlterAll(Alteration alteration, string mapFolder, string destinationFolder, string Name) =>
-        AlterAll(new List<Alteration>{alteration},mapFolder,destinationFolder,Name);
-    public static void AlterAll(CustomBlockAlteration alteration, string mapFolder, string destinationFolder, string Name) =>
-        AlterAll(new List<CustomBlockAlteration>{alteration},mapFolder,destinationFolder,Name);
+    public static void AlterAll(Alteration alteration, string sourceFolder, string destinationFolder, string Name) =>
+        AlterAll(new List<Alteration>{alteration},sourceFolder,destinationFolder,Name);
+    public static void AlterAll(CustomBlockAlteration alteration, string sourceFolder, string destinationFolder, string Name) =>
+        AlterAll(new List<CustomBlockAlteration>{alteration},sourceFolder,destinationFolder,Name);
     
-    public static void AlterFolder(List<Alteration> alterations, string mapFolder, string Name) =>
-        AlterFolder(alterations,mapFolder,mapFolder,Name);
-    public static void AlterFolder(List<CustomBlockAlteration> alterations, string mapFolder, string Name) =>
-        AlterFolder(alterations,mapFolder,mapFolder,Name);
-    
-    public static void AlterFolder(Alteration alteration, string mapFolder, string Name) =>
-        AlterFolder(alteration,mapFolder,mapFolder,Name);
-    public static void AlterFolder(CustomBlockAlteration alteration, string mapFolder, string Name) =>
-        AlterFolder(alteration,mapFolder,mapFolder,Name);
-    
-    public static void AlterFile(List<Alteration> alterations, string mapFile, string destinationFile, string Name) {
-        Map map = new(mapFile);
+    public static void AlterFile(List<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
+        Map map = new(sourceFile);
         Alter(alterations, map);
         map.map.MapName = map.map.MapName + " " + Name;
         map.Save(destinationFile);
         Console.WriteLine(destinationFile);
     }
-    public static void AlterFile(List<CustomBlockAlteration> alterations, string blockFile, string destinationFile, string Name) {
+    public static void AlterFile(List<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name) {
         CustomBlock customBlock;
         try {
-            customBlock = new(blockFile);
+            customBlock = new(sourceFile);
         } catch {
             Console.WriteLine("Load Error");
             return;
@@ -143,26 +134,26 @@ public class AutoAlteration {
             Console.WriteLine(customBlock.Name + " unchanged");
         };
     }
-    public static void AlterFile(Alteration alteration, string mapFile, string destinationFile, string Name) =>
-        AlterFile(new List<Alteration>{alteration},mapFile,destinationFile,Name);
-    public static void AlterFile(CustomBlockAlteration alteration, string blockFile, string destinationFile, string Name) =>
-        AlterFile(new List<CustomBlockAlteration>{alteration},blockFile,destinationFile,Name);
+    public static void AlterFile(Alteration alteration, string sourceFile, string destinationFile, string Name) =>
+        AlterFile(new List<Alteration>{alteration},sourceFile,destinationFile,Name);
+    public static void AlterFile(CustomBlockAlteration alteration, string sourceFile, string destinationFile, string Name) =>
+        AlterFile(new List<CustomBlockAlteration>{alteration},sourceFile,destinationFile,Name);
     
-    public static void AlterFile(List<Alteration> alterations, string mapFile, string Name) =>
-        AlterFile(alterations,mapFile,Path.GetDirectoryName(mapFile)  + "\\" +  Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
-    public static void AlterFile(List<CustomBlockAlteration> alterations, string blockFile, string Name) =>
-        AlterFile(alterations,blockFile,GetNewCustomBlockName(blockFile,Name),Name);
+    public static void AlterFile(List<Alteration> alterations, string sourceFile, string Name) =>
+        AlterFile(alterations,sourceFile,Path.Combine(Path.GetDirectoryName(sourceFile),  Path.GetFileName(sourceFile)[..^8] + " " + Name + ".map.gbx"),Name);
+    public static void AlterFile(List<CustomBlockAlteration> alterations, string sourceFile, string Name) =>
+        AlterFile(alterations,sourceFile,GetNewCustomBlockName(sourceFile,Name),Name);
     
-    public static void AlterFile(Alteration alteration, string mapFile, string Name) =>
-        AlterFile(alteration,mapFile,Path.GetDirectoryName(mapFile) + "\\" +  Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx",Name);
-    public static void AlterFile(CustomBlockAlteration alteration, string blockFile, string Name) =>
-        AlterFile(alteration,blockFile,GetNewCustomBlockName(blockFile,Name),Name);
+    public static void AlterFile(Alteration alteration, string sourceFile, string Name) =>
+        AlterFile(alteration,sourceFile,Path.Combine(Path.GetDirectoryName(sourceFile),  Path.GetFileName(sourceFile)[..^8] + " " + Name + ".map.gbx"),Name);
+    public static void AlterFile(CustomBlockAlteration alteration, string sourceFile, string Name) =>
+        AlterFile(alteration,sourceFile,GetNewCustomBlockName(sourceFile,Name),Name);
 
     private static string GetNewCustomBlockName(string path, string name){
         if (path.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
-            return Path.GetDirectoryName(path) + "\\" +  Path.GetFileName(path)[..^9] + name + path[^9..];
+            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileName(path)[..^9] + name + path[^9..]);
         } else if (path.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase)){
-            return Path.GetDirectoryName(path) + "\\" +  Path.GetFileName(path)[..^10] + name + path[^10..];
+            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileName(path)[..^10] + name + path[^10..]);
         } else {
             Console.WriteLine("Invalid Filetype");
             return "";
