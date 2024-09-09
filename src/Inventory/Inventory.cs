@@ -91,16 +91,11 @@ public class Inventory {
         return this;
     }
 
-    //Development Section ------------------------------------------------------------------------------------------------------
     public KeywordEdit EditOriginal(){
-        if (!AutoAlteration.devMode){
-            Console.WriteLine("Edit Original only available in devMode");
-            return null;
-        } else {
-            articles.ForEach(x => x.cacheFilter.Clear());
-            return new KeywordEdit(articles);
-        }
+        articles.ForEach(x => x.cacheFilter.Clear());
+        return new KeywordEdit(articles);
     }
+    //Development Section ------------------------------------------------------------------------------------------------------
 
     public void CheckDuplicates(){
         articles.ForEach(article => {

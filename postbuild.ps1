@@ -8,4 +8,4 @@ if (-not (Test-Path $destinationPath)) {
 }
 
 # Copy the data folder to ProgramData
-Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse -Force
+Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse

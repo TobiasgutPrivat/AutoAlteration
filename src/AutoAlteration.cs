@@ -24,14 +24,12 @@ public class AutoAlteration {
     public static void Alter(List<Alteration> alterations, Map map) {
         foreach (Alteration alteration in alterations) {
             if (lastAlteration == null || (alteration.GetType() != lastAlteration.GetType())) {
-                devMode = true;
                 Alteration.CreateInventory();
                 alteration.ChangeInventory();
                 Alteration.InventoryChanges();
                 if (devMode){
                     Alteration.inventory.Export(alteration.GetType().Name);
                 }
-                devMode = false;
             }
             alteration.Run(map);
             lastAlteration = alteration;
