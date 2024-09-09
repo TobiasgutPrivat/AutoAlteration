@@ -9,7 +9,7 @@ If you encounter problems or you have some questions/ideas etc. please contact m
 
 [Guide to implementing Alterations](https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing)
 ## How to use
-UI-App for recommended for normal use.
+UI-App recommended for normal use.
 
 [Download](https://1drv.ms/u/c/bf971998d3da6c52/EdpzD5D_ModDlt00VIA7MOwBXzTzdBbICkWemIKLqgChnw?e=hie2hq)
 
