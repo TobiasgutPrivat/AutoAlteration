@@ -13,9 +13,11 @@ UI-App recommended for normal use.
 
 [Download](https://1drv.ms/u/c/bf971998d3da6c52/EdpzD5D_ModDlt00VIA7MOwBXzTzdBbICkWemIKLqgChnw?e=hie2hq)
 
+Also Alteration Scripts can be defined using json files. [Example](https://1drv.ms/u/c/bf971998d3da6c52/EQbNHWn08upIkWh903vYe6YBgC39OcYKtmoFAoxtys3Pmg?e=289yQq)
+
 To have more control, or to develop some stuff you need to setup the full Project (see Installation)
 
-### Installation
+### Setup Project
 1. Install git if you haven't: https://git-scm.com/downloads
 2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
 3. Clone this GitHub Repository into any Folder (you can use this Command in cmd)
@@ -26,13 +28,6 @@ There can be an issue with nuget source.
 In that case make sure you have correct package source using:
 > dotnet nuget add source https://api.nuget.org/v3/index.json
 -->
-
-### Usage
-Run the "start.bat" script
-
-This will open up a basic CLI guiding you through altering your maps
-
-To update the project run the "update.bat" script
 
 ### Available Alterations
 Those are the currently available Alterations (for CLI Copy names from here)

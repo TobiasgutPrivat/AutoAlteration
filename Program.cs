@@ -8,9 +8,10 @@ using Newtonsoft.Json;
 AutoAlteration.devMode = true;
 AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","dev");
 AutoAlteration.Load();
-AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/dev/Config.json");
-// CLI.Run();
+
 // ----------- Code for Execution (change for your use) ----------- //
+
+AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/ExampleConfigurationScript.json");
 
 //Folder Processing -------------
 string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Training/";
