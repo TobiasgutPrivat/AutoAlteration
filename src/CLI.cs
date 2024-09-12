@@ -18,11 +18,11 @@ class CLI {
     public static void Run(){
         try{
             
-        AlterationConfigType? type = CLISelectType();
+        AlterType? type = CLISelectType();
         if (type == null){
             return;
         }
-        Configuration((AlterationConfigType)type);
+        Configuration((AlterType)type);
         
         Console.WriteLine("Press Enter to exit");
         Console.ReadLine();
@@ -35,7 +35,7 @@ class CLI {
         }
     }
 
-    static void Configuration(AlterationConfigType type){
+    static void Configuration(AlterType type){
         string source = SelectSourcePath(type);
         string destination = SelectDestinationPath(type);
 
@@ -49,13 +49,13 @@ class CLI {
             return;
         }
         switch (type){
-            case AlterationConfigType.File:
+            case AlterType.File:
                 AutoAlteration.AlterFile(Alterations, source, destination, name);
                 break;
-            case AlterationConfigType.Folder:
+            case AlterType.Folder:
                 AutoAlteration.AlterFolder(Alterations, source, destination, name);
                 break;
-            case AlterationConfigType.All:
+            case AlterType.FullFolder:
                 AutoAlteration.AlterAll(Alterations, source, destination, name);
                 break;
         }
@@ -94,8 +94,8 @@ class CLI {
         return selection.First();
     }
 
-    static string SelectSourcePath(AlterationConfigType type){
-        if (type == AlterationConfigType.File){
+    static string SelectSourcePath(AlterType type){
+        if (type == AlterType.File){
             Console.WriteLine("Enter Source File: ");
         } else {
             Console.WriteLine("Enter Source Folder: ");
@@ -107,7 +107,7 @@ class CLI {
         } else {
             source = source.Replace("\"", "");
             if (ValidPath(type, source)){
-                if (type == AlterationConfigType.File && !File.Exists(source)){
+                if (type == AlterType.File && !File.Exists(source)){
                     Console.WriteLine("File not found");
                     return SelectSourcePath(type);
                 }
@@ -118,8 +118,8 @@ class CLI {
             }
         }
     }
-    static string SelectDestinationPath(AlterationConfigType type){
-        if (type == AlterationConfigType.File){
+    static string SelectDestinationPath(AlterType type){
+        if (type == AlterType.File){
             Console.WriteLine("Enter Destination File: ");
         } else {
             Console.WriteLine("Enter Destination Folder: ");
@@ -139,16 +139,16 @@ class CLI {
         }
     }
 
-    static bool ValidPath(AlterationConfigType type, string path){
+    static bool ValidPath(AlterType type, string path){
         switch (type){
-            case AlterationConfigType.File:
+            case AlterType.File:
                 if (!Directory.Exists(Path.GetDirectoryName(path))){
                     Console.WriteLine("Folder not found: " + Path.GetDirectoryName(path));
                     return false;
                 }
                 return true;
-            case AlterationConfigType.Folder:
-            case AlterationConfigType.All:
+            case AlterType.Folder:
+            case AlterType.FullFolder:
                 if (!Directory.Exists(path)){
                     Console.WriteLine("Folder not found: " + path);
                     return false;
@@ -160,7 +160,7 @@ class CLI {
         }
     }
 
-    static AlterationConfigType? CLISelectType(){
+    static AlterType? CLISelectType(){
         Console.WriteLine("Do you want to");
         Console.WriteLine("1. Alter a File");
         Console.WriteLine("2. Alter a Folder");
@@ -169,11 +169,11 @@ class CLI {
         string ?type = Console.ReadLine();
         switch (type){
             case "1":
-                return AlterationConfigType.File;
+                return AlterType.File;
             case "2":
-                return AlterationConfigType.Folder;
+                return AlterType.Folder;
             case "3":
-                return AlterationConfigType.All;
+                return AlterType.FullFolder;
             default:
                 Console.WriteLine("Invalid Input");
                 return CLISelectType();

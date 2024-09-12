@@ -7,8 +7,9 @@ using Newtonsoft.Json;
 //Initial load
 AutoAlteration.devMode = true;
 AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","dev");
-AutoAlteration.Load(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AutoAlteration", "data"));
-CLI.Run();
+AutoAlteration.Load();
+AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/dev/Config.json");
+// CLI.Run();
 // ----------- Code for Execution (change for your use) ----------- //
 
 //Folder Processing -------------

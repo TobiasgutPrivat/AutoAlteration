@@ -2,24 +2,25 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build and Copy Data",
+            "label": "Build",
             "type": "shell",
             "command": "dotnet build",  // Adjust this if you're using another build system
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn": "Copy Data",
+            // "dependsOn": "Copy Data",
             "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "Copy Data",
-            "type": "shell",
-            "command": "./PostBuild.ps1",  // Use PostBuild.bat if you're using the batch script
-            "group": {
-                "kind": "none",
-                "isDefault": false
-            }
         }
+        // ,
+        // {
+        //     "label": "Copy Data",
+        //     "type": "shell",
+        //     "command": "./PostBuild.ps1",  // Use PostBuild.bat if you're using the batch script
+        //     "group": {
+        //         "kind": "none",
+        //         "isDefault": false
+        //     }
+        // }
     ]
 }
