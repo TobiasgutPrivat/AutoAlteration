@@ -15,7 +15,11 @@ public class AutoAlteration {
     public static string[] specialKeywords = [];
 
     public static void Load() {
-        DataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AutoAlteration", "data");
+        if (devMode) {
+            DataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data");
+        }else {
+            DataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AutoAlteration", "data");
+        }
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
         shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt"));
         surfaceKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","surfaceKeywords.txt"));
@@ -161,6 +165,9 @@ public class AutoAlteration {
     }
 
     public static void RunConfig(string filePath){
+        if (!filePath.Contains(':')){
+            filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","config", filePath);
+        }
         foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
         {
             RunAlteration(

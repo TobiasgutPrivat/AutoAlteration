@@ -11,7 +11,7 @@ AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 
-AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/ExampleConfigurationScript.json");
+AutoAlteration.RunConfig("TestFile.json");
 
 //Folder Processing -------------
 string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Training/";

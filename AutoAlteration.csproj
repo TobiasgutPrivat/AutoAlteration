@@ -16,11 +16,11 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-  <Target Name="CopyFilesToProgramData" AfterTargets="Build">
+  <!-- <Target Name="CopyFilesToProgramData" AfterTargets="Build">
     <ItemGroup>
       <MyFiles Include="$(ProjectDir)data\**\*.*" />
     </ItemGroup>
     <MakeDir Directories="C:\ProgramData\AutoAlteration\data" />
     <Copy SourceFiles="@(MyFiles)" DestinationFolder="C:\ProgramData\AutoAlteration\data\%(RecursiveDir)" SkipUnchangedFiles="true" />
-  </Target>
+  </Target> -->
 </Project>
