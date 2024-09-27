@@ -7,13 +7,14 @@
 
 class Dirt : Alteration {
     public override void Run(Map map){
+        map.PlaceRelative(inventory.Select("MapStart"),"RoadTechToThemeSnowRoadMagnet");
         inventory.Select("!Dirt&!OpenDirtRoad&!OpenDirtZone&!RoadDirt").AddKeyword("HeavyDirt").Replace(map);
         map.PlaceStagedBlocks();
     }
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("HeavyDirt");
+        AddCustomBlockSet("HeavyDirt");
     }
 }
 
@@ -29,7 +30,7 @@ class Grass : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("HeavyGrass");
+        AddCustomBlockSet("HeavyGrass");
     }
 }
 
@@ -41,7 +42,7 @@ class Ice : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("HeavyIce");
+        AddCustomBlockSet("HeavyIce");
     }
 }
 
@@ -53,7 +54,7 @@ class Magnet : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("HeavyMagnet");
+        AddCustomBlockSet("HeavyMagnet");
     }
 }
 
@@ -69,7 +70,7 @@ class Plastic : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("HeavyPlastic");
+        AddCustomBlockSet("HeavyPlastic");
     }
 }
 
@@ -81,7 +82,7 @@ class Road : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("HeavyTech");
+        AddCustomBlockSet("HeavyTech");
     }
 }
 
@@ -93,7 +94,7 @@ class Wood : Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("HeavyWood");
+        AddCustomBlockSet("HeavyWood");
     }
 }
 
@@ -139,6 +140,6 @@ class RouteOnly: Alteration {
 
     public override void ChangeInventory()
     {
-        AddCustomBlocks("RouteOnlyBlock");
+        AddCustomBlockSet("RouteOnlyBlock");
     }
 }

@@ -11,33 +11,18 @@ AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 
-AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/ExampleConfigurationScript.json");
-
-//Folder Processing -------------
-string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/Training/";
-string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/Training/";
-// AutoAlteration.AlterFolder(new Mini(), sourceFolder, destinationFolder + "Training Mini/", "Mini");
-
-//Full Folder Processing -------------
-// string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/";
-// AutoAlteration.AlterAll(new CPBoost(), sourceFolder, destinationFolder, "CP-Boost");
-
-//All Alterations Full Folder Processing -------------
-// string sourceFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Nadeo Maps/";
-// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Auto-Altered-Nadeo/";
-// AutoAlteration.AllAlterations(sourceFolder, destinationFolder);
-
-//Single File Processing -------------
-// string sourceFile = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Vanilla/Roads/RoadBump/Slopes/SlopeU/RoadBumpSlopeUBottomX2/RoadBumpSlopeUBottomX2.Item.Gbx";
-// string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/My Maps/Thread of Ariadne.Map.Gbx";
-string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template.Map.Gbx";
-// AutoAlteration.AlterFile(new Test(), sourceFile, "Test");
+// AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/Summer2024Config.json");
+AutoAlteration.GenerateBlockSet(new SupersizedBlock(), "SupersizedBlock");
 
 //Customblocks -------------
-// string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Vanilla";
-// string destinationFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/MiniBlock";
-// AutoAlteration.AlterAll(new MiniBlock(), sourceFolder, destinationFolder, "MiniBlock");
+// string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev";
+// string destinationFolder = "C:/Users/Tobias/Documents/Trackmania2020/Items/dev";
+// AutoAlteration.AlterAll(new HeavyDirt(), sourceFolder, destinationFolder, "HeavyDirt");
+
+// Gbx.LZO = new MiniLZO();
+// Gbx.ZLib = new ZLib();
+// CGameItemModel customBlock = Gbx.Parse<CGameItemModel>("C:/Users/Tobias/Documents/Trackmania2020/Blocks/Magnet/RoadTechToThemeSnowRoadMagnet.Block.Gbx");
+// customBlock.Save("C:/Users/Tobias/Documents/Trackmania2020/Blocks/Magnet/RoadTechToThemeSnowRoadMagnet.Block.Gbx");
 
 // Materials Log using MaterialInfo
 // string sourceFolder = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/Vanilla";
@@ -46,9 +31,6 @@ string sourceFile = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Test Template
 // File.WriteAllText(AutoAlteration.ProjectFolder + "dev/SurfacePhysicIds.json", JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
 // File.WriteAllText(AutoAlteration.ProjectFolder + "dev/SurfaceGameplayIds.json", JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
 // File.WriteAllText(AutoAlteration.ProjectFolder + "dev/Materials.json", JsonConvert.SerializeObject(MaterialInfo.materials));
-
-// Unvalidated -------------
-// AutoAlteration.AlterFile(new List<Alteration>{}, sourceFile, "(Unvalidated)");
 
 //Development Section -----------------------------------------------------------------------------------------------------------------------
 void stringToName(string projectFolder) {

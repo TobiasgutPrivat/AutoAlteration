@@ -9,6 +9,7 @@ public class AutoAlteration {
     public static bool devMode = false;
     public static string DataFolder = "";
     public static string CustomBlocksFolder = "";
+    public static string CustomBlockSetsFolder = "";
     public static string[] Keywords = [];
     public static string[] shapeKeywords = [];
     public static string[] surfaceKeywords = [];
@@ -17,6 +18,7 @@ public class AutoAlteration {
     public static void Load() {
         DataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AutoAlteration", "data");
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
+        CustomBlockSetsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
         shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt"));
         surfaceKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","surfaceKeywords.txt"));
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt"));
@@ -96,14 +98,14 @@ public class AutoAlteration {
         AlterFolder(alterations,sourceFolder,Path.Combine(destinationFolder, Path.GetFileName(sourceFolder) + " - " + Name),Name);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Directory[sourceFolder.Length..]),Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
         }
     }
     public static void AlterAll(List<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         AlterFolder(alterations,sourceFolder,destinationFolder,Name);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Directory[sourceFolder.Length..]),Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
         }
     }
     public static void AlterAll(Alteration alteration, string sourceFolder, string destinationFolder, string Name) =>
@@ -183,6 +185,9 @@ public class AutoAlteration {
         }
         return (Alteration) Activator.CreateInstance(alterations.First());
     }
+
+    public static void GenerateBlockSet(CustomBlockAlteration alteration,  string Name) =>
+        AlterAll(new List<CustomBlockAlteration>{alteration},Path.Combine(CustomBlocksFolder,"Vanilla"),Path.Combine(CustomBlockSetsFolder,Name),Name);
 
     public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)
     {

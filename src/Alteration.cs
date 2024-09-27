@@ -116,6 +116,10 @@ public class Alteration {
         inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
         inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
     }
+    public static void AddCustomBlockSet(string subFolder){
+        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlockSetsFolder, subFolder), "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlockSetsFolder, subFolder), "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+    }
 
     public static void AddNoCPBlocks(){
         Inventory tempInventory = new();

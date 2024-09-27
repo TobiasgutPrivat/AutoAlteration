@@ -60,7 +60,8 @@ class HeavyTech : CustomSurfaceAlteration {
 
 class HeavyDirt : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
-        return HeavySurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech", "Stadium\\Media\\Material\\RoadDirt",CPlugSurface.MaterialId.Dirt);
+        // return HeavySurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech", "Stadium\\Media\\Material\\RoadDirt",CPlugSurface.MaterialId.Dirt);
+        return true;
     }
 }
 

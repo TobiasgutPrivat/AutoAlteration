@@ -198,31 +198,32 @@ public class Map
     newBlock.Bit21 = block.IsAir;
   }
 
-  public void Delete(string Block){
-    List<int> indexes;
-    List<CGameCtnBlock> modifiedblocks = map.Blocks.ToList();
-    indexes = modifiedblocks.FindAll(block => block.BlockModel.Id == Block).Select(block => modifiedblocks.IndexOf(block)).ToList();
-    indexes.Reverse();
-    foreach(int index in indexes){
-      modifiedblocks.RemoveAt(index);
-    }
-    map.Blocks = modifiedblocks;
+  public void Delete(string Block, bool includePillars = false){
+    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == Block).ToList();
+    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != Block).ToList();
+    if (includePillars){
+      deleted.ForEach(x => {
+        if (!x.IsFree && !x.IsGround){
+          map.Blocks = map.Blocks.Where(block => 
+            !(block.BlockModel.Id.Contains("Pillar") &&
+              block.Coord.X == x.Coord.X &&
+              block.Coord.Z == x.Coord.Z &&
+              block.Coord.Y < x.Coord.Y
+            )
+          ).ToList();
+        }
+      });
+    };
 
-    List<CGameCtnAnchoredObject> modifiedItems = map.AnchoredObjects.ToList();
-    indexes = modifiedItems.FindAll(block => block.ItemModel.Id == Block).Select(block => modifiedItems.IndexOf(block)).ToList();
-    indexes.Reverse();
-    foreach(int index in indexes){
-      modifiedItems.RemoveAt(index);
-    }
-    map.AnchoredObjects = modifiedItems;
+    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != Block).ToList();
   }
-  public void Delete(string[] blocks){
+  public void Delete(string[] blocks, bool includePillars = false){
     foreach(var block in blocks){
-      Delete(block);
+      Delete(block,includePillars);
     }
   }
-  public void Delete(Inventory inventory){
-    Delete(inventory.Names());
+  public void Delete(Inventory inventory, bool includePillars = false){
+    Delete(inventory.Names(),includePillars);
   }
 
   public static Article GetArticle(string name) =>
