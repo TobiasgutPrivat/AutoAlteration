@@ -1,4 +1,5 @@
 using GBX.NET;
+using GBX.NET.Engines.GameData;
 
 //flat2d (manual)
 
@@ -40,7 +41,7 @@ class Boosterless: Alteration {
     }
 }
 
-//TODO boss-overlayed (multiple Maps)
+//TODO boss-overlayed (multiple) Maps
 
 class Broken: EffectAlteration {
     public override void Run(Map map){
@@ -72,9 +73,9 @@ class BlockedCheckpoint: EffectAlteration { //only blocks Checkpoints
     }
 }
 
-//TODO Cleaned
+//TODO Cleaned (custom)block
 
-//TODO color-combined
+//TODO color-combined (multiple) Maps
 
 class CPBoost : Alteration{
     public override void Run(Map map){
@@ -107,13 +108,39 @@ class CPLess : Alteration{
     }
 }
 
-//TODO cplink
+class CPLink : Alteration{
+    public override void Run(Map map){
+        map.map.Blocks.ToList().ForEach(x => {
+            if (x.BlockModel.Id.Contains("Checkpoint")){
+                x.WaypointSpecialProperty.Order = 1;
+                x.WaypointSpecialProperty.Tag = "LinkedCheckpoint";
+           }
+        });
+        map.map.AnchoredObjects.ToList().ForEach(x => {
+            if (x.ItemModel.Id.Contains("Checkpoint")){
+                x.WaypointSpecialProperty.Order = 1;
+                x.WaypointSpecialProperty.Tag = "LinkedCheckpoint";
+           }
+        });
+    }
+}
 
-//TODO cpsRotated
+class CPsRotated : Alteration{
+    public override void Run(Map map){
+        map.Move(inventory.Select("Checkpoint"),RotateMid(PI*0.5f,0,0));
+        map.PlaceStagedBlocks();
+    }
+}
 
 //TODO Dragonyeet (Macroblock)
 
-//TODO earthquake
+class Earthquake : Alteration{
+    public override void Run(Map map){
+        inventory.Edit().Replace(map);
+        map.stagedBlocks.ForEach(x => x.position.coords += new Vec3(1000000,500000,1000000));
+        map.PlaceStagedBlocks();
+    }
+}
 
 class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
     public override void Run(Map map){

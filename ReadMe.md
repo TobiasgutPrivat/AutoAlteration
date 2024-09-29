@@ -1,3 +1,8 @@
+<!--
+TODO for Performance
+make class Map able to hold multiple maps at ones and make functions apply on all !!not compatible with changing inventory per map
+improve general inventory concept /or/ read keywordstring on inventory level and maybe improve align algorythm
+-->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
 
