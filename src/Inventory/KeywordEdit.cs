@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 public class KeywordEdit {
     public List<Article> articles = [];
 
@@ -80,6 +82,29 @@ public class KeywordEdit {
                 // Console.WriteLine("No matching article found for: " + a.KeywordString());
             }
         });
+    }
+    public void ReplaceWithRandom(Map map,List<string> addKeywords,MoveChain ?moveChain = null){
+        articles.ForEach( a => {
+            map.ReplaceWithRandom(a, AlignMultiple(a, addKeywords), moveChain);
+        });
+    }
+    public void PlaceRelativeWithRandom(Map map,List<string> addKeywords,MoveChain ?moveChain = null){
+        articles.ForEach( a => {
+            map.PlaceRelativeWithRandom(a, AlignMultiple(a, addKeywords), moveChain);
+        });
+    }
+
+    public static Inventory AlignMultiple(Article a,List<string> addKeywords) {
+        List<Article> articles = [];
+        addKeywords.ForEach(k => {
+            Article article = a.CloneArticle();
+            article.Keywords.Add(k);
+            Article ?Match = Alteration.inventory.AlignArticle(article);
+            if (Match != null) {
+                articles.Add(Match);
+            }
+        });
+        return new Inventory(articles);
     }
 
     public void PlaceRelative(Map map,MoveChain ?moveChain = null){

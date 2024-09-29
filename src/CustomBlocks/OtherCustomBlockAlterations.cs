@@ -16,9 +16,13 @@ class SupersizedBlock : CustomBlockAlteration {
         return true;
     }
     public override bool Run(CustomBlock customBlock) {
-        customBlock.customBlock.DefaultPlacement.GridSnapHStep *= factor;
-        customBlock.customBlock.DefaultPlacement.GridSnapVStep *= factor;
-        customBlock.customBlock.DefaultPlacement.FlyVStep *= factor;
+        if (customBlock.Type == BlockType.Block) {
+            customBlock.customBlock.DefaultPlacement.GridSnapHStep *= factor;
+            customBlock.customBlock.DefaultPlacement.GridSnapVStep *= factor;
+            customBlock.customBlock.DefaultPlacement.FlyVStep *= factor;
+        } else if (customBlock.Type == BlockType.Item) {
+            //TODO
+        }
         return false;
     }
 }
@@ -38,9 +42,13 @@ class MiniBlock : CustomBlockAlteration {
         return true;
     }
     public override bool Run(CustomBlock customBlock) {
-        customBlock.customBlock.DefaultPlacement.GridSnapHStep *= factor;
-        customBlock.customBlock.DefaultPlacement.GridSnapVStep *= factor;
-        customBlock.customBlock.DefaultPlacement.FlyVStep *= factor;
+        if (customBlock.Type == BlockType.Block) {
+            customBlock.customBlock.DefaultPlacement.GridSnapHStep *= factor;
+            customBlock.customBlock.DefaultPlacement.GridSnapVStep *= factor;
+            customBlock.customBlock.DefaultPlacement.FlyVStep *= factor;
+        } else if (customBlock.Type == BlockType.Item) {
+            //TODO
+        }
         return false;
     }
 }

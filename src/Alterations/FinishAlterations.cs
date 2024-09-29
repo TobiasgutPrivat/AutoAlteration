@@ -47,32 +47,46 @@ class TwoUP: Alteration {
     }
 }
 
-//better reverse manual
+//better reverse (manual)
 
-//cp1 is end manual
+//cp1 is end (manual)
 
-//TODO floor-fin Macroblock
+//TODO floor-fin (Macro)block
 
-//TODO Ground-Clippers, Pillars at y=0 get custom finishblock
+//TODO Ground-Clippers, Pillars at y=0 get (custom) finishblock
 
-//TODO inclined tilt start down + remove pillars underneath
+class Inclined : Alteration {
+    public override void Run(Map map){
+        inventory.Select("MapStart|Multilap").Edit().PlaceRelative(map,Rotate(0,0.2f*PI,0));
+        map.Delete(inventory.Select("MapStart"),true);
+        map.PlaceStagedBlocks();
+    }
+}
 
-//TODO Manslaughter custom finishes
+//TODO Manslaughter (custom) finishes
 
-//no gear 5 manual
+//no gear 5 (manual)
 
-//TODO Podium customfinish
+//TODO Podium (custom)finish
 
-//puzzle manual
+//puzzle (manual)
 
-//TODO reverse, customblocks
+//TODO reverse, (custom)blocks
 
-//TODO Roofing, Macroblock
+//TODO Roofing, (Macro)block
 
-//short manual
+//short (manual)
 
-//TODO sky is the finish Macroblock
+//TODO sky is the finish (Macro)block
 
-//TODO there and back
+class ThereAndBack : Alteration {
+    public override void Run(Map map){
+        inventory.Select("Finish").RemoveKeyword("Finish").AddKeyword("Checkpoint").Replace(map);//TODO (Custom)blocks (No removekeyword)
+        inventory.Select("MapStart").RemoveKeyword("MapStart").AddKeyword("Multilap").Replace(map);//TODO (Custom)blocks
+        map.map.IsLapRace = true;
+        map.map.NbLaps = 1;
+        map.PlaceStagedBlocks();
+    }
+}
 
-//yep tree puzzle manual
+//yep tree puzzle (manual)

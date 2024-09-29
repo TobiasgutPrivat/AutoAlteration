@@ -145,8 +145,8 @@ public class Alteration {
     public static void AddCheckpointTrigger(){
         Vec3 midPlatform = new(16,2,16);
         CreateTriggerArticle("!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!RoadIce", midPlatform,Vec3.Zero);
-        CreateTriggerArticle("!WithWall&!RoadIce&DiagRight",new Vec3(48f,0,32f),new Vec3(PI * -0.148f,0f,0));
-        CreateTriggerArticle("!WithWall&!RoadIce&DiagLeft",new Vec3(48f,0,32f),new Vec3(PI * 0.148f,0,0));
+        CreateTriggerArticle("!WithWall&!RoadIce&DiagRight",new Vec3(48f,2,32f),new Vec3(PI * -0.148f,0f,0));
+        CreateTriggerArticle("!WithWall&!RoadIce&DiagLeft",new Vec3(48f,2,32f),new Vec3(PI * 0.148f,0,0));
         float slope2 = 0.47f;
         CreateTriggerArticle("Slope2&Down", midPlatform + new Vec3(0,8,0),new Vec3(0,slope2,0));
         CreateTriggerArticle("Slope2&Up", midPlatform + new Vec3(0,8,0),new Vec3(0,-slope2,0));

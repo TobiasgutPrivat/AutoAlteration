@@ -77,20 +77,17 @@ public class Map
     // Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
 
-  public void PlaceRelative(string atBlock, string newBlock,MoveChain ?moveChain = null){
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnBlock,GetArticle(atBlock),GetArticle(newBlock),moveChain));
+  public void PlaceRelativeWithRandom(Article atBlock, Inventory newInventory,MoveChain ?moveChain = null){
+    List<Article> newArticles = newInventory.articles;
+    if (newArticles.Count == 0) return;
+    Random rand = new Random();
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock.Name)){
+      stagedBlocks.Add(new Block(ctnBlock,atBlock,newArticles[rand.Next(newArticles.Count)],moveChain));
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock)){
-      stagedBlocks.Add(new Block(ctnItem,GetArticle(atBlock),GetArticle(newBlock),moveChain));
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock.Name)){
+      stagedBlocks.Add(new Block(ctnItem,atBlock,newArticles[rand.Next(newArticles.Count)],moveChain));
     }
   }
-
-  public void PlaceRelative(string[] atBlocks, string newBlock,MoveChain ?moveChain = null)=>
-    atBlocks.ToList().ForEach(atBlock => PlaceRelative(atBlock, newBlock, moveChain));
-
-  public void PlaceRelative(Inventory inventory, string newBlock,MoveChain ?moveChain = null) =>
-    PlaceRelative(inventory.Names(), newBlock, moveChain);
 
   public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null){
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){
@@ -107,19 +104,16 @@ public class Map
   public void PlaceRelative(KeywordEdit keywordEdit, MoveChain ?moveChain = null) =>
     keywordEdit.PlaceRelative(this,moveChain);
 
-  public void Replace(string oldBlock, string newBlock,MoveChain ?moveChain = null){
-    PlaceRelative(oldBlock, newBlock, moveChain);
-    Delete(oldBlock);
-  }
 
-  public void Replace(string[] oldBlocks, string newBlock,MoveChain ?moveChain = null){
-    PlaceRelative(oldBlocks, newBlock, moveChain);
-    Delete(oldBlocks);
+  public void ReplaceWithRandom(Article oldArticle, Inventory newInventory,MoveChain ?moveChain = null){
+    if (newInventory.articles.Count == 0) return;
+    PlaceRelativeWithRandom(oldArticle, newInventory, moveChain);
+    Delete(oldArticle);
   }
 
   public void Replace(Article oldArticle, Article article, MoveChain ?moveChain = null){
     PlaceRelative(oldArticle, article,moveChain);
-    Delete(oldArticle.Name);
+    Delete(oldArticle);
   }
 
   public void Replace(Inventory inventory, string newBlock, MoveChain ?moveChain = null){
@@ -138,12 +132,6 @@ public class Map
   public void Move(Article article, MoveChain moveChain) =>
     Replace(article, article, moveChain);
 
-  public void Move(string block, MoveChain moveChain) =>
-    Replace(block,block, moveChain);
-    
-  public void Move(string[] blocks, MoveChain moveChain) =>
-    blocks.ToList().ForEach(block => Move(block, moveChain));
-  
   public void Move(Inventory inventory, MoveChain moveChain) =>
     inventory.articles.ForEach(a => Move(a, moveChain));
 
@@ -198,9 +186,9 @@ public class Map
     newBlock.Bit21 = block.IsAir;
   }
 
-  public void Delete(string Block, bool includePillars = false){
-    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == Block).ToList();
-    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != Block).ToList();
+  public void Delete(Article Block, bool includePillars = false){
+    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == Block.Name).ToList();
+    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != Block.Name).ToList();
     if (includePillars){
       deleted.ForEach(x => {
         if (!x.IsFree && !x.IsGround){
@@ -215,15 +203,12 @@ public class Map
       });
     };
 
-    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != Block).ToList();
-  }
-  public void Delete(string[] blocks, bool includePillars = false){
-    foreach(var block in blocks){
-      Delete(block,includePillars);
-    }
+    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != Block.Name).ToList();
   }
   public void Delete(Inventory inventory, bool includePillars = false){
-    Delete(inventory.Names(),includePillars);
+    foreach(var block in inventory.articles){
+      Delete(block,includePillars);
+    }
   }
 
   public static Article GetArticle(string name) =>

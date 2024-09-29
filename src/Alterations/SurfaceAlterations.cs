@@ -7,7 +7,7 @@
 
 class Dirt : Alteration {
     public override void Run(Map map){
-        map.PlaceRelative(inventory.Select("MapStart"),"RoadTechToThemeSnowRoadMagnet");
+        // map.PlaceRelative(inventory.Select("MapStart"),"RoadTechToThemeSnowRoadMagnet");
         inventory.Select("!Dirt&!OpenDirtRoad&!OpenDirtZone&!RoadDirt").AddKeyword("HeavyDirt").Replace(map);
         map.PlaceStagedBlocks();
     }
@@ -119,9 +119,9 @@ class Sausage : Alteration { //half manual
 class Surfaceless: Alteration {
     public override void Run(Map map){    
         Inventory Blocks = inventory.Select(BlockType.Block);
-        map.PlaceRelative(Blocks.Select("MapStart"),"GateStartCenter32m");
-        map.PlaceRelative(Blocks.Select("Checkpoint"),"GateCheckpointCenter32m");
-        map.PlaceRelative(Blocks.Select("Finish"),"GateFinishCenter32m");
+        map.PlaceRelative(Blocks.Select("MapStart"),inventory.GetArticle("GateStartCenter32m"));
+        map.PlaceRelative(Blocks.Select("Checkpoint"),inventory.GetArticle("GateCheckpointCenter32m"));
+        map.PlaceRelative(Blocks.Select("Finish"),inventory.GetArticle("GateFinishCenter32m"));
         inventory.Select(BlockType.Item).Select("MapStart&Finish&Checkpoint").Edit().PlaceRelative(map);
         map.Delete(inventory.Sub(inventory.Select(BlockType.Pillar)));
         map.PlaceStagedBlocks();

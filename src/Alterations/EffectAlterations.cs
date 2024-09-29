@@ -52,7 +52,7 @@ class Fragile: EffectAlteration {
     }
 }
 
-//TODO 100 Fragile, Fragile + remove reset + start Macroblock
+//TODO 100 Fragile, Fragile + remove reset + start (Macro)block
 
 class FreeWheel: EffectAlteration {
     public override void Run(Map map){
@@ -90,7 +90,7 @@ class NoEffect: EffectAlteration {
     }
 }
 
-//TODO no-grip
+//TODO no-grip (custom)block
 
 class NoSteer: EffectAlteration {
     public override void Run(Map map){
@@ -99,9 +99,31 @@ class NoSteer: EffectAlteration {
     }
 }
 
-//TODO random-dankness
+class RandomDankness: EffectAlteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint&!((Slope|Slope2)&(Left|Right))").RemoveKeyword("Checkpoint")
+            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+        inventory.Select(BlockType.Block).Select("Checkpoint&Slope&(Left|Right)").RemoveKeyword(["Checkpoint","Slope"]).AddKeyword("Tilt")
+            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+        inventory.Select(BlockType.Block).Select("Checkpoint&Slope2&(Left|Right)").RemoveKeyword(["Checkpoint","Slope2"]).AddKeyword("Tilt2")
+            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"])
+            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+        inventory.Select(AllEffects)
+            .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"])
+            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+        map.PlaceStagedBlocks();
+    }
+}
 
-//TODO random-effects
+class RandomEffects: EffectAlteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Block).Select(AllEffects)
+            .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"])
+            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+        map.PlaceStagedBlocks();
+    }
+}
 
 class Reactor: EffectAlteration {
     public override void Run(Map map){
@@ -139,6 +161,6 @@ class SlowMo: EffectAlteration {
     }
 }
 
-//TODO WetWheels
+//TODO WetWheels (custom)block
 
-//TODO Worn-tires, similair to 100 fragile
+//TODO Worn-tires, similair to 100 fragile (macro)block
