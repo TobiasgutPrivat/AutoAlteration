@@ -14,7 +14,8 @@ class OneForward: Alteration {
 
 class OneDown: Alteration {
     public override void Run(Map map){
-        map.Move(inventory.Select("Finish|Multilap"), Move(0,-8,0));
+        inventory.Select("Finish|Multilap").Edit().PlaceRelative(map,Move(0,-8,0));
+        map.Delete(inventory.Select("Finish|Multilap"),true);
         map.PlaceStagedBlocks();
     }
 }

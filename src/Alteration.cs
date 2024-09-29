@@ -72,6 +72,14 @@ public class Alteration {
         moveChain.RotateMid(vector);
         return moveChain;
     }
+    public static MoveChain RotateCenter(float x, float y, float z) =>
+        RotateCenter(new Vec3(x,y,z));
+
+    public static MoveChain RotateCenter(Vec3 vector) {
+        MoveChain moveChain = new();
+        moveChain.RotateCenter(vector);
+        return moveChain;
+    }
 
     public static void CreateInventory() {
         inventory = ImportVanillaInventory(Path.Combine(AutoAlteration.DataFolder, "Inventory","BlockData.json"));

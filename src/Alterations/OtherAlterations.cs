@@ -200,9 +200,18 @@ class NoItems: Alteration {
     }
 }
 
-//TODO Poolhunters
+//TODO Poolhunters (custom)block links manual //Only reasonable if asked for
 
-//TODO random
+class RandomBlocks : Alteration{
+    public override void Run(Map map){
+        Random rand = new();
+        Inventory normals = inventory.Select(BlockType.Block).Add(inventory.Select(BlockType.Item)).Add(inventory.Select(BlockType.CustomBlock)).Add(inventory.Select(BlockType.CustomItem)).Select("!MapStart&!Finish&!Checkpoint&!Multilap");
+        normals.Edit().PlaceRelative(map);
+        normals.Edit().PlaceRelative(map);
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(rand.Next() % 1536, rand.Next() % 240, rand.Next() % 1536));
+        map.PlaceStagedBlocks();
+    }
+}
 
 class RingCP : Alteration{
     public override void Run(Map map){
@@ -228,7 +237,13 @@ class SpeedLimit: Alteration {
     }
 }
 
-//TODO start 1-down
+class StartOneDown: Alteration {
+    public override void Run(Map map){
+        inventory.Select("MapStart").Edit().PlaceRelative(map,Move(0,-8,0));
+        map.Delete(inventory.Select("MapStart"),true);
+        map.PlaceStagedBlocks();
+    }
+}
 
 //TODO Supersized
 
@@ -248,14 +263,52 @@ class STTF : Alteration{
 
 //symmetrical (manual) (Editor)
 
-//TODO tilted (Water impossible)
+class Tilted: Alteration {
+    public override void Run(Map map){
+        Random rand = new();
+        inventory.Edit().Replace(map,RotateCenter(rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f));
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
+        map.PlaceStagedBlocks();
+    }
+}
 
-//TODO yeet
+class Yeet: Alteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map);
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
 
-//TODO yeet-down
+class YeetDown: Alteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map,RotateMid(PI,0,0));
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map,RotateMid(PI,0,0));
+        map.PlaceStagedBlocks();
+    }
+}
+
+class YeetMaxUp: Alteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map);
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map);
+        map.PlaceStagedBlocks();
+        inventory.Select("Finish").Edit().Replace(map);
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, 240, x.position.coords.Z));
+        map.PlaceStagedBlocks();
+    }
+}
 
 //New ------------------------------------------------------------------------------
-
+class RandomHoles: Alteration {
+    public override void Run(Map map){
+        Random rand = new();
+        Inventory normals = inventory.Select(BlockType.Block).Add(inventory.Select(BlockType.Item)).Add(inventory.Select(BlockType.CustomBlock)).Add(inventory.Select(BlockType.CustomItem)).Select("!MapStart&!Finish&!Checkpoint&!Multilap");
+        normals.Edit().Replace(map);
+        map.stagedBlocks = map.stagedBlocks.Where(x => !(rand.Next() % 10 == 0)).ToList();
+        map.PlaceStagedBlocks();
+    }
+}
 class YepTree: Alteration {
     public override void Run(Map map){    
         map.PlaceRelative(inventory.Select("Tree|Cactus|Fir|Palm|Cypress|Spring|Summer|Winter|Fall"),inventory.GetArticle("GateCheckpointCenter8mv2"));

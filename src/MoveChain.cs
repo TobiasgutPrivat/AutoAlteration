@@ -20,6 +20,9 @@ public class MoveChain {
                 case MoveType.RotateMid:
                     position.RotateMid(move.vector, article);
                     break;
+                case MoveType.RotateCenter:
+                    position.RotateCenter(move.vector);
+                    break;
             }
         }
     }
@@ -35,6 +38,9 @@ public class MoveChain {
                     break;
                 case MoveType.RotateMid:
                     position.RotateMid(-move.vector, article);
+                    break;
+                case MoveType.RotateCenter:
+                    position.RotateCenter(-move.vector);
                     break;
             }
         }
@@ -67,6 +73,13 @@ public class MoveChain {
         moves.Add(new Move(MoveType.RotateMid, vector));
         return this;
     }
+    public MoveChain RotateCenter(float x, float y, float z) =>
+        RotateCenter(new Vec3(x,y,z));
+
+    public MoveChain RotateCenter(Vec3 vector) {
+        moves.Add(new Move(MoveType.RotateCenter, vector));
+        return this;
+    }
 }
 public class Move{
     public MoveType type;
@@ -80,5 +93,6 @@ public class Move{
 public enum MoveType{
     Move,
     Rotate,
-    RotateMid
+    RotateMid,
+    RotateCenter,
 }

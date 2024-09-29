@@ -36,6 +36,16 @@ public class Position {
         RelativeOffset(new Vec3(-article.Width * 16, -article.Height * 4, -article.Length * 16));
         return this;
     }
+    public Position RotateCenter(Vec3 pitchYawRoll){
+        Vec3 Offset = new Vec3(768 - coords.X, 120 - coords.Y, 768 - coords.Z);
+        Vec3 rotation = this.pitchYawRoll;
+        Rotate(-rotation);
+        RelativeOffset(Offset);
+        AddRotation(pitchYawRoll);
+        RelativeOffset(-Offset);
+        Rotate(rotation);
+        return this;
+    }
     public void RelativeOffset(Vec3 offset){
         double Yaw = pitchYawRoll.X;
         double Roll = pitchYawRoll.Z;
