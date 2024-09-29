@@ -83,6 +83,7 @@ public class Alteration {
     }
 
     public static void InventoryChanges(){
+        //Generally applied changes to inventory, does effect Keyword-indexing behaviour
         inventory.Select(BlockType.Block).Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
         inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
         inventory.Select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").EditOriginal().RemoveKeyword("Start").AddKeyword("MapStart");

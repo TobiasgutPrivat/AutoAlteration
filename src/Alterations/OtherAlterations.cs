@@ -150,14 +150,19 @@ class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
     }
 }
 
-class Flipped: Alteration {//Prototype TODO a lot
+class Flipped: EffectAlteration {
     public override void Run(Map map){
         //Dimensions normal Stadium
-        // (1,9,1)
-        // (48,38,48)
+        // from (1,9,1) to (48,38,48)
         inventory.Edit().Replace(map);
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, 240-x.position.coords.Y, 1536-x.position.coords.Z));  //X: 1536-
-        map.stagedBlocks.ForEach(x => x.position.Rotate(new Vec3(0, PI, 0)));
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, 360-x.position.coords.Y, 1536-x.position.coords.Z));
+        map.stagedBlocks.ForEach(x => {
+            Vec3 rotation = x.position.pitchYawRoll;
+            x.position.Rotate(-rotation).Rotate(new Vec3(0, PI, 0)).Rotate(rotation);
+        });
+        map.PlaceStagedBlocks();
+        PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
+        PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
         map.PlaceStagedBlocks();
     }
 }
@@ -178,6 +183,15 @@ class Holes : Alteration{
 //mini-rpg (manual)
 
 //TODO mirrored
+class Mirrored: EffectAlteration {//TODO Prototype
+    public override void Run(Map map){
+        inventory.Edit().Replace(map);
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y, 1536-x.position.coords.Z));
+        // Move back by Width of Block (Simulate Coords of block beeing at other Corner)
+        //Switch all right and left
+        map.PlaceStagedBlocks();
+    }
+}
 
 class NoItems: Alteration {
     public override void Run(Map map){
