@@ -73,6 +73,8 @@ Rectangular
 Battlements
 SwitchRight
 SwitchLeft
+ToDiagRight
+ToDiagLeft
 Checkpoint
 Inflatable
 NoSteering

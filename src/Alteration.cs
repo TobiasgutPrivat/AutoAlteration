@@ -20,6 +20,7 @@ public class Alteration {
 
     public static Inventory ImportVanillaInventory(string path){
         string json = File.ReadAllText(path);
+        //correcting the names in Blockdata.json
         json = json.Replace("PlatformGrassSlope2UTop", "PlatformGrasssSlope2UTop");
         json = json.Replace("PlatForm", "Platform");
         json = json.Replace("ShowFogger8M", "ShowFogger8m");
@@ -73,13 +74,8 @@ public class Alteration {
     }
 
     public static void CreateInventory() {
-        //Load Nadeo Articles
         inventory = ImportVanillaInventory(Path.Combine(AutoAlteration.DataFolder, "Inventory","BlockData.json"));
-        
-        //Control
         // inventory.CheckDuplicates();
-
-        //save
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
         if (AutoAlteration.devMode){
             inventory.Export("Vanilla");
@@ -96,6 +92,8 @@ public class Alteration {
         inventory.RemoveArticles(inventory.Select("v2").RemoveKeyword("v2").Align());
         inventory.Select("v2").EditOriginal().RemoveKeyword("v2");
         inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
+        inventory.SelectString("RoadIceDiagLeftToRoadIceWithWallDiagRight").EditOriginal().RemoveKeyword("DiagRight").AddKeyword("ToDiagRight");
+        inventory.SelectString("RoadIceDiagRightToRoadIceWithWallDiagLeft").EditOriginal().RemoveKeyword("DiagLeft").AddKeyword("ToDiagLeft");
     }
 
     public static void TestInventory(){
