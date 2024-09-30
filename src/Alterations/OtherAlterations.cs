@@ -1,5 +1,4 @@
 using GBX.NET;
-using GBX.NET.Engines.GameData;
 
 //flat2d (manual)
 
@@ -56,7 +55,7 @@ class Broken: EffectAlteration {
 
 //Cacti (manual)
 
-class BlockedCheckpoint: EffectAlteration { //only blocks Checkpoints
+class Checkpointnt: EffectAlteration { //only blocks Checkpoints
     public override void Run(Map map){
         float slope = 0.235f;
         Inventory triggers = inventory.Select("CheckpointTrigger|MultilapTrigger&!Ring");
@@ -233,7 +232,7 @@ class RingCP : Alteration{
  
 class SpeedLimit: Alteration {
     public override void Run(Map map){
-        map.Delete(inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
+        map.Delete(inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"),true);
     }
 }
 

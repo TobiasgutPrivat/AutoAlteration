@@ -5,7 +5,7 @@ AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 
-AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/Summer2024Config.json");
+AutoAlteration.RunConfig("TestFile.json");
 // AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/TestTemplateConfig.json");
 // AutoAlteration.GenerateBlockSet(new HeavyDirt(), "HeavyDirt");
 
