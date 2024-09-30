@@ -25,6 +25,8 @@ To have more control, or to develop some stuff you need to setup the full Projec
 ### Available Alterations
 Those are the currently available Alterations
 
+(Some Alterations, are not fully what they are in Altered Nadeo)
+
 <strong>Effect Alterations</strong>
 - Cruise
 - Fragile
