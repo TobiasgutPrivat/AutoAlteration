@@ -22,20 +22,35 @@ Also Alteration Scripts can be defined using json files. [Example](https://1drv.
 
 To have more control, or to develop some stuff you need to setup the full Project (see Installation)
 
-### Setup Project
-1. Install git if you haven't: https://git-scm.com/downloads
-2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
-3. Clone this GitHub Repository into any Folder (you can use this Command in cmd)
-> git clone https://github.com/TobiasgutPrivat/AutoAlteration.git /{path/to/your/directory}
-
-<!--
-There can be an issue with nuget source.
-In that case make sure you have correct package source using:
-> dotnet nuget add source https://api.nuget.org/v3/index.json
--->
-
 ### Available Alterations
-Those are the currently available Alterations (for CLI Copy names from here)
+Those are the currently available Alterations
+
+<strong>Effect Alterations</strong>
+- Cruise
+- Fragile
+- FreeWheel
+- Glider
+- NoBrake
+- NoEffect
+- NoSteer
+- RandomDankness
+- RandomEffects
+- Reactor
+- ReactorDown
+- RedEffects
+- RngBooster
+- SlowMo
+
+<strong>Finish Alterations</strong>
+- OneBack
+- OneForward
+- OneDown
+- OneLeft
+- OneRight
+- OneUP
+- TwoUP
+- Inclined
+- ThereAndBack
 
 <strong>Environment Alterations</strong>
 - Stadium
@@ -43,33 +58,35 @@ Those are the currently available Alterations (for CLI Copy names from here)
 - Rally
 - Desert
 
-<strong>Effect Alterations</strong>
-- NoBrake
-- Cruise
-- Fragile
-- SlowMo
-- NoSteer
-- Glider
-- Reactor
-- ReactorDown
-- FreeWheel
-- Antibooster
-
-<strong>Checkpoint Alterations</strong>
-- STTF
-- CPFull
-- CPBoost
-
-<strong>Finish Alterations</strong>
-- OneUP
-- OneDown
-- OneLeft
-- OneRight
-- TwoUP
+<strong>GameMode Alterations</strong>
+- Race
+- Stunt
 
 <strong>Other Alterations</strong>
-- YepTree
+- AntiBooster
+- Boosterless
+- Broken
+- Checkpointnt
+- CPBoost
+- CPFull
+- CPLess
+- CPLink
+- CPsRotated
+- Earthquake
+- Fast
+- Flipped
+- Holes
 - NoItems
+- RandomBlocks
+- RingCP
+- SpeedLimit
+- StartOneDown
+- STTF
+- Tilted
+- Yeet
+- YeetDown
+- YeetMaxUp
+- YepTree
 
 ## Known Issues
 - The position of Items which are snapped onto something are read incorrectly, resulting in small offsets.
@@ -84,5 +101,14 @@ Your Feedback or Ideas are also valueable, so you can write me that too.
 
 A guide to implementing Alterations will come soon
 
-# Temp
-github Acces token: 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
+### Setup Project
+1. Install git if you haven't: https://git-scm.com/downloads
+2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+3. Clone this GitHub Repository into any Folder (you can use this Command in cmd)
+> git clone https://github.com/TobiasgutPrivat/AutoAlteration.git /{path/to/your/directory}
+
+<!--
+There can be an issue with nuget source.
+In that case make sure you have correct package source using:
+> dotnet nuget add source https://api.nuget.org/v3/index.json
+-->
