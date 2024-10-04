@@ -10,19 +10,19 @@ class SnowScenery : Alteration
         // inventory.Select("OpenDirtRoad|OpenTechRoad").RemoveKeyword(["OpenDirtRoad","OpenTechRoad"]).AddKeyword("OpenIceRoad").Replace(map);
         // inventory.Select("OpenDirtZone|OpenTechZone").RemoveKeyword(["OpenDirtZone","OpenTechZone"]).AddKeyword("OpenIceZone").Replace(map);
         // Trees
-        // map.Replace([ "FirTall", "CypressTall", "PalmTreeMedium", "SpringPalmTree" ], "FirSnowTall");
-        // map.Replace([ "FirMedium", "PalmTreeSmall" ], "FirSnowMedium");
-        // map.Replace([ "FallTreeTall", "CypressDirtTall", "SpringTreeTall" ], "FrozenTreeTall");
-        // map.Replace([ "FallTreeBig", "PalmTreeDirtMedium", "SpringTreeBig" ], "FrozenTreeBig");
-        // map.Replace([ "FallTreeMedium", "PalmTreeDirtSmall", "SpringTreeMedium", "CherryTreeMedium" ], "FrozenTreeMedium");
-        // map.Replace([ "FallTreeSmall", "CactusMedium", "SpringTreeSmall" ], "FrozenTreeSmall");
-        // map.Replace([ "FallTreeVerySmall", "CactusVerySmall", "SpringTreeVerySmall" ], "FrozenTreeVerySmall");
+        map.Replace(inventory.GetArticles([ "FirTall", "CypressTall", "PalmTreeMedium", "SpringPalmTree" ]), inventory.GetArticle("FirSnowTall"));
+        map.Replace(inventory.GetArticles([ "FirMedium", "PalmTreeSmall" ]), inventory.GetArticle("FirSnowMedium"));
+        map.Replace(inventory.GetArticles([ "FallTreeTall", "CypressDirtTall", "SpringTreeTall" ]), inventory.GetArticle("FrozenTreeTall"));
+        map.Replace(inventory.GetArticles([ "FallTreeBig", "PalmTreeDirtMedium", "SpringTreeBig" ]), inventory.GetArticle("FrozenTreeBig"));
+        map.Replace(inventory.GetArticles([ "FallTreeMedium", "PalmTreeDirtSmall", "SpringTreeMedium", "CherryTreeMedium" ]), inventory.GetArticle("FrozenTreeMedium"));
+        map.Replace(inventory.GetArticles([ "FallTreeSmall", "CactusMedium", "SpringTreeSmall" ]), inventory.GetArticle("FrozenTreeSmall"));
+        map.Replace(inventory.GetArticles([ "FallTreeVerySmall", "CactusVerySmall", "SpringTreeVerySmall" ]), inventory.GetArticle("FrozenTreeVerySmall"));
  
-        // map.Replace([ "Fall" ], "WinterFrozenTree");
-        // map.Replace([ "SummerPalmTree" ], "WinterFrozenTree");
-        // map.Replace([ "Spring" ], "WinterFrozenTree");
-        // map.Replace([ "SpringCherryTree" ], "WinterFrozenTree");
-        // map.Replace([ "Summer" ], "Winter");
+        map.Replace(inventory.GetArticles([ "Fall" ]), inventory.GetArticle("WinterFrozenTree"));
+        map.Replace(inventory.GetArticles([ "SummerPalmTree" ]), inventory.GetArticle("WinterFrozenTree"));
+        map.Replace(inventory.GetArticles([ "Spring" ]), inventory.GetArticle("WinterFrozenTree"));
+        map.Replace(inventory.GetArticles([ "SpringCherryTree" ]), inventory.GetArticle("WinterFrozenTree"));
+        map.Replace(inventory.GetArticles([ "Summer" ]), inventory.GetArticle("Winter"));
         map.PlaceStagedBlocks();
     }
 }

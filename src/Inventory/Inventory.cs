@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using SharpLzo;
 public class Inventory {
     public List<Article> articles = [];
     public Inventory() {}
@@ -10,7 +11,7 @@ public class Inventory {
     }
     
     public Inventory Select(string keywordFilter) =>
-        new(GetArticles(keywordFilter));
+        new(SelectArticles(keywordFilter));
     public Inventory Select(BlockType blockType) =>
         new(articles.Where(a => a.Type == blockType).ToList());
 
@@ -34,8 +35,18 @@ public class Inventory {
         }
         return match.First();
     }
+    public Inventory GetArticles(string[] names) {
+        List<Article> result = [];
+        foreach (string name in names) {
+            List<Article> match = articles.Where(a => a.Name == name).ToList();
+            if (match.Count > 0) {
+                result.Add(match.First());
+            }
+        }
+        return new Inventory(result);
+    }
 
-    public List<Article> GetArticles(string keywordFilter) =>
+    public List<Article> SelectArticles(string keywordFilter) =>
         articles.Where(a => a.Match(keywordFilter)).ToList();
 
     public Article? AlignArticle(Article article) {//TODO make Cache
