@@ -13,6 +13,13 @@ class DevUtils{
         // entitymodeledition.MeshCrystal.Layers[0].Crystal.Positions/Faces
     }
 
+    public static void resaveBlock(string BlockPath) {
+        Gbx.LZO = new MiniLZO();
+        Gbx.ZLib = new ZLib();
+        CGameItemModel customBlock = Gbx.Parse<CGameItemModel>(BlockPath);
+        customBlock.Save(BlockPath + "resaved.block.gbx");
+    }
+
     public static void LogMaterialInfo() {
         string sourceFolder = Path.Combine(AutoAlteration.DataFolder, "CustomBlocks/Vanilla");
         string destinationFolder = Path.Combine(AutoAlteration.DataFolder, "CustomBlocks/MaterialInfo");
