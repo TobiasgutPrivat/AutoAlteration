@@ -4,7 +4,8 @@ AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @".
 AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-AutoAlteration.RunConfig("Summer2024Config.json");
+// AutoAlteration.AlterFolder(new SnowScenery(),"SourcePath","DestinationPath","SnowScenery");
+AutoAlteration.RunConfig("TestTemplateConfig.json");
 // AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/TestTemplateConfig.json");
 // AutoAlteration.GenerateBlockSet(new HeavyDirt(), "HeavyDirt");
 

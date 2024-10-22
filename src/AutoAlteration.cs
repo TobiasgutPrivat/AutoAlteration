@@ -299,6 +299,7 @@ public class AutoAlteration {
             new RedEffects(),
             new RingCP(),
             new RngBooster(),
+            new SnowScenery(),
             new SlowMo(),
             new SpeedLimit(),
             new Stadium(),

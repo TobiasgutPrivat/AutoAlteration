@@ -54,6 +54,11 @@ public class Block {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
+            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32));
+            position.AddPosition(GetDirectionOffset(block));
+            if (block.BlockModel.Id == "TrackWallArch1x4SideTop"){//only block with that issue found yet
+                position.AddPosition(new(Vec3.Zero, new Vec3(0.5f*Alteration.PI, 0, 0)));
+            }
             return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));// 64m offset depends on Map Template i think
         }
     }

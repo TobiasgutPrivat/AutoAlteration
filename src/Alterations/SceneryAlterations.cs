@@ -1,3 +1,5 @@
+using GBX.NET.Engines.Game;
+
 class SnowScenery : Alteration
 {
     public override void Run(Map map)
@@ -24,5 +26,6 @@ class SnowScenery : Alteration
         map.Replace(inventory.GetArticles([ "SpringCherryTree" ]), inventory.GetArticle("WinterFrozenTree"));
         map.Replace(inventory.GetArticles([ "Summer" ]), inventory.GetArticle("Winter"));
         map.PlaceStagedBlocks();
+        // map.map.Blocks.ToList().ForEach(x => x.Skin = CGameCtnBlockSkin.);
     }
 }
