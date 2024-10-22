@@ -149,7 +149,7 @@ public class Map
           PlaceTypeBlock(block);
           break;
         case BlockType.Item:
-          map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
+          PlaceTypeItem(block);
           break;
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x == block.name)){
@@ -164,12 +164,7 @@ public class Map
             EmbedItem(block.name,block.Path);
             embeddedBlocks.Add(block.name);
           }
-          CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
-          item.SnappedOnItem = block.SnappedOnItem;
-          item.SnappedOnBlock = block.SnappedOnBlock;
-          item.PlacedOnItem = block.PlacedOnItem;
-          item.PivotPosition = block.PivotPosition;
-          item.BlockUnitCoord = block.BlockUnitCoord;
+          PlaceTypeItem(block);
           break;
       }
   }
@@ -184,6 +179,16 @@ public class Map
     newBlock.Color = block.color;
     newBlock.Skin = block.Skin;
     newBlock.Bit21 = block.IsAir;
+  }
+  private void PlaceTypeItem(Block block){
+    CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
+    item.SnappedOnItem = block.SnappedOnItem;
+    item.SnappedOnBlock = block.SnappedOnBlock;
+    item.PlacedOnItem = block.PlacedOnItem;
+    item.PivotPosition = block.PivotPosition;
+    item.BlockUnitCoord = block.BlockUnitCoord;
+    item.Color = block.color;
+    item.Scale = 1;
   }
 
   public void Delete(Article Block, bool includePillars = false){

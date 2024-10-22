@@ -79,6 +79,7 @@ public class Block {
         };
     }
 
+
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
