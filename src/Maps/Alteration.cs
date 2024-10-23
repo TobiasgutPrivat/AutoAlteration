@@ -1,6 +1,10 @@
 using GBX.NET;
 using Newtonsoft.Json;
 public class Alteration {
+    public virtual void Run(Map map) {}
+    public virtual void ChangeInventory() {}
+
+    #region initializing
     public static float PI = (float)Math.PI;
     public static Inventory inventory = new();
 
@@ -41,11 +45,9 @@ public class Alteration {
         }
         return temp;
     }
+    #endregion
 
-    public Alteration(){}
-    public virtual void Run(Map map) {}
-    public virtual void ChangeInventory() {}
-
+    #region Utilities
     public static MoveChain Move(float x, float y, float z) =>
         Move(new Vec3(x,y,z));
 
@@ -103,20 +105,6 @@ public class Alteration {
         inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
         inventory.SelectString("RoadIceDiagLeftToRoadIceWithWallDiagRight").EditOriginal().RemoveKeyword("DiagRight").AddKeyword("ToDiagRight");
         inventory.SelectString("RoadIceDiagRightToRoadIceWithWallDiagLeft").EditOriginal().RemoveKeyword("DiagLeft").AddKeyword("ToDiagLeft");
-    }
-
-    public static void TestInventory(){
-        CreateInventory();
-        AddCustomBlocks("");
-        AddNoCPBlocks();
-        AddCheckpointTrigger();
-        inventory.CheckDuplicates();
-        inventory.articles.ForEach(x => {
-            if (x.Keywords.Any(y => y == "")){Console.WriteLine("Empty Keyword found in " + x.Name);}
-            if (x.Shapes.Any(y => y == "")){Console.WriteLine("Empty Shape found in " + x.Name);}
-            if (x.ToShapes.Any(y => y == "")){Console.WriteLine("Empty ToShape found in " + x.Name);}
-            if (x.Surfaces.Any(y => y == "")){Console.WriteLine("Empty Surface found in " + x.Name);}
-        });
     }
 
     public static void AddCustomBlocks(string subFolder){
@@ -206,4 +194,5 @@ public class Alteration {
         tempInventory.AddArticles(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,["DiagRight","Left","WithWall"],"RoadIce",null,null,Move(96,0,64).Rotate(PI,0,0)));
         tempInventory.AddArticles(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,["DiagLeft","Left","WithWall"],"RoadIce",null,null));
     }
+    #endregion
 }
