@@ -8,6 +8,8 @@ public class MoveChain {
         clone.moves.AddRange(moves);
         return clone;
     }
+
+    #region Applying
     public void Apply(Position position,Article article){
         foreach(Move move in moves){
             switch(move.type){
@@ -46,10 +48,14 @@ public class MoveChain {
         }
         moves.Reverse();
     }
+    #endregion
+    
     public MoveChain AddChain(MoveChain moveChain) {
         moves.AddRange(moveChain.moves);
         return this;
     }
+    
+    #region Constructors
     public MoveChain Move(float x, float y, float z) =>
         Move(new Vec3(x,y,z));
 
@@ -80,6 +86,7 @@ public class MoveChain {
         moves.Add(new Move(MoveType.RotateCenter, vector));
         return this;
     }
+    #endregion
 }
 public class Move{
     public MoveType type;

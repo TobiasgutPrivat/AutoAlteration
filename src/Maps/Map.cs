@@ -9,6 +9,8 @@ public class Map
   public CGameCtnChallenge map;
   public List<Block> stagedBlocks = [];
   public List<string> embeddedBlocks = [];
+
+  #region loading
   public Map(string mapPath)
   { 
     Gbx.LZO = new MiniLZO();
@@ -55,7 +57,9 @@ public class Map
     }
     map.MapUid = new string(stringChars);
   }
+  #endregion
 
+  #region embedding
   private void EmbedBlock(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
@@ -64,7 +68,6 @@ public class Map
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
-    // Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
   private void EmbedItem(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
@@ -74,9 +77,10 @@ public class Map
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
-    // Console.WriteLine(string.Join(",", map.OpenReadEmbeddedZipData().Entries.Select(x => x.Name)));
   }
+  #endregion
 
+  #region staging
   public void PlaceRelativeWithRandom(Article atBlock, Inventory newInventory,MoveChain ?moveChain = null){
     List<Article> newArticles = newInventory.articles;
     if (newArticles.Count == 0) return;
@@ -123,6 +127,33 @@ public class Map
   public void Move(Inventory inventory, MoveChain moveChain) =>
     inventory.articles.ForEach(a => Move(a, moveChain));
 
+    public void Delete(Article Block, bool includePillars = false){
+    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == Block.Name).ToList();
+    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != Block.Name).ToList();
+    if (includePillars){
+      deleted.ForEach(x => {
+        if (!x.IsFree && !x.IsGround){
+          map.Blocks = map.Blocks.Where(block => 
+            !(block.BlockModel.Id.Contains("Pillar") &&
+              block.Coord.X == x.Coord.X &&
+              block.Coord.Z == x.Coord.Z &&
+              block.Coord.Y < x.Coord.Y
+            )
+          ).ToList();
+        }
+      });
+    };
+
+    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != Block.Name).ToList();
+  }
+  public void Delete(Inventory inventory, bool includePillars = false){
+    foreach(var block in inventory.articles){
+      Delete(block,includePillars);
+    }
+  }
+  #endregion
+
+  #region placement
   public void PlaceStagedBlocks(){
     foreach (var block in stagedBlocks){
       PlaceBlock(block);
@@ -178,32 +209,5 @@ public class Map
     item.Color = block.color;
     item.Scale = 1;
   }
-
-  public void Delete(Article Block, bool includePillars = false){
-    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == Block.Name).ToList();
-    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != Block.Name).ToList();
-    if (includePillars){
-      deleted.ForEach(x => {
-        if (!x.IsFree && !x.IsGround){
-          map.Blocks = map.Blocks.Where(block => 
-            !(block.BlockModel.Id.Contains("Pillar") &&
-              block.Coord.X == x.Coord.X &&
-              block.Coord.Z == x.Coord.Z &&
-              block.Coord.Y < x.Coord.Y
-            )
-          ).ToList();
-        }
-      });
-    };
-
-    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != Block.Name).ToList();
-  }
-  public void Delete(Inventory inventory, bool includePillars = false){
-    foreach(var block in inventory.articles){
-      Delete(block,includePillars);
-    }
-  }
-
-  public static Article GetArticle(string name) =>
-    Alteration.inventory.GetArticle(name);
+  #endregion
 }
