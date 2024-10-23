@@ -1,6 +1,6 @@
 ﻿//Initial load
 AutoAlteration.devMode = true;
-AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","dev");
+AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","dev");
 AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //

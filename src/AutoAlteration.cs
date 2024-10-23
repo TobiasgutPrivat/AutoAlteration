@@ -168,7 +168,7 @@ public class AutoAlteration {
 
     public static void RunConfig(string filePath){
         if (!filePath.Contains(':')){
-            filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","config", filePath);
+            filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","config", filePath);
         }
         foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
         {
