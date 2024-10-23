@@ -10,10 +10,10 @@ class AntiBooster: Alteration {
     public override void Run(Map map){
         Inventory boosters = inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette");
         Inventory tiltedBoosters = boosters.Select("Slope|Slope2|Tilt|Tilt2");
-        map.Replace(tiltedBoosters.Select("Up").RemoveKeyword("Up").AddKeyword("Down"));
-        map.Replace(tiltedBoosters.Select("Down").RemoveKeyword("Down").AddKeyword("Up"));
-        map.Replace(tiltedBoosters.Select("Left").RemoveKeyword("Left").AddKeyword("Right"));
-        map.Replace(tiltedBoosters.Select("Right").RemoveKeyword("Right").AddKeyword("Left"));
+        tiltedBoosters.Select("Up").RemoveKeyword("Up").AddKeyword("Down").Replace(map);        
+        tiltedBoosters.Select("Down").RemoveKeyword("Down").AddKeyword("Up").Replace(map);
+        tiltedBoosters.Select("Left").RemoveKeyword("Left").AddKeyword("Right").Replace(map);
+        tiltedBoosters.Select("Right").RemoveKeyword("Right").AddKeyword("Left").Replace(map);;
         map.PlaceStagedBlocks();
         map.Move(boosters,RotateMid(PI,0,0));
         map.PlaceStagedBlocks();

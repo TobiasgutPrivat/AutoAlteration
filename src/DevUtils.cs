@@ -13,7 +13,7 @@ class DevUtils{
         // entitymodeledition.MeshCrystal.Layers[0].Crystal.Positions/Faces
     }
 
-    public static void resaveBlock(string BlockPath) {
+    public static void ResaveBlock(string BlockPath) {
         Gbx.LZO = new MiniLZO();
         Gbx.ZLib = new ZLib();
         CGameItemModel customBlock = Gbx.Parse<CGameItemModel>(BlockPath);
@@ -23,13 +23,13 @@ class DevUtils{
     public static void LogMaterialInfo() {
         string sourceFolder = Path.Combine(AutoAlteration.DataFolder, "CustomBlocks/Vanilla");
         string destinationFolder = Path.Combine(AutoAlteration.DataFolder, "CustomBlocks/MaterialInfo");
-        AutoAlteration.AlterAll(new MaterialInfo(), sourceFolder, destinationFolder, "MaterialInfo");
+        AutoAlteration.AlterAll([new MaterialInfo()], sourceFolder, destinationFolder, "MaterialInfo");
         File.WriteAllText(Path.Combine(AutoAlteration.devPath, "SurfacePhysicIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
         File.WriteAllText(Path.Combine(AutoAlteration.devPath, "SurfaceGameplayIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
         File.WriteAllText(Path.Combine(AutoAlteration.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
     }
 
-    public static void stringToName(string projectFolder) {
+    public static void StringToName(string projectFolder) {
         string json = File.ReadAllText(projectFolder + "data/Vanilla/Items.json");
         string[] lines = JsonConvert.DeserializeObject<string[]>(json);
         string[] articles = lines.Select(line => line.Split('/')[^1].Trim()).ToArray();
@@ -37,7 +37,7 @@ class DevUtils{
         File.WriteAllText(projectFolder + "data/Vanilla/ItemNames.json", json);
     }
 
-    public static void sponsorNonColidableFix(string projectFolder) {
+    public static void SponsorNonColidableFix(string projectFolder) {
         foreach (string file in Directory.GetFiles(projectFolder + "data/CustomBlocks/Vanilla", "*", SearchOption.AllDirectories))
         {
             if (!file.Contains("Sponsors")){

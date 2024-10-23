@@ -101,10 +101,6 @@ public class Map
   public void PlaceRelative(Inventory inventory, Article newArticle, MoveChain ?moveChain = null)=>
     inventory.articles.ForEach(a => PlaceRelative(a, newArticle, moveChain));
   
-  public void PlaceRelative(KeywordEdit keywordEdit, MoveChain ?moveChain = null) =>
-    keywordEdit.PlaceRelative(this,moveChain);
-
-
   public void ReplaceWithRandom(Article oldArticle, Inventory newInventory,MoveChain ?moveChain = null){
     if (newInventory.articles.Count == 0) return;
     PlaceRelativeWithRandom(oldArticle, newInventory, moveChain);
@@ -115,19 +111,11 @@ public class Map
     PlaceRelative(oldArticle, article,moveChain);
     Delete(oldArticle);
   }
-
-  public void Replace(Inventory inventory, string newBlock, MoveChain ?moveChain = null){
-    PlaceRelative(inventory, GetArticle(newBlock),moveChain);
-    Delete(inventory);
-  }
   
   public void Replace(Inventory inventory, Article article, MoveChain ?moveChain = null){
     PlaceRelative(inventory, article,moveChain);
     Delete(inventory);
   }
-
-  public void Replace(KeywordEdit keywordEdit, MoveChain ?moveChain = null) =>
-    keywordEdit.Replace(this,moveChain);
 
   public void Move(Article article, MoveChain moveChain) =>
     Replace(article, article, moveChain);

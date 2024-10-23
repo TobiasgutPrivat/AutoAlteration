@@ -93,11 +93,7 @@ public class AutoAlteration {
             AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name);
         }
     }
-    public static void AlterFolder(Alteration alteration, string sourceFolder, string destinationFolder, string Name) =>
-        AlterFolder(new List<Alteration>{alteration},sourceFolder,destinationFolder,Name);
-    public static void AlterFolder(CustomBlockAlteration alteration, string sourceFolder, string destinationFolder, string Name) =>
-        AlterFolder(new List<CustomBlockAlteration>{alteration},sourceFolder,destinationFolder,Name);
-    
+
     public static void AlterAll(List<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         AlterFolder(alterations,sourceFolder,Path.Combine(destinationFolder, Path.GetFileName(sourceFolder) + " - " + Name),Name);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
@@ -112,10 +108,6 @@ public class AutoAlteration {
             AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
         }
     }
-    public static void AlterAll(Alteration alteration, string sourceFolder, string destinationFolder, string Name) =>
-        AlterAll(new List<Alteration>{alteration},sourceFolder,destinationFolder,Name);
-    public static void AlterAll(CustomBlockAlteration alteration, string sourceFolder, string destinationFolder, string Name) =>
-        AlterAll(new List<CustomBlockAlteration>{alteration},sourceFolder,destinationFolder,Name);
     
     public static void AlterFile(List<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
         Map map = new(sourceFile);
@@ -140,20 +132,6 @@ public class AutoAlteration {
             Console.WriteLine(customBlock.Name + " unchanged");
         };
     }
-    public static void AlterFile(Alteration alteration, string sourceFile, string destinationFile, string Name) =>
-        AlterFile(new List<Alteration>{alteration},sourceFile,destinationFile,Name);
-    public static void AlterFile(CustomBlockAlteration alteration, string sourceFile, string destinationFile, string Name) =>
-        AlterFile(new List<CustomBlockAlteration>{alteration},sourceFile,destinationFile,Name);
-    
-    public static void AlterFile(List<Alteration> alterations, string sourceFile, string Name) =>
-        AlterFile(alterations,sourceFile,Path.Combine(Path.GetDirectoryName(sourceFile),  Path.GetFileName(sourceFile)[..^8] + " " + Name + ".map.gbx"),Name);
-    public static void AlterFile(List<CustomBlockAlteration> alterations, string sourceFile, string Name) =>
-        AlterFile(alterations,sourceFile,GetNewCustomBlockName(sourceFile,Name),Name);
-    
-    public static void AlterFile(Alteration alteration, string sourceFile, string Name) =>
-        AlterFile(alteration,sourceFile,Path.Combine(Path.GetDirectoryName(sourceFile),  Path.GetFileName(sourceFile)[..^8] + " " + Name + ".map.gbx"),Name);
-    public static void AlterFile(CustomBlockAlteration alteration, string sourceFile, string Name) =>
-        AlterFile(alteration,sourceFile,GetNewCustomBlockName(sourceFile,Name),Name);
 
     private static string GetNewCustomBlockName(string path, string name){
         if (path.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
@@ -194,7 +172,7 @@ public class AutoAlteration {
     }
 
     public static void GenerateBlockSet(CustomBlockAlteration alteration,  string Name) =>
-        AlterAll(new List<CustomBlockAlteration>{alteration},Path.Combine(CustomBlocksFolder,"Vanilla"),Path.Combine(CustomBlockSetsFolder,Name),Name);
+        AlterAll([alteration],Path.Combine(CustomBlocksFolder,"Vanilla"),Path.Combine(CustomBlockSetsFolder,Name),Name);
 
     public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)
     {
@@ -252,7 +230,7 @@ public class AutoAlteration {
         if (!Path.IsPathFullyQualified(Path.GetFullPath(path))){
             return "Invalid Path";
         }
-        if (path.Contains(".")) {
+        if (path.Contains('.')) {
             return "Not a Folder Path";
         }       
         return "";     
