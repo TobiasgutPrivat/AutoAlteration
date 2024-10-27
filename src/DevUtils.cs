@@ -31,8 +31,8 @@ class DevUtils{
 
     public static void StringToName(string projectFolder) {
         string json = File.ReadAllText(projectFolder + "data/Vanilla/Items.json");
-        string[] lines = JsonConvert.DeserializeObject<string[]>(json);
-        string[] articles = lines.Select(line => line.Split('/')[^1].Trim()).ToArray();
+        SList<string> lines = JsonConvert.DeserializeObject<SList<string>>(json);
+        SList<string> articles = lines.Select(line => line.Split('/')[^1].Trim()).ToList();
         json = JsonConvert.SerializeObject(articles);
         File.WriteAllText(projectFolder + "data/Vanilla/ItemNames.json", json);
     }
@@ -81,9 +81,5 @@ class Test : Alteration {
     public override void Run(Map map)
     {
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory(){
-        AddCustomBlocks("dev/Water");
     }
 }

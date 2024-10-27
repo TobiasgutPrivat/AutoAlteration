@@ -27,7 +27,7 @@ class SnowScenery : Alteration
         map.Replace(inventory.GetArticles([ "SpringCherryTree" ]), inventory.GetArticle("WinterFrozenTree"));
         map.Replace(inventory.GetArticles([ "Summer" ]), inventory.GetArticle("Winter"));
         map.PlaceStagedBlocks();
-        // map.map.Blocks.ToList().Where(x => x.Skin != null).Where(x => x.Skin.Text == "PlatformIce\\").ToList().ForEach(x => x.Skin.Save("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/IceSkin.gbx"));
+        
         CGameCtnBlockSkin GrassSkin = Gbx.Parse<CGameCtnBlockSkin>("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/IceSkin.gbx");
         map.map.Blocks.ToList().ForEach(x => x.Skin = GrassSkin);
         map.map.BakedBlocks.ToList().ForEach(x => x.Skin = GrassSkin);

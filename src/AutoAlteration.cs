@@ -10,10 +10,10 @@ public class AutoAlteration {
     public static string DataFolder = "";
     public static string CustomBlocksFolder = "";
     public static string CustomBlockSetsFolder = "";
-    public static string[] Keywords = [];
-    public static string[] shapeKeywords = [];
-    public static string[] surfaceKeywords = [];
-    public static string[] specialKeywords = [];
+    public static List<string> Keywords = [];
+    public static List<string> shapeKeywords = [];
+    public static List<string> surfaceKeywords = [];
+    public static List<string> customBlockAltNames = [];
 
     public static void Load() {
         if (devMode) {
@@ -23,18 +23,18 @@ public class AutoAlteration {
         }
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
         CustomBlockSetsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
-        shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt"));
-        surfaceKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","surfaceKeywords.txt"));
-        Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt"));
-        specialKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","SpecialKeywords.txt"));
+        shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt")).ToList();
+        surfaceKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","surfaceKeywords.txt")).ToList();
+        Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
+        customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
     }
 
     public static void Alter(List<Alteration> alterations, Map map) {
         foreach (Alteration alteration in alterations) {
             if (lastAlteration == null || (alteration.GetType() != lastAlteration.GetType())) {
                 Alteration.CreateInventory();
-                alteration.ChangeInventory();
-                Alteration.InventoryChanges();
+                alteration.InventoryChanges.ForEach(x => x.ChangeInventory(Alteration.inventory));
+                Alteration.DefaultInventoryChanges();
                 if (devMode){
                     Alteration.inventory.Export(alteration.GetType().Name);
                 }

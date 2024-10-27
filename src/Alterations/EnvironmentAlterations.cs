@@ -1,4 +1,4 @@
-class EnvironmentAlterations: Alteration {
+abstract class EnvironmentAlterations: Alteration {
     public static void SetGamePlay(Map map, string GamePlay){
         inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword(GamePlay).Replace(map);
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
@@ -35,7 +35,6 @@ class Desert: EnvironmentAlterations {
         SetGamePlay(map,"Desert");
     }
 }
-
 
 //Snow Carswitch manual
 

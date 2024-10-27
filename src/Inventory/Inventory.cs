@@ -24,9 +24,6 @@ public class Inventory {
     public Inventory Sub(Inventory inventory) =>
         new(articles.Except(inventory.articles).ToList());
 
-    public string[] Names() =>
-        articles.Select(a => a.Name).ToArray();
-
     public Article GetArticle(string name) {
         List<Article> match = articles.Where(a => a.Name == name).ToList();
         if (match.Count == 0) {
@@ -35,7 +32,7 @@ public class Inventory {
         }
         return match.First();
     }
-    public Inventory GetArticles(string[] names) {
+    public Inventory GetArticles(SList<string> names) {
         List<Article> result = [];
         foreach (string name in names) {
             List<Article> match = articles.Where(a => a.Name == name).ToList();
@@ -60,26 +57,14 @@ public class Inventory {
         return null;
     }
 
-    public KeywordEdit AddKeyword(string keyword) =>
+    public KeywordEdit AddKeyword(SList<string> keyword) =>
         Edit().AddKeyword(keyword);
-    public KeywordEdit AddKeyword(string[] keyword) =>
-        Edit().AddKeyword(keyword);
-    public KeywordEdit RemoveKeyword(string keyword) =>
+    public KeywordEdit RemoveKeyword(SList<string> keyword) =>
         Edit().RemoveKeyword(keyword);
-    public KeywordEdit RemoveKeyword(string[] keyword) =>
-        Edit().RemoveKeyword(keyword);
-    public KeywordEdit AddToShape(string keyword) =>
+    public KeywordEdit AddToShape(SList<string> keyword) =>
         Edit().AddToShape(keyword);
-    public KeywordEdit RemoveToShape(string keyword) =>
+    public KeywordEdit RemoveToShape(SList<string> keyword) =>
         Edit().RemoveToShape(keyword);
-    public KeywordEdit SetChain(MoveChain moveChain) =>
-        Edit().SetChain(moveChain);
-    public KeywordEdit AddChain(MoveChain moveChain) =>
-        Edit().AddChain(moveChain);
-    public KeywordEdit Width(int width) =>
-        Edit().Width(width);
-    public KeywordEdit Length(int length) =>
-        Edit().Length(length);
 
     public KeywordEdit Edit(){
         List<Article> articleClone = articles.Select(a => a.CloneArticle()).ToList();

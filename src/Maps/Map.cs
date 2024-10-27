@@ -127,7 +127,7 @@ public class Map
   public void Move(Inventory inventory, MoveChain moveChain) =>
     inventory.articles.ForEach(a => Move(a, moveChain));
 
-    public void Delete(Article Block, bool includePillars = false){
+  public void Delete(Article Block, bool includePillars = false){
     List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == Block.Name).ToList();
     map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != Block.Name).ToList();
     if (includePillars){

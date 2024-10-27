@@ -1,8 +1,7 @@
-class EffectAlteration: Alteration {
-    public string AllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
-    public override void ChangeInventory() {
-        AddCheckpointTrigger();
-    }
+abstract class EffectAlteration: Alteration {
+    public string SelAllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
+    public List<string> AllEffects = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"];
+    public override List<InventoryChange> InventoryChanges => [new CheckpointTrigger()];
     public static void PlaceCPEffect(Map map, string Effect,MoveChain ?moveChain = null, bool oriented = false) {
         moveChain ??= new();
         Article GateSpecial;
@@ -78,15 +77,12 @@ class NoBrake: EffectAlteration {
 }
 
 class NoEffect: EffectAlteration {
+    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select(AllEffects)
-            .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]).Replace(map);
-        map.Delete(inventory.Select(BlockType.Item).Select(AllEffects));
+        inventory.Select(BlockType.Block).Select(SelAllEffects)
+            .RemoveKeyword(AllEffects).Replace(map);
+        map.Delete(inventory.Select(BlockType.Item).Select(SelAllEffects));
         map.PlaceStagedBlocks();
-    }
-    public override void ChangeInventory()
-    {
-        AddNoCPBlocks();
     }
 }
 
@@ -102,25 +98,25 @@ class NoSteer: EffectAlteration {
 class RandomDankness: EffectAlteration {
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select("Checkpoint&!((Slope|Slope2)&(Left|Right))").RemoveKeyword("Checkpoint")
-            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+            .ReplaceWithRandom(map,AllEffects);
         inventory.Select(BlockType.Block).Select("Checkpoint&Slope&(Left|Right)").RemoveKeyword(["Checkpoint","Slope"]).AddKeyword("Tilt")
-            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+            .ReplaceWithRandom(map,AllEffects);
         inventory.Select(BlockType.Block).Select("Checkpoint&Slope2&(Left|Right)").RemoveKeyword(["Checkpoint","Slope2"]).AddKeyword("Tilt2")
-            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+            .ReplaceWithRandom(map,AllEffects);
         inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"])
-            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
-        inventory.Select(AllEffects)
-            .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"])
-            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+            .ReplaceWithRandom(map,AllEffects);
+        inventory.Select(SelAllEffects)
+            .RemoveKeyword(AllEffects)
+            .ReplaceWithRandom(map,AllEffects);
         map.PlaceStagedBlocks();
     }
 }
 
 class RandomEffects: EffectAlteration {
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select(AllEffects)
-            .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"])
-            .ReplaceWithRandom(map,["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]);
+        inventory.Select(BlockType.Block).Select(SelAllEffects)
+            .RemoveKeyword(AllEffects)
+            .ReplaceWithRandom(map,AllEffects);
         map.PlaceStagedBlocks();
     }
 }
@@ -141,14 +137,14 @@ class ReactorDown: EffectAlteration {
 
 class RedEffects: EffectAlteration {
     public override void Run(Map map){
-        inventory.Select(AllEffects).RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]).AddKeyword("Turbo2").Replace(map);
+        inventory.Select(SelAllEffects).RemoveKeyword(AllEffects).AddKeyword("Turbo2").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 
 class RngBooster: EffectAlteration {
     public override void Run(Map map){
-        inventory.Select(AllEffects).RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"]).AddKeyword("TurboRoulette").Replace(map);
+        inventory.Select(SelAllEffects).RemoveKeyword(AllEffects).AddKeyword("TurboRoulette").Replace(map);
         map.PlaceStagedBlocks();
     }
 }

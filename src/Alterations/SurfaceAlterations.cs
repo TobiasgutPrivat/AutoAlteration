@@ -5,16 +5,13 @@
 //     }
 // }
 
+
 class Dirt : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyDirt())];
     public override void Run(Map map){
         // map.PlaceRelative(inventory.Select("MapStart"),"RoadTechToThemeSnowRoadMagnet");
         inventory.Select("!Dirt&!OpenDirtRoad&!OpenDirtZone&!RoadDirt").AddKeyword("HeavyDirt").Replace(map);
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("HeavyDirt");
     }
 }
 
@@ -23,38 +20,26 @@ class Dirt : Alteration {
 //flooded manual
 
 class Grass : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyGrass())];
     public override void Run(Map map){
         inventory.Select("!Grass&!OpenGrassRoad&!OpenGrassZone").AddKeyword("HeavyGrass").Replace(map);
         map.PlaceStagedBlocks();
     }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("HeavyGrass");
-    }
 }
 
 class Ice : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyIce())];
     public override void Run(Map map){
         inventory.Select("!Ice&!OpenIceRoad&!OpenIceZone&!RoadIce").AddKeyword("HeavyIce").Replace(map);
         map.PlaceStagedBlocks();
     }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("HeavyIce");
-    }
 }
 
 class Magnet : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyMagnet())];
     public override void Run(Map map){
         inventory.AddKeyword("HeavyMagnet").Replace(map);
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("HeavyMagnet");
     }
 }
 
@@ -63,38 +48,26 @@ class Magnet : Alteration {
 //TODO penalty
 
 class Plastic : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyPlastic())];
     public override void Run(Map map){
         inventory.Select("!Plastic&!OpenPlasticRoad&!OpenPlasticZone&!RoadPlastic").AddKeyword("HeavyPlastic").Replace(map);
         map.PlaceStagedBlocks();
     }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("HeavyPlastic");
-    }
 }
 
 class Road : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyTech())];
     public override void Run(Map map){
         inventory.Select("!Tech&!OpenTechRoad&!OpenTechZone&!RoadTech").AddKeyword("HeavyTech").Replace(map);
         map.PlaceStagedBlocks();
     }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("HeavyTech");
-    }
 }
 
 class Wood : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyWood())];
     public override void Run(Map map){
         inventory.Select("!SnowRoad").AddKeyword("HeavyWood").Replace(map);
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("HeavyWood");
     }
 }
 
@@ -132,14 +105,10 @@ class Surfaceless: Alteration {
 
 
 class RouteOnly: Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new RouteOnlyBlock())];
     public override void Run(Map map){
         inventory.AddKeyword("RouteOnlyBlock").Replace(map);
         map.Delete(inventory.Sub(inventory.Select(BlockType.Item).Select("MapStart|Finish|Checkpoint")));
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("RouteOnlyBlock");
     }
 }

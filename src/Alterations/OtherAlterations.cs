@@ -23,6 +23,7 @@ class AntiBooster: Alteration {
 //backwards (manual)
 
 class Boosterless: Alteration {
+    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
     public override void Run(Map map){
         map.Delete(inventory.Select(BlockType.Item).Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
         Inventory blocks = inventory.Select(BlockType.Block);
@@ -34,17 +35,13 @@ class Boosterless: Alteration {
         blocks.Select("TurboRoulette").RemoveKeyword("TurboRoulette").Replace(map);
         map.PlaceStagedBlocks();
     }
-
-    public override void ChangeInventory(){
-        AddNoCPBlocks();
-    }
 }
 
 //TODO boss-overlayed (multiple) Maps
 
 class Broken: EffectAlteration {
     public override void Run(Map map){
-        inventory.Select(AllEffects)
+        inventory.Select(SelAllEffects)
             .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up"])
             .AddKeyword("NoEngine").Replace(map);
         map.PlaceStagedBlocks();
@@ -92,12 +89,10 @@ class CPBoost : Alteration{
 //cp1 kept (manual)
 
 class CPFull : Alteration{
+    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).AddKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
-    }
-    public override void ChangeInventory(){
-        AddNoCPBlocks();
     }
 }
 
@@ -167,13 +162,11 @@ class Flipped: EffectAlteration {
 }
 
 class Holes : Alteration{
+    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).AddKeyword("Hole").Replace(map);
-        inventory.Select(BlockType.Block).AddKeyword("Hole").AddKeyword("With").Replace(map);
+        inventory.Select(BlockType.Block).AddKeyword(["Hole","With","24m"]).Replace(map);
         map.PlaceStagedBlocks();
-    }
-    public override void ChangeInventory(){
-        AddNoCPBlocks();
     }
 }
 
@@ -213,16 +206,13 @@ class RandomBlocks : Alteration{
 }
 
 class RingCP : Alteration{
+    public override List<InventoryChange> InventoryChanges => [new CheckpointTrigger()];
     public override void Run(Map map){
         Article GateCheckpoint = inventory.GetArticle("GateCheckpoint");
         map.PlaceRelative(inventory.Select(BlockType.Item).Select("Checkpoint"),GateCheckpoint,Move(-16,-12,-16));
         map.PlaceRelative(inventory.Select(BlockType.Block).Select("CheckpointTrigger"),GateCheckpoint,Move(0,-12,0));
         map.Delete(inventory.Select("Checkpoint"),true);
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory(){
-        AddCheckpointTrigger();
     }
 }
 
@@ -247,14 +237,11 @@ class StartOneDown: Alteration {
 //TODO Supersized
 
 class STTF : Alteration{
+    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
     public override void Run(Map map){
         map.Delete(inventory.Select("Checkpoint&(Ring|Gate)"));
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory(){
-        AddNoCPBlocks();
     }
 }
 
@@ -323,27 +310,19 @@ class Rotated: Alteration {
 }
 
 class Mini : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new MiniBlock())];
     public override void Run(Map map){
         inventory.AddKeyword("MiniBlock").Replace(map);
         map.Delete(inventory);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X / 2, x.position.coords.Y / 2 + 4, x.position.coords.Z / 2));//4 is offset for normal stadium
         map.PlaceStagedBlocks();
     }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlockSet("MiniBlock");
-    }
 }
 class Invisible : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new InvisibleBlock())];
     public override void Run(Map map){
         inventory.Select("!MapStart&!Finish&!Checkpoint&!Gameplay").AddKeyword("InvisibleBlock").Replace(map);
         map.Delete(inventory.Select("!MapStart&!Finish&!Checkpoint&!Gameplay"));
         map.PlaceStagedBlocks();
-    }
-
-    public override void ChangeInventory()
-    {
-        AddCustomBlocks("InvisibleBlock");
     }
 }

@@ -1,8 +1,11 @@
 using GBX.NET;
 using Newtonsoft.Json;
-public class Alteration {
-    public virtual void Run(Map map) {}
-    public virtual void ChangeInventory() {}
+public abstract class Alteration: MoveConstructors {
+    public abstract void Run(Map map);
+
+    public virtual string? Description { get; }
+
+    public virtual List<InventoryChange> InventoryChanges { get; } = [];
 
     #region initializing
     public static float PI = (float)Math.PI;
@@ -18,7 +21,7 @@ public class Alteration {
     
     public static Inventory ImportArrayInventory(string path,BlockType blockType){
         string json = File.ReadAllText(path);
-        string[] lines = JsonConvert.DeserializeObject<string[]>(json);
+        SList<string> lines = JsonConvert.DeserializeObject<SList<string>>(json);
         return new Inventory(lines.Select(line => new Article(line,blockType)).ToList());
     }
 
@@ -48,41 +51,7 @@ public class Alteration {
     #endregion
 
     #region Utilities
-    public static MoveChain Move(float x, float y, float z) =>
-        Move(new Vec3(x,y,z));
-
-    public static MoveChain Move(Vec3 vector) {
-        MoveChain moveChain = new();
-        moveChain.Move(vector);
-        return moveChain;
-    }
-
-    public static MoveChain Rotate(float x, float y, float z) =>
-        Rotate(new Vec3(x,y,z));
-
-    public static MoveChain Rotate(Vec3 vector) {
-        MoveChain moveChain = new();
-        moveChain.Rotate(vector);
-        return moveChain;
-    }
-
-    public static MoveChain RotateMid(float x, float y, float z) =>
-        RotateMid(new Vec3(x,y,z));
-
-    public static MoveChain RotateMid(Vec3 vector) {
-        MoveChain moveChain = new();
-        moveChain.RotateMid(vector);
-        return moveChain;
-    }
-    public static MoveChain RotateCenter(float x, float y, float z) =>
-        RotateCenter(new Vec3(x,y,z));
-
-    public static MoveChain RotateCenter(Vec3 vector) {
-        MoveChain moveChain = new();
-        moveChain.RotateCenter(vector);
-        return moveChain;
-    }
-
+    
     public static void CreateInventory() {
         inventory = ImportVanillaInventory(Path.Combine(AutoAlteration.DataFolder, "Inventory","BlockData.json"));
         // inventory.CheckDuplicates();
@@ -92,7 +61,7 @@ public class Alteration {
         }
     }
 
-    public static void InventoryChanges(){
+    public static void DefaultInventoryChanges(){
         //Generally applied changes to inventory, does effect Keyword-indexing behaviour
         inventory.Select(BlockType.Block).Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
         inventory.Select("Special").EditOriginal().RemoveKeyword("Special");

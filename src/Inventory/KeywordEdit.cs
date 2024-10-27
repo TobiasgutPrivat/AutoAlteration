@@ -19,7 +19,7 @@ public class KeywordEdit {
         return this;
     }
 
-    public KeywordEdit AddKeyword(string[] keywords) {
+    public KeywordEdit AddKeyword(List<string> keywords) {
         keywords.ToList().ForEach(a => AddKeyword(a));
         return this;
     }
@@ -37,17 +37,18 @@ public class KeywordEdit {
         return this;
     }
 
-    public KeywordEdit RemoveKeyword(string[] keywords) {
-        keywords.ToList().ForEach(k => RemoveKeyword(k));
+    public KeywordEdit RemoveKeyword(List<string> keywords) {
+        articles.ForEach(a => keywords.ToList().ForEach(k => a.Keywords.Remove(k)));
+        keywords.ToList().ForEach(k => RemoveKeyword(k));//TODO Fix loop
         return this;
     }
 
-    public KeywordEdit AddToShape(string toShape) {
-        articles.ForEach(a => a.ToShapes.Add(toShape));
+    public KeywordEdit AddToShape(List<string> toShape) {
+        articles.ForEach(a => toShape.ForEach(s => a.ToShapes.Add(s)));
         return this;
     }
-    public KeywordEdit RemoveToShape(string toShape) {
-        articles.ForEach(a => a.ToShapes.Remove(toShape));
+    public KeywordEdit RemoveToShape(List<string> toShape) {
+        articles.ForEach(a => toShape.ForEach(s => a.ToShapes.Remove(s)));
         return this;
     }
 
@@ -128,9 +129,6 @@ public class KeywordEdit {
         });
         return new Inventory(newarticles);
     }
-
-    public string[] Names() =>
-        Align().articles.Select(a => a.Name).ToArray();
 
     public KeywordEdit Print() {
         articles.ForEach(article => {

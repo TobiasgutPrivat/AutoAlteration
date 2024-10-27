@@ -17,28 +17,28 @@ public class Article {
 
     public Dictionary<string,bool> cacheFilter = [];
 
-    public Article(string name,BlockType type,List<string> keywords,List<string> shape,List<string> toShape,List<string> surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
+    public Article(string name,BlockType type,SList<string> keywords,SList<string>? shape = null,SList<string>? toShape = null,SList<string>? surface = null,MoveChain ?moveChain = null,int length = 1, int width = 1){
         Name = name;
         Type = type;
         Keywords = keywords;
-        Shapes = shape;
-        ToShapes = toShape;
-        Surfaces = surface;
+        Shapes = shape ?? [];
+        ToShapes = toShape ?? [];
+        Surfaces = surface ?? [];
         MoveChain = moveChain ?? new MoveChain();
         Length = length;
         Width = width;
     }
-    public Article(string name,BlockType type,List<string> ?keywords,string ?shape,string ?toShape,string ?surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
-        Name = name;
-        Type = type;
-        Keywords = keywords ?? [];
-        if (shape != null) Shapes = [shape];
-        if (toShape != null) ToShapes = [toShape];
-        if (surface != null) Surfaces = [surface];
-        MoveChain = moveChain ?? new MoveChain();
-        Length = length;
-        Width = width;
-    }
+    // public Article(string name,BlockType type,List<string> ?keywords,string ?shape,string ?toShape,string ?surface,MoveChain ?moveChain = null,int length = 1, int width = 1){
+    //     Name = name;
+    //     Type = type;
+    //     Keywords = keywords ?? [];
+    //     if (shape != null) Shapes = [shape];
+    //     if (toShape != null) ToShapes = [toShape];
+    //     if (surface != null) Surfaces = [surface];
+    //     MoveChain = moveChain ?? new MoveChain();
+    //     Length = length;
+    //     Width = width;
+    // }
     
     public Article(string name,BlockType type){
         Name = name;
@@ -72,7 +72,7 @@ public class Article {
         LoadKeywords();
         Type = type;
         string vanillaName = Name;
-        AutoAlteration.specialKeywords.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        AutoAlteration.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
         List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList();
         if (vanillaVersion.Count > 0) {
             Width = vanillaVersion.First().Width;
