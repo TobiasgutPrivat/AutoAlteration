@@ -83,13 +83,13 @@ public class Block {
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
-        SnappedOnBlock = item.SnappedOnBlock;
-        SnappedOnItem = item.SnappedOnItem;
-        PlacedOnItem = item.PlacedOnItem;
-        PivotPosition = item.PivotPosition;
-        BlockUnitCoord = item.BlockUnitCoord;
+        // SnappedOnBlock = item.SnappedOnBlock;
+        // SnappedOnItem = item.SnappedOnItem;
+        // PlacedOnItem = item.PlacedOnItem;
+        // BlockUnitCoord = item.BlockUnitCoord;
         color = item.Color;
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
+        position.Move(item.PivotPosition);
 
         this.article = article;
         this.name = article.Name;

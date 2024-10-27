@@ -6,13 +6,6 @@ using GBX.NET.ZLib;
 using Newtonsoft.Json;
 
 class DevUtils{
-    public static void CombineItemPrefabs(string ItemPath, string PrefabPath) {
-        // TODO
-        // Ents[0].Model.Shape.Surf.Vertices/Triangles
-        // To
-        // entitymodeledition.MeshCrystal.Layers[0].Crystal.Positions/Faces
-    }
-
     public static void ResaveBlock(string BlockPath) {
         Gbx.LZO = new MiniLZO();
         Gbx.ZLib = new ZLib();

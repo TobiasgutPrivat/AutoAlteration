@@ -5,7 +5,7 @@ using MathNet.Numerics.LinearAlgebra.Double;
 public class Position {
     public Vec3 coords;
     public Vec3 pitchYawRoll;
-    public static Position Zero = new (Vec3.Zero,Vec3.Zero);//TODO maybe issue with changing value
+    public static Position Zero = new (Vec3.Zero,Vec3.Zero);
 
     public Position( Vec3 ?coords){
         this.coords = coords ?? Vec3.Zero;
@@ -51,7 +51,6 @@ public class Position {
         double Roll = pitchYawRoll.Z;
         double Pitch = pitchYawRoll.Y;
 
-        // Original vector coordinates
         double x = offset.X;//west
         double y = offset.Y;//up
         double z = offset.Z;//north

@@ -94,12 +94,10 @@ public class Article {
 
     public void LoadKeywords() {
         string name = Name;
-        //toshape 
-        if(name.Contains("To")){//TODO Probably issue when having To-Keyword like Torch before To Keyword
-            int toPos = name.IndexOf("To");
+        int toPos = GetToPos(name) ?? -1;
+        if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
-            if (!AutoAlteration.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].IndexOf(k) == 0)) {
-                AutoAlteration.shapeKeywords.ToList().ForEach(k => {
+            AutoAlteration.shapeKeywords.ToList().ForEach(k => {
                     if (ToString.Contains(k)) {
                         ToShapes.Add(k);
                         ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
@@ -107,7 +105,6 @@ public class Article {
                 });
                 Keywords.Add("To");
                 name = name[..toPos] + ToString;
-            };
         }
         
         //Keywords
@@ -127,13 +124,23 @@ public class Article {
         
         CheckFullNameCoverage();
     }
+
+    public int? GetToPos(string name) {
+        if(name.Contains("To")){
+            int toPos = name.IndexOf("To");
+            if (AutoAlteration.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
+                return GetToPos(name[(toPos + 2)..]) + toPos + 2;
+            } else {
+                return toPos;
+            }
+        }else {
+            return null;
+        }
+    }
     
     private void CheckFullNameCoverage() {
-        int nameLength = Name.Length;
         int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length);
-        if (nameLength == keywordLength) {
-            // Console.WriteLine($"Name {Name} is fully covered by keywords: " + KeywordString());
-        } else {
+        if (Name.Length != keywordLength) {
             Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }

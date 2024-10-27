@@ -201,11 +201,11 @@ public class Map
   }
   private void PlaceTypeItem(Block block){
     CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
-    item.SnappedOnItem = block.SnappedOnItem;
-    item.SnappedOnBlock = block.SnappedOnBlock;
-    item.PlacedOnItem = block.PlacedOnItem;
-    item.PivotPosition = block.PivotPosition;
-    item.BlockUnitCoord = block.BlockUnitCoord;
+    // item.SnappedOnItem = block.SnappedOnItem;
+    // item.SnappedOnBlock = block.SnappedOnBlock;
+    // item.PlacedOnItem = block.PlacedOnItem;
+    // item.PivotPosition = block.PivotPosition;
+    // item.BlockUnitCoord = block.BlockUnitCoord;
     item.Color = block.color;
     item.Scale = 1;
   }

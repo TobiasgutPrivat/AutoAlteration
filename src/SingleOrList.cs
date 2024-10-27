@@ -4,59 +4,28 @@ public class SList<T> : IEnumerable<T>
 {
     private readonly List<T> _items;
 
-    // Property to expose the internal list
     public List<T> Items => _items;
 
-    // Default constructor
-    public SList()
-    {
-        _items = [];
-    }
+    public SList() => _items = [];
 
-    // Constructor accepting a single item
-    public SList(T singleItem)
-    {
-        _items = [singleItem];
-    }
+    public SList(T singleItem) => _items = [singleItem];
 
-    // Constructor accepting multiple items
-    public SList(IEnumerable<T> multipleItems)
-    {
-        _items = new List<T>(multipleItems);
-    }
+    public SList(IEnumerable<T> multipleItems) => _items = new List<T>(multipleItems);
 
-    // Implicit conversion from single item
-    public static implicit operator SList<T>(T singleItem)
-    {
-        return new SList<T>(singleItem);
-    }
+    public static implicit operator SList<T>(T singleItem) =>
+        new(singleItem);
 
-    // Implicit conversion from list
-    public static implicit operator SList<T>(List<T> multipleItems)
-    {
-        return new SList<T>(multipleItems);
-    }
+    public static implicit operator SList<T>(List<T> multipleItems) =>
+        new(multipleItems);
 
-    // Implicit conversion to List<T>
-    public static implicit operator List<T>(SList<T> singleOrList)
-    {
-        return singleOrList.Items;
-    }
+    public static implicit operator List<T>(SList<T> singleOrList) =>
+        singleOrList.Items;
 
-    // Add method to support collection initializer syntax
-    public void Add(T item)
-    {
-        _items.Add(item);
-    }
+    public void Add(T item) => _items.Add(item);
 
-    // Implement IEnumerable<T> to allow enumeration
-    public IEnumerator<T> GetEnumerator()
-    {
-        return _items.GetEnumerator();
-    }
+    public IEnumerator<T> GetEnumerator() =>
+        _items.GetEnumerator();
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return _items.GetEnumerator();
-    }
+    IEnumerator IEnumerable.GetEnumerator() =>
+        _items.GetEnumerator();
 }

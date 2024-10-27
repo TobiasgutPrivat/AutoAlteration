@@ -9,10 +9,6 @@ public abstract class Alteration: PosUtils {
 
     public static Inventory inventory = new();
     
-    // public static Inventory Type(BlockType blockType) => inventory.Type(blockType);
-    // public static Inventory All(SList<string> keywords) => inventory.All(keywords);
-    // public static Inventory Any(SList<string> keywords) => inventory.Any(keywords);
-
     public static Inventory ImportVanillaInventory(string path){
         string json = File.ReadAllText(path);
 
@@ -28,7 +24,6 @@ public abstract class Alteration: PosUtils {
     }
 
     public static string BlockDataCorrections(string json){
-        //correcting the names in Blockdata.json
         json = json.Replace("PlatformGrassSlope2UTop", "PlatformGrasssSlope2UTop");
         json = json.Replace("PlatForm", "Platform");
         json = json.Replace("ShowFogger8M", "ShowFogger8m");
@@ -51,7 +46,6 @@ public abstract class Alteration: PosUtils {
     }
 
     public static void DefaultInventoryChanges(){
-        //Generally applied changes to inventory, does effect Keyword-indexing behaviour
         inventory.Select(BlockType.Block).Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
         inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
         inventory.Select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").EditOriginal().RemoveKeyword("Start").AddKeyword("MapStart");
@@ -61,8 +55,5 @@ public abstract class Alteration: PosUtils {
         inventory.RemoveArticles(inventory.Select("v2").RemoveKeyword("v2").Align());
         inventory.Select("v2").EditOriginal().RemoveKeyword("v2");
         inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
-        //TODO solve using toKeywords + remove selectstring
-        // inventory.SelectString("RoadIceDiagLeftToRoadIceWithWallDiagRight").EditOriginal().RemoveKeyword("DiagRight").AddKeyword("ToDiagRight");
-        // inventory.SelectString("RoadIceDiagRightToRoadIceWithWallDiagLeft").EditOriginal().RemoveKeyword("DiagLeft").AddKeyword("ToDiagLeft");
     }
 }

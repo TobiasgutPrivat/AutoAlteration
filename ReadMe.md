@@ -1,7 +1,10 @@
 <!--
-TODO for Performance
-make class Map able to hold multiple maps at ones and make functions apply on all !!not compatible with changing inventory per map
-improve general inventory concept /or/ read keywordstring on inventory level and maybe improve align algorythm
+TODO 
+Performance: improve KeywordFilter, Alignment 
+Translate PivotPosition to Postion
+integrate already embedded Blocks
+Mark which Alterations differ from Altered Nadeo
+Issue with Altering Blocks, not placeable
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.

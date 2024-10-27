@@ -5,49 +5,22 @@ public class KeywordEdit {
         this.articles = articles;
     }
 
-    public KeywordEdit AddKeyword(string keyword) {
-        // if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
-        //     articles.ForEach(a => a.Surfaces.Add(keyword));
-        // } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
-        //     articles.ForEach(a => a.Shapes.Add(keyword));
-        if (AutoAlteration.Keywords.Contains(keyword)) {
-            articles.ForEach(a => a.Keywords.Add(keyword));
-        } else {
-            Console.WriteLine("Keyword not found: " + keyword);
-        }
-        return this;
-    }
-
-    public KeywordEdit AddKeyword(List<string> keywords) {
-        keywords.ToList().ForEach(a => AddKeyword(a));
+    public KeywordEdit AddKeyword(SList<string> keywords) {
+        articles.ForEach(a => keywords.ToList().ForEach(k => a.Keywords.Add(k)));
         return this;
     }
     
-    public KeywordEdit RemoveKeyword(string keyword) {
-        // if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
-        //     articles.ForEach(a => a.Surfaces.Remove(keyword));
-        // } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
-        //     articles.ForEach(a => a.Shapes.Remove(keyword));
-        if (AutoAlteration.Keywords.Contains(keyword)) {
-            articles.ForEach(a => a.Keywords.Remove(keyword));
-        } else {
-            Console.WriteLine("Keyword not found: " + keyword);
-        }
-        return this;
-    }
-
-    public KeywordEdit RemoveKeyword(List<string> keywords) {
+    public KeywordEdit RemoveKeyword(SList<string> keywords) {
         articles.ForEach(a => keywords.ToList().ForEach(k => a.Keywords.Remove(k)));
-        keywords.ToList().ForEach(k => RemoveKeyword(k));//TODO Fix loop
         return this;
     }
 
-    public KeywordEdit AddToShape(List<string> toShape) {
-        articles.ForEach(a => toShape.ForEach(s => a.ToShapes.Add(s)));
+    public KeywordEdit AddToShape(SList<string> toShape) {
+        articles.ForEach(a => toShape.ToList().ForEach(s => a.ToShapes.Add(s)));
         return this;
     }
-    public KeywordEdit RemoveToShape(List<string> toShape) {
-        articles.ForEach(a => toShape.ForEach(s => a.ToShapes.Remove(s)));
+    public KeywordEdit RemoveToShape(SList<string> toShape) {
+        articles.ForEach(a => toShape.ToList().ForEach(s => a.ToShapes.Remove(s)));
         return this;
     }
 

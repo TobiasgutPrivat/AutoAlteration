@@ -160,7 +160,7 @@ public class Inventory {
         return new Inventory(result);
     }
 
-    public Article? AlignArticle(Article article) {//TODO make Cache
+    public Article? AlignArticle(Article article) {
         List<Article> matchArticles = articles.Where(a => article.Match(a)).ToList();
         if (matchArticles.Count > 1) {
             Console.WriteLine("More than one found article with keywords: " + article.KeywordString() + "\nFound Articles: " + string.Join(", ", matchArticles.Select(a => a.Name).ToArray()));

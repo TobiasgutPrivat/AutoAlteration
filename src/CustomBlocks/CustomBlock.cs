@@ -9,8 +9,6 @@ public class CustomBlock
   public CGameBlockItem Block;
   public string Name;
   public CGameCommonItemEntityModelEdition Item;
-  // public IList<CPlugCrystal.Layer> Layers;
-  // public CPlugCrystal MeshCrystal;
   public BlockType Type;
   public CustomBlock(string blockPath)
   { 
