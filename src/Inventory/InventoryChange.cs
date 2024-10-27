@@ -4,7 +4,7 @@ public abstract class InventoryChange: PosUtils {
     public abstract void ChangeInventory(Inventory inventory);
 }
 
-public class CustomBlocks(string subFolder) : InventoryChange {
+public class CustomBlockFolder(string subFolder) : InventoryChange {
     readonly string subFolder = subFolder;
 
     public override void ChangeInventory(Inventory inventory) {
@@ -17,16 +17,25 @@ public class CustomBlocks(string subFolder) : InventoryChange {
 
 public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : InventoryChange {
     readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
+    readonly string FolderPath = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
 
     public override void ChangeInventory(Inventory inventory) {
         string folder = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
         if (!Directory.Exists(folder)) { 
-            throw new Exception($"Folder {folder} doesn't exist. You will need to generate the Block set '{customBlockAlteration.GetType().Name}'."); 
+            GenerateBlockSet();
         }
         inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
             .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
         inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
             .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+    }
+
+    public void GenerateBlockSet() {
+        Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
+        if (!Directory.Exists(FolderPath)) { 
+            Directory.CreateDirectory(FolderPath); 
+        }
+        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AutoAlteration.CustomBlocksFolder, "Vanilla"), FolderPath, customBlockAlteration.GetType().Name);
     }
 }
 

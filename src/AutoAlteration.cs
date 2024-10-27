@@ -94,14 +94,14 @@ public class AutoAlteration {
         }
     }
 
-    public static void AlterAll(List<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+    public static void AlterAll(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         AlterFolder(alterations,sourceFolder,Path.Combine(destinationFolder, Path.GetFileName(sourceFolder) + " - " + Name),Name);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
             AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
         }
     }
-    public static void AlterAll(List<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+    public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         AlterFolder(alterations,sourceFolder,destinationFolder,Name);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
@@ -170,9 +170,6 @@ public class AutoAlteration {
         }
         return (Alteration) Activator.CreateInstance(alterations.First());
     }
-
-    public static void GenerateBlockSet(CustomBlockAlteration alteration,  string Name) =>
-        AlterAll([alteration],Path.Combine(CustomBlocksFolder,"Vanilla"),Path.Combine(CustomBlockSetsFolder,Name),Name);
 
     public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)
     {

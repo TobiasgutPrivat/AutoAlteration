@@ -5,8 +5,6 @@ AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 AutoAlteration.RunConfig("FileConfig.json");
-// AutoAlteration.RunConfig("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/config/TestTemplateConfig.json");
-// AutoAlteration.GenerateBlockSet(new HeavyDirt(), "HeavyDirt");
 // AutoAlteration.AlterFolder(new SnowScenery(),"SourcePath","DestinationPath","SnowScenery");
 
 //Customblocks -------------

@@ -56,7 +56,7 @@ class DevUtils{
 
     public static void TestInventory(){
         Alteration.CreateInventory();
-        new CustomBlocks("").ChangeInventory(Alteration.inventory);
+        new CustomBlockFolder("").ChangeInventory(Alteration.inventory);
         new NoCPBlocks().ChangeInventory(Alteration.inventory);
         new CheckpointTrigger().ChangeInventory(Alteration.inventory);
         Alteration.inventory.CheckDuplicates();
