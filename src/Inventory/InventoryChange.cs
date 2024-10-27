@@ -8,8 +8,10 @@ public class CustomBlocks(string subFolder) : InventoryChange {
     readonly string subFolder = subFolder;
 
     public override void ChangeInventory(Inventory inventory) {
-        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
-        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Block.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Item.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
     }
 }
 
@@ -17,8 +19,14 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
     readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
 
     public override void ChangeInventory(Inventory inventory) {
-        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name), "*.Block.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
-        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name), "*.Item.Gbx", SearchOption.AllDirectories).Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+        string folder = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
+        if (!Directory.Exists(folder)) { 
+            throw new Exception($"Folder {folder} doesn't exist. You will need to generate the Block set '{customBlockAlteration.GetType().Name}'."); 
+        }
+        inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+        inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
     }
 }
 
