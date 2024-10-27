@@ -103,7 +103,7 @@ public class Inventory {
 
     public Inventory Print() {
         articles.ForEach(article => {
-            Console.WriteLine(article.Name + ": " + string.Join(", ", string.Join(", ", article.Keywords),string.Join(", ", article.Surfaces),string.Join(", ", article.Shapes),string.Join(", ", article.ToShapes)));
+            Console.WriteLine(article.Name + ": " + article.KeywordString());
         });
         return this;
     }

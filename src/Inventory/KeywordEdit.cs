@@ -1,17 +1,16 @@
 public class KeywordEdit {
     public List<Article> articles = [];
 
-    public KeywordEdit() {}
     public KeywordEdit(List<Article> articles) {
         this.articles = articles;
     }
 
     public KeywordEdit AddKeyword(string keyword) {
-        if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
-            articles.ForEach(a => a.Surfaces.Add(keyword));
-        } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
-            articles.ForEach(a => a.Shapes.Add(keyword));
-        } else if (AutoAlteration.Keywords.Contains(keyword)) {
+        // if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
+        //     articles.ForEach(a => a.Surfaces.Add(keyword));
+        // } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
+        //     articles.ForEach(a => a.Shapes.Add(keyword));
+        if (AutoAlteration.Keywords.Contains(keyword)) {
             articles.ForEach(a => a.Keywords.Add(keyword));
         } else {
             Console.WriteLine("Keyword not found: " + keyword);
@@ -25,11 +24,11 @@ public class KeywordEdit {
     }
     
     public KeywordEdit RemoveKeyword(string keyword) {
-        if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
-            articles.ForEach(a => a.Surfaces.Remove(keyword));
-        } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
-            articles.ForEach(a => a.Shapes.Remove(keyword));
-        } else if (AutoAlteration.Keywords.Contains(keyword)) {
+        // if (AutoAlteration.surfaceKeywords.Contains(keyword)) {
+        //     articles.ForEach(a => a.Surfaces.Remove(keyword));
+        // } else if (AutoAlteration.shapeKeywords.Contains(keyword)) {
+        //     articles.ForEach(a => a.Shapes.Remove(keyword));
+        if (AutoAlteration.Keywords.Contains(keyword)) {
             articles.ForEach(a => a.Keywords.Remove(keyword));
         } else {
             Console.WriteLine("Keyword not found: " + keyword);

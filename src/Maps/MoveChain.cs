@@ -104,7 +104,9 @@ public enum MoveType{
     RotateCenter,
 }
 
-public class MoveConstructors{
+public class PosUtils{
+    public const float PI = (float)Math.PI;
+
     public static MoveChain Move(float x, float y, float z) =>
         Move(new Vec3(x,y,z));
 

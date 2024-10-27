@@ -56,15 +56,13 @@ class DevUtils{
 
     public static void TestInventory(){
         Alteration.CreateInventory();
-        Alteration.AddCustomBlocks("");
-        Alteration.AddNoCPBlocks();
-        Alteration.AddCheckpointTrigger();
+        new CustomBlocks("").ChangeInventory(Alteration.inventory);
+        new NoCPBlocks().ChangeInventory(Alteration.inventory);
+        new CheckpointTrigger().ChangeInventory(Alteration.inventory);
         Alteration.inventory.CheckDuplicates();
         Alteration.inventory.articles.ForEach(x => {
             if (x.Keywords.Any(y => y == "")){Console.WriteLine("Empty Keyword found in " + x.Name);}
-            if (x.Shapes.Any(y => y == "")){Console.WriteLine("Empty Shape found in " + x.Name);}
             if (x.ToShapes.Any(y => y == "")){Console.WriteLine("Empty ToShape found in " + x.Name);}
-            if (x.Surfaces.Any(y => y == "")){Console.WriteLine("Empty Surface found in " + x.Name);}
         });
     }
 }
