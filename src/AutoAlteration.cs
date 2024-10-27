@@ -12,7 +12,6 @@ public class AutoAlteration {
     public static string CustomBlockSetsFolder = "";
     public static List<string> Keywords = [];
     public static List<string> shapeKeywords = [];
-    public static List<string> surfaceKeywords = [];
     public static List<string> customBlockAltNames = [];
 
     public static void Load() {
@@ -24,7 +23,6 @@ public class AutoAlteration {
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
         CustomBlockSetsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
         shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt")).ToList();
-        surfaceKeywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","surfaceKeywords.txt")).ToList();
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
         customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
     }

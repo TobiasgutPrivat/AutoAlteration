@@ -17,6 +17,8 @@ ZoneCenter
 TrackWall
 ZoneRight
 RoadWater
+DiagRight
+DiagLeft
 RoadBump
 SnowRoad
 RoadDirt

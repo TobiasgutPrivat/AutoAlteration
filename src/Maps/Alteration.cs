@@ -8,6 +8,10 @@ public abstract class Alteration: PosUtils {
     public virtual List<InventoryChange> InventoryChanges { get; } = [];
 
     public static Inventory inventory = new();
+    
+    // public static Inventory Type(BlockType blockType) => inventory.Type(blockType);
+    // public static Inventory All(SList<string> keywords) => inventory.All(keywords);
+    // public static Inventory Any(SList<string> keywords) => inventory.Any(keywords);
 
     public static Inventory ImportVanillaInventory(string path){
         string json = File.ReadAllText(path);
@@ -57,7 +61,8 @@ public abstract class Alteration: PosUtils {
         inventory.RemoveArticles(inventory.Select("v2").RemoveKeyword("v2").Align());
         inventory.Select("v2").EditOriginal().RemoveKeyword("v2");
         inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
-        inventory.SelectString("RoadIceDiagLeftToRoadIceWithWallDiagRight").EditOriginal().RemoveKeyword("DiagRight").AddKeyword("ToDiagRight");
-        inventory.SelectString("RoadIceDiagRightToRoadIceWithWallDiagLeft").EditOriginal().RemoveKeyword("DiagLeft").AddKeyword("ToDiagLeft");
+        //TODO solve using toKeywords + remove selectstring
+        // inventory.SelectString("RoadIceDiagLeftToRoadIceWithWallDiagRight").EditOriginal().RemoveKeyword("DiagRight").AddKeyword("ToDiagRight");
+        // inventory.SelectString("RoadIceDiagRightToRoadIceWithWallDiagLeft").EditOriginal().RemoveKeyword("DiagLeft").AddKeyword("ToDiagLeft");
     }
 }

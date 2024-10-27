@@ -80,7 +80,7 @@ public class Map
   }
   #endregion
 
-  #region staging
+  #region actions
   public void PlaceRelativeWithRandom(Article atBlock, Inventory newInventory,MoveChain ?moveChain = null){
     List<Article> newArticles = newInventory.articles;
     if (newArticles.Count == 0) return;

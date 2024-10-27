@@ -197,7 +197,7 @@ class NoItems: Alteration {
 class RandomBlocks : Alteration{
     public override void Run(Map map){
         Random rand = new();
-        Inventory normals = inventory.Select(BlockType.Block).Add(inventory.Select(BlockType.Item)).Add(inventory.Select(BlockType.CustomBlock)).Add(inventory.Select(BlockType.CustomItem)).Select("!MapStart&!Finish&!Checkpoint&!Multilap");
+        Inventory normals = !inventory.Select(BlockType.Pillar) & inventory.Select("!MapStart&!Finish&!Checkpoint&!Multilap");
         normals.Edit().PlaceRelative(map);
         normals.Edit().PlaceRelative(map);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(rand.Next() % 1536, rand.Next() % 240, rand.Next() % 1536));
@@ -289,7 +289,7 @@ class YeetMaxUp: Alteration {
 class RandomHoles: Alteration {
     public override void Run(Map map){
         Random rand = new();
-        Inventory normals = inventory.Select(BlockType.Block).Add(inventory.Select(BlockType.Item)).Add(inventory.Select(BlockType.CustomBlock)).Add(inventory.Select(BlockType.CustomItem)).Select("!MapStart&!Finish&!Checkpoint&!Multilap");
+        Inventory normals = !(inventory.Select(BlockType.Pillar)).Select("!MapStart&!Finish&!Checkpoint&!Multilap");
         normals.Edit().Replace(map);
         map.stagedBlocks = map.stagedBlocks.Where(x => !(rand.Next() % 10 == 0)).ToList();
         map.PlaceStagedBlocks();

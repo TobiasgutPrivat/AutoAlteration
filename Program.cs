@@ -4,7 +4,7 @@ AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @".
 AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-AutoAlteration.RunConfig("FileConfig.json");
+AutoAlteration.RunConfig("CampaignConfig.json");
 // AutoAlteration.AlterFolder(new SnowScenery(),"SourcePath","DestinationPath","SnowScenery");
 
 //Customblocks -------------
