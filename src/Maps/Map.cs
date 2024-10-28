@@ -18,10 +18,16 @@ public class Map
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
+    
+    FlattenEmbedings();
     embeddedBlocks = GetEmbeddedBlocks();
-    Alteration.inventory.AddArticles(embeddedBlocks.Select(x => 
-      new Article(x,x.Contains(".Item.Gbx") ? BlockType.CustomItem : BlockType.CustomBlock,"",true)
-    ).ToList());
+    Alteration.inventory.AddArticles(embeddedBlocks.Select(x => {
+      if (x.Contains(".Item.Gbx")){
+        return new Article(x.Split('\\').Last()[..^9], BlockType.CustomItem,"",true);
+      } else{
+        return new Article(x.Split('\\').Last()[..^10], BlockType.CustomBlock,"",true);
+      }
+    }).ToList());
   }
 
   public void Save(string path)
@@ -65,6 +71,13 @@ public class Map
   #endregion
 
   #region embedding
+  private void FlattenEmbedings(){
+    //TODO make names format (Type/Name.Block/Item.Gbx)
+    // map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
+    // {
+    //   zipArchive.Entries.ToList().ForEach(x => x.Name = Path.GetFileName(x.Name));
+    // });
+  }
   private void EmbedBlock(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
@@ -206,6 +219,7 @@ public class Map
             EmbedItem(block.name,block.Path);
             embeddedBlocks.Add(block.name);
           }
+          block.name += ".Item.Gbx";
           PlaceTypeItem(block);
           break;
       }
@@ -223,7 +237,7 @@ public class Map
     newBlock.Bit21 = block.IsAir;
   }
   private void PlaceTypeItem(Block block){
-    CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name + ".Item.Gbx", new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
+    CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
     // item.SnappedOnItem = block.SnappedOnItem;
     // item.SnappedOnBlock = block.SnappedOnBlock;
     // item.PlacedOnItem = block.PlacedOnItem;
