@@ -172,12 +172,8 @@ public class Inventory {
     }
 
     #region Edit
-    public Inventory AddArticles(List<Article> newArticles) {
+    public Inventory AddArticles(SList<Article> newArticles) {
         articles.AddRange(newArticles);
-        return this;
-    }
-    public Inventory AddArticles(Article newArticle) {
-        articles.Add(newArticle);
         return this;
     }
     public Inventory AddArticles(KeywordEdit inventory) =>
@@ -206,6 +202,10 @@ public class Inventory {
         articles.ForEach(x => x.cacheFilter.Clear());
         return new KeywordEdit(articles);
     }
+
+    public void ClearSpecific() =>
+        articles = articles.Where(a => !a.MapSpecific).ToList();
+        
     #endregion
     
     #region Development

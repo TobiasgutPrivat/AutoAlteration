@@ -1,25 +1,25 @@
 using GBX.NET;
 
 public abstract class InventoryChange: PosUtils {
-    public abstract void ChangeInventory(Inventory inventory);
+    public abstract void ChangeInventory(Inventory inventory, bool mapSpecific = false);
 }
 
 public class CustomBlockFolder(string subFolder) : InventoryChange {
-    readonly string subFolder = subFolder;
+    public readonly string subFolder = subFolder;
 
-    public override void ChangeInventory(Inventory inventory) {
+    public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Block.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x, mapSpecific)).ToList());
         inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Item.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x, mapSpecific)).ToList());
     }
 }
 
 public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : InventoryChange {
-    readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
-    readonly string FolderPath = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
+    public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
+    public readonly string FolderPath = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
 
-    public override void ChangeInventory(Inventory inventory) {
+    public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         string folder = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
         if (!Directory.Exists(folder)) { 
             GenerateBlockSet();
@@ -40,7 +40,7 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
 }
 
 public class NoCPBlocks: InventoryChange {
-    public override void ChangeInventory(Inventory inventory) {
+    public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         Inventory tempInventory = new();
         tempInventory.AddArticles(inventory.Select(BlockType.Item).Select("Center&(Checkpoint|Multilap|MapStart)").RemoveKeyword("Center"));
         AddRoadNoCPBlocks(tempInventory,"Tech");
@@ -87,7 +87,7 @@ public class NoCPBlocks: InventoryChange {
     }
 }
 public class CheckpointTrigger: InventoryChange {
-    public override void ChangeInventory(Inventory inventory) {
+    public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         Vec3 midPlatform = new(16,2,16);
         CreateTriggerArticle(inventory,"!Wall&!Slope2&!Slope&!Tilt&!DiagRight&!DiagLeft&!RoadIce", midPlatform,Vec3.Zero);
         CreateTriggerArticle(inventory,"!WithWall&!RoadIce&DiagRight",new Vec3(48f,2,32f),new Vec3(PI * -0.148f,0f,0));

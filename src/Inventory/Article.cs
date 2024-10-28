@@ -10,6 +10,7 @@ public class Article {
     public string Path = "";
     public bool DefaultRotation;
     public bool Theme;
+    public bool MapSpecific = false;
 
     public static char[] systemCharacters = ['&', '|', '!', '(', ')'];
 
@@ -25,11 +26,6 @@ public class Article {
         Width = width;
     }
     
-    public Article(string name,BlockType type){
-        Name = name;
-        LoadKeywords();
-        Type = type;
-    }
     public Article(int Height, int Width, int Length, string type, string Name, bool Theme, bool DefaultRotation){
         this.Name = Name;
         LoadKeywords();
@@ -51,7 +47,7 @@ public class Article {
         this.Theme = Theme;
     }
 
-    public Article(string name,BlockType type, string Path){
+    public Article(string name,BlockType type, string Path, bool mapSpecific = false){
         Name = name;
         this.Path = Path;
         LoadKeywords();
@@ -64,6 +60,7 @@ public class Article {
             Length = vanillaVersion.First().Length;
             Height = vanillaVersion.First().Height;
         }
+        MapSpecific = mapSpecific;
     }
 
     public Article CloneArticle() =>

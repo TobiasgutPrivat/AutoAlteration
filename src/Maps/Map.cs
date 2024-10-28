@@ -18,10 +18,15 @@ public class Map
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
+    embeddedBlocks = GetEmbeddedBlocks();
+    Alteration.inventory.AddArticles(embeddedBlocks.Select(x => 
+      new Article(x,x.Contains(".Item.Gbx") ? BlockType.CustomItem : BlockType.CustomBlock,"",true)
+    ).ToList());
   }
 
   public void Save(string path)
   { 
+    Alteration.inventory.ClearSpecific();
     NewMapUid();
     RemoveAuthor();
     map.RemovePassword();
@@ -77,6 +82,24 @@ public class Map
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
+  }
+
+  private List<string> GetEmbeddedBlocks(){
+    ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
+    return zipArchive.Entries.Select(x => x.Name).ToList();
+  }
+
+  private void ExtractEmbeddedBlocks(string Path){
+    ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
+    zipArchive.Entries.ToList().ForEach(x => x.ExtractToFile(Path + "\\" + x.Name));
+  }
+
+  public  void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
+    string TempFolder = Path.Join(AutoAlteration.CustomBlocksFolder,"Temp");
+    string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetType().Name);
+    ExtractEmbeddedBlocks(TempFolder);
+    AutoAlteration.AlterFolder(customBlockAlteration,TempFolder,CustomFolder,customBlockAlteration.GetType().Name);
+    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetType().Name).ChangeInventory(Alteration.inventory,true);
   }
   #endregion
 

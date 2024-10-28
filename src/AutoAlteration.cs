@@ -4,7 +4,7 @@ using GBX.NET.Engines.Plug;
 
 public class AutoAlteration {
     public static int mapCount = 0;
-    private static Alteration ?lastAlteration;
+    private static List<Alteration> ?lastAlterations;
     public static string devPath = "";
     public static bool devMode = false;
     public static string DataFolder = "";
@@ -28,20 +28,32 @@ public class AutoAlteration {
     }
 
     public static void Alter(List<Alteration> alterations, Map map) {
-        foreach (Alteration alteration in alterations) {
-            if (lastAlteration == null || (alteration.GetType() != lastAlteration.GetType())) {
+        alterations
+            .SelectMany(alteration => alteration.InventoryChanges)
+            .Where(change => change is CustomBlockSet)
+            .Cast<CustomBlockSet>()
+            .ToList()
+            .ForEach(x => map.GenerateCustomBlocks(x.customBlockAlteration));
+
+        if (lastAlterations == null || alterations.Any(a => lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
+            // needs Inventory recreation
+            foreach (Alteration alteration in alterations) {
                 Alteration.CreateInventory();
                 alteration.InventoryChanges.ForEach(x => x.ChangeInventory(Alteration.inventory));
                 Alteration.DefaultInventoryChanges();
-                if (devMode){
-                    Alteration.inventory.Export(alteration.GetType().Name);
-                }
             }
-            alteration.Run(map);
-            lastAlteration = alteration;
+            if (devMode){
+                Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
+            }
         }
+
+        foreach (Alteration alteration in alterations) {
+            alteration.Run(map);
+        }
+        lastAlterations = alterations;
         mapCount++;
     }
+    
     public static bool Alter(List<CustomBlockAlteration> alterations, CustomBlock customBlock) {
         bool changed = false;
         foreach (CustomBlockAlteration alteration in alterations) {
@@ -78,12 +90,12 @@ public class AutoAlteration {
         return changed;
     }
 
-    public static void AlterFolder(List<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+    public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
             AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
         }
     }
-    public static void AlterFolder(List<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+    public static void AlterFolder(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.item.gbx", SearchOption.TopDirectoryOnly)){
             AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name);
         }
@@ -107,14 +119,14 @@ public class AutoAlteration {
         }
     }
     
-    public static void AlterFile(List<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
+    public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
         Map map = new(sourceFile);
         Alter(alterations, map);
         map.map.MapName = map.map.MapName + " " + Name;
         map.Save(destinationFile);
         Console.WriteLine(destinationFile);
     }
-    public static void AlterFile(List<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name) {
+    public static void AlterFile(SList<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name) {
         CustomBlock customBlock;
         try {
             customBlock = new(sourceFile);
