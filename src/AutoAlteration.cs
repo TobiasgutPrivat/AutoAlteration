@@ -27,6 +27,7 @@ public class AutoAlteration {
         customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
     }
 
+    #region Altering Logic
     public static void Alter(List<Alteration> alterations, Map map) {
         alterations
             .SelectMany(alteration => alteration.InventoryChanges)
@@ -89,7 +90,9 @@ public class AutoAlteration {
         });
         return changed;
     }
+    #endregion
 
+    #region Alter Functions
     public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
             AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
@@ -153,7 +156,9 @@ public class AutoAlteration {
             return "";
         }
     }
+    #endregion
 
+    #region ConfigScript
     public static void RunConfig(string filePath){
         if (!filePath.Contains(':')){
             filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","config", filePath);
@@ -242,6 +247,7 @@ public class AutoAlteration {
         }       
         return "";     
     }
+    #endregion
 
     public static List<Alteration> GetImplementedAlterations() {
         return [

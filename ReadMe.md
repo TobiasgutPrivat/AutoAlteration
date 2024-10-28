@@ -3,6 +3,7 @@ TODO
 Performance: improve KeywordFilter, Alignment 
 Translate PivotPosition to Postion
 integrate already embedded Blocks
+think about case sensitivity in Inventory
 Mark which Alterations differ from Altered Nadeo
 Issue with Altering Blocks, not placeable
 -->
