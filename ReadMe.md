@@ -1,11 +1,14 @@
 <!--
 TODO 
-Performance: improve KeywordFilter, Alignment 
-Translate PivotPosition to Postion
 integrate already embedded Blocks
-think about case sensitivity in Inventory
+Translate PivotPosition to Postion (maybe solved)
 Mark which Alterations differ from Altered Nadeo
 Issue with Altering Blocks, not placeable
+Opt.:
+Performance: improve KeywordFilter, Alignment 
+Think about Multiple finishes for reverse/combined etc.
+Multi Map Alterations (Combined,Repeat/Multilap)
+apply on Nation Converter (check with BigBang)
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
