@@ -1,10 +1,14 @@
-﻿//Initial load
+﻿using Newtonsoft.Json;
+//Initial load
+
 AutoAlteration.devMode = true;
 AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","dev");
 AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 AutoAlteration.RunConfig("CampaignConfig.json");
+// AutoAlteration.RunConfig("FileConfig.json");
+// File.WriteAllText(Path.Combine(AutoAlteration.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
 // AutoAlteration.AlterFolder(new SnowScenery(),"SourcePath","DestinationPath","SnowScenery");
 
 //Customblocks -------------

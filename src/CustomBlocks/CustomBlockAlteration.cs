@@ -29,6 +29,19 @@ public class CustomBlockAlteration {
         }
         return changed;
     }
+
+    public static string GetMaterialLink(CPlugCrystal.Face face) =>
+        face.Material?.MaterialUserInst?.Link ?? "";
+    public static string GetMaterialLink(CPlugCrystal.Material face) =>
+        face.MaterialUserInst?.Link ?? "";
+    public static CPlugSurface.MaterialId GetMaterialSurfacePhysicId(CPlugCrystal.Face face) =>
+        face.Material?.MaterialUserInst?.SurfacePhysicId ?? new CPlugSurface.MaterialId();
+    public static CPlugSurface.MaterialId GetMaterialSurfacePhysicId(CPlugCrystal.Material face) =>
+        face.MaterialUserInst?.SurfacePhysicId ?? new CPlugSurface.MaterialId();
+    public static CPlugMaterialUserInst GetMaterialUserInst(CPlugCrystal.Face face) =>
+        face.Material?.MaterialUserInst ?? new CPlugMaterialUserInst();
+    public static CPlugMaterialUserInst GetMaterialUserInst(CPlugCrystal.Material face) =>
+        face.MaterialUserInst ?? new CPlugMaterialUserInst();
 }
 
 
@@ -40,32 +53,32 @@ class MaterialInfo : CustomBlockAlteration {
     public override bool Run(CustomBlock customBlock) {
         if (customBlock.Type == BlockType.Block) {
             customBlock.Block.CustomizedVariants[0].Crystal.Materials.ToList().ForEach(x => {
-                if (!materials.ContainsKey(x.MaterialUserInst.Link)) {
-                    materials.Add(x.MaterialUserInst.Link,x.MaterialUserInst.SurfacePhysicId);
-                    Console.WriteLine(x.MaterialUserInst.Link);
+                if (!materials.ContainsKey(GetMaterialLink(x))) {
+                    materials.Add(GetMaterialLink(x),GetMaterialUserInst(x).SurfacePhysicId);
+                    Console.WriteLine(GetMaterialLink(x));
                 }
-                if (!SurfacePhysicIds.ContainsKey(x.MaterialUserInst.SurfacePhysicId)) {
-                    SurfacePhysicIds.Add(x.MaterialUserInst.SurfacePhysicId,x.MaterialUserInst.Link);
-                    Console.WriteLine(x.MaterialUserInst.SurfacePhysicId);
+                if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(x).SurfacePhysicId)) {
+                    SurfacePhysicIds.Add(GetMaterialUserInst(x).SurfacePhysicId,GetMaterialLink(x));
+                    Console.WriteLine(GetMaterialUserInst(x).SurfacePhysicId);
                 }
-                if (!SurfaceGameplayIds.ContainsKey(x.MaterialUserInst.SurfaceGameplayId)) {
-                    SurfaceGameplayIds.Add(x.MaterialUserInst.SurfaceGameplayId,x.MaterialUserInst.Link);
-                    Console.WriteLine(x.MaterialUserInst.SurfaceGameplayId);
+                if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(x).SurfaceGameplayId)) {
+                    SurfaceGameplayIds.Add(GetMaterialUserInst(x).SurfaceGameplayId,GetMaterialLink(x));
+                    Console.WriteLine(GetMaterialUserInst(x).SurfaceGameplayId);
                 }
             });
         } else {
             customBlock.Item.MeshCrystal.Materials.ToList().ForEach(x => {
-                if (!materials.ContainsKey(x.MaterialUserInst.Link)) {
-                    materials.Add(x.MaterialUserInst.Link,x.MaterialUserInst.SurfacePhysicId);
-                    Console.WriteLine(x.MaterialUserInst.Link);
+                if (!materials.ContainsKey(GetMaterialLink(x))) {
+                    materials.Add(GetMaterialLink(x),GetMaterialUserInst(x).SurfacePhysicId);
+                    Console.WriteLine(GetMaterialLink(x));
                 }
-                if (!SurfacePhysicIds.ContainsKey(x.MaterialUserInst.SurfacePhysicId)) {
-                    SurfacePhysicIds.Add(x.MaterialUserInst.SurfacePhysicId,x.MaterialUserInst.Link);
-                    Console.WriteLine(x.MaterialUserInst.SurfacePhysicId);
+                if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(x).SurfacePhysicId)) {
+                    SurfacePhysicIds.Add(GetMaterialUserInst(x).SurfacePhysicId,GetMaterialLink(x));
+                    Console.WriteLine(GetMaterialUserInst(x).SurfacePhysicId);
                 }
-                if (!SurfaceGameplayIds.ContainsKey(x.MaterialUserInst.SurfaceGameplayId)) {
-                    SurfaceGameplayIds.Add(x.MaterialUserInst.SurfaceGameplayId,x.MaterialUserInst.Link);
-                    Console.WriteLine(x.MaterialUserInst.SurfaceGameplayId);
+                if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(x).SurfaceGameplayId)) {
+                    SurfaceGameplayIds.Add(GetMaterialUserInst(x).SurfaceGameplayId,GetMaterialLink(x));
+                    Console.WriteLine(GetMaterialUserInst(x).SurfaceGameplayId);
                 }
             });
         }
@@ -74,17 +87,17 @@ class MaterialInfo : CustomBlockAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer)
     {
         layer.Crystal.Faces.ToList().ForEach(x => {
-            if (!materials.ContainsKey(x.Material.MaterialUserInst.Link)) {
-                materials.Add(x.Material.MaterialUserInst.Link,x.Material.MaterialUserInst.SurfacePhysicId);
-                Console.WriteLine(x.Material.MaterialUserInst.Link);
+            if (!materials.ContainsKey(GetMaterialLink(x))) {
+                materials.Add(GetMaterialLink(x),GetMaterialUserInst(x).SurfacePhysicId);
+                Console.WriteLine(GetMaterialLink(x));
             }
-            if (!SurfacePhysicIds.ContainsKey(x.Material.MaterialUserInst.SurfacePhysicId)) {
-                SurfacePhysicIds.Add(x.Material.MaterialUserInst.SurfacePhysicId,x.Material.MaterialUserInst.Link);
-                Console.WriteLine(x.Material.MaterialUserInst.SurfacePhysicId);
+            if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(x).SurfacePhysicId)) {
+                SurfacePhysicIds.Add(GetMaterialUserInst(x).SurfacePhysicId,GetMaterialLink(x));
+                Console.WriteLine(GetMaterialUserInst(x).SurfacePhysicId);
             }
-            if (!SurfaceGameplayIds.ContainsKey(x.Material.MaterialUserInst.SurfaceGameplayId)) {
-                SurfaceGameplayIds.Add(x.Material.MaterialUserInst.SurfaceGameplayId,x.Material.MaterialUserInst.Link);
-                Console.WriteLine(x.Material.MaterialUserInst.SurfaceGameplayId);
+            if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(x).SurfaceGameplayId)) {
+                SurfaceGameplayIds.Add(GetMaterialUserInst(x).SurfaceGameplayId,GetMaterialLink(x));
+                Console.WriteLine(GetMaterialUserInst(x).SurfaceGameplayId);
             }
         });
         return false;

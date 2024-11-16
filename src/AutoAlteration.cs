@@ -29,13 +29,30 @@ public class AutoAlteration {
 
     #region Altering Logic
     public static void Alter(List<Alteration> alterations, Map map) {
+        //cleanup
+        if (Directory.Exists(Path.Join(CustomBlocksFolder,"Temp"))){
+            Directory.Delete(Path.Join(CustomBlocksFolder,"Temp"),true);
+        }
+        Alteration.inventory.ClearSpecific();
+
+        //Map specific custom blocks
+        Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => {
+            if (x.Contains(".Item.Gbx")){
+                return new Article(x.Split('\\').Last()[..^9], BlockType.CustomItem,"",true);
+            } else if (x.Contains(".Block.Gbx")){
+                return new Article(x.Split('\\').Last()[..^10], BlockType.CustomBlock,"",true);
+            } else {
+                throw new Exception("Unknown file type: " + x);
+            }
+        }).ToList());
+
         alterations
             .SelectMany(alteration => alteration.InventoryChanges)
             .Where(change => change is CustomBlockSet)
-            .Cast<CustomBlockSet>()
-            .ToList()
-            .ForEach(x => map.GenerateCustomBlocks(x.customBlockAlteration));
+            .Cast<CustomBlockSet>().ToList().ForEach(
+                x => map.GenerateCustomBlocks(x.customBlockAlteration)); //includes updating inventory
 
+        //create inventory for Alteration
         if (lastAlterations == null || alterations.Any(a => lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
             // needs Inventory recreation
             foreach (Alteration alteration in alterations) {
@@ -48,9 +65,11 @@ public class AutoAlteration {
             }
         }
 
+        //alteration
         foreach (Alteration alteration in alterations) {
             alteration.Run(map);
         }
+
         lastAlterations = alterations;
         mapCount++;
     }

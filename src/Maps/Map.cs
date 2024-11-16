@@ -21,18 +21,10 @@ public class Map
     
     FlattenEmbedings();
     embeddedBlocks = GetEmbeddedBlocks();
-    Alteration.inventory.AddArticles(embeddedBlocks.Select(x => {
-      if (x.Contains(".Item.Gbx")){
-        return new Article(x.Split('\\').Last()[..^9], BlockType.CustomItem,"",true);
-      } else{
-        return new Article(x.Split('\\').Last()[..^10], BlockType.CustomBlock,"",true);
-      }
-    }).ToList());
   }
 
   public void Save(string path)
   { 
-    Alteration.inventory.ClearSpecific();
     NewMapUid();
     RemoveAuthor();
     map.RemovePassword();
@@ -97,9 +89,9 @@ public class Map
     });
   }
 
-  private List<string> GetEmbeddedBlocks(){
+  public List<string> GetEmbeddedBlocks(){
     ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
-    return zipArchive.Entries.Select(x => x.Name).ToList();
+    return zipArchive.Entries.Select(x => x.Name).Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx")).ToList();
   }
 
   private void ExtractEmbeddedBlocks(string Path){
@@ -107,9 +99,11 @@ public class Map
     zipArchive.Entries.ToList().ForEach(x => x.ExtractToFile(Path + "\\" + x.Name));
   }
 
-  public  void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
+  public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
     string TempFolder = Path.Join(AutoAlteration.CustomBlocksFolder,"Temp");
     string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetType().Name);
+    if (!Directory.Exists(TempFolder)) { Directory.CreateDirectory(TempFolder); }
+    if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
     ExtractEmbeddedBlocks(TempFolder);
     AutoAlteration.AlterFolder(customBlockAlteration,TempFolder,CustomFolder,customBlockAlteration.GetType().Name);
     new CustomBlockFolder("Temp\\" + customBlockAlteration.GetType().Name).ChangeInventory(Alteration.inventory,true);
