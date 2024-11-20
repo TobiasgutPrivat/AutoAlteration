@@ -4,6 +4,7 @@ integrate already embedded Blocks
 Translate PivotPosition to Postion (maybe solved)
 Mark which Alterations differ from Altered Nadeo
 Issue with Altering Blocks, not placeable
+Some solution for Keyword Order, to not interfere
 Opt.:
 Performance: improve KeywordFilter, Alignment 
 Think about Multiple finishes for reverse/combined etc.

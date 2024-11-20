@@ -35,7 +35,7 @@ public class CustomBlockAlteration {
     public static string GetMaterialLink(CPlugCrystal.Material face) =>
         face.MaterialUserInst?.Link ?? "";
     public static CPlugSurface.MaterialId GetMaterialSurfacePhysicId(CPlugCrystal.Face face) =>
-        face.Material?.MaterialUserInst?.SurfacePhysicId ?? new CPlugSurface.MaterialId();
+        face.Material?.MaterialUserInst?.SurfacePhysicId ?? CPlugSurface.MaterialId.XXX_Null;
     public static CPlugSurface.MaterialId GetMaterialSurfacePhysicId(CPlugCrystal.Material face) =>
         face.MaterialUserInst?.SurfacePhysicId ?? new CPlugSurface.MaterialId();
     public static CPlugMaterialUserInst GetMaterialUserInst(CPlugCrystal.Face face) =>

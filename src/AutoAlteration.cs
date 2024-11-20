@@ -24,7 +24,18 @@ public class AutoAlteration {
         CustomBlockSetsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
         shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt")).ToList();
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
+        Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "Keywords.txt"))).ToList();
+        Keywords = Keywords.OrderBy(x => x.Length).Reverse().ToList();
+        Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","KeywordsStart.txt")).Concat(Keywords).ToList();
+        Keywords = loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "KeywordsStart.txt")).Concat(Keywords).ToList();
         customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
+    }
+
+    private static List<string> loadKeywordsFile(string Path){
+        if (!File.Exists(Path)){
+            File.Create(Path).Close();
+        }
+        return File.ReadAllLines(Path).ToList();
     }
 
     #region Altering Logic
@@ -34,6 +45,19 @@ public class AutoAlteration {
             Directory.Delete(Path.Join(CustomBlocksFolder,"Temp"),true);
         }
         Alteration.inventory.ClearSpecific();
+
+        //create inventory for Alteration
+        if (lastAlterations == null || alterations.Any(a => lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
+            // needs Inventory recreation
+            foreach (Alteration alteration in alterations) {
+                Alteration.CreateInventory();
+                alteration.InventoryChanges.ForEach(x => x.ChangeInventory(Alteration.inventory));
+                Alteration.DefaultInventoryChanges();
+            }
+            if (devMode){
+                Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
+            }
+        }
 
         //Map specific custom blocks
         Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => {
@@ -51,19 +75,6 @@ public class AutoAlteration {
             .Where(change => change is CustomBlockSet)
             .Cast<CustomBlockSet>().ToList().ForEach(
                 x => map.GenerateCustomBlocks(x.customBlockAlteration)); //includes updating inventory
-
-        //create inventory for Alteration
-        if (lastAlterations == null || alterations.Any(a => lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
-            // needs Inventory recreation
-            foreach (Alteration alteration in alterations) {
-                Alteration.CreateInventory();
-                alteration.InventoryChanges.ForEach(x => x.ChangeInventory(Alteration.inventory));
-                Alteration.DefaultInventoryChanges();
-            }
-            if (devMode){
-                Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
-            }
-        }
 
         //alteration
         foreach (Alteration alteration in alterations) {

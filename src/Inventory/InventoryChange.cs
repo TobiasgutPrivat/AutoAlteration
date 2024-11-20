@@ -35,7 +35,7 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
         if (!Directory.Exists(FolderPath)) { 
             Directory.CreateDirectory(FolderPath); 
         }
-        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AutoAlteration.CustomBlocksFolder, "Vanilla"), FolderPath, customBlockAlteration.GetType().Name);
+        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AutoAlteration.CustomBlocksFolder, "Vanilla Items"), FolderPath, customBlockAlteration.GetType().Name);
     }
 }
 

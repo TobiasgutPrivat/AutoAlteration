@@ -70,9 +70,6 @@ public class Article {
         Keywords.Contains(keyword) || ToShapes.Contains(keyword);
 
     public bool Match(Article article) {
-        if (Name == "DecoPlatformDirtSlopeBaseCurve1InFull" && article.Name == "DecoPlatformDirtSlopeBaseCurve1InFullHeavyDirt") {
-            Console.WriteLine("Debug");
-        }
         if (Keywords.Count != article.Keywords.Count || ToShapes.Count != article.ToShapes.Count) {
             return false;
         }

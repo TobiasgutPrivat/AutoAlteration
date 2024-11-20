@@ -2,10 +2,12 @@ using GBX.NET;
 using GBX.NET.Engines.Plug;
 
 class CustomSurfaceAlteration : CustomBlockAlteration {
-    public static SList<CPlugSurface.MaterialId> DrivableMaterials = [CPlugSurface.MaterialId.Tech,CPlugSurface.MaterialId.Dirt, CPlugSurface.MaterialId.Green, CPlugSurface.MaterialId.Ice, CPlugSurface.MaterialId.Plastic, CPlugSurface.MaterialId.Wood];//Top of TrackWall: "Stadium\\Media\\Material\\TrackWallClips"
+    //TODO check if correct SurfaceGameplayIds
+    public static SList<CPlugSurface.MaterialId> DrivableMaterials = [CPlugSurface.MaterialId.Danger,CPlugSurface.MaterialId.Sand, CPlugSurface.MaterialId.RoadSynthetic, CPlugSurface.MaterialId.NoBrakes_Deprecated, CPlugSurface.MaterialId.RoadIce, CPlugSurface.MaterialId.Wood];
+    // public static SList<CPlugSurface.MaterialId> DrivableMaterials = [CPlugSurface.MaterialId.Tech,CPlugSurface.MaterialId.Dirt, CPlugSurface.MaterialId.Green, CPlugSurface.MaterialId.Ice, CPlugSurface.MaterialId.Plastic, CPlugSurface.MaterialId.Wood];
     // public static SList<string> DrivableMaterials = ["Stadium\\Media\\Material\\PlatformTech","Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech","Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech","Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech","Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech","Stadium\\Media\\Material\\RoadBump","Stadium\\Media\\Material\\RoadTech","Stadium\\Media\\Material\\RoadDirt","Stadium\\Media\\Material\\RoadIce","Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic","Stadium\\Media\\Modifier\\PlatformDirt\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformGrass\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformIce\\OpenTechBorders","Stadium\\Media\\Material\\OpenTechBorders","Stadium\\Media\\Material\\ThemeSnowRoad","Stadium\\Media\\Material\\ThemeSnowRoadBorder"];//Top of TrackWall: "Stadium\\Media\\Material\\TrackWallClips"
     public static bool LightSurface(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer, string Surface, string RoadSurface, CPlugSurface.MaterialId SurfacePhysicId){
-        layer.Crystal.Faces = layer.Crystal.Faces.ToList().Where(x => DrivableMaterials.Contains(x.Material.MaterialUserInst.SurfacePhysicId) || (x.Material.MaterialUserInst.SurfaceGameplayId != CPlugMaterialUserInst.GameplayId.None)).ToArray();
+        layer.Crystal.Faces = layer.Crystal.Faces.ToList().ToArray();//.Where(x => DrivableMaterials.Contains(x.Material.MaterialUserInst.SurfacePhysicId) || (x.Material.MaterialUserInst.SurfaceGameplayId != CPlugMaterialUserInst.GameplayId.None))
         if (layer.Crystal.Faces.Length == 0){
             return false;
         }
@@ -36,14 +38,14 @@ class CustomSurfaceAlteration : CustomBlockAlteration {
     }
 
     public static bool HeavySurface(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer, string Surface, string RoadSurface, CPlugSurface.MaterialId SurfacePhysicId){
-        if (customBlock.Name.Contains("Road") && !customBlock.Name.Contains("Open")) {
-            layer.Crystal.Faces.ToList().ForEach(x => {if (DrivableMaterials.Contains(GetMaterialSurfacePhysicId(x))) {
+        if (customBlock.Name.Contains("Road") && !customBlock.Name.Contains("Open")) { //TODO debug if correct SurfaceGameplayIds
+            layer.Crystal.Faces.ToList().ForEach(x => {if (GetMaterialSurfacePhysicId(x) != CPlugSurface.MaterialId.XXX_Null) {//DrivableMaterials.Contains(GetMaterialSurfacePhysicId(x))
                 x.Material.MaterialUserInst.Link = RoadSurface;
                 x.Material.MaterialUserInst.SurfacePhysicId = SurfacePhysicId;
                 }});
             if (layer.Crystal.Faces.ToList().Any(x => GetMaterialLink(x) == RoadSurface)){return true;};
         } else {
-            layer.Crystal.Faces.ToList().ForEach(x => {if (DrivableMaterials.Contains(GetMaterialSurfacePhysicId(x))) {
+            layer.Crystal.Faces.ToList().ForEach(x => {if (GetMaterialSurfacePhysicId(x) != CPlugSurface.MaterialId.XXX_Null) {
                 x.Material.MaterialUserInst.Link = Surface;
                 x.Material.MaterialUserInst.SurfacePhysicId = SurfacePhysicId;
                 }});
