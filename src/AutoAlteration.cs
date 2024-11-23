@@ -11,7 +11,7 @@ public class AutoAlteration {
     public static string CustomBlocksFolder = "";
     public static string CustomBlockSetsFolder = "";
     public static List<string> Keywords = [];
-    public static List<string> shapeKeywords = [];
+    public static List<string> ToKeywords = [];
     public static List<string> customBlockAltNames = [];
 
     public static void Load() {
@@ -22,7 +22,8 @@ public class AutoAlteration {
         }
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
         CustomBlockSetsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
-        shapeKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","shapeKeywords.txt")).ToList();
+        ToKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
+        ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "ToKeywords.txt"))).ToList();
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
         Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "Keywords.txt"))).ToList();
         Keywords = Keywords.OrderBy(x => x.Length).Reverse().ToList();
@@ -47,7 +48,7 @@ public class AutoAlteration {
         Alteration.inventory.ClearSpecific();
 
         //create inventory for Alteration
-        if (lastAlterations == null || alterations.Any(a => lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
+        if (lastAlterations == null || alterations.Any(a => !lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
             // needs Inventory recreation
             foreach (Alteration alteration in alterations) {
                 Alteration.CreateInventory();
@@ -62,9 +63,9 @@ public class AutoAlteration {
         //Map specific custom blocks
         Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => {
             if (x.Contains(".Item.Gbx")){
-                return new Article(x.Split('\\').Last()[..^9], BlockType.CustomItem,"",true);
+                return new Article(x.Substring(x.IndexOf('/') + 1)[..^9], BlockType.CustomItem,"",true);
             } else if (x.Contains(".Block.Gbx")){
-                return new Article(x.Split('\\').Last()[..^10], BlockType.CustomBlock,"",true);
+                return new Article(x.Substring(x.IndexOf('/') + 1)[..^10], BlockType.CustomBlock,"",true);
             } else {
                 throw new Exception("Unknown file type: " + x);
             }

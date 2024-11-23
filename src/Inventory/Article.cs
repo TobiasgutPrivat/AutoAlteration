@@ -87,11 +87,16 @@ public class Article {
     }
 
     public void LoadKeywords() {
-        string name = Name;
+        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None);
+        splits = splits.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+        string name = splits.Last();
+
+        splits[..^1].ToList().ForEach(s => Keywords.Add(s));
+
         int toPos = GetToPos(name) ?? -1;
         if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
-            AutoAlteration.shapeKeywords.ToList().ForEach(k => {
+            AutoAlteration.ToKeywords.ToList().ForEach(k => {
                     if (ToString.Contains(k)) {
                         ToShapes.Add(k);
                         ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
@@ -134,7 +139,7 @@ public class Article {
     
     private void CheckFullNameCoverage() {
         int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length);
-        if (Name.Length != keywordLength) {
+        if (Name.Replace("/", "").Replace("\\", "").Length != keywordLength) {
             Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }

@@ -5,22 +5,21 @@ public abstract class InventoryChange: PosUtils {
 }
 
 public class CustomBlockFolder(string subFolder) : InventoryChange {
-    public readonly string subFolder = subFolder;
+    public readonly string folder = Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder);
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
-        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Block.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x, mapSpecific)).ToList());
-        inventory.AddArticles(Directory.GetFiles(Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder), "*.Item.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x, mapSpecific)).ToList());
+        inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(x.Replace(folder,"")[..^10], BlockType.CustomBlock, x, mapSpecific)).ToList());
+        inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(x.Replace(folder,"")[..^9], BlockType.CustomItem, x, mapSpecific)).ToList());
     }
 }
 
 public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : InventoryChange {
     public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
-    public readonly string FolderPath = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
+    public readonly string folder = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
-        string folder = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
         if (!Directory.Exists(folder)) { 
             GenerateBlockSet();
         }
@@ -32,10 +31,10 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
 
     public void GenerateBlockSet() {
         Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
-        if (!Directory.Exists(FolderPath)) { 
-            Directory.CreateDirectory(FolderPath); 
+        if (!Directory.Exists(folder)) { 
+            Directory.CreateDirectory(folder); 
         }
-        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AutoAlteration.CustomBlocksFolder, "Vanilla Items"), FolderPath, customBlockAlteration.GetType().Name);
+        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AutoAlteration.CustomBlocksFolder, "Vanilla Items"), folder, customBlockAlteration.GetType().Name);
     }
 }
 

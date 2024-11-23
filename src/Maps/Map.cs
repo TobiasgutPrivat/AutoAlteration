@@ -3,6 +3,7 @@ using GBX.NET.Engines.Game;
 using GBX.NET.LZO;
 using System.IO.Compression;
 using GBX.NET.ZLib;
+using System.Runtime.CompilerServices;
 public class Map
 {
   Gbx<CGameCtnChallenge> gbx;
@@ -19,7 +20,6 @@ public class Map
     map = gbx.Node;
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
     
-    FlattenEmbedings();
     embeddedBlocks = GetEmbeddedBlocks();
   }
 
@@ -63,13 +63,6 @@ public class Map
   #endregion
 
   #region embedding
-  private void FlattenEmbedings(){
-    //TODO make names format (Type/Name.Block/Item.Gbx)
-    // map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
-    // {
-    //   zipArchive.Entries.ToList().ForEach(x => x.Name = Path.GetFileName(x.Name));
-    // });
-  }
   private void EmbedBlock(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
@@ -91,12 +84,16 @@ public class Map
 
   public List<string> GetEmbeddedBlocks(){
     ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
-    return zipArchive.Entries.Select(x => x.Name).Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx")).ToList();
+    return zipArchive.Entries.Select(x => x.FullName).Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx")).ToList();
   }
 
-  private void ExtractEmbeddedBlocks(string Path){
+  private void ExtractEmbeddedBlocks(string path){
     ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
-    zipArchive.Entries.ToList().ForEach(x => x.ExtractToFile(Path + "\\" + x.Name));
+    zipArchive.Entries.ToList().ForEach(x => {
+      string filePath = (path + "\\" + x.FullName).Replace("Items/","").Replace("Blocks/","");
+      Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+      x.ExtractToFile(filePath);
+    });
   }
 
   public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
@@ -105,7 +102,7 @@ public class Map
     if (!Directory.Exists(TempFolder)) { Directory.CreateDirectory(TempFolder); }
     if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
     ExtractEmbeddedBlocks(TempFolder);
-    AutoAlteration.AlterFolder(customBlockAlteration,TempFolder,CustomFolder,customBlockAlteration.GetType().Name);
+    AutoAlteration.AlterAll(customBlockAlteration,TempFolder,CustomFolder,customBlockAlteration.GetType().Name);
     new CustomBlockFolder("Temp\\" + customBlockAlteration.GetType().Name).ChangeInventory(Alteration.inventory,true);
   }
   #endregion
@@ -124,7 +121,7 @@ public class Map
   }
 
   public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null){
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){//TODO issue with customblocks having blockmodel.id as path
       stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.Name)){
