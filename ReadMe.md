@@ -10,6 +10,9 @@ Performance: improve KeywordFilter, Alignment
 Think about Multiple finishes for reverse/combined etc.
 Multi Map Alterations (Combined,Repeat/Multilap)
 apply on Nation Converter (check with BigBang)
+
+Alteration Ideen:
+kleine lücken (1m pro block nach aussen schieben)
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
