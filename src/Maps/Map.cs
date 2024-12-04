@@ -83,8 +83,12 @@ public class Map
   // }
 
   public List<string> GetEmbeddedBlocks(){
-    ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
-    return zipArchive.Entries.Select(x => x.FullName).Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx")).ToList();
+    if (map.EmbeddedZipData != null && map.EmbeddedZipData.Length > 0) {
+      ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
+      return zipArchive.Entries.Select(x => x.FullName).Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx")).ToList();
+    } else {
+      return [];
+    }
   }
 
   private void ExtractEmbeddedBlocks(string path){

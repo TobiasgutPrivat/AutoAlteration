@@ -326,3 +326,13 @@ class Invisible : Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class Gaps : Alteration {
+    public override void Run(Map map){
+        inventory.Edit().Replace(map);
+        map.stagedBlocks.ForEach(x => 
+            x.position.coords = new Vec3(x.position.coords.X * 17/16, x.position.coords.Y * 17/16, x.position.coords.Z * 17/16)
+        );
+        map.PlaceStagedBlocks();
+    }
+}

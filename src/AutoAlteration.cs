@@ -32,11 +32,12 @@ public class AutoAlteration {
         customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
     }
 
-    private static List<string> loadKeywordsFile(string Path){
-        if (!File.Exists(Path)){
-            File.Create(Path).Close();
+    private static List<string> loadKeywordsFile(string path){
+        if (!File.Exists(path)){
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            File.Create(path).Close();
         }
-        return File.ReadAllLines(Path).ToList();
+        return File.ReadAllLines(path).ToList();
     }
 
     #region Altering Logic
