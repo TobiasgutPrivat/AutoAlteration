@@ -66,21 +66,21 @@ public class Map
   private void EmbedBlock(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
-      ZipArchiveEntry entry = zipArchive.CreateEntry("Blocks\\" + name + ".Block.Gbx");
+      ZipArchiveEntry entry = zipArchive.CreateEntry(name);
         using Stream entryStream = entry.Open();
         using FileStream fileStream = File.OpenRead(path);
         fileStream.CopyTo(entryStream);
     });
   }
-  private void EmbedItem(string name, string path){
-    map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
-    {
-      ZipArchiveEntry entry = zipArchive.CreateEntry("Items\\" + name + ".Item.Gbx");
-        using Stream entryStream = entry.Open();
-        using FileStream fileStream = File.OpenRead(path);
-        fileStream.CopyTo(entryStream);
-    });
-  }
+  // private void EmbedItem(string name, string path){
+  //   map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
+  //   {
+  //     ZipArchiveEntry entry = zipArchive.CreateEntry("Items\\" + name + ".Item.Gbx");
+  //       using Stream entryStream = entry.Open();
+  //       using FileStream fileStream = File.OpenRead(path);
+  //       fileStream.CopyTo(entryStream);
+  //   });
+  // }
 
   public List<string> GetEmbeddedBlocks(){
     ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
@@ -121,10 +121,14 @@ public class Map
   }
 
   public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null){
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atArticle.Name)){//TODO issue with customblocks having blockmodel.id as path
+    string ArticleName = atArticle.Name;
+    if (atArticle.Type == BlockType.CustomBlock) ArticleName = atArticle.Name + ".Block.Gbx";
+    if (atArticle.Type == BlockType.CustomItem) ArticleName = atArticle.Name + ".Item.Gbx";
+    ArticleName = ArticleName.Replace("/","\\");
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){//TODO issue with customblocks having blockmodel.id as path
       stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,moveChain));
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atArticle.Name)){
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName)){
       stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,moveChain));
     }
   }
@@ -155,8 +159,12 @@ public class Map
     inventory.articles.ForEach(a => Move(a, moveChain));
 
   public void Delete(Article Block, bool includePillars = false){
-    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == Block.Name).ToList();
-    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != Block.Name).ToList();
+    string ArticleName = Block.Name;
+    if (Block.Type == BlockType.CustomBlock) ArticleName = Block.Name + ".Block.Gbx";
+    if (Block.Type == BlockType.CustomItem) ArticleName = Block.Name + ".Item.Gbx";
+    ArticleName = ArticleName.Replace("/","\\");
+    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == ArticleName).ToList();
+    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != ArticleName).ToList();
     if (includePillars){
       deleted.ForEach(x => {
         if (!x.IsFree && !x.IsGround){
@@ -171,7 +179,7 @@ public class Map
       });
     };
 
-    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != Block.Name).ToList();
+    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != ArticleName).ToList();
   }
   public void Delete(Inventory inventory, bool includePillars = false){
     foreach(var block in inventory.articles){
@@ -189,6 +197,7 @@ public class Map
   }
 
   public void PlaceBlock(Block block){
+    block.name = block.name.TrimStart('\\');
     switch (block.blockType){
         case BlockType.Block:
         case BlockType.Pillar:
@@ -199,18 +208,19 @@ public class Map
           break;
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x == block.name)){
-            EmbedBlock(block.name,block.Path);
+            EmbedBlock("Blocks\\" + block.name + ".Block.Gbx",block.Path);
             embeddedBlocks.Add(block.name);
           }
           block.name += ".Block.Gbx_CustomBlock";
           PlaceTypeBlock(block);
           break;
         case BlockType.CustomItem:
+          block.name = (block.name.Split('\\').Last() + ".Item.Gbx").Replace("\\","/");
           if(!embeddedBlocks.Any(x => x == block.name)){
-            EmbedItem(block.name,block.Path);
+            EmbedBlock("Items/" + block.name,block.Path);
             embeddedBlocks.Add(block.name);
           }
-          block.name += ".Item.Gbx";
+          // block.name += ".Item.Gbx";
           PlaceTypeItem(block);
           break;
       }

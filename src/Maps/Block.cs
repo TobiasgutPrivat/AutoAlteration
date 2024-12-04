@@ -12,7 +12,6 @@ public enum BlockType
 
 public class Block {
     public BlockType blockType;
-    public Article article;
     public string name;
     public Position position = Position.Zero;
     public DifficultyColor color;
@@ -31,8 +30,8 @@ public class Block {
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
     {
         color = block.Color;
-        blockType = BlockType.Block;
-        name = block.BlockModel.Id;
+        // blockType = BlockType.Block;
+        // name = block.BlockModel.Id;
         IsFree = block.IsFree;
         IsClip = block.IsClip;
         IsGround = block.IsGround;
@@ -40,10 +39,9 @@ public class Block {
         IsAir = block.Bit21;
         position = GetBlockPosition(block);
 
-        this.article = article;
-        this.name = article.Name;
-        this.blockType = article.Type;
-        this.Path = article.Path;
+        name = article.Name;
+        blockType = article.Type;
+        Path = article.Path;
         
         fromArticle.MoveChain.Apply(position,article);
         moveChain?.Apply(position,article);
@@ -91,10 +89,9 @@ public class Block {
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         position.Move(item.PivotPosition);
 
-        this.article = article;
-        this.name = article.Name;
-        this.blockType = article.Type;
-        this.Path = article.Path;
+        name = article.Name;
+        blockType = article.Type;
+        Path = article.Path;
 
         fromArticle.MoveChain.Apply(position,article);
         moveChain?.Apply(position,article);

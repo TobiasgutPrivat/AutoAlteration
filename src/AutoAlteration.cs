@@ -81,6 +81,7 @@ public class AutoAlteration {
         foreach (Alteration alteration in alterations) {
             alteration.Run(map);
         }
+        map.map.OpenReadEmbeddedZipData().Entries.Select(x => x.FullName).ToList().ForEach(Console.WriteLine);
 
         lastAlterations = alterations;
         mapCount++;

@@ -5,6 +5,7 @@ Translate PivotPosition to Postion (maybe solved)
 Mark which Alterations differ from Altered Nadeo
 Issue with Altering Blocks, not placeable
 Issue EmbeddedBlocks names -> flatten or use full path
+Turn Blocktypes into inheriting classes
 Opt.:
 Performance: improve KeywordFilter, Alignment 
 Think about Multiple finishes for reverse/combined etc.
