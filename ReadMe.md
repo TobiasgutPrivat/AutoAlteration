@@ -5,6 +5,21 @@ Translate PivotPosition to Postion (maybe solved)
 Mark which Alterations differ from Altered Nadeo
 Issue with Altering Blocks, not placeable
 Issue EmbeddedBlocks names -> flatten or use full path
+
+Testing:
+Automatedtests for singular parts + Full processes
+TestScript for complex selected
+
+Definitions/Documentation:
+Programm Interface
+Folder Structures
+Trackmania Properties (How embedding, positioning etc. works )
+
+Split AutoAlterations.cs into Folder Interface/System
+AlterScript.cs AlterationScripts
+AlterLogic.cs: Alter Map/files/folders
+Settings.cs: All data like Keywords, Paths (Singleton)
+
 Opt.:
 Performance: improve KeywordFilter, Alignment 
 Think about Multiple finishes for reverse/combined etc.
