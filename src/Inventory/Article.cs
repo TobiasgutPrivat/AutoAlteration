@@ -12,8 +12,6 @@ public class Article {
     public bool Theme;
     public bool MapSpecific = false;
 
-    public static char[] systemCharacters = ['&', '|', '!', '(', ')'];
-
     public Dictionary<string,bool> cacheFilter = [];
 
     public Article(string name,BlockType type,SList<string> keywords,SList<string>? toShape = null,MoveChain ?moveChain = null,int length = 1, int width = 1){

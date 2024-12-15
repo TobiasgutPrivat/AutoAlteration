@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-public class Inventory {
+public class Inventory { // represents all available articles which can be placed in a map
     public List<Article> articles = [];
     public Inventory() {}
     public Inventory(List<Article> articles) {this.articles = articles;}
@@ -161,7 +161,7 @@ public class Inventory {
     }
 
     public Article? AlignArticle(Article article) {
-        List<Article> matchArticles = articles.Where(a => article.Match(a)).ToList();
+        List<Article> matchArticles = articles.Where(article.Match).ToList();
         if (matchArticles.Count > 1) {
             Console.WriteLine("More than one found article with keywords: " + article.KeywordString() + "\nFound Articles: " + string.Join(", ", matchArticles.Select(a => a.Name).ToArray()));
             return null;

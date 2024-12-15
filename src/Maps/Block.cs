@@ -97,23 +97,4 @@ public class Block {
         moveChain?.Apply(position,article);
         article.MoveChain.Subtract(position,article);
     }
-
-    public bool IsInGrid(){
-        if (position.coords.X % 32 != 0 || position.coords.Y % 8 != 0 || position.coords.Z % 32 != 0){
-        return false;
-        }
-        if (Round(position.pitchYawRoll.Y) != 0 || Round(position.pitchYawRoll.Z) != 0){
-        return false;
-        }
-        if(Round(position.pitchYawRoll.X % ((float)Math.PI/2)) == 0){
-        return false;
-        }
-        return true;
-    }
-
-    public static float Round(float number){
-        number = (float)Math.Round(number,3);
-        number = Math.Abs(number);
-        return number;
-    }
 }

@@ -98,3 +98,10 @@ class AlterationScript {
         return "";     
     }   
 }
+
+public enum AlterType
+{
+    File,
+    Folder,
+    FullFolder
+}
