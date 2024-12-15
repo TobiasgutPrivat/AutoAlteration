@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Reflection;
 
 class AlterationScript {
     public string filePath = "";
@@ -7,7 +8,7 @@ class AlterationScript {
         this.filePath = filePath;
     }
 
-    public void RunConfig(string filePath){
+    public void RunConfig(){
         if (!filePath.Contains(':')){
             filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","config", filePath);
         }

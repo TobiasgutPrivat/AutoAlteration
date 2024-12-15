@@ -53,7 +53,7 @@ public class Article {
         LoadKeywords();
         Type = type;
         string vanillaName = Name;
-        AutoAlteration.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        AltertionConfig.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
         List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList();
         if (vanillaVersion.Count > 0) {
             Width = vanillaVersion.First().Width;
@@ -96,7 +96,7 @@ public class Article {
         int toPos = GetToPos(name) ?? -1;
         if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
-            AutoAlteration.ToKeywords.ToList().ForEach(k => {
+            AltertionConfig.ToKeywords.ToList().ForEach(k => {
                     if (ToString.Contains(k)) {
                         ToShapes.Add(k);
                         ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
@@ -107,7 +107,7 @@ public class Article {
         }
         
         //Keywords
-        foreach (var keywordLine in AutoAlteration.Keywords) {
+        foreach (var keywordLine in AltertionConfig.Keywords) {
             if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
                 Keywords.Add(keywordLine);
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
@@ -127,7 +127,7 @@ public class Article {
     public int? GetToPos(string name) {
         if(name.Contains("To")){
             int toPos = name.IndexOf("To");
-            if (AutoAlteration.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
+            if (AltertionConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
                 return GetToPos(name[(toPos + 2)..]) + toPos + 2;
             } else {
                 return toPos;

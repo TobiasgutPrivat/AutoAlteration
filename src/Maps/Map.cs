@@ -88,7 +88,7 @@ public class Map
   }
 
   public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
-    string TempFolder = Path.Join(AutoAlteration.CustomBlocksFolder,"Temp");
+    string TempFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Temp");
     string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetType().Name);
     if (!Directory.Exists(TempFolder)) { Directory.CreateDirectory(TempFolder); }
     if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
