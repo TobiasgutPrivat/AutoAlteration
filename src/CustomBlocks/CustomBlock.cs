@@ -1,8 +1,7 @@
 using GBX.NET;
 using GBX.NET.LZO;
-using GBX.NET.ZLib;
 using GBX.NET.Engines.GameData;
-using GBX.NET.Engines.Plug;
+
 public class CustomBlock
 {
   public CGameItemModel customBlock;
@@ -12,8 +11,6 @@ public class CustomBlock
   public BlockType Type;
   public CustomBlock(string blockPath)
   { 
-    Gbx.LZO = new MiniLZO();
-    Gbx.ZLib = new ZLib();
     customBlock = Gbx.Parse<CGameItemModel>(blockPath);
     
     if (blockPath.Contains(".Block.gbx", StringComparison.OrdinalIgnoreCase)){

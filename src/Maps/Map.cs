@@ -1,9 +1,7 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
-using GBX.NET.LZO;
 using System.IO.Compression;
-using GBX.NET.ZLib;
-using System.Runtime.CompilerServices;
+
 public class Map
 {
   Gbx<CGameCtnChallenge> gbx;
@@ -14,8 +12,6 @@ public class Map
   #region loading
   public Map(string mapPath)
   { 
-    Gbx.LZO = new MiniLZO();
-    Gbx.ZLib = new ZLib();
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
@@ -72,15 +68,6 @@ public class Map
         fileStream.CopyTo(entryStream);
     });
   }
-  // private void EmbedItem(string name, string path){
-  //   map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
-  //   {
-  //     ZipArchiveEntry entry = zipArchive.CreateEntry("Items\\" + name + ".Item.Gbx");
-  //       using Stream entryStream = entry.Open();
-  //       using FileStream fileStream = File.OpenRead(path);
-  //       fileStream.CopyTo(entryStream);
-  //   });
-  // }
 
   public List<string> GetEmbeddedBlocks(){
     if (map.EmbeddedZipData != null && map.EmbeddedZipData.Length > 0) {
@@ -220,9 +207,9 @@ public class Map
           break;
         case BlockType.CustomItem:
           block.name = (block.name.Split('\\').Last() + ".Item.Gbx").Replace("\\","/");
-          if(!embeddedBlocks.Any(x => x == block.name)){
+          if(!embeddedBlocks.Any(x => x == "Items/" + block.name)){
             EmbedBlock("Items/" + block.name,block.Path);
-            embeddedBlocks.Add(block.name);
+            embeddedBlocks.Add("Items/" + block.name);
           }
           // block.name += ".Item.Gbx";
           PlaceTypeItem(block);

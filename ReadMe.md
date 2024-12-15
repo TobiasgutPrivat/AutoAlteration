@@ -141,3 +141,37 @@ There can be an issue with nuget source.
 In that case make sure you have correct package source using:
 > dotnet nuget add source https://api.nuget.org/v3/index.json
 -->
+
+## To be documented:
+
+## Trackmania circumstances
+### Positioning systems
+### Embeddings
+
+## Definitions
+### Data Structure AutoAlteration
+- Customblocks
+- Inventory
+- DevLog
+
+## Alteration Scripts
+
+## Design Decisions
+
+### Map Altering
+
+### Positioning
+- MoveChains
+
+### Inventory
+- Keyword Splitting
+- ToKeywords
+
+### Alteration implementations
+- Helperfunctions
+
+### Customblocks
+- Embedding
+- FolderStructure
+
+### Program interface

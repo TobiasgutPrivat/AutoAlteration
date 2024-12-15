@@ -1,6 +1,8 @@
 using System.Reflection;
-using System.Text.Json;
 using GBX.NET.Engines.Plug;
+using GBX.NET;
+using GBX.NET.LZO;
+using GBX.NET.ZLib;
 
 public class AutoAlteration {
     public static int mapCount = 0;
@@ -15,6 +17,8 @@ public class AutoAlteration {
     public static List<string> customBlockAltNames = [];
 
     public static void Load() {
+        Gbx.LZO = new MiniLZO();
+        // Gbx.ZLib = new ZLib();
         if (devMode) {
             DataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data");
         }else {
@@ -82,7 +86,6 @@ public class AutoAlteration {
         foreach (Alteration alteration in alterations) {
             alteration.Run(map);
         }
-        map.map.OpenReadEmbeddedZipData().Entries.Select(x => x.FullName).ToList().ForEach(Console.WriteLine);
 
         lastAlterations = alterations;
         mapCount++;
@@ -156,7 +159,7 @@ public class AutoAlteration {
     }
     
     public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
-        Map map = new(sourceFile);
+        Map map = new Map(sourceFile);
         Alter(alterations, map);
         map.map.MapName = map.map.MapName + " " + Name;
         map.Save(destinationFile);
@@ -165,7 +168,7 @@ public class AutoAlteration {
     public static void AlterFile(SList<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name) {
         CustomBlock customBlock;
         try {
-            customBlock = new(sourceFile);
+            customBlock = new CustomBlock(sourceFile);
         } catch {
             Console.WriteLine("Load Error");
             return;
@@ -188,97 +191,6 @@ public class AutoAlteration {
             Console.WriteLine("Invalid Filetype");
             return "";
         }
-    }
-    #endregion
-
-    #region ConfigScript
-    public static void RunConfig(string filePath){
-        if (!filePath.Contains(':')){
-            filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","config", filePath);
-        }
-        foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
-        {
-            RunAlteration(
-                (AlterType)Enum.Parse(typeof(AlterType), item.GetProperty("Type").GetString()),
-                item.GetProperty("Source").GetString(),
-                item.GetProperty("Destination").GetString(),
-                item.GetProperty("Name").GetString(),
-                item.GetProperty("Alterations").EnumerateArray().Select(x => 
-                    GetAlteration(x.GetString())
-                    ).ToList()
-            );
-        }
-    }
-
-    public static Alteration GetAlteration(string name){
-        List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
-        List<Type> alterations = types.Where(t => t.Name == name).ToList();
-        if (alterations.Count == 0){
-            throw new Exception("Alteration " + name + " not found");
-        }
-        return (Alteration) Activator.CreateInstance(alterations.First());
-    }
-
-    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)
-    {
-        string warning = ValidateSource(type, source);
-        if (warning != ""){
-            throw new Exception("Source " + warning);
-        }
-        warning = ValidateDestination(destination);
-        if (warning != ""){
-            throw new Exception("Destination " + warning);
-        }
-        Console.WriteLine("Alter " + type.ToString() + ": " + source);
-        Console.WriteLine("To: " + destination);
-        Console.WriteLine("As " + name);
-        Console.WriteLine("Alterations:");
-        alterations.ToList().ForEach(x => Console.Write(" " + x.GetType().ToString()));
-        switch (type){
-            case AlterType.File: 
-                AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name);
-                break;
-            case AlterType.Folder:
-                AlterFolder(alterations.ToList(),source,destination,name);
-                break;
-            case AlterType.FullFolder:
-                AlterAll(alterations.ToList(),source,destination,name);
-                break;
-        }
-    }
-    
-    private static string ValidateSource(AlterType Type, string path)
-    {
-		if (path is null || path == ""){
-            return "Path missing";
-		}
-        if (Type != AlterType.File) {
-            if (!Directory.Exists(Path.GetFullPath(path))) {
-                return "Folder doesn't Exist";
-            }
-        } else {
-            try {
-                if (!File.Exists(Path.GetFullPath(path))) {
-                    return "File doesn't Exist";
-                };
-            } catch{
-                return "File doesn't Exist";
-            }
-        }
-        return "";     
-    }
-    private static string ValidateDestination(string path)
-    {
-		if (path is null || path == ""){
-            return "Path missing";
-		}
-        if (!Path.IsPathFullyQualified(Path.GetFullPath(path))){
-            return "Invalid Path";
-        }
-        if (path.Contains('.')) {
-            return "Not a Folder Path";
-        }       
-        return "";     
     }
     #endregion
 

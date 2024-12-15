@@ -6,7 +6,7 @@ AutoAlteration.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @".
 AutoAlteration.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-AutoAlteration.RunConfig("CampaignConfig.json");
+AutoAlteration.RunConfig("Test.json");
 // AutoAlteration.RunConfig("FileConfig.json");
 // File.WriteAllText(Path.Combine(AutoAlteration.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
 // AutoAlteration.AlterFolder(new SnowScenery(),"SourcePath","DestinationPath","SnowScenery");
