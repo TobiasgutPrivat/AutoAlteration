@@ -52,8 +52,8 @@ public class Article {
         Type = type;
         string vanillaName = Name;
         AltertionConfig.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
-        List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList();
-        if (vanillaVersion.Count > 0) {
+        List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList(); 
+        if (vanillaVersion.Count > 0) { // for customblocksets get size from unaltered version
             Width = vanillaVersion.First().Width;
             Length = vanillaVersion.First().Length;
             Height = vanillaVersion.First().Height;
@@ -85,13 +85,12 @@ public class Article {
     }
 
     public void LoadKeywords() {
-        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None);
-        splits = splits.Where(p => !string.IsNullOrEmpty(p)).ToArray();
-        string name = splits.Last();
+        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None).Where(p => !string.IsNullOrEmpty(p)).ToArray(); // seperate Foldernames
+        string name = splits.Last(); // filename/blockname
 
-        splits[..^1].ToList().ForEach(s => Keywords.Add(s));
+        splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
 
-        int toPos = GetToPos(name) ?? -1;
+        int toPos = GetToPos(name) ?? -1; // Extract ToKeywords (mostly shapes) to avoid naming conflicts
         if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
             AltertionConfig.ToKeywords.ToList().ForEach(k => {
@@ -124,7 +123,7 @@ public class Article {
 
     public int? GetToPos(string name) {
         if(name.Contains("To")){
-            int toPos = name.IndexOf("To");
+            int toPos = name.IndexOf("To"); //check if "to" is not part of another keyword
             if (AltertionConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
                 return GetToPos(name[(toPos + 2)..]) + toPos + 2;
             } else {

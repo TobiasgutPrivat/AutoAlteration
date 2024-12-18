@@ -102,7 +102,7 @@ public class Map
   public void PlaceRelativeWithRandom(Article atBlock, Inventory newInventory,MoveChain ?moveChain = null){
     List<Article> newArticles = newInventory.articles;
     if (newArticles.Count == 0) return;
-    Random rand = new Random();
+    Random rand = new();
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock.Name)){
       stagedBlocks.Add(new Block(ctnBlock,atBlock,newArticles[rand.Next(newArticles.Count)],moveChain));
     }
