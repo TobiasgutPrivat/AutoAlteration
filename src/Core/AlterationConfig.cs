@@ -7,6 +7,7 @@ class AltertionConfig {
     public static string devPath = "";
     public static bool devMode = false;
     public static string DataFolder = "";
+    public static string BlockDataPath = "";
     public static string CustomBlocksFolder = "";
     public static string CustomBlockSetsFolder = "";
     public static List<string> Keywords = [];
@@ -21,8 +22,11 @@ class AltertionConfig {
         }else {
             DataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AutoAlteration", "data");
         }
+
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
         CustomBlockSetsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
+        BlockDataPath = Path.Combine(DataFolder, "Inventory","BlockData.json");
+
         ToKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
         ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "ToKeywords.txt"))).ToList();
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
@@ -30,6 +34,7 @@ class AltertionConfig {
         Keywords = Keywords.OrderBy(x => x.Length).Reverse().ToList();
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","KeywordsStart.txt")).Concat(Keywords).ToList();
         Keywords = loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "KeywordsStart.txt")).Concat(Keywords).ToList();
+
         customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
     }
 

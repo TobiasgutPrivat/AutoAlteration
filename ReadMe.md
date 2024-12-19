@@ -147,7 +147,7 @@ In that case make sure you have correct package source using:
 ## Note TODO Blocks
 
 **requires**:
-constructor from Item/Block
+constructor from Item/Block, according to article Type
 place into map
 
 one base class to allow transfer as one list: 
@@ -164,6 +164,11 @@ CustomItem(Item) custom Items -> add path to constructor. requires embedding in 
 **Action**
 input: Block, Article
 modify: Article
+
+## placing requirements Blocks
+
+
+
 ## To be documented:
 
 ## Trackmania circumstances

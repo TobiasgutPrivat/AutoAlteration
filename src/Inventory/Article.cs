@@ -84,6 +84,7 @@ public class Article {
         return true;
     }
 
+    #region LoadKeywords
     public void LoadKeywords() {
         string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None).Where(p => !string.IsNullOrEmpty(p)).ToArray(); // seperate Foldernames
         string name = splits.Last(); // filename/blockname
@@ -140,6 +141,7 @@ public class Article {
             Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }
+    #endregion
 
     public string KeywordString() =>
         string.Join(", ", Keywords.Select(k => k)) + " " + string.Join(", ", ToShapes);
