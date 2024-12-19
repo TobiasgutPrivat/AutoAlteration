@@ -140,3 +140,26 @@ There can be an issue with nuget source.
 In that case make sure you have correct package source using:
 > dotnet nuget add source https://api.nuget.org/v3/index.json
 -->
+
+# Documentation
+
+## Note TODO Blocks
+
+**requires**:
+constructor from Item/Block
+place into map
+
+one base class to allow transfer as one list: 
+Block: represent blocks which are already available (previously embedded/Vanilla Inventory)
+
+Item(Block) for AnchoredObject: represent blocks which are already available in (previously embedded/Vanilla Inventory)
+
+CustomBlock(Block) custom Blocks -> add path to constructor. requires embedding in map 
+CustomItem(Item) custom Items -> add path to constructor. requires embedding in map
+
+## Note TODO PositionChange
+**constructor**: save Properties to move with
+
+**Action**
+input: Block, Article
+modify: Article
