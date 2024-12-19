@@ -9,18 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GBX.NET" Version="2.0.9" />
+    <PackageReference Include="GBX.NET" Version="2.1.0-nightly.20241210.ba792c4" />
     <PackageReference Include="GBX.NET.LZO" Version="2.1.1" />
     <PackageReference Include="GBX.NET.ZLib" Version="1.1.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-  <!-- <Target Name="CopyFilesToProgramData" AfterTargets="Build">
-    <ItemGroup>
-      <MyFiles Include="$(ProjectDir)data\**\*.*" />
-    </ItemGroup>
-    <MakeDir Directories="C:\ProgramData\AutoAlteration\data" />
-    <Copy SourceFiles="@(MyFiles)" DestinationFolder="C:\ProgramData\AutoAlteration\data\%(RecursiveDir)" SkipUnchangedFiles="true" />
-  </Target> -->
 </Project>

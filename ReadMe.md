@@ -5,6 +5,7 @@ Translate PivotPosition to Postion (maybe solved)
 Mark which Alterations differ from Altered Nadeo
 Issue with Altering Blocks, not placeable
 Issue EmbeddedBlocks names -> flatten or use full path
+Turn Blocktypes into inheriting classes
 
 Testing:
 Automatedtests for singular parts + Full processes
@@ -163,3 +164,36 @@ CustomItem(Item) custom Items -> add path to constructor. requires embedding in 
 **Action**
 input: Block, Article
 modify: Article
+## To be documented:
+
+## Trackmania circumstances
+### Positioning systems
+### Embeddings
+
+## Definitions
+### Data Structure AutoAlteration
+- Customblocks
+- Inventory
+- DevLog
+
+## Alteration Scripts
+
+## Design Decisions
+
+### Map Altering
+
+### Positioning
+- MoveChains
+
+### Inventory
+- Keyword Splitting
+- ToKeywords
+
+### Alteration implementations
+- Helperfunctions
+
+### Customblocks
+- Embedding
+- FolderStructure
+
+### Program interface

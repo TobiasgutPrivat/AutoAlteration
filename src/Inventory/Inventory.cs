@@ -1,14 +1,14 @@
 using Newtonsoft.Json;
 
-public class Inventory {
+public class Inventory { // represents all available articles which can be placed in a map
     public List<Article> articles = [];
     public Inventory() {}
     public Inventory(List<Article> articles) {this.articles = articles;}
     private Dictionary<string,Inventory> cachedInventories = [];
 
     public void Export(string Name) {
-        Directory.CreateDirectory(Path.Combine(AutoAlteration.devPath,"Inventory"));
-        File.WriteAllText(Path.Combine(AutoAlteration.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles));
+        Directory.CreateDirectory(Path.Combine(AltertionConfig.devPath,"Inventory"));
+        File.WriteAllText(Path.Combine(AltertionConfig.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles));
     }
     
     public Inventory Select(string keywordFilter)  {
@@ -161,7 +161,7 @@ public class Inventory {
     }
 
     public Article? AlignArticle(Article article) {
-        List<Article> matchArticles = articles.Where(a => article.Match(a)).ToList();
+        List<Article> matchArticles = articles.Where(article.Match).ToList();
         if (matchArticles.Count > 1) {
             Console.WriteLine("More than one found article with keywords: " + article.KeywordString() + "\nFound Articles: " + string.Join(", ", matchArticles.Select(a => a.Name).ToArray()));
             return null;

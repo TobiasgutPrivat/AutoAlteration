@@ -5,7 +5,7 @@ public abstract class InventoryChange: PosUtils {
 }
 
 public class CustomBlockFolder(string subFolder) : InventoryChange {
-    public readonly string folder = Path.Combine(AutoAlteration.CustomBlocksFolder, subFolder);
+    public readonly string folder = Path.Combine(AltertionConfig.CustomBlocksFolder, subFolder);
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
@@ -17,7 +17,7 @@ public class CustomBlockFolder(string subFolder) : InventoryChange {
 
 public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : InventoryChange {
     public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
-    public readonly string folder = Path.Combine(AutoAlteration.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
+    public readonly string folder = Path.Combine(AltertionConfig.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         if (!Directory.Exists(folder)) { 
@@ -34,7 +34,7 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
         if (!Directory.Exists(folder)) { 
             Directory.CreateDirectory(folder); 
         }
-        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AutoAlteration.CustomBlocksFolder, "Vanilla Items"), folder, customBlockAlteration.GetType().Name);
+        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AltertionConfig.CustomBlocksFolder, "Vanilla Items"), folder, customBlockAlteration.GetType().Name);
     }
 }
 

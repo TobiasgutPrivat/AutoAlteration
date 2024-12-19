@@ -38,9 +38,9 @@ public abstract class Alteration: PosUtils {
     }
     
     public static void CreateInventory() {
-        inventory = ImportVanillaInventory(Path.Combine(AutoAlteration.DataFolder, "Inventory","BlockData.json"));
+        inventory = ImportVanillaInventory(Path.Combine(AltertionConfig.DataFolder, "Inventory","BlockData.json"));
         inventory.articles.ForEach(x => x.cacheFilter.Clear());
-        if (AutoAlteration.devMode){
+        if (AltertionConfig.devMode){
             inventory.Export("Vanilla");
         }
     }

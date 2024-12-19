@@ -12,7 +12,6 @@ public enum BlockType
 
 public class Block {
     public BlockType blockType;
-    public Article article;
     public string name;
     public Position position = Position.Zero;
     public DifficultyColor color;
@@ -31,8 +30,8 @@ public class Block {
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
     {
         color = block.Color;
-        blockType = BlockType.Block;
-        name = block.BlockModel.Id;
+        // blockType = BlockType.Block;
+        // name = block.BlockModel.Id;
         IsFree = block.IsFree;
         IsClip = block.IsClip;
         IsGround = block.IsGround;
@@ -40,10 +39,9 @@ public class Block {
         IsAir = block.Bit21;
         position = GetBlockPosition(block);
 
-        this.article = article;
-        this.name = article.Name;
-        this.blockType = article.Type;
-        this.Path = article.Path;
+        name = article.Name;
+        blockType = article.Type;
+        Path = article.Path;
         
         fromArticle.MoveChain.Apply(position,article);
         moveChain?.Apply(position,article);
@@ -91,32 +89,12 @@ public class Block {
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         position.Move(item.PivotPosition);
 
-        this.article = article;
-        this.name = article.Name;
-        this.blockType = article.Type;
-        this.Path = article.Path;
+        name = article.Name;
+        blockType = article.Type;
+        Path = article.Path;
 
         fromArticle.MoveChain.Apply(position,article);
         moveChain?.Apply(position,article);
         article.MoveChain.Subtract(position,article);
-    }
-
-    public bool IsInGrid(){
-        if (position.coords.X % 32 != 0 || position.coords.Y % 8 != 0 || position.coords.Z % 32 != 0){
-        return false;
-        }
-        if (Round(position.pitchYawRoll.Y) != 0 || Round(position.pitchYawRoll.Z) != 0){
-        return false;
-        }
-        if(Round(position.pitchYawRoll.X % ((float)Math.PI/2)) == 0){
-        return false;
-        }
-        return true;
-    }
-
-    public static float Round(float number){
-        number = (float)Math.Round(number,3);
-        number = Math.Abs(number);
-        return number;
     }
 }

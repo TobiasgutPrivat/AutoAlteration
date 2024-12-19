@@ -12,8 +12,6 @@ public class Article {
     public bool Theme;
     public bool MapSpecific = false;
 
-    public static char[] systemCharacters = ['&', '|', '!', '(', ')'];
-
     public Dictionary<string,bool> cacheFilter = [];
 
     public Article(string name,BlockType type,SList<string> keywords,SList<string>? toShape = null,MoveChain ?moveChain = null,int length = 1, int width = 1){
@@ -53,9 +51,9 @@ public class Article {
         LoadKeywords();
         Type = type;
         string vanillaName = Name;
-        AutoAlteration.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
-        List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList();
-        if (vanillaVersion.Count > 0) {
+        AltertionConfig.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList(); 
+        if (vanillaVersion.Count > 0) { // for customblocksets get size from unaltered version
             Width = vanillaVersion.First().Width;
             Length = vanillaVersion.First().Length;
             Height = vanillaVersion.First().Height;
@@ -87,16 +85,15 @@ public class Article {
     }
 
     public void LoadKeywords() {
-        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None);
-        splits = splits.Where(p => !string.IsNullOrEmpty(p)).ToArray();
-        string name = splits.Last();
+        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None).Where(p => !string.IsNullOrEmpty(p)).ToArray(); // seperate Foldernames
+        string name = splits.Last(); // filename/blockname
 
-        splits[..^1].ToList().ForEach(s => Keywords.Add(s));
+        splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
 
-        int toPos = GetToPos(name) ?? -1;
+        int toPos = GetToPos(name) ?? -1; // Extract ToKeywords (mostly shapes) to avoid naming conflicts
         if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
-            AutoAlteration.ToKeywords.ToList().ForEach(k => {
+            AltertionConfig.ToKeywords.ToList().ForEach(k => {
                     if (ToString.Contains(k)) {
                         ToShapes.Add(k);
                         ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
@@ -107,7 +104,7 @@ public class Article {
         }
         
         //Keywords
-        foreach (var keywordLine in AutoAlteration.Keywords) {
+        foreach (var keywordLine in AltertionConfig.Keywords) {
             if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
                 Keywords.Add(keywordLine);
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
@@ -126,8 +123,8 @@ public class Article {
 
     public int? GetToPos(string name) {
         if(name.Contains("To")){
-            int toPos = name.IndexOf("To");
-            if (AutoAlteration.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
+            int toPos = name.IndexOf("To"); //check if "to" is not part of another keyword
+            if (AltertionConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
                 return GetToPos(name[(toPos + 2)..]) + toPos + 2;
             } else {
                 return toPos;
