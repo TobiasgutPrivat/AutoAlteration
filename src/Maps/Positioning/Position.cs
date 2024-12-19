@@ -76,7 +76,7 @@ public class Position {
     public void AddRotation(Vec3 rotation) =>
         pitchYawRoll = RotateRelative(pitchYawRoll, rotation);
 
-    public static Vec3 RotateRelative(Vec3 rotation, Vec3 byRotation){
+    private static Vec3 RotateRelative(Vec3 rotation, Vec3 byRotation){
         //Trackmania does like ZXY in https://dugas.ch/transform_viewer/index.html
         Matrix<double> rotationMatrix = CreateZXYMatrix(rotation);
         Matrix<double> byrotationMatrix = CreateZXYMatrix(byRotation);
@@ -86,14 +86,14 @@ public class Position {
         return GetEulerZXY(rotationMatrix);
     }
 
-    public static Vec3 GetEulerZXY(Matrix<double> rotationMatrix) {
+    private static Vec3 GetEulerZXY(Matrix<double> rotationMatrix) {
         double extractedRoll = Math.Asin(rotationMatrix[2, 1]);
         double extractedPitch = Math.Atan2(-rotationMatrix[2, 0], rotationMatrix[2, 2]);
         double extractedYaw = Math.Atan2(-rotationMatrix[0, 1], rotationMatrix[1, 1]);
         return new Vec3((float)extractedYaw, (float)extractedPitch, (float)extractedRoll);
     }
 
-    public static Matrix<double> CreateZXYMatrix(Vec3 rotation) {
+    private static Matrix<double> CreateZXYMatrix(Vec3 rotation) {
         double Yaw = rotation.X;
         double Roll = rotation.Z;
         double Pitch = rotation.Y;
