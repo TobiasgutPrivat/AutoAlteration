@@ -11,42 +11,19 @@ public class Position {
         this.coords = coords ?? Vec3.Zero;
         this.pitchYawRoll = Vec3.Zero;
     }
+
     public Position(Vec3 ?coords, Vec3 ?pitchYawRoll){
         this.coords = coords ?? Vec3.Zero;
         this.pitchYawRoll = pitchYawRoll ?? Vec3.Zero;
     }
 
     public Position AddPosition(Position position){
-        RelativeOffset(position.coords);
-        AddRotation(position.pitchYawRoll);
+        Move(position.coords);
+        Rotate(position.pitchYawRoll);
         return this;
     }
     
-    public Position Move(Vec3 coords){
-        RelativeOffset(coords);
-        return this;
-    }
-    public Position Rotate(Vec3 pitchYawRoll){
-        AddRotation(pitchYawRoll);
-        return this;
-    }
-    public Position RotateMid(Vec3 pitchYawRoll, Article article){
-        RelativeOffset(new Vec3(article.Width * 16, article.Height * 4, article.Length * 16));
-        AddRotation(pitchYawRoll);
-        RelativeOffset(new Vec3(-article.Width * 16, -article.Height * 4, -article.Length * 16));
-        return this;
-    }
-    public Position RotateCenter(Vec3 pitchYawRoll){
-        Vec3 Offset = new Vec3(768 - coords.X, 120 - coords.Y, 768 - coords.Z);
-        Vec3 rotation = this.pitchYawRoll;
-        Rotate(-rotation);
-        RelativeOffset(Offset);
-        AddRotation(pitchYawRoll);
-        RelativeOffset(-Offset);
-        Rotate(rotation);
-        return this;
-    }
-    public void RelativeOffset(Vec3 offset){
+    public void Move(Vec3 offset){
         double Yaw = pitchYawRoll.X;
         double Roll = pitchYawRoll.Z;
         double Pitch = pitchYawRoll.Y;
@@ -73,17 +50,14 @@ public class Position {
         coords += new Vec3((float)x3, (float)y3, (float)z3);
     }
 
-    public void AddRotation(Vec3 rotation) =>
-        pitchYawRoll = RotateRelative(pitchYawRoll, rotation);
-
-    private static Vec3 RotateRelative(Vec3 rotation, Vec3 byRotation){
+    public void Rotate(Vec3 rotation) {
         //Trackmania does like ZXY in https://dugas.ch/transform_viewer/index.html
-        Matrix<double> rotationMatrix = CreateZXYMatrix(rotation);
-        Matrix<double> byrotationMatrix = CreateZXYMatrix(byRotation);
+        Matrix<double> rotationMatrix = CreateZXYMatrix(pitchYawRoll);
+        Matrix<double> byrotationMatrix = CreateZXYMatrix(rotation);
                   
         rotationMatrix *= byrotationMatrix;
 
-        return GetEulerZXY(rotationMatrix);
+        pitchYawRoll = GetEulerZXY(rotationMatrix);
     }
 
     private static Vec3 GetEulerZXY(Matrix<double> rotationMatrix) {

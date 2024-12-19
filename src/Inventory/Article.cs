@@ -24,20 +24,9 @@ public class Article {
         Width = width;
     }
     
-    public Article(int Height, int Width, int Length, string type, string Name, bool Theme, bool DefaultRotation){
+    public Article(int Height, int Width, int Length, BlockType Type, string Name, bool Theme, bool DefaultRotation){
         this.Name = Name;
-        LoadKeywords();
-        switch (type) {
-            case "Block":
-                Type = BlockType.Block;
-                break;
-            case "Item":
-                Type = BlockType.Item;
-                break;
-            case "Pillar":
-                Type = BlockType.Pillar;
-                break;
-        }
+        this.Type = Type;
         this.Length = Length;
         this.Width = Width;
         this.Height = Height;

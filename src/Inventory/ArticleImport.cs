@@ -24,17 +24,23 @@ class ArticleImport {
         List<Article> articles = [];
         foreach (var item in jsonArray)
         {
+            BlockType blockType = BlockType.Block;
             switch (item.type) {
                 case "Block":
-                    articles.Add(new BlockArticle((int)item.Height, (int)item.Width, (int)item.Length, (string)item.Name, (bool)item.Theme, (bool)item.DefaultRotation));
+                    blockType = BlockType.Block;
                     break;
                 case "Item":
-                    articles.Add(new ItemArticle((int)item.Height, (int)item.Width, (int)item.Length, (string)item.Name, (bool)item.Theme, (bool)item.DefaultRotation));
+                    blockType = BlockType.Item;
                     break;
                 case "Pillar":
-                    articles.Add(new PillarArticle((int)item.Height, (int)item.Width, (int)item.Length, (string)item.Name, (bool)item.Theme, (bool)item.DefaultRotation));
+                    blockType = BlockType.Pillar;
+                    break;
+                default:
+                    Console.WriteLine("Blocktype missing");
+                    blockType = BlockType.Block;
                     break;
             }
+            articles.Add(new Article((int)item.Height, (int)item.Width, (int)item.Length, blockType (string)item.Name, (bool)item.Theme, (bool)item.DefaultRotation));
         }
         return articles;
     }

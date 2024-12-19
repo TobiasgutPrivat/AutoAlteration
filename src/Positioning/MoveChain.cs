@@ -34,7 +34,7 @@ public class MoveChain {
         Move(new Vec3(x,y,z));
 
     public MoveChain Move(Vec3 vector) {
-        moves.Add(new Move(vector));
+        moves.Add(new Offset(vector));
         return this;
     }
     
