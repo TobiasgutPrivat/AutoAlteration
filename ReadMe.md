@@ -1,34 +1,17 @@
 <!--
 TODO 
 integrate already embedded Blocks
-Translate PivotPosition to Postion (maybe solved)
 Mark which Alterations differ from Altered Nadeo
 Issue with Altering Blocks, not placeable
 Issue EmbeddedBlocks names -> flatten or use full path
-Turn Blocktypes into inheriting classes
-
-Testing:
-Automatedtests for singular parts + Full processes
-TestScript for complex selected
 
 Definitions/Documentation:
-Programm Interface
-Folder Structures
 Trackmania Properties (How embedding, positioning etc. works )
 
-Split AutoAlterations.cs into Folder Interface/System
-AlterScript.cs AlterationScripts
-AlterLogic.cs: Alter Map/files/folders
-Settings.cs: All data like Keywords, Paths (Singleton)
-
 Opt.:
-Performance: improve KeywordFilter, Alignment 
 Think about Multiple finishes for reverse/combined etc.
 Multi Map Alterations (Combined,Repeat/Multilap)
 apply on Nation Converter (check with BigBang)
-
-Alteration Ideen:
-kleine lücken (1m pro block nach aussen schieben)
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
@@ -248,21 +231,33 @@ Contains all functionality for processing of Positions (coords and rotation)
 In CommonApplicationData ("C:\ProgramData\AutoAlteration\data")
 DataFolder modifyable per DevMode, DevPath (for Development)
 
-**CustomBlocks:** Base Folder for customblocks/Items which can be imported into Inventory (Inventorychange: CustomBlockFolder)
+**CustomBlocks/:** Base Folder for customblocks/Items which can be imported into Inventory (Inventorychange: CustomBlockFolder)
 
-**CustomBlocks/Vanilla:** Folder with all vanilla blocks/items as customblocks/items
+- **CustomBlocks/Vanilla:** Folder with all vanilla blocks/items as customblocks/items
 
-**Inventory:** Data defining Keywords and vanilla Articles
+**Inventory/:** Data defining Keywords and vanilla Articles
 
-**Inventory/BlockData:** Vanilla Articles in json format: [{Height,Width,Length,type,Name,Theme,Defaultrotation}]
+- **Inventory/BlockData:** Vanilla Articles in json format: [{Height,Width,Length,type,Name,Theme,Defaultrotation}]
 
-**Inventory/Keywords:** most Keywords used to split up Article Names (Orderd by Length)
+- **Inventory/Keywords:** most Keywords used to split up Article Names (Orderd by Length)
 
-**Inventory/KeywordsStart:** Keywordswhich should be used first
+- **Inventory/KeywordsStart:** Keywordswhich should be used first
+
+**LowCubeLayer:** used for invisible blocks
+
+**IceSkin:** used for SnowScenery Wall skin
+
+**config/:** place to store Alteration scripts files
+
+**dev/** some data exports for debugging
 
 ### User Data
 in ApplicationData ("%appdata%/Autoalteration/")
 Data which can vary depending on Usage
+
+**Keywords/KeywordsStart:** here additional Keywords can be defined
+
+**CustomBlockSets:** If a customblock set is needed it get's generated into it's Folder AutoAlteration/{SetName}/
 
 ## Processes
 
