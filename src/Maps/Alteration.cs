@@ -4,6 +4,7 @@ public abstract class Alteration: PosUtils {
 
     public virtual string? Description { get; }
 
+    // Changes which get applied on base inventory before the Alteration is executed
     public virtual List<InventoryChange> InventoryChanges { get; } = [];
 
     public static Inventory inventory = new();

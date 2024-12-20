@@ -143,6 +143,12 @@ In that case make sure you have correct package source using:
 -->
 
 # Documentation
+This Documentation contains
+- Code Structure
+- Data Strcucture/Definitions
+- Some Process explanaitions
+
+Further detailing Explanations are in code
 
 ## Note TODO Blocks
 
@@ -168,6 +174,109 @@ modify: Article
 ## placing requirements Blocks
 
 
+## Code Structure
+Description of basic Purpose of all code-Files
+
+### AutoAlteration.cs
+Interface to main Alteration Functionality
+
+### Alterations
+Contains All the Implementations of Map Alterations
+
+Files are named according to Alteration Categories of Altered Nadeo
+
+### Core
+Contains all surrounding Functionality
+
+**AlterationConfig:** Global Configurations considering Datastructure, Keywords, etc. (Needs to be loaded before any Alteration)
+
+**AlterationLogic:** Implements the Process of Altering Maps or Customblocks
+
+**AlterationScript:** Represents a Script of Alteration executions, which can be loaded from json and be run.
+
+**DevUtils:** Some Tools used during Develoment
+
+**SingleOrList:** A Listrepresentation which can be created from a single instance or a List
+
+### CustoBlocks
+Contains all about alteration of Customblocks
+
+**CustomBlock:** Represents a Customblock/Item which can be altered
+
+**CustomBlockAlteration:** Abstract definition of CustomBlock Alterations which can be applied on Customblocks
+
+**CustomSurfaceAlteration:** Implementations of CustomBlock Alterations for surface changes
+
+**CustomOtherAlteration:** Some Varying Implementations of CustomBlock Alterations
+
+### Inventory
+Conatins All about available Articles and selection of them.
+
+**Article:** Represents a Article (Block/Item) which can be placed in a Map. Contains Keyword indexing and matching (Keywords according to it's name) 
+
+**ArticleImport:** Import of Articles available in Trackmania 2020
+
+**Inventory:** A set of Articles, allows the Selection of Articles based on Keywords (The full/base Inventory with all available Articles including customblocks is in Alteration.inventory)
+
+**InventoryChange:** Changes which will can be applied on an Inventory (Including Base, but not during an Alteration)
+
+**KeywordEdit:** A copy of an Inventory with cloned Articles, used to align to Articles with changed set of Keywords (change Keywords within Articles -> see which Articles originaly had those Keywords -> use Alignment to place/replace)
+
+### Maps: 
+Contains fundamental functionality for the Alteration of Maps
+
+**Alteration:** Abstract defintion of Alterations which can be applied on Maps
+
+**Block:** Represents a Placed Block, although not actually placed in a Map but used for staging before getting placed in.
+
+**Map:** Represents a Map which can loaded, altered and saved. Provides a range of functionality for modifications, often using Inventory (wrapping an actual map)
+
+### Positioning
+Contains all functionality for processing of Positions (coords and rotation)
+
+**Move:** Diffrent Implementations of modifications which can be applied on a Position (sometimes with Articleinfo)
+
+**MoveChain:** A chain of diffrent Moves, which can be applied on a position
+
+**Position:** Represents a Position of a Block (coords and rotation)
+
+**PosUtils:** some Functions for easier creation of Movechains (used in Alteration and InventoryChange)
+
+## Data Structure
+
+### Global Data
+In CommonApplicationData ("C:\ProgramData\AutoAlteration\data")
+DataFolder modifyable per DevMode, DevPath (for Development)
+
+**CustomBlocks:** Base Folder for customblocks/Items which can be imported into Inventory (Inventorychange: CustomBlockFolder)
+
+**CustomBlocks/Vanilla:** Folder with all vanilla blocks/items as customblocks/items
+
+**Inventory:** Data defining Keywords and vanilla Articles
+
+**Inventory/BlockData:** Vanilla Articles in json format: [{Height,Width,Length,type,Name,Theme,Defaultrotation}]
+
+**Inventory/Keywords:** most Keywords used to split up Article Names (Orderd by Length)
+
+**Inventory/KeywordsStart:** Keywordswhich should be used first
+
+### User Data
+in ApplicationData ("%appdata%/Autoalteration/")
+Data which can vary depending on Usage
+
+## Processes
+
+### Keyword extraction
+
+### Map Alteration
+
+### Folder Alteration
+
+### CustomBlock Alteration
+
+### Inventory Selection
+
+### InventoryEdit Alignment
 
 ## To be documented:
 
