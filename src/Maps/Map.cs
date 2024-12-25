@@ -187,7 +187,7 @@ public class Map
     stagedBlocks = [];
   }
 
-  public void PlaceBlock(Block block){
+  private void PlaceBlock(Block block){ // expects the block to be deleted after placing -> could cause nameing issues if not
     block.name = block.name.TrimStart('\\');
     switch (block.blockType){
         case BlockType.Block:

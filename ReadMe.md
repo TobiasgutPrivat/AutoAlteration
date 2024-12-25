@@ -276,6 +276,51 @@ Data which can vary depending on Usage
 ## To be documented:
 
 ## Trackmania circumstances
+
+### Block Placement
+
+**Vanilla Blocks**
+- Class: CGameCtnBlock
+- Name (blockModel): Name of Block in game
+- Modes: normal (in grid), free, (is defined by block.isFree)
+  - Normal: block.Coord defines position in grid (factor: (32m, 8m, 32m) ), block.Direction defines orientation as Cardinal Directions
+  - Free: 
+    - block.AbsolutePositionInMap: defines position as coordinates, 
+    - block.PitchYawRoll: defines rotation as Vector (X=Yaw, Y=Pitch, Z=Roll)
+      
+      application order: 1. Yaw, 2. Roll, 3. Pitch
+
+- Auto Alteration always places as Freeblock
+- Some additional Properties: IsGhost, IsClip, Color, Skin, Bit21 (aka. IsAir)
+  
+  Per default they are just transfered from original block in Auto Alteration
+
+**Vanilla Items**
+- Class: CGameCtnAnchoredObject
+- Name (Id): Name of Item in game
+- Collection: here fixed to TM2020 (new Id(26))
+- Author: here fixed to Nadeo
+- item.AbsolutePositionInMap: defines position as coordinates, 
+  - item.PitchYawRoll: defines rotation as Vector (X=Yaw, Y=Pitch, Z=Roll)
+    
+    application order: 1. Yaw, 2. Roll, 3. Pitch
+
+- Some additional Properties: Color, Scale
+
+**Custom Blocks**
+- Requires block to be embedded in the Map
+  - EntryName: "Blocks/" + block.name + ".Block.Gbx"
+- Name (blockModel): block.name + ".Block.Gbx_CustomBlock";
+- block.name can be a Path with Folders
+- Everything else: like normal Blocks
+
+**Custom Items**
+- Requires item to be embedded in the Map
+  - EntryName: "Items/" + item.name + ".Item.Gbx"
+- Name (Id): item.name + ".Item.Gbx"
+- item.name can be a Path with Folders
+- Everything else: like normal Items
+
 ### Positioning systems
 ### Embeddings
 
