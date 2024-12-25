@@ -2,7 +2,8 @@
 TODO 
 integrate already embedded Blocks
 Mark which Alterations differ from Altered Nadeo
-Issue with Altering Blocks, not placeable
+Positioning Issue with some blocks on Tilted (probably with negation of rotation at start)
+Issue with Altering CustomBlocks (not placeable)
 Issue EmbeddedBlocks names -> flatten or use full path
 
 Definitions/Documentation:
@@ -259,7 +260,7 @@ Data which can vary depending on Usage
 
 **CustomBlockSets:** If a customblock set is needed it get's generated into it's Folder AutoAlteration/{SetName}/
 
-## Processes
+## Processes (To be documented)
 
 ### Keyword extraction
 
@@ -272,8 +273,6 @@ Data which can vary depending on Usage
 ### Inventory Selection
 
 ### InventoryEdit Alignment
-
-## To be documented:
 
 ## Trackmania circumstances
 
@@ -321,33 +320,4 @@ Data which can vary depending on Usage
 - item.name can be a Path with Folders
 - Everything else: like normal Items
 
-### Positioning systems
-### Embeddings
-
-## Definitions
-### Data Structure AutoAlteration
-- Customblocks
-- Inventory
-- DevLog
-
-## Alteration Scripts
-
-## Design Decisions
-
-### Map Altering
-
-### Positioning
-- MoveChains
-
-### Inventory
-- Keyword Splitting
-- ToKeywords
-
-### Alteration implementations
-- Helperfunctions
-
-### Customblocks
-- Embedding
-- FolderStructure
-
-### Program interface
+## maybe further to be documented

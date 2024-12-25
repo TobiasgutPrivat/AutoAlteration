@@ -10,8 +10,8 @@ public abstract class Alteration: PosUtils {
     public static Inventory inventory = new();
     
     public static void CreateInventory() {
+        inventory = new(); //Clear inventory when regenerating
         inventory.AddArticles(ArticleImport.ImportVanillaInventory());
-        inventory.articles.ForEach(x => x.cacheFilter.Clear());
         if (AltertionConfig.devMode){
             inventory.Export("Vanilla");
         }

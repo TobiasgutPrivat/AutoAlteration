@@ -15,6 +15,7 @@ public class Inventory { // represents all available articles which can be place
         if (cachedInventories.ContainsKey(keywordFilter)) {
             return cachedInventories[keywordFilter];
         }
+
         List<Article> result = [];
         bool[] matches = Matches(keywordFilter);
         for (int i = 0; i < articles.Count; i++){
@@ -22,8 +23,10 @@ public class Inventory { // represents all available articles which can be place
                 result.Add(articles[i]);
             }
         }
-        cachedInventories[keywordFilter] = new(result);
-        return new(result);
+
+        Inventory resultInventory = new(result);
+        cachedInventories[keywordFilter] = resultInventory;
+        return resultInventory;
     }
 
     #region Match
@@ -198,10 +201,8 @@ public class Inventory { // represents all available articles which can be place
         return new KeywordEdit(articleClone);
     }
 
-    public KeywordEdit EditOriginal(){
-        articles.ForEach(x => x.cacheFilter.Clear());
-        return new KeywordEdit(articles);
-    }
+    public KeywordEdit EditOriginal() =>
+        new KeywordEdit(articles);
 
     public void ClearSpecific() =>
         articles = articles.Where(a => !a.MapSpecific).ToList();

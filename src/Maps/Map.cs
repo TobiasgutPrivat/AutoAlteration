@@ -190,20 +190,20 @@ public class Map
   private void PlaceBlock(Block block){ // expects the block to be deleted after placing -> could cause nameing issues if not
     block.name = block.name.TrimStart('\\');
     switch (block.blockType){
-        case BlockType.Block:
-        case BlockType.Pillar:
-          PlaceTypeBlock(block);
-          break;
-        case BlockType.Item:
-          PlaceTypeItem(block);
-          break;
+        // case BlockType.Block:
+        // case BlockType.Pillar:
+        //   PlaceTypeBlock(block);
+        //   break;
+        // case BlockType.Item:
+        //   PlaceTypeItem(block);
+        //   break;
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x == block.name)){
             EmbedBlock("Blocks\\" + block.name + ".Block.Gbx",block.Path);
             embeddedBlocks.Add(block.name);
           }
           block.name += ".Block.Gbx_CustomBlock";
-          PlaceTypeBlock(block);
+          // PlaceTypeBlock(block);
           break;
         case BlockType.CustomItem:
           block.name = (block.name.Split('\\').Last() + ".Item.Gbx").Replace("\\","/");
@@ -212,31 +212,33 @@ public class Map
             embeddedBlocks.Add("Items/" + block.name);
           }
           // block.name += ".Item.Gbx";
-          PlaceTypeItem(block);
+          // PlaceTypeItem(block);
           break;
       }
+
+    block.PlaceInMap(map);
   }
 
-  private void PlaceTypeBlock(Block block){
-    CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-    newBlock.IsFree = true;
-    newBlock.AbsolutePositionInMap = block.position.coords;
-    newBlock.PitchYawRoll = block.position.pitchYawRoll;
-    newBlock.IsGhost = false;
-    newBlock.IsClip = block.IsClip;
-    newBlock.Color = block.color;
-    newBlock.Skin = block.Skin;
-    newBlock.Bit21 = block.IsAir;
-  }
-  private void PlaceTypeItem(Block block){
-    CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
-    // item.SnappedOnItem = block.SnappedOnItem;
-    // item.SnappedOnBlock = block.SnappedOnBlock;
-    // item.PlacedOnItem = block.PlacedOnItem;
-    // item.PivotPosition = block.PivotPosition;
-    // item.BlockUnitCoord = block.BlockUnitCoord;
-    item.Color = block.color;
-    item.Scale = 1;
-  }
+  // private void PlaceTypeBlock(Block block){
+  //   CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
+  //   newBlock.IsFree = true;
+  //   newBlock.AbsolutePositionInMap = block.position.coords;
+  //   newBlock.PitchYawRoll = block.position.pitchYawRoll;
+  //   newBlock.IsGhost = false;
+  //   newBlock.IsClip = block.IsClip;
+  //   newBlock.Color = block.color;
+  //   newBlock.Skin = block.Skin;
+  //   newBlock.Bit21 = block.IsAir;
+  // }
+  // private void PlaceTypeItem(Block block){
+  //   CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
+  //   // item.SnappedOnItem = block.SnappedOnItem;
+  //   // item.SnappedOnBlock = block.SnappedOnBlock;
+  //   // item.PlacedOnItem = block.PlacedOnItem;
+  //   // item.PivotPosition = block.PivotPosition;
+  //   // item.BlockUnitCoord = block.BlockUnitCoord;
+  //   item.Color = block.color;
+  //   item.Scale = 1;
+  // }
   #endregion
 }

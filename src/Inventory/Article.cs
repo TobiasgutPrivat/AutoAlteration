@@ -12,8 +12,6 @@ public class Article {
     public bool Theme;
     public bool MapSpecific = false;
 
-    public Dictionary<string,bool> cacheFilter = [];
-
     public Article(string name,BlockType type,SList<string> keywords,SList<string>? toShape = null,MoveChain ?moveChain = null,int length = 1, int width = 1){
         Name = name;
         Type = type;
@@ -26,6 +24,7 @@ public class Article {
     
     public Article(int Height, int Width, int Length, BlockType Type, string Name, bool Theme, bool DefaultRotation){
         this.Name = Name;
+        LoadKeywords();
         this.Type = Type;
         this.Length = Length;
         this.Width = Width;
@@ -40,13 +39,16 @@ public class Article {
         LoadKeywords();
         Type = type;
         string vanillaName = Name;
+
+        // for customblocksets get size from unaltered version
         AltertionConfig.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
         List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList(); 
-        if (vanillaVersion.Count > 0) { // for customblocksets get size from unaltered version
+        if (vanillaVersion.Count > 0) { 
             Width = vanillaVersion.First().Width;
             Length = vanillaVersion.First().Length;
             Height = vanillaVersion.First().Height;
         }
+
         MapSpecific = mapSpecific;
     }
 

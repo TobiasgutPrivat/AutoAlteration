@@ -27,6 +27,22 @@ public class Block {
     public Byte3 BlockUnitCoord;
     public string Path = "";
 
+    public void PlaceInMap(CGameCtnChallenge map){
+        switch (blockType){
+            case BlockType.Block:
+            case BlockType.CustomBlock:
+            case BlockType.Pillar:
+                PlaceBlockInMap(map);
+                break;
+            case BlockType.Item:
+            case BlockType.CustomItem:
+                PlaceItemInMap(map);
+                break;
+        }
+    }
+
+    #region Blocks
+        
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
     {
         color = block.Color;
@@ -77,7 +93,22 @@ public class Block {
         };
     }
 
+    private void PlaceBlockInMap(CGameCtnChallenge map) {
+        CGameCtnBlock newBlock = map.PlaceBlock(name,new(0,0,0),Direction.North);
+        newBlock.IsFree = true;
+        newBlock.AbsolutePositionInMap = position.coords;
+        newBlock.PitchYawRoll = position.pitchYawRoll;
+        newBlock.IsGhost = false;
+        newBlock.IsClip = IsClip;
+        newBlock.Color = color;
+        newBlock.Skin = Skin;
+        newBlock.Bit21 = IsAir;
+    }
 
+    #endregion
+
+    #region Items
+    
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
@@ -97,4 +128,16 @@ public class Block {
         moveChain?.Apply(position,article);
         article.MoveChain.Subtract(position,article);
     }
+
+    private void PlaceItemInMap(CGameCtnChallenge map){
+        CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(name, new Id(26), "Nadeo"),position.coords,position.pitchYawRoll);
+        // item.SnappedOnItem = SnappedOnItem;
+        // item.SnappedOnBlock = SnappedOnBlock;
+        // item.PlacedOnItem = PlacedOnItem;
+        // item.PivotPosition = PivotPosition;
+        // item.BlockUnitCoord = BlockUnitCoord;
+        item.Color = color;
+        item.Scale = 1;
+    }
+    #endregion
 }

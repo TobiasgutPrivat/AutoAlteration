@@ -25,7 +25,7 @@ class ArticleImport {
         foreach (var item in jsonArray)
         {
             BlockType blockType = BlockType.Block;
-            switch (item.type) {
+            switch ((string) item.type) {
                 case "Block":
                     blockType = BlockType.Block;
                     break;
