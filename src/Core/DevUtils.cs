@@ -74,3 +74,9 @@ class Test : Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class Nothing : Alteration {
+    public override void Run(Map map)
+    {
+    }
+}

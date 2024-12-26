@@ -81,11 +81,26 @@ public class Map
   private void ExtractEmbeddedBlocks(string path){
     ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
     zipArchive.Entries.ToList().ForEach(x => {
-      string filePath = (path + "\\" + x.FullName).Replace("Items/","").Replace("Blocks/","");
+      string filePath = path + "\\" + x.Name; // Extract without Folderstructure (FullName)
       Directory.CreateDirectory(Path.GetDirectoryName(filePath));
       x.ExtractToFile(filePath);
     });
   }
+
+  // private void FlattenEmbeddedBlocks(){
+  //   ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
+  //   zipArchive.Entries.ToList().ForEach(x => {
+  //     //Flatten customblocks
+  //     if (x.FullName.Contains("Blocks")) x.ExtractToFile(Path.Join(AltertionConfig.CustomBlocksFolder,x.FullName.Replace("Blocks\\","").Replace("Blocks/","")));
+  //   });
+  //   //Flatten references to those blocks
+  //   map.Blocks.ToList().Where(x => x.BlockModel.Id.Contains('\\') || x.BlockModel.Id.Contains('/')).ToList().ForEach(x => 
+  //     x.BlockModel = new (){Id = x.BlockModel.Id.Split('\\','/').Last(), Author = x.BlockModel.Author, Collection = x.BlockModel.Collection}
+  //     );
+  //   map.AnchoredObjects.ToList().Where(x => x.ItemModel.Id.Contains('\\') || x.ItemModel.Id.Contains('/')).ToList().ForEach(x => 
+  //     x.ItemModel = new (){Id = x.ItemModel.Id.Split('\\','/').Last(), Author = x.ItemModel.Author, Collection = x.ItemModel.Collection}
+  //     );
+  // }
 
   public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
     string TempFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Temp");
@@ -190,13 +205,6 @@ public class Map
   private void PlaceBlock(Block block){ // expects the block to be deleted after placing -> could cause nameing issues if not
     block.name = block.name.TrimStart('\\');
     switch (block.blockType){
-        // case BlockType.Block:
-        // case BlockType.Pillar:
-        //   PlaceTypeBlock(block);
-        //   break;
-        // case BlockType.Item:
-        //   PlaceTypeItem(block);
-        //   break;
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x == block.name)){
             EmbedBlock("Blocks\\" + block.name + ".Block.Gbx",block.Path);
@@ -212,33 +220,10 @@ public class Map
             embeddedBlocks.Add("Items/" + block.name);
           }
           // block.name += ".Item.Gbx";
-          // PlaceTypeItem(block);
           break;
       }
 
     block.PlaceInMap(map);
   }
-
-  // private void PlaceTypeBlock(Block block){
-  //   CGameCtnBlock newBlock = map.PlaceBlock(block.name,new(0,0,0),Direction.North);
-  //   newBlock.IsFree = true;
-  //   newBlock.AbsolutePositionInMap = block.position.coords;
-  //   newBlock.PitchYawRoll = block.position.pitchYawRoll;
-  //   newBlock.IsGhost = false;
-  //   newBlock.IsClip = block.IsClip;
-  //   newBlock.Color = block.color;
-  //   newBlock.Skin = block.Skin;
-  //   newBlock.Bit21 = block.IsAir;
-  // }
-  // private void PlaceTypeItem(Block block){
-  //   CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(block.name, new Id(26), "Nadeo"),block.position.coords,block.position.pitchYawRoll);
-  //   // item.SnappedOnItem = block.SnappedOnItem;
-  //   // item.SnappedOnBlock = block.SnappedOnBlock;
-  //   // item.PlacedOnItem = block.PlacedOnItem;
-  //   // item.PivotPosition = block.PivotPosition;
-  //   // item.BlockUnitCoord = block.BlockUnitCoord;
-  //   item.Color = block.color;
-  //   item.Scale = 1;
-  // }
   #endregion
 }

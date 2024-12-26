@@ -77,10 +77,11 @@ public class Article {
 
     #region LoadKeywords
     public void LoadKeywords() {
-        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None).Where(p => !string.IsNullOrEmpty(p)).ToArray(); // seperate Foldernames
-        string name = splits.Last(); // filename/blockname
+        // string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None).Where(p => !string.IsNullOrEmpty(p)).ToArray(); // seperate Foldernames
+        // string name = splits.Last(); // filename/blockname
+        // splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
 
-        splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
+        string name = Name.Split(['/', '\\'],StringSplitOptions.None).Last(); // filename/blockname
 
         int toPos = GetToPos(name) ?? -1; // Extract ToKeywords (mostly shapes) to avoid naming conflicts
         if (toPos != -1) {
@@ -97,17 +98,17 @@ public class Article {
         
         //Keywords
         foreach (var keywordLine in AltertionConfig.Keywords) {
-            if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
+            while (name.Contains(keywordLine) && Name.Contains(keywordLine)) { //also check original Name, to avoid Keywords created by 2 parts which where previously seperated
                 Keywords.Add(keywordLine);
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
             }
-            if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
-                Keywords.Add(keywordLine);
-                name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
-            }
-            if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
-                Console.WriteLine("Article " + Name + " contains Keyword: " + keywordLine + " three Times");
-            }
+            // if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
+            //     Keywords.Add(keywordLine);
+            //     name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
+            // }
+            // if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
+            //     Console.WriteLine("Article " + Name + " contains Keyword: " + keywordLine + " three Times");
+            // }
         }
         
         CheckFullNameCoverage();
@@ -128,7 +129,7 @@ public class Article {
     
     private void CheckFullNameCoverage() {
         int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length);
-        if (Name.Replace("/", "").Replace("\\", "").Length != keywordLength) {
+        if (Name.Split(['/', '\\'],StringSplitOptions.None).Last().Length != keywordLength) {
             Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }

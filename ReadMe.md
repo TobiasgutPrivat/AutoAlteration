@@ -5,6 +5,7 @@ Mark which Alterations differ from Altered Nadeo
 Positioning Issue with some blocks on Tilted (probably with negation of rotation at start)
 Issue with Altering CustomBlocks (not placeable)
 Issue EmbeddedBlocks names -> flatten or use full path
+Add Scripts to UI App
 
 Definitions/Documentation:
 Trackmania Properties (How embedding, positioning etc. works )
@@ -310,14 +311,21 @@ Data which can vary depending on Usage
 - Requires block to be embedded in the Map
   - EntryName: "Blocks/" + block.name + ".Block.Gbx"
 - Name (blockModel): block.name + ".Block.Gbx_CustomBlock";
-- block.name can be a Path with Folders
+- block.name can be a Path with Folders *Note
 - Everything else: like normal Blocks
 
 **Custom Items**
 - Requires item to be embedded in the Map
   - EntryName: "Items/" + item.name + ".Item.Gbx"
 - Name (Id): item.name + ".Item.Gbx"
-- item.name can be a Path with Folders
+- item.name can be a Path with Folders *Note
 - Everything else: like normal Items
+
+**\*Note CustomBlock Paths**
+Usually when embedding customblocks they can have a full path.
+
+In this Project only the Name is used for indexing and when embedding new Blocks, for simplicity reasons.
+
+**Potential Problem** this can cause issues if two blocks have the same name but diffrent Path
 
 ## maybe further to be documented

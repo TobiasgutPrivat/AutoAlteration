@@ -6,7 +6,7 @@ AltertionConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"
 AltertionConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-new AlterationScript ("Test.json").RunConfig();
+new AlterationScript ("TestTemplate.json").RunConfig();
 // AutoAlteration.RunConfig("FileConfig.json");
 // File.WriteAllText(Path.Combine(AutoAlteration.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
 // AutoAlteration.AlterFolder(new SnowScenery(),"SourcePath","DestinationPath","SnowScenery");
