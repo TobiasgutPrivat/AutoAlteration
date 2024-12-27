@@ -18,7 +18,7 @@ public class CustomBlockFolder(string subFolder) : InventoryChange {
 
 public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : InventoryChange {
     public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
-    public readonly string folder = Path.Combine(AltertionConfig.CustomBlockSetsFolder, customBlockAlteration.GetType().Name);
+    public readonly string folder = Path.Combine(AltertionConfig.ApplicationDataFolder, customBlockAlteration.GetType().Name);
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         if (!Directory.Exists(folder)) { 

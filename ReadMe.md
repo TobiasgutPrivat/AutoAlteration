@@ -102,6 +102,51 @@ Those are the currently available Alterations
 - YeetMaxUp
 - YepTree
 
+## Folder Application
+Description how the new Maps are stored.
+
+According to selected way:
+
+**File**
+
+Loads Map from selected {Source} (FilePath)
+
+Saves altered Map to "{Destination}/{Previous FileName} {Name}.map.gbx"
+
+**Folder**
+
+Loads all Maps from selected {Source} (FolderPath, no subfolders)
+
+Saves altered Maps to "{Destination}/{Previous FileName} {Name}.map.gbx"
+
+**FullFolder**
+
+Loads all Maps from selected {Source} (FolderPath, including subfolders)
+
+Saves altered Maps to "{Destination}/{Previous Subfolder}/{SubfolderName} {Name}/{Previous FileName} {Name}.map.gbx"
+
+## Alteration Scripts
+For often used Alterations, scripts can be made.
+
+**Store** in "%appdata%/AutoAlteration/scripts/" as *.json
+
+**Format**:
+>     [
+>       {
+>         "Type": "{Type: File/Folder/FullFolder}",
+>         "Name": "{Name: used for Files/Mapname}",
+>         "Source": "{Path to your existing File/Folder}",
+>         "Destination": "{Path to your save Folder}",
+>         "Alterations": [
+>           "{Your Alteration}", //Names as defined previously
+>           ... //further Alterations
+>         ]
+>       },
+>       ... //further Configurations
+>     ]
+
+Has to follow json formatting rules
+
 ## Known Issues
 - The position of Items which are snapped onto something are read incorrectly, resulting in small offsets.
 - Some Map Templates have different height offset when transforming to freeblock mode
@@ -117,8 +162,8 @@ A guide to implementing Alterations will come soon
 
 ### Setup Project
 1. Install git if you haven't: https://git-scm.com/downloads
-2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0
-3. Clone this GitHub Repository into any Folder (you can use this Command in cmd)
+2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0 (make sure nuget is available)
+3. Clone this GitHub Repository into any Folder. You can use this Command in cmd:
 > git clone https://github.com/TobiasgutPrivat/AutoAlteration.git /{path/to/your/directory}
 
 <!--
@@ -127,7 +172,7 @@ In that case make sure you have correct package source using:
 > dotnet nuget add source https://api.nuget.org/v3/index.json
 -->
 
-# Documentation
+# Technical Documentation
 This Documentation contains
 - Code Structure
 - Data Strcucture/Definitions
@@ -165,12 +210,12 @@ Description of basic Purpose of all code-Files
 ### AutoAlteration.cs
 Interface to main Alteration Functionality
 
-### Alterations
+### Alterations/
 Contains All the Implementations of Map Alterations
 
 Files are named according to Alteration Categories of Altered Nadeo
 
-### Core
+### Core/
 Contains all surrounding Functionality
 
 **AlterationConfig:** Global Configurations considering Datastructure, Keywords, etc. (Needs to be loaded before any Alteration)
@@ -183,7 +228,7 @@ Contains all surrounding Functionality
 
 **SingleOrList:** A Listrepresentation which can be created from a single instance or a List
 
-### CustoBlocks
+### CustoBlocks/
 Contains all about alteration of Customblocks
 
 **CustomBlock:** Represents a Customblock/Item which can be altered
@@ -194,7 +239,7 @@ Contains all about alteration of Customblocks
 
 **CustomOtherAlteration:** Some Varying Implementations of CustomBlock Alterations
 
-### Inventory
+### Inventory/
 Conatins All about available Articles and selection of them.
 
 **Article:** Represents a Article (Block/Item) which can be placed in a Map. Contains Keyword indexing and matching (Keywords according to it's name) 
@@ -207,7 +252,7 @@ Conatins All about available Articles and selection of them.
 
 **KeywordEdit:** A copy of an Inventory with cloned Articles, used to align to Articles with changed set of Keywords (change Keywords within Articles -> see which Articles originaly had those Keywords -> use Alignment to place/replace)
 
-### Maps: 
+### Maps/
 Contains fundamental functionality for the Alteration of Maps
 
 **Alteration:** Abstract defintion of Alterations which can be applied on Maps
@@ -216,7 +261,7 @@ Contains fundamental functionality for the Alteration of Maps
 
 **Map:** Represents a Map which can loaded, altered and saved. Provides a range of functionality for modifications, often using Inventory (wrapping an actual map)
 
-### Positioning
+### Positioning/
 Contains all functionality for processing of Positions (coords and rotation)
 
 **Move:** Diffrent Implementations of modifications which can be applied on a Position (sometimes with Articleinfo)
@@ -249,7 +294,7 @@ DataFolder modifyable per DevMode, DevPath (for Development)
 
 **IceSkin:** used for SnowScenery Wall skin
 
-**config/:** place to store Alteration scripts files
+**script/:** place to store Alteration scriptfiles
 
 **dev/** some data exports for debugging
 
@@ -263,11 +308,27 @@ Data which can vary depending on Usage
 
 ## Processes (To be documented)
 
-### Keyword extraction
-
 ### Map Alteration
+From Map file to altered Map file (AutoAlteration.AlterFile)
 
-### Folder Alteration
+1. Load Map using Map constructor
+
+2. Call Alteration Process AlterationLogic.Alter
+
+3. Clear embedded Blocks from last Map ("mapSpecific") from Folder and Inventory
+
+4. If the set of alterations differs from last time, regenerate the Inventory
+    1. Recreate Inventory from Vanilla Blockdata
+    2. Apply Inventorychanges from all Alterations
+    3. Apply some general modifications on Inventory for better Keyword Indexing
+
+5. Add already embedded Customblocks to Inventory
+
+6. For all customblockSets in Alterations, generate Set and add to Inventory for already embedded Blocks (Extracts to Temp Folder) 
+
+7. Apply Alterations on Map (alteration.Run)
+
+8. save map with new Name
 
 ### CustomBlock Alteration
 
@@ -327,5 +388,3 @@ Usually when embedding customblocks they can have a full path.
 In this Project only the Name is used for indexing and when embedding new Blocks, for simplicity reasons.
 
 **Potential Problem** this can cause issues if two blocks have the same name but diffrent Path
-
-## maybe further to be documented

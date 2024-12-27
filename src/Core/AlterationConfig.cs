@@ -9,7 +9,7 @@ class AltertionConfig {
     public static string DataFolder = "";
     public static string BlockDataPath = "";
     public static string CustomBlocksFolder = "";
-    public static string CustomBlockSetsFolder = "";
+    public static string ApplicationDataFolder = "";
     public static List<string> Keywords = [];
     public static List<string> ToKeywords = [];
     public static List<string> customBlockAltNames = [];
@@ -24,16 +24,16 @@ class AltertionConfig {
         }
 
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
-        CustomBlockSetsFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
+        ApplicationDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
         BlockDataPath = Path.Combine(DataFolder, "Inventory","BlockData.json");
 
         ToKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
-        ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "ToKeywords.txt"))).ToList();
+        ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "ToKeywords.txt"))).ToList();
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
-        Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "Keywords.txt"))).ToList();
+        Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "Keywords.txt"))).ToList();
         Keywords = Keywords.OrderBy(x => x.Length).Reverse().ToList();
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","KeywordsStart.txt")).Concat(Keywords).ToList();
-        Keywords = loadKeywordsFile(Path.Combine(CustomBlockSetsFolder, "KeywordsStart.txt")).Concat(Keywords).ToList();
+        Keywords = loadKeywordsFile(Path.Combine(ApplicationDataFolder, "KeywordsStart.txt")).Concat(Keywords).ToList();
 
         customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
     }

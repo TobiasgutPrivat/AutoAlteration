@@ -13,12 +13,13 @@ class AlterationLogic {
         //create inventory for Alteration
         if (lastAlterations == null || alterations.Any(a => !lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
             // needs Inventory recreation
+            Alteration.CreateInventory(); //Resets Inventory to Vanilla
             foreach (Alteration alteration in alterations) {
-                Alteration.CreateInventory();
                 alteration.InventoryChanges.ForEach(x => x.ChangeInventory(Alteration.inventory));
-                Alteration.DefaultInventoryChanges();
             }
-            if (AltertionConfig.devMode){
+            Alteration.DefaultInventoryChanges();
+
+            if (AltertionConfig.devMode){ //logging
                 Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
             }
         }

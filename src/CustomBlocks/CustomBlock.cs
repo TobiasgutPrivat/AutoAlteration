@@ -1,5 +1,4 @@
 using GBX.NET;
-using GBX.NET.LZO;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
@@ -10,6 +9,7 @@ public class CustomBlock
   public string Name;
   // public CGameCommonItemEntityModelEdition? Item;
   public List<CPlugCrystal> MeshCrystals = [];
+  // public List<CPlugCrystal> MeshCrystals = [];
   public BlockType Type;
   public CustomBlock(string blockPath)
   { 
@@ -17,8 +17,13 @@ public class CustomBlock
     
     if (blockPath.Contains(".Block.gbx", StringComparison.OrdinalIgnoreCase)){
       Type = BlockType.Block;
-      CGameBlockItem Block = (CGameBlockItem)customBlock.EntityModelEdition;//TODO handle null
-      MeshCrystals.AddRange(Block.CustomizedVariants.Select(x => x.Crystal).ToList());
+      if (customBlock.EntityModelEdition is not null){
+        CGameBlockItem Block = (CGameBlockItem)customBlock.EntityModelEdition;
+        if (Block.CustomizedVariants is not null){
+          MeshCrystals.AddRange(Block.CustomizedVariants.Select(x => x.Crystal).OfType<CPlugCrystal>().ToList());
+        }
+      }
+      //TODO handle EntityModel
       Name = Path.GetFileName(blockPath)[..^10];
     }
     else if (blockPath.Contains(".Item.gbx", StringComparison.OrdinalIgnoreCase)){

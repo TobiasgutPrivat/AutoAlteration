@@ -10,7 +10,7 @@ class AlterationScript {
 
     public void RunConfig(){
         if (!filePath.Contains(':')){
-            filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","config", filePath);
+            filePath = Path.Combine(AltertionConfig.ApplicationDataFolder,"scripts", filePath);
         }
         foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
         {

@@ -105,10 +105,14 @@ public class Map
   public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
     string TempFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Temp");
     string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetType().Name);
+    string TempExportsFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Exports");
     if (!Directory.Exists(TempFolder)) { Directory.CreateDirectory(TempFolder); }
     if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
-    ExtractEmbeddedBlocks(TempFolder);
-    AutoAlteration.AlterAll(customBlockAlteration,TempFolder,CustomFolder,customBlockAlteration.GetType().Name);
+    if (!Directory.Exists(TempExportsFolder)) { 
+      Directory.CreateDirectory(TempExportsFolder);
+      ExtractEmbeddedBlocks(TempFolder);
+    }
+    AutoAlteration.AlterAll(customBlockAlteration,TempExportsFolder,CustomFolder,customBlockAlteration.GetType().Name);
     new CustomBlockFolder("Temp\\" + customBlockAlteration.GetType().Name).ChangeInventory(Alteration.inventory,true);
   }
   #endregion
