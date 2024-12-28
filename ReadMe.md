@@ -1,18 +1,18 @@
 <!--
 TODO 
-integrate already embedded Blocks
 Mark which Alterations differ from Altered Nadeo
-Positioning Issue with some blocks on Tilted (probably with negation of rotation at start)
-Issue with Altering CustomBlocks (not placeable)
-Issue EmbeddedBlocks names -> flatten or use full path
 Add Scripts to UI App
 
-Definitions/Documentation:
-Trackmania Properties (How embedding, positioning etc. works )
+Rotation subtraction incorrect, testable using Tilted, but so far nowhere needed (probably rotation order issue)
+
+Roadmap Customblock Alterations:
+1. Issue with Altering CustomBlocks (not placeable), works for items
+2. Test full Surface Alterations
+3. Issue Altering of EmbeddedBlocks don't appear ingame as embedded (can be done first)
+4. Solution for StaticModel-customblocks
 
 Opt.:
-Think about Multiple finishes for reverse/combined etc.
-Multi Map Alterations (Combined,Repeat/Multilap)
+Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
 apply on Nation Converter (check with BigBang)
 -->
 # Auto Alterations

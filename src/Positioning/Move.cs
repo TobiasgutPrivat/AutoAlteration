@@ -35,6 +35,7 @@ public class RotateCenter(Vec3 vector): Move(vector){
         Vec3 Offset = new(768 - position.coords.X, 120 - position.coords.Y, 768 - position.coords.Z);
         Vec3 rotation = position.pitchYawRoll;
         position.Rotate(-rotation);
+        position.pitchYawRoll = new Vec3(0, 0, 0);//not really clean solution
         position.Move(Offset);
         position.Rotate(vector);
         position.Move(-Offset);

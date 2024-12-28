@@ -148,14 +148,7 @@ class Flipped: EffectAlteration {
     public override void Run(Map map){
         //Dimensions normal Stadium
         // from (1,9,1) to (48,38,48)
-        inventory.Edit().Replace(map);
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, 360-x.position.coords.Y, 1536-x.position.coords.Z));
-        map.stagedBlocks.ForEach(x => {
-            Vec3 rotation = x.position.pitchYawRoll;
-            x.position.Rotate(-rotation);
-            x.position.Rotate(new Vec3(0, PI, 0));
-            x.position.Rotate(rotation);
-        });
+        inventory.Edit().Replace(map,RotateCenter(0,PI,0));
         map.PlaceStagedBlocks();
         PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
         PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
