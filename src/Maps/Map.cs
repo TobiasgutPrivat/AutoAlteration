@@ -9,6 +9,8 @@ public class Map
   public List<Block> stagedBlocks = [];
   public List<string> embeddedBlocks = [];
 
+  private Replay WRReplay;
+
   #region loading
   public Map(string mapPath)
   { 
@@ -230,4 +232,11 @@ public class Map
     block.PlaceInMap(map);
   }
   #endregion
+
+  public Replay GetWRReplay(){
+    //AR
+    //download the replay
+
+    return new Replay("somePath");
+  }
 }
