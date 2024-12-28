@@ -1,5 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
+using GBX.NET.Engines.GameData;
 
 public enum BlockType
 {
@@ -25,6 +26,7 @@ public class Block {
     public CGameCtnAnchoredObject? PlacedOnItem;
     public Vec3 PivotPosition;
     public Byte3 BlockUnitCoord;
+    public CGameWaypointSpecialProperty? WaypointSpecialProperty;
     public string Path = "";
 
     public void PlaceInMap(CGameCtnChallenge map){
@@ -53,6 +55,7 @@ public class Block {
         IsGround = block.IsGround;
         Skin = block.Skin;
         IsAir = block.Bit21;
+        WaypointSpecialProperty = block.WaypointSpecialProperty;
         position = GetBlockPosition(block);
 
         name = article.Name;
@@ -94,15 +97,16 @@ public class Block {
     }
 
     private void PlaceBlockInMap(CGameCtnChallenge map) {
-        CGameCtnBlock newBlock = map.PlaceBlock(name,new(0,0,0),Direction.North);
-        newBlock.IsFree = true;
-        newBlock.AbsolutePositionInMap = position.coords;
-        newBlock.PitchYawRoll = position.pitchYawRoll;
-        newBlock.IsGhost = false;
-        newBlock.IsClip = IsClip;
-        newBlock.Color = color;
-        newBlock.Skin = Skin;
-        newBlock.Bit21 = IsAir;
+        CGameCtnBlock block = map.PlaceBlock(name,new(0,0,0),Direction.North);
+        block.IsFree = true;
+        block.AbsolutePositionInMap = position.coords;
+        block.PitchYawRoll = position.pitchYawRoll;
+        block.WaypointSpecialProperty = WaypointSpecialProperty;
+        block.IsGhost = false;
+        block.IsClip = IsClip;
+        block.Color = color;
+        block.Skin = Skin;
+        block.Bit21 = IsAir;
     }
 
     #endregion
@@ -116,6 +120,7 @@ public class Block {
         // SnappedOnItem = item.SnappedOnItem;
         // PlacedOnItem = item.PlacedOnItem;
         // BlockUnitCoord = item.BlockUnitCoord;
+        WaypointSpecialProperty = item.WaypointSpecialProperty;
         color = item.Color;
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         position.Move(item.PivotPosition);
@@ -136,6 +141,7 @@ public class Block {
         // item.PlacedOnItem = PlacedOnItem;
         // item.PivotPosition = PivotPosition;
         // item.BlockUnitCoord = BlockUnitCoord;
+        item.WaypointSpecialProperty = WaypointSpecialProperty;
         item.Color = color;
         item.Scale = 1;
     }
