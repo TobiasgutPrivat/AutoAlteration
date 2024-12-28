@@ -2,6 +2,8 @@
 TODO 
 Mark which Alterations differ from Altered Nadeo
 Add Scripts to UI App
+Fix Some Blocks wrong rotation
+Some Trees turn into Cacti (Tilted 06, maybe some flags?)
 
 Rotation subtraction incorrect, testable using Tilted, but so far nowhere needed (probably rotation order issue)
 

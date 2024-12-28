@@ -26,7 +26,8 @@ public class Block {
     public CGameCtnAnchoredObject? PlacedOnItem;
     public Vec3 PivotPosition;
     public Byte3 BlockUnitCoord;
-    public CGameWaypointSpecialProperty? WaypointSpecialProperty;
+    public CGameWaypointSpecialProperty? WaypointSpecialProperty; //Stores CPLink info
+    public string? AnchorTreeId;
     public string Path = "";
 
     public void PlaceInMap(CGameCtnChallenge map){
@@ -52,6 +53,8 @@ public class Block {
         // name = block.BlockModel.Id;
         IsFree = block.IsFree;
         IsClip = block.IsClip;
+        block.
+
         IsGround = block.IsGround;
         Skin = block.Skin;
         IsAir = block.Bit21;
@@ -73,7 +76,8 @@ public class Block {
         } else {
             Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32));
             position.AddPosition(GetDirectionOffset(block));
-            if (block.BlockModel.Id == "TrackWallArch1x4SideTop"){//only block with that issue found yet
+            List<string> rotatedBlocks = ["TrackWallArch1x4SideTop", "DecoWallLoopEnd", "DecoWallLoopEndGrass", "DecoWallLoopEndDirt", "DecoWallLoopEndIce"];
+            if (rotatedBlocks.Any(x => x == block.BlockModel.Id)){//some excepted Blocks
                 position.AddPosition(new(Vec3.Zero, new Vec3(0.5f*Alteration.PI, 0, 0)));
             }
             return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));// 64m offset depends on Map Template i think
@@ -116,12 +120,15 @@ public class Block {
     public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
         blockType = BlockType.Item;
         name = item.ItemModel.Id;
+
         // SnappedOnBlock = item.SnappedOnBlock;
         // SnappedOnItem = item.SnappedOnItem;
         // PlacedOnItem = item.PlacedOnItem;
         // BlockUnitCoord = item.BlockUnitCoord;
+        AnchorTreeId = item.AnchorTreeId;
         WaypointSpecialProperty = item.WaypointSpecialProperty;
         color = item.Color;
+
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         position.Move(item.PivotPosition);
 
@@ -143,6 +150,7 @@ public class Block {
         // item.BlockUnitCoord = BlockUnitCoord;
         item.WaypointSpecialProperty = WaypointSpecialProperty;
         item.Color = color;
+        item.AnchorTreeId = AnchorTreeId;
         item.Scale = 1;
     }
     #endregion

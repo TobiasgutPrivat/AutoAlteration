@@ -18,6 +18,14 @@ public abstract class Alteration: PosUtils {
     }
 
     public static void DefaultInventoryChanges(){ //Some modifications for better Keyword indexing
+        inventory.articles.Where(a => a.Name.StartsWith("StructureSupportCurve2")).ToList().ForEach(a => {
+            a.Width = 2;
+            a.Length = 2;
+        });
+        inventory.articles.Where(a => a.Name.StartsWith("StructureSupportCurve3")).ToList().ForEach(a => {
+            a.Width = 3;
+            a.Length = 3;
+        });
         inventory.Select(BlockType.Block).Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
         inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
         inventory.Select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").EditOriginal().RemoveKeyword("Start").AddKeyword("MapStart");
