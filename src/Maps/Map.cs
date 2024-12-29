@@ -89,21 +89,6 @@ public class Map
     });
   }
 
-  // private void FlattenEmbeddedBlocks(){
-  //   ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
-  //   zipArchive.Entries.ToList().ForEach(x => {
-  //     //Flatten customblocks
-  //     if (x.FullName.Contains("Blocks")) x.ExtractToFile(Path.Join(AltertionConfig.CustomBlocksFolder,x.FullName.Replace("Blocks\\","").Replace("Blocks/","")));
-  //   });
-  //   //Flatten references to those blocks
-  //   map.Blocks.ToList().Where(x => x.BlockModel.Id.Contains('\\') || x.BlockModel.Id.Contains('/')).ToList().ForEach(x => 
-  //     x.BlockModel = new (){Id = x.BlockModel.Id.Split('\\','/').Last(), Author = x.BlockModel.Author, Collection = x.BlockModel.Collection}
-  //     );
-  //   map.AnchoredObjects.ToList().Where(x => x.ItemModel.Id.Contains('\\') || x.ItemModel.Id.Contains('/')).ToList().ForEach(x => 
-  //     x.ItemModel = new (){Id = x.ItemModel.Id.Split('\\','/').Last(), Author = x.ItemModel.Author, Collection = x.ItemModel.Collection}
-  //     );
-  // }
-
   public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
     string TempFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Temp");
     string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetType().Name);
@@ -137,7 +122,7 @@ public class Map
     if (atArticle.Type == BlockType.CustomBlock) ArticleName = atArticle.Name + ".Block.Gbx";
     if (atArticle.Type == BlockType.CustomItem) ArticleName = atArticle.Name + ".Item.Gbx";
     ArticleName = ArticleName.Replace("/","\\");
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){//TODO issue with customblocks having blockmodel.id as path
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){
       stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName)){

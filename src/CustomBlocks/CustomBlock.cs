@@ -5,11 +5,8 @@ using GBX.NET.Engines.Plug;
 public class CustomBlock
 {
   public CGameItemModel customBlock;
-  // public CGameBlockItem Block;
   public string Name;
-  // public CGameCommonItemEntityModelEdition? Item;
   public List<CPlugCrystal> MeshCrystals = [];
-  // public List<CPlugCrystal> MeshCrystals = [];
   public BlockType Type;
   public CustomBlock(string blockPath)
   { 

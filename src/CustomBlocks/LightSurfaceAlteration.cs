@@ -40,7 +40,7 @@ class LightSurfaceAlteration : CustomSurfaceAlteration {
         layer.Crystal.Faces.ToList().ForEach(x => GetMaterialUserInst(x).SurfacePhysicId = SurfacePhysicId);
         
         // move all positions closer to topmiddle point
-        // Will have issues with surfaces looking away from topmiddle point -> TODO replace Platform blocks with vanilla blocks
+        // Will have issues with surfaces looking away from topmiddle point
         Vec3 topMiddle = GetTopMiddle(layer.Crystal);
         layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => {
             float X,Y,Z;

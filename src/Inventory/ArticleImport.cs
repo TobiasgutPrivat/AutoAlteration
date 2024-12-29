@@ -13,7 +13,7 @@ class ArticleImport {
         //         "type": "Block"/"Item"/"Pillar"
         //         "Name": string,
         //         "Theme": bool,
-        //         "DefaultRotation": bool //TODO could be cause for additional rotation of some blocks
+        //         "DefaultRotation": bool
         //     },
         //     ...
         // ]
