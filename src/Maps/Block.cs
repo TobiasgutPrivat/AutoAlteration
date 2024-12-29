@@ -28,6 +28,8 @@ public class Block {
     public Byte3 BlockUnitCoord;
     public CGameWaypointSpecialProperty? WaypointSpecialProperty; //Stores CPLink info
     public string? AnchorTreeId;
+    public int BlockFlags;
+    public short ItemFlags;
     public string Path = "";
 
     public void PlaceInMap(CGameCtnChallenge map){
@@ -53,7 +55,7 @@ public class Block {
         // name = block.BlockModel.Id;
         IsFree = block.IsFree;
         IsClip = block.IsClip;
-        block.
+        BlockFlags = block.Flags;
 
         IsGround = block.IsGround;
         Skin = block.Skin;
@@ -111,6 +113,7 @@ public class Block {
         block.Color = color;
         block.Skin = Skin;
         block.Bit21 = IsAir;
+        block.Flags = BlockFlags;
     }
 
     #endregion
@@ -128,6 +131,7 @@ public class Block {
         AnchorTreeId = item.AnchorTreeId;
         WaypointSpecialProperty = item.WaypointSpecialProperty;
         color = item.Color;
+        ItemFlags = item.Flags;
 
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         position.Move(item.PivotPosition);
@@ -152,6 +156,7 @@ public class Block {
         item.Color = color;
         item.AnchorTreeId = AnchorTreeId;
         item.Scale = 1;
+        item.Flags = ItemFlags;
     }
     #endregion
 }
