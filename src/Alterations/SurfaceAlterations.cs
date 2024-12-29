@@ -64,10 +64,9 @@ class Road : Alteration {
 }
 
 class Wood : Alteration {
-    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyWood())];
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new LightWood())];
     public override void Run(Map map){
-        inventory.Export("Temp");
-        inventory.AddKeyword("HeavyWood").Replace(map);
+        inventory.AddKeyword("LightWood").PlaceRelative(map);
         map.PlaceStagedBlocks();
     }
 }

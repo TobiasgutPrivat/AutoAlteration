@@ -58,7 +58,7 @@ class InvisibleBlock : CustomBlockAlteration {
         CustomBlock LowCube = new CustomBlock(Path.Combine(AltertionConfig.DataFolder, "LowCubeLayer.Item.Gbx"));
         CPlugCrystal.GeometryLayer layer = LowCube.MeshCrystals[0].Layers[0] as CPlugCrystal.GeometryLayer;
         layer.Crystal.Positions = layer.Crystal.Positions.Select(x => new Vec3(x.X, x.Y - 1500, x.Z)).ToArray();
-        MeshCrystal.Layers.Add(layer);
+        MeshCrystal.Layers.Add(layer); //will not be effected by Altergeometry, because MeshCrystals to Alter get selected before this
         return true;
     }
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {

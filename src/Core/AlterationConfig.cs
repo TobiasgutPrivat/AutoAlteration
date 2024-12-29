@@ -29,6 +29,7 @@ class AltertionConfig {
 
         ToKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
         ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "ToKeywords.txt"))).ToList();
+        
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
         Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "Keywords.txt"))).ToList();
         Keywords = Keywords.OrderBy(x => x.Length).Reverse().ToList();
@@ -36,6 +37,7 @@ class AltertionConfig {
         Keywords = loadKeywordsFile(Path.Combine(ApplicationDataFolder, "KeywordsStart.txt")).Concat(Keywords).ToList();
 
         customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
+        Keywords = customBlockAltNames.Concat(Keywords).ToList(); // Add custom blocks Alterations at start of keywords
     }
 
     private static List<string> loadKeywordsFile(string path){

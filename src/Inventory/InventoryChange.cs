@@ -35,9 +35,10 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
     public void GenerateBlockSet() {
         Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
         if (!Directory.Exists(folder)) { 
-            Directory.CreateDirectory(folder); 
+            Directory.CreateDirectory(folder + "Temp");//Temp in case something goes wrong
         }
-        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AltertionConfig.CustomBlocksFolder, "Vanilla Items"), folder, customBlockAlteration.GetType().Name);
+        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AltertionConfig.CustomBlocksFolder, "Vanilla"), folder + "Temp", customBlockAlteration.GetType().Name);
+        Directory.Move(folder + "Temp", folder);
     }
 }
 

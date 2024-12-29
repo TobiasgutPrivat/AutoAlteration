@@ -17,19 +17,6 @@ public class CustomBlockAlteration {
         return new Vec3((Right + Left) / 2, top, (Front + Back) / 2);
     }
 
-    // public static bool MakeGeometryOnly(CustomBlock customBlock, CPlugCrystal MeshCrystal){
-    //     bool changed = false;
-    //     if (customBlock.customBlock.WaypointType != GBX.NET.Engines.GameData.CGameItemModel.EWaypointType.None){
-    //         customBlock.customBlock.WaypointType = GBX.NET.Engines.GameData.CGameItemModel.EWaypointType.None;
-    //         changed = true;
-    //     }
-    //     if (MeshCrystal.Layers.Any(x => x is not CPlugCrystal.GeometryLayer)){
-    //         MeshCrystal.Layers.Where(x => x is not CPlugCrystal.GeometryLayer).ToList().ForEach(x => MeshCrystal.Layers.Remove(x));
-    //         changed = true;
-    //     }
-    //     return changed;
-    // }
-
     public static string GetMaterialLink(CPlugCrystal.Face face) =>
         face.Material?.MaterialUserInst?.Link ?? "";
     public static string GetMaterialLink(CPlugCrystal.Material face) =>
@@ -67,37 +54,6 @@ class MaterialInfo : CustomBlockAlteration {
                 }
             });
         });
-        // if (customBlock.Type == BlockType.Block) {
-        //     customBlock.Block.CustomizedVariants[0].Crystal.Materials.ToList().ForEach(x => {
-        //         if (!materials.ContainsKey(GetMaterialLink(x))) {
-        //             materials.Add(GetMaterialLink(x),GetMaterialUserInst(x).SurfacePhysicId);
-        //             Console.WriteLine(GetMaterialLink(x));
-        //         }
-        //         if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(x).SurfacePhysicId)) {
-        //             SurfacePhysicIds.Add(GetMaterialUserInst(x).SurfacePhysicId,GetMaterialLink(x));
-        //             Console.WriteLine(GetMaterialUserInst(x).SurfacePhysicId);
-        //         }
-        //         if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(x).SurfaceGameplayId)) {
-        //             SurfaceGameplayIds.Add(GetMaterialUserInst(x).SurfaceGameplayId,GetMaterialLink(x));
-        //             Console.WriteLine(GetMaterialUserInst(x).SurfaceGameplayId);
-        //         }
-        //     });
-        // } else {
-        //     customBlock.Item.MeshCrystal.Materials.ToList().ForEach(x => {
-        //         if (!materials.ContainsKey(GetMaterialLink(x))) {
-        //             materials.Add(GetMaterialLink(x),GetMaterialUserInst(x).SurfacePhysicId);
-        //             Console.WriteLine(GetMaterialLink(x));
-        //         }
-        //         if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(x).SurfacePhysicId)) {
-        //             SurfacePhysicIds.Add(GetMaterialUserInst(x).SurfacePhysicId,GetMaterialLink(x));
-        //             Console.WriteLine(GetMaterialUserInst(x).SurfacePhysicId);
-        //         }
-        //         if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(x).SurfaceGameplayId)) {
-        //             SurfaceGameplayIds.Add(GetMaterialUserInst(x).SurfaceGameplayId,GetMaterialLink(x));
-        //             Console.WriteLine(GetMaterialUserInst(x).SurfaceGameplayId);
-        //         }
-        //     });
-        // }
         return false;
     }
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer)
