@@ -80,7 +80,13 @@ public class AlterationScript {
         alterations.ToList().ForEach(x => Console.Write(" " + x.GetType().ToString()));
         switch (type){
             case AlterType.File: 
-                AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name);
+                if (source.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
+                    AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^9] + " " + name + ".Item.Gbx"),name);
+                } else if (source.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase)){
+                    AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^10] + " " + name + ".Item.Gbx"),name);
+                } else {
+                    throw new Exception("Invalid Filetype");
+                }
                 break;
             case AlterType.Folder:
                 AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name);

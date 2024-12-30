@@ -28,7 +28,7 @@ class SnowScenery : Alteration
         map.Replace(inventory.GetArticles([ "Summer" ]), inventory.GetArticle("Winter"));
         map.PlaceStagedBlocks();
         
-        CGameCtnBlockSkin GrassSkin = Gbx.Parse<CGameCtnBlockSkin>("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/IceSkin.gbx");
+        CGameCtnBlockSkin GrassSkin = Gbx.Parse<CGameCtnBlockSkin>("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/Templates/IceSkin.gbx");
         map.map.Blocks.ToList().ForEach(x => x.Skin = GrassSkin);
         map.map.BakedBlocks.ToList().ForEach(x => x.Skin = GrassSkin);
     }
