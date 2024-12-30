@@ -77,6 +77,7 @@ public class Article {
 
     #region LoadKeywords
     public void LoadKeywords() {//TODO think about integrating full Path as Keywords -> Example: A01: PlatformBase in Map and Vanilla
+                                //-> Maybe if two blocks have the same keywords thex can be matched based on full name similarity
 
         // string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None).Where(p => !string.IsNullOrEmpty(p)).ToArray(); // seperate Foldernames
         // string name = splits.Last(); // filename/blockname

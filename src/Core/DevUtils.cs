@@ -75,6 +75,7 @@ class Replace : Alteration {
 class Test : Alteration {
     public override void Run(Map map)
     {
+        inventory.Edit().Replace(map,Move(16,0,0));//Test if Rotation is before or after Move
         map.PlaceStagedBlocks();
     }
 }

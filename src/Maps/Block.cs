@@ -21,15 +21,15 @@ public class Block {
     public bool IsGround;
     public bool IsAir;
     public CGameCtnBlockSkin? Skin;
-    public CGameCtnAnchoredObject? SnappedOnItem;
-    public CGameCtnBlock? SnappedOnBlock;
-    public CGameCtnAnchoredObject? PlacedOnItem;
-    public Vec3 PivotPosition;
-    public Byte3 BlockUnitCoord;
+    // public CGameCtnAnchoredObject? SnappedOnItem;
+    // public CGameCtnBlock? SnappedOnBlock;
+    // public CGameCtnAnchoredObject? PlacedOnItem;
+    // public Vec3 PivotPosition;
+    // public Byte3 BlockUnitCoord;
     public CGameWaypointSpecialProperty? WaypointSpecialProperty; //Stores CPLink info
     public string? AnchorTreeId;
-    // public int BlockFlags;
-    // public short ItemFlags;
+    // public int BlockFlags; //not needed, causes issue with placing
+    public short ItemFlags; //Stores relevant placement info
     public string Path = "";
 
     public void PlaceInMap(CGameCtnChallenge map){
@@ -51,8 +51,6 @@ public class Block {
     public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
     {
         color = block.Color;
-        // blockType = BlockType.Block;
-        // name = block.BlockModel.Id;
         IsFree = block.IsFree;
         IsClip = block.IsClip;
         // BlockFlags = block.Flags;
@@ -62,6 +60,7 @@ public class Block {
         IsAir = block.Bit21;
         WaypointSpecialProperty = block.WaypointSpecialProperty;
         position = GetBlockPosition(block);
+
 
         name = article.Name;
         blockType = article.Type;
@@ -78,10 +77,17 @@ public class Block {
         } else {
             Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32));
             position.AddPosition(GetDirectionOffset(block));
-            List<string> rotatedBlocks = ["TrackWallArch1x4SideTop", "DecoWallLoopEnd", "DecoWallLoopEndGrass", "DecoWallLoopEndDirt", "DecoWallLoopEndIce"];
-            if (rotatedBlocks.Any(x => x == block.BlockModel.Id)){//some excepted Blocks
-                position.AddPosition(new(Vec3.Zero, new Vec3(0.5f*Alteration.PI, 0, 0)));
-            }
+
+            // TODO -> actually also if freeblocked (maybe some kind of tag/property)
+            // applies for all blocks with Defaultrotation (diffrent rotations) including their skin-variants
+            // only happens one time, also when replaced twice
+            // The additional rotation only applies after other moves are done -> probably how it's read ingame
+
+            // List<string> rotatedBlocks = ["TrackWallArch1x4SideTop", "DecoWallLoopEnd", "DecoWallLoopEndGrass", "DecoWallLoopEndDirt", "DecoWallLoopEndIce"];
+            // if (rotatedBlocks.Any(x => x == block.BlockModel.Id)){
+                // position.AddPosition(new(Vec3.Zero, new Vec3(0.5f*Alteration.PI, 0, 0)));
+            // }
+
             return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));// 64m offset depends on Map Template i think
         }
     }
@@ -131,10 +137,10 @@ public class Block {
         AnchorTreeId = item.AnchorTreeId;
         WaypointSpecialProperty = item.WaypointSpecialProperty;
         color = item.Color;
-        // ItemFlags = item.Flags;
+        ItemFlags = item.Flags;
 
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
-        position.Move(item.PivotPosition);
+        position.Move(item.PivotPosition); // PivotPosition is Offset which comes from snapping
 
         name = article.Name;
         blockType = article.Type;
@@ -156,7 +162,7 @@ public class Block {
         item.Color = color;
         item.AnchorTreeId = AnchorTreeId;
         item.Scale = 1;
-        // item.Flags = ItemFlags;
+        item.Flags = ItemFlags;
     }
     #endregion
 }
