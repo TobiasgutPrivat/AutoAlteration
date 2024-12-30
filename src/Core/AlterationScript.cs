@@ -62,6 +62,34 @@ class AlterationScript {
                 break;
         }
     }
+
+    private void RunBlockAlteration(AlterType type, string source, string destination, string name, List<CustomBlockAlteration> alterations)
+    {
+        string warning = ValidateSource(type, source);
+        if (warning != ""){
+            throw new Exception("Source " + warning);
+        }
+        warning = ValidateDestination(destination);
+        if (warning != ""){
+            throw new Exception("Destination " + warning);
+        }
+        Console.WriteLine("Alter " + type.ToString() + ": " + source);
+        Console.WriteLine("To: " + destination);
+        Console.WriteLine("As " + name);
+        Console.WriteLine("Alterations:");
+        alterations.ToList().ForEach(x => Console.Write(" " + x.GetType().ToString()));
+        switch (type){
+            case AlterType.File: 
+                AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name);
+                break;
+            case AlterType.Folder:
+                AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name);
+                break;
+            case AlterType.FullFolder:
+                AutoAlteration.AlterAll(alterations.ToList(),source,destination,name);
+                break;
+        }
+    }
     
     private string ValidateSource(AlterType Type, string path)
     {
