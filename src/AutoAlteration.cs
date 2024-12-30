@@ -123,6 +123,14 @@ public class AutoAlteration {
     }
     public static List<CustomBlockAlteration> GetImplementedBlockAlterations() {
         return [
+            new HeavyDirt(),
+            new HeavyGrass(),
+            new HeavyIce(),
+            new HeavyTech(),
+            new HeavyWood(),
+            new HeavyPlastic(),
+            new HeavyMagnet(),
+            new InvisibleBlock(),
         ];
     }
 }

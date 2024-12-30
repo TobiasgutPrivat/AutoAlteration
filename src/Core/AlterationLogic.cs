@@ -1,6 +1,6 @@
 using GBX.NET.Engines.Plug;
 
-class AlterationLogic {
+public class AlterationLogic {
     public static int mapCount = 0;
     private static List<Alteration> ?lastAlterations;
     public static void Alter(List<Alteration> alterations, Map map) {

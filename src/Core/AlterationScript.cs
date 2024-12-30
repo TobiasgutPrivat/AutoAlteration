@@ -1,7 +1,7 @@
 using System.Text.Json;
 using System.Reflection;
 
-class AlterationScript {
+public class AlterationScript {
     public string filePath = "";
 
     public AlterationScript(string filePath){
@@ -35,7 +35,7 @@ class AlterationScript {
         return (Alteration) Activator.CreateInstance(alterations.First());
     }
 
-    private void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)
+    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)
     {
         string warning = ValidateSource(type, source);
         if (warning != ""){
@@ -63,7 +63,7 @@ class AlterationScript {
         }
     }
 
-    private void RunBlockAlteration(AlterType type, string source, string destination, string name, List<CustomBlockAlteration> alterations)
+    public static void RunAlteration(AlterType type, string source, string destination, string name, List<CustomBlockAlteration> alterations)
     {
         string warning = ValidateSource(type, source);
         if (warning != ""){
@@ -91,7 +91,7 @@ class AlterationScript {
         }
     }
     
-    private string ValidateSource(AlterType Type, string path)
+    private static string ValidateSource(AlterType Type, string path)
     {
 		if (path is null || path == ""){
             return "Path missing";
@@ -112,7 +112,7 @@ class AlterationScript {
         return "";     
     }
 
-    private string ValidateDestination(string path)
+    private static string ValidateDestination(string path)
     {
 		if (path is null || path == ""){
             return "Path missing";

@@ -3,7 +3,7 @@ using GBX.NET;
 using GBX.NET.LZO;
 using GBX.NET.ZLib;
 
-class AltertionConfig {
+public class AltertionConfig {
     public static string devPath = "";
     public static bool devMode = false;
     public static string DataFolder = "";
