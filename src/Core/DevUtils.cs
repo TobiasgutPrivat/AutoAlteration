@@ -30,20 +30,24 @@ class DevUtils{
         File.WriteAllText(projectFolder + "data/Vanilla/ItemNames.json", json);
     }
 
-    public static void SponsorNonColidableFix(string projectFolder) {
-        foreach (string file in Directory.GetFiles(projectFolder + "data/CustomBlocks/Vanilla", "*", SearchOption.AllDirectories))
+    public static void NonColidableFix() {
+        foreach (string file in Directory.GetFiles(Path.Join(AltertionConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
         {
-            if (!file.Contains("Sponsors")){
-                continue;
-            }
             Gbx.LZO = new MiniLZO();
             Gbx.ZLib = new ZLib();
-            CGameItemModel customBlock = Gbx.Parse<CGameItemModel>(file);
-            CGameCommonItemEntityModelEdition Item = (CGameCommonItemEntityModelEdition)customBlock.EntityModelEdition;
-            CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)Item.MeshCrystal.Layers.Where(x => x is CPlugCrystal.GeometryLayer layer && !layer.Collidable && layer.IsVisible).First();
-            Console.WriteLine(layer.LayerName);
-            layer.Collidable = true;
-            customBlock.Save(file);
+            CustomBlock customBlock = new(file);
+            bool changed = false;
+            customBlock.MeshCrystals.ForEach(x => {
+                //if there are no collidable layers, make first one collidable
+                if (!x.Layers.Any(y => y.GetType() == typeof(CPlugCrystal.GeometryLayer) && ((CPlugCrystal.GeometryLayer)y).Collidable)){ 
+                    CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x.Layers.Where(y => y.GetType() == typeof(CPlugCrystal.GeometryLayer)).First();
+                    layer.Collidable = true;
+                    changed = true;
+                }
+            });
+            if (changed){
+                customBlock.Save(file);
+            }
         }
     }
 
