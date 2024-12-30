@@ -25,15 +25,8 @@ class AlterationLogic {
         }
 
         //Map specific custom blocks
-        Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => {
-            if (x.Contains(".Item.Gbx")){
-                return new Article(x[..^9], BlockType.CustomItem,"",true); //use full path without extension
-            } else if (x.Contains(".Block.Gbx")){
-                return new Article(x[..^10], BlockType.CustomBlock,"",true); 
-            } else {
-                throw new Exception("Unknown file type: " + x);
-            }
-        }).ToList());
+        Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)).ToList());
+        Alteration.inventory.Export("WithMapBlocks");
 
         //Generate Map specific custom blocks sets
         alterations

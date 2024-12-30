@@ -7,7 +7,7 @@ public class Map
   Gbx<CGameCtnChallenge> gbx;
   public CGameCtnChallenge map;
   public List<Block> stagedBlocks = [];
-  public List<string> embeddedBlocks = [];
+  public Dictionary<string,BlockType> embeddedBlocks = []; //Format: "Blocks/SomeFolder/BlockName.Block.Gbx" -> "SomeFolder\\BlockName" (like name in Inventory)
 
   private Replay WRReplay;
 
@@ -71,10 +71,16 @@ public class Map
     });
   }
 
-  public List<string> GetEmbeddedBlocks(){
+  public Dictionary<string,BlockType> GetEmbeddedBlocks(){
     if (map.EmbeddedZipData != null && map.EmbeddedZipData.Length > 0) {
       ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
-      return zipArchive.Entries.Select(x => x.FullName).Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx")).ToList();
+      return zipArchive.Entries.Select(x => x.FullName)
+        .Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx"))
+        .Select(x => {
+          BlockType type = x.Contains(".Item.Gbx") ? BlockType.CustomItem : BlockType.CustomBlock;
+          string name = x.Replace("/","\\").Replace("Items\\","").Replace("Blocks\\","").Replace(".Item.Gbx","").Replace(".Block.Gbx","");
+          return (name,type);})
+        .ToDictionary();
     } else {
       return [];
     }
@@ -197,20 +203,20 @@ public class Map
     block.name = block.name.TrimStart('\\');
     switch (block.blockType){
         case BlockType.CustomBlock:
-          if(!embeddedBlocks.Any(x => x == block.name)){
-            EmbedBlock("Blocks\\" + block.name + ".Block.Gbx",block.Path);
-            embeddedBlocks.Add(block.name);
+          if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
+            EmbedBlock("Blocks/" + block.name + ".Block.Gbx",block.Path);
+            embeddedBlocks.Add(block.name, block.blockType);
           }
           block.name += ".Block.Gbx_CustomBlock";
           // PlaceTypeBlock(block);
           break;
         case BlockType.CustomItem:
-          block.name = (block.name.Split('\\').Last() + ".Item.Gbx").Replace("\\","/");
-          if(!embeddedBlocks.Any(x => x == "Items/" + block.name)){
-            EmbedBlock("Items/" + block.name,block.Path);
-            embeddedBlocks.Add("Items/" + block.name);
+          // block.name = (block.name.Split('\\').Last() + ".Item.Gbx").Replace("\\","/");
+          if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
+            EmbedBlock("Items/" + block.name + ".Item.Gbx",block.Path);
+            embeddedBlocks.Add(block.name, block.blockType);
           }
-          // block.name += ".Item.Gbx";
+          block.name += ".Item.Gbx";
           break;
       }
 
