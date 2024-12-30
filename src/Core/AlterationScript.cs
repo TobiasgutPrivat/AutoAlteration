@@ -83,7 +83,7 @@ public class AlterationScript {
                 if (source.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
                     AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^9] + " " + name + ".Item.Gbx"),name);
                 } else if (source.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase)){
-                    AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^10] + " " + name + ".Item.Gbx"),name);
+                    AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^10] + " " + name + ".Block.Gbx"),name);
                 } else {
                     throw new Exception("Invalid Filetype");
                 }

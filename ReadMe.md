@@ -1,17 +1,14 @@
 <!--
 TODO 
 Mark which Alterations differ from Altered Nadeo
-Add Scripts to UI App
-Fix Some Blocks wrong rotation
-Some Trees turn into Cacti (Tilted 06, maybe some flags?)
+Fix Some Blocks wrong rotation -> Comments in Block.cs
 
 Rotation subtraction incorrect, testable using Tilted, but so far nowhere needed (probably rotation order issue)
 
 Roadmap Customblock Alterations:
-1. Issue with Altering CustomBlocks (not placeable), works for items
-2. Test full Surface Alterations
-3. Issue Altering of EmbeddedBlocks don't appear ingame as embedded (can be done first)
-4. Solution for StaticModel-customblocks
+1. Issue with air mode
+2. Issue Altering of EmbeddedBlocks don't appear ingame as embedded (can be done first)
+3. Opt. Solution for StaticModel-customblocks
 
 Opt.:
 Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)

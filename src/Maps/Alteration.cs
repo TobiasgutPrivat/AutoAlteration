@@ -3,6 +3,8 @@ public abstract class Alteration: PosUtils {
     public abstract void Run(Map map);
 
     public virtual string? Description { get; }
+    public virtual bool? Completed { get; }
+    public virtual bool? LikeOriginal { get; }
 
     // Changes which get applied on base inventory before the Alteration is executed
     public virtual List<InventoryChange> InventoryChanges { get; } = [];
