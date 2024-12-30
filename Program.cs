@@ -6,8 +6,8 @@ AltertionConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"
 AltertionConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-// new AlterationScript ("TestTemplate.json").RunConfig();
-DevUtils.NonColidableFix();
+new AlterationScript ("TestTemplate.json").RunConfig();
+// DevUtils.NonColidableFix();
 
 // AutoAlteration.RunConfig("FileConfig.json");
 // File.WriteAllText(Path.Combine(AutoAlteration.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));

@@ -34,7 +34,7 @@ class DevUtils{
         foreach (string file in Directory.GetFiles(Path.Join(AltertionConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
         {
             Gbx.LZO = new MiniLZO();
-            Gbx.ZLib = new ZLib();
+            // Gbx.ZLib = new ZLib();
             CustomBlock customBlock = new(file);
             bool changed = false;
             customBlock.MeshCrystals.ForEach(x => {
