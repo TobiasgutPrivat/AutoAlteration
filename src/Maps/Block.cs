@@ -116,6 +116,7 @@ public class Block {
         block.WaypointSpecialProperty = WaypointSpecialProperty;
         block.IsGhost = false;
         block.IsClip = IsClip;
+        block.IsGround = IsGround;
         block.Color = color;
         block.Skin = Skin;
         block.Bit21 = IsAir;
