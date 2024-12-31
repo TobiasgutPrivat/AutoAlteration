@@ -1,3 +1,5 @@
+using System.Reflection;
+
 public class AutoAlteration {
     public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
@@ -65,72 +67,21 @@ public class AutoAlteration {
     }
 
     public static List<Alteration> GetImplementedAlterations() {
-        return [
-            new AntiBooster(),
-            new Boosterless(),
-            new Broken(),
-            new Checkpointnt(),
-            new CPBoost(),
-            new CPFull(),
-            new CPLess(),
-            new CPLink(),
-            new CPsRotated(),
-            new Cruise(),
-            new Desert(),
-            new Earthquake(),
-            new Fast(),
-            new Flipped(),
-            new Fragile(),
-            new FreeWheel(),
-            new Glider(),
-            new Holes(),
-            // new Mirrored(),
-            new NoBrake(),
-            new NoEffect(),
-            new NoItems(),
-            new NoSteer(),
-            new OneBack(),
-            new OneDown(),
-            new OneLeft(),
-            new OneRight(),
-            new OneUP(),
-            // new Platform(),
-            new RandomBlocks(),
-            new Race(),
-            new Rally(),
-            new RandomDankness(),
-            new RandomEffects(),
-            new Reactor(),
-            new ReactorDown(),
-            new RedEffects(),
-            new RingCP(),
-            new RngBooster(),
-            new SnowScenery(),
-            new SlowMo(),
-            new SpeedLimit(),
-            new Stadium(),
-            new StartOneDown(),
-            new STTF(),
-            new Stunt(),
-            new Snow(),
-            new Tilted(),
-            new TwoUP(),
-            new Yeet(),
-            new YeetDown(),
-            new YeetMaxUp(),
-            new YepTree(),
-        ];
+        return Assembly.GetExecutingAssembly().GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration)))
+            .Select(t => Activator.CreateInstance(t) as Alteration)
+            .OfType<Alteration>()
+            .Where(x => x.Published)
+            .OrderBy(x => x.GetType().Name)
+            .ToList();
     }
     public static List<CustomBlockAlteration> GetImplementedBlockAlterations() {
-        return [
-            new HeavyDirt(),
-            new HeavyGrass(),
-            new HeavyIce(),
-            new HeavyTech(),
-            new HeavyWood(),
-            new HeavyPlastic(),
-            new HeavyMagnet(),
-            new InvisibleBlock(),
-        ];
+        return Assembly.GetExecutingAssembly().GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CustomBlockAlteration)))
+            .Select(t => Activator.CreateInstance(t) as CustomBlockAlteration)
+            .OfType<CustomBlockAlteration>()
+            .Where(x => x.Published)
+            .OrderBy(x => x.GetType().Name)
+            .ToList();
     }
 }

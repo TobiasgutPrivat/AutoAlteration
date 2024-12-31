@@ -13,10 +13,10 @@ class DevUtils{
         customBlock.Save(BlockPath + "resaved.block.gbx");
     }
 
-    public static void LogMaterialInfo() {
-        string sourceFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks/Vanilla");
-        string destinationFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks/MaterialInfo");
-        AutoAlteration.AlterAll([new MaterialInfo()], sourceFolder, destinationFolder, "MaterialInfo");
+    public static void LogMaterialInfo(string Folder) {
+        // string sourceFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks/Vanilla");
+        string destinationFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks","MaterialInfo");
+        AutoAlteration.AlterAll([new MaterialInfo()], Folder, destinationFolder, "MaterialInfo");
         File.WriteAllText(Path.Combine(AltertionConfig.devPath, "SurfacePhysicIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
         File.WriteAllText(Path.Combine(AltertionConfig.devPath, "SurfaceGameplayIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
         File.WriteAllText(Path.Combine(AltertionConfig.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
