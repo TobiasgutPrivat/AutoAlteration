@@ -3,6 +3,9 @@ TODO
 Mark which Alterations differ from Altered Nadeo
 Fix Some Blocks wrong rotation -> Comments in Block.cs
 
+Define Alteration Properties for Alterations
+Apply Alteration Properties in UI
+
 Rotation subtraction incorrect, testable using Tilted, but so far nowhere needed (probably rotation order issue)
 
 Roadmap Customblock Alterations:
@@ -12,7 +15,11 @@ Roadmap Customblock Alterations:
 
 Opt.:
 Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
+Multiple Maps Alterations (like Combined, sections joined)
 apply on Nation Converter (check with BigBang)
+
+Maybe make Keywords not case sensitive
+Somehow handle Missing Keywords, maybe in general for numbers and other weird stuff, just put remaining parts after Keywords as Keywords
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
