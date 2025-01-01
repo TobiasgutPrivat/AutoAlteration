@@ -76,37 +76,50 @@ public class Article {
     }
 
     #region LoadKeywords
-    public void LoadKeywords() {//TODO think about integrating full Path as Keywords -> Example: A01: PlatformBase in Map and Vanilla
-                                //-> Maybe if two blocks have the same keywords thex can be matched based on full name similarity
+    public void LoadKeywords() {
+        //Path
+        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.RemoveEmptyEntries); // seperate Foldernames
+        splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
 
-        // string[] splits = Name.Split(["/", "\\"],StringSplitOptions.None).Where(p => !string.IsNullOrEmpty(p)).ToArray(); // seperate Foldernames
-        // string name = splits.Last(); // filename/blockname
-        // splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
+        //Name
+        string name = splits.Last(); // filename/blockname
+        List<string> nameSplits = []; //Individual Parts of the name, Keywords get cut out, spereating the string
 
-        string name = Name.Split(['/', '\\'],StringSplitOptions.None).Last(); // filename/blockname
-
+        //ToKeywords
         int toPos = GetToPos(name) ?? -1; // Extract ToKeywords (mostly shapes) to avoid naming conflicts
+
         if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
-            AltertionConfig.ToKeywords.ToList().ForEach(k => {
-                    if (ToString.Contains(k)) {
-                        ToShapes.Add(k);
-                        ToString = ToString.Remove(ToString.IndexOf(k), k.Length);
-                    }
-                });
-                Keywords.Add("To");
-                name = name[..toPos] + ToString;
+            nameSplits.Add(name[..toPos]);
+
+            List<string> ToSplits = [ToString];
+
+            SplitByKeywords(ToSplits, AltertionConfig.ToKeywords, ToShapes);
+            Keywords.Add("To");
+            nameSplits.AddRange(ToSplits);
+        } else {
+            nameSplits = [name];
         }
         
         //Keywords
-        foreach (var keywordLine in AltertionConfig.Keywords) {
-            while (name.Contains(keywordLine) && Name.Contains(keywordLine)) { //also check original Name, to avoid Keywords created by 2 parts which where previously seperated
-                Keywords.Add(keywordLine);
-                name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
-            }
-        }
+        SplitByKeywords(nameSplits, AltertionConfig.Keywords, Keywords);
+
+        Keywords.AddRange(nameSplits);
         
         CheckFullNameCoverage();
+    }
+
+    private static void SplitByKeywords(List<string> splits, IEnumerable<string> keywords, List<string> collection) {
+        foreach (var keyword in keywords) {
+            while (splits.Any(split => split.Contains(keyword))) { //also
+                splits.Where(split => split.Contains(keyword)).ToList().ForEach(split => {
+                        int count = split.Split(keyword, StringSplitOptions.None).Length - 1;
+                        collection.AddRange(Enumerable.Repeat(keyword, count));
+                        splits.Remove(split); //replace split with itself splitted by the keyword
+                        splits.AddRange(split.Split(keyword, StringSplitOptions.RemoveEmptyEntries));
+                    });
+            }
+        }
     }
 
     public int? GetToPos(string name) {
@@ -124,7 +137,7 @@ public class Article {
     
     private void CheckFullNameCoverage() {
         int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length);
-        if (Name.Split(['/', '\\'],StringSplitOptions.None).Last().Length != keywordLength) {
+        if (Name.Split(['/', '\\'],StringSplitOptions.None).Sum(k => k.Length) != keywordLength) {
             Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }

@@ -262,14 +262,3 @@ Up
 v2
 No
 On
-X1
-1D
-90
-In
-2D
-3D
-X2
-X4
-X
-B
-C

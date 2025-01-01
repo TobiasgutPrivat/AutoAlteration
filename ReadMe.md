@@ -11,7 +11,7 @@ Rotation subtraction incorrect, testable using Tilted, but so far nowhere needed
 Roadmap Customblock Alterations:
 1. Issue with air mode
 2. Issue Altering of EmbeddedBlocks don't appear ingame as embedded (can be done first)
-   A Thought -> For Customblocks, it could be defined that the ones from AutoAlt do have unique names, and for mapspecific the Path would be included
+   A Thought -> For Customblocks, it could be defined that the ones from AutoAlt do have unique names, and for mapspecific the Path would be included, mapspecific should not need to be matching to Vanilla Blocks
 3. Opt. Solution for StaticModel-customblocks
 
 Opt.:
@@ -20,7 +20,6 @@ Multiple Maps Alterations (like Combined, sections joined)
 apply on Nation Converter (check with BigBang)
 
 Maybe make Keywords not case sensitive
-Somehow handle Missing Keywords, maybe in general for numbers and other weird stuff, just put remaining parts after Keywords as Keywords
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.

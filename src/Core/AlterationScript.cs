@@ -45,11 +45,11 @@ public class AlterationScript {
         if (warning != ""){
             throw new Exception("Destination " + warning);
         }
-        Console.WriteLine("Alter " + type.ToString() + ": " + source);
+        Console.WriteLine("\nAlter " + type.ToString() + ": " + source);
         Console.WriteLine("To: " + destination);
         Console.WriteLine("As " + name);
         Console.WriteLine("Alterations:");
-        alterations.ToList().ForEach(x => Console.Write(" " + x.GetType().ToString()));
+        Console.WriteLine(" " + string.Join("\n", alterations.Select(x => x.GetType().ToString())));
         switch (type){
             case AlterType.File: 
                 AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name);
@@ -77,7 +77,7 @@ public class AlterationScript {
         Console.WriteLine("To: " + destination);
         Console.WriteLine("As " + name);
         Console.WriteLine("Alterations:");
-        alterations.ToList().ForEach(x => Console.Write(" " + x.GetType().ToString()));
+        Console.WriteLine(string.Join("\n", alterations.Select(x => x.GetType().ToString())));
         switch (type){
             case AlterType.File: 
                 if (source.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
