@@ -104,13 +104,6 @@ public class Article {
                 Keywords.Add(keywordLine);
                 name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
             }
-            // if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
-            //     Keywords.Add(keywordLine);
-            //     name = name.Remove(name.IndexOf(keywordLine), keywordLine.Length);
-            // }
-            // if (name.Contains(keywordLine) && Name.Contains(keywordLine)) {
-            //     Console.WriteLine("Article " + Name + " contains Keyword: " + keywordLine + " three Times");
-            // }
         }
         
         CheckFullNameCoverage();

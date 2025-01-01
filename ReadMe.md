@@ -11,6 +11,7 @@ Rotation subtraction incorrect, testable using Tilted, but so far nowhere needed
 Roadmap Customblock Alterations:
 1. Issue with air mode
 2. Issue Altering of EmbeddedBlocks don't appear ingame as embedded (can be done first)
+   A Thought -> For Customblocks, it could be defined that the ones from AutoAlt do have unique names, and for mapspecific the Path would be included
 3. Opt. Solution for StaticModel-customblocks
 
 Opt.:
