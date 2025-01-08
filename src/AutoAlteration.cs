@@ -43,11 +43,12 @@ public class AutoAlteration {
         try {
             customBlock = new CustomBlock(sourceFile);
         } catch {
-            Console.WriteLine("Load Error");
+            Console.WriteLine("Load Error " + sourceFile);
             return;
         }
         if (AlterationLogic.Alter(alterations, customBlock)){
-            customBlock.customBlock.Name = customBlock.customBlock.Name + " " + Name;
+            customBlock.Name += Name;
+            customBlock.customBlock.Name = customBlock.Name;
             customBlock.Save(destinationFile);
             Console.WriteLine(destinationFile);
         } else {

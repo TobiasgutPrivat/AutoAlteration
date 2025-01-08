@@ -229,7 +229,18 @@ class StartOneDown: Alteration {
     }
 }
 
-//TODO Supersized
+class SuperSized : Alteration{
+    private float factor = 2;
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new SupersizedBlock(factor))];
+    public SuperSized(){}
+    public SuperSized(float factor) => this.factor = factor;
+    public override void Run(Map map){
+        inventory.AddKeyword("SupersizedBlock").Replace(map);
+        map.Delete(inventory);
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X * factor + 2000, x.position.coords.Y * factor, x.position.coords.Z * factor));
+        map.PlaceStagedBlocks();
+    }
+}
 
 class STTF : Alteration{
     public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];

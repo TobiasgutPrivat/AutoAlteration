@@ -2,7 +2,9 @@ using GBX.NET;
 using GBX.NET.Engines.Plug;
 
 class SupersizedBlock : CustomBlockAlteration {
-    private static readonly float factor = 2;
+    private float factor;
+    public SupersizedBlock(float factor = 2) { this.factor = factor; }
+
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => new Vec3(x.X * factor, x.Y * factor, x.Z * factor)).ToArray();
         return true;

@@ -17,6 +17,7 @@ Roadmap Customblock Alterations:
 Opt.:
 Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
 Multiple Maps Alterations (like Combined, sections joined)
+Make Configurable Alterations
 apply on Nation Converter (check with BigBang)
 
 Maybe make Keywords not case sensitive
