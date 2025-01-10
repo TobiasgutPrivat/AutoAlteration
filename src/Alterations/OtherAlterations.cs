@@ -237,7 +237,7 @@ class SuperSized : Alteration{
     public override void Run(Map map){
         inventory.AddKeyword("SupersizedBlock").Replace(map);
         map.Delete(inventory);
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X * factor + 2000, x.position.coords.Y * factor, x.position.coords.Z * factor));
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3((x.position.coords.X - (32 * 24)) * factor, x.position.coords.Y * factor + 500, (x.position.coords.Z - (32 * 24)) * factor));
         map.PlaceStagedBlocks();
     }
 }

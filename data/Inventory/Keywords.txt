@@ -225,7 +225,6 @@ Open
 Dirt
 Back
 Hole
-Utop
 UTopX2
 Down
 Tilt2
