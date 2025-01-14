@@ -137,10 +137,6 @@ public class Inventory { // represents all available articles which can be place
     }
 
     [Obsolete]
-    public Inventory Add(Inventory inventory) =>
-        new(articles.Concat(inventory.articles).ToList());
-        
-    [Obsolete]
     public Inventory Sub(Inventory inventory) =>
         new(articles.Except(inventory.articles).ToList());
 
