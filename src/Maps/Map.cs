@@ -230,4 +230,17 @@ public class Map
 
     return new Replay("somePath");
   }
+
+  public void StageAll(MoveChain ?moveChain = null){
+    stagedBlocks.AddRange(map.Blocks.Select(x => {
+      Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
+      return new Block(x,article,article, moveChain);
+    }));
+    map.Blocks = [];
+    stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
+      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id.Replace(".Item.Gbx",""));
+      return new Block(x,article,article, moveChain);
+    }));
+    map.AnchoredObjects = [];
+  }
 }

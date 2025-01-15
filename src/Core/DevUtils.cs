@@ -67,7 +67,7 @@ class DevUtils{
 class Replace : Alteration {
     public override void Run(Map map)
     {
-        inventory.Edit().Replace(map);
+        map.StageAll();
         map.PlaceStagedBlocks();
     }
 }

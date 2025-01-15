@@ -78,24 +78,14 @@ public class Block {
             Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32));
             position.AddPosition(GetDirectionOffset(block));
 
-            // TODO -> actually also if freeblocked (maybe some kind of tag/property)
-            // applies for all blocks with Defaultrotation (diffrent rotations) including their skin-variants
-            // only happens one time, also when replaced twice
-            // The additional rotation only applies after other moves are done -> probably how it's read ingame
-
-            // List<string> rotatedBlocks = ["TrackWallArch1x4SideTop", "DecoWallLoopEnd", "DecoWallLoopEndGrass", "DecoWallLoopEndDirt", "DecoWallLoopEndIce"];
-            // if (rotatedBlocks.Any(x => x == block.BlockModel.Id)){
-                // position.AddPosition(new(Vec3.Zero, new Vec3(0.5f*Alteration.PI, 0, 0)));
-            // }
-
             return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));// 64m offset depends on Map Template i think
         }
     }
 
     public static Position GetDirectionOffset(CGameCtnBlock block) {
-        Article ?article = Alteration.inventory.GetArticle(block.BlockModel.Id);
+        Article ?article = Alteration.inventory.GetArticle(block.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
         if (article == null){
-            Console.WriteLine("No article found for model: " + block.BlockModel.Id);
+            Console.WriteLine("No article found for model: " + block.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
             return Position.Zero;
         }
         return block.Direction switch

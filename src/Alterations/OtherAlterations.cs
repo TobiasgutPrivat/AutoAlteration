@@ -130,7 +130,7 @@ class CPsRotated : Alteration{
 
 class Earthquake : Alteration{
     public override void Run(Map map){
-        inventory.Edit().Replace(map);
+        map.StageAll();
         map.stagedBlocks.ForEach(x => x.position.coords += new Vec3(1000000,500000,1000000));
         map.PlaceStagedBlocks();
     }
@@ -148,7 +148,7 @@ class Flipped: EffectAlteration {
     public override void Run(Map map){
         //Dimensions normal Stadium
         // from (1,9,1) to (48,38,48)
-        inventory.Edit().Replace(map,RotateCenter(0,PI,0));
+        map.StageAll(RotateCenter(0,PI,0));
         map.PlaceStagedBlocks();
         PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
         PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
@@ -172,7 +172,7 @@ class Holes : Alteration{
 //TODO mirrored
 class Mirrored: EffectAlteration {//TODO Prototype
     public override void Run(Map map){
-        inventory.Edit().Replace(map);
+        map.StageAll();
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y, 1536-x.position.coords.Z));
         // Move back by Width of Block (Simulate Coords of block beeing at other Corner)
         //Switch all right and left
@@ -258,7 +258,7 @@ class STTF : Alteration{
 class Tilted: Alteration {
     public override void Run(Map map){
         Random rand = new();
-        inventory.Edit().Replace(map,RotateCenter(rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f));
+        map.StageAll(RotateCenter(rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f));
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
         map.PlaceStagedBlocks();
     }
@@ -335,7 +335,7 @@ class Invisible : Alteration {
 
 class Gaps : Alteration {
     public override void Run(Map map){
-        inventory.Edit().Replace(map);
+        map.StageAll();
         map.stagedBlocks.ForEach(x => 
             x.position.coords = new Vec3(x.position.coords.X * 17/16, x.position.coords.Y * 17/16, x.position.coords.Z * 17/16)
         );
