@@ -91,7 +91,7 @@ class FixAutoRotation : Alteration {
     {
         Inventory DecoWall = inventory.Select("DecoWall");
         map.Move(DecoWall.Select("LoopEnd&!Center&!Side"), RotateMid(PI*0.5f,0,0));
-        map.Move(DecoWall.Select("Arch&Slope2&(Straight|UTop|End)"), RotateMid(PI*0.5f,0,0));
+        map.Move(DecoWall.Select("Arch&Slope2&(UTop|End)"), RotateMid(PI*0.5f,0,0));//excluded Straight|
         map.PlaceStagedBlocks();
     }
 }

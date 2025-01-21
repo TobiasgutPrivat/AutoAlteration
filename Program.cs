@@ -5,6 +5,6 @@ AltertionConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"
 AltertionConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-new AlterationScript ("Campaign.json").RunConfig();
+new AlterationScript ("TestTemplate.json").RunConfig();
 
 // DevUtils.LogMaterialInfo("C:/Users/Tobias/AppData/Roaming/AutoAlteration/HeavyPlastic");

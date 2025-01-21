@@ -50,6 +50,10 @@ public class NoCPBlocks: InventoryChange {
         AddRoadNoCPBlocks(tempInventory,"Dirt");
         AddRoadNoCPBlocks(tempInventory,"Bump");
         AddRoadNoCPBlocks(tempInventory,"Ice");
+        AddOpenRoadNoCPBlocks(tempInventory,"Tech");
+        AddOpenRoadNoCPBlocks(tempInventory,"Dirt");
+        AddOpenRoadNoCPBlocks(tempInventory,"Bump");
+        AddOpenRoadNoCPBlocks(tempInventory,"Ice");
         AddPlatformNoCPBlocks(tempInventory,"Tech");
         AddPlatformNoCPBlocks(tempInventory,"Dirt");
         AddPlatformNoCPBlocks(tempInventory,"Plastic");
@@ -62,6 +66,13 @@ public class NoCPBlocks: InventoryChange {
         tempInventory.Select("Wall").articles.ForEach(x => {x.Width = 1;x.Height = 4;x.Length = 1;});
         tempInventory.Select("!(DiagRight|DiagLeft|Slope2|Slope|Wall|Tilt)").articles.ForEach(x => {x.Width = 1;x.Height = 1;x.Length = 1;});
         inventory.AddArticles(tempInventory.articles);
+    }
+
+    private static void AddOpenRoadNoCPBlocks(Inventory tempInventory, string surface){
+        tempInventory.AddArticles(new Article("Open" +surface+"RoadSlope2Straight",BlockType.Block,["Up","Slope2","Open" + surface + "Road"]));
+        tempInventory.AddArticles(new Article("Open" +surface+"RoadSlope2Straight",BlockType.Block,["Down","Slope2","Open" + surface + "Road"], moveChain: Move(32,0,32).Rotate(PI,0,0)));
+        tempInventory.AddArticles(new Article("Open" +surface+"RoadStraightTilt2",BlockType.Block,["Left","Slope2","Open" + surface + "Road"], moveChain: Move(32,0,0).Rotate(PI*1.5f,0,0)));
+        tempInventory.AddArticles(new Article("Open" +surface+"RoadStraightTilt2",BlockType.Block,["Right","Slope2","Open" + surface + "Road"], moveChain: Move(0,0,32).Rotate(PI*0.5f,0,0)));
     }
 
     private static void AddRoadNoCPBlocks(Inventory tempInventory, string surface){
