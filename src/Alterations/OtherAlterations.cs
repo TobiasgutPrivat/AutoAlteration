@@ -172,8 +172,11 @@ class Holes : Alteration{
 //TODO mirrored
 class Mirrored: EffectAlteration {//TODO Prototype
     public override void Run(Map map){
+        //Dimensions normal Stadium
+        // from (1,9,1) to (48,38,48)
         map.StageAll();
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y, 1536-x.position.coords.Z));
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(1536-x.position.coords.X, x.position.coords.Y, x.position.coords.Z));
+        map.stagedBlocks.ForEach(x => x.position.pitchYawRoll = new Vec3(x.position.pitchYawRoll.X, -x.position.pitchYawRoll.Y, -x.position.pitchYawRoll.Z)); //inverting yaw
         // Move back by Width of Block (Simulate Coords of block beeing at other Corner)
         //Switch all right and left
         map.PlaceStagedBlocks();

@@ -35,7 +35,7 @@ If you encounter problems or you have some questions/ideas etc. please contact m
 ## How to use
 UI-App recommended for normal use.
 
-[Download](https://1drv.ms/u/c/bf971998d3da6c52/EdpzD5D_ModDlt00VIA7MOwBXzTzdBbICkWemIKLqgChnw?e=hie2hq)
+[Download](https://1drv.ms/u/c/bf971998d3da6c52/Ec43uQOtQZdInmv-en32fmAB_-tn0nyNPD2hQr8z4424sw?e=ttExio)
 
 Also Alteration Scripts can be defined using json files. [Example](https://1drv.ms/u/c/bf971998d3da6c52/EQbNHWn08upIkWh903vYe6YBgC39OcYKtmoFAoxtys3Pmg?e=289yQq)
 

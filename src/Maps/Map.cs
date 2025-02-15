@@ -243,4 +243,8 @@ public class Map
     }));
     map.AnchoredObjects = [];
   }
+  public void SetBuildDimension(Vec2 Origin, Vec2 Target){ //TODO test this
+    map.MapCoordOrigin = Origin;
+    map.MapCoordTarget = Target;
+  }
 }
