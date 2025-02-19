@@ -4,6 +4,14 @@ public abstract class InventoryChange: PosUtils {
     public abstract void ChangeInventory(Inventory inventory, bool mapSpecific = false);
 }
 
+public class NormalizeCheckpoint: InventoryChange {
+    public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Straight").Align().EditOriginal().RemoveKeyword("Straight");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align().EditOriginal().RemoveKeyword("StraightX2");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Base").Align().EditOriginal().RemoveKeyword("Base");
+    }
+}
+
 public class CustomBlockFolder(string subFolder) : InventoryChange {
     public readonly string folder = Path.Combine(AltertionConfig.CustomBlocksFolder, subFolder);
 

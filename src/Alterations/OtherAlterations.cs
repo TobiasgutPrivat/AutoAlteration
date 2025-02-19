@@ -23,7 +23,7 @@ class AntiBooster: Alteration {
 //backwards (manual)
 
 class Boosterless: Alteration {
-    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
+    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         map.Delete(inventory.Select(BlockType.Item).Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
         Inventory blocks = inventory.Select(BlockType.Block);
@@ -74,6 +74,7 @@ class Checkpointnt: EffectAlteration { //only blocks Checkpoints
 //TODO color-combined (multiple) Maps
 
 class CPBoost : Alteration{
+    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Turbo").Replace(map);
         inventory.Select(BlockType.Block).Select("Turbo").RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(map);
@@ -89,7 +90,7 @@ class CPBoost : Alteration{
 //cp1 kept (manual)
 
 class CPFull : Alteration{
-    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
+    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).AddKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
@@ -157,7 +158,7 @@ class Flipped: EffectAlteration {
 }
 
 class Holes : Alteration{
-    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
+    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).AddKeyword("Hole").Replace(map);
         inventory.Select(BlockType.Block).AddKeyword(["Hole","With","24m"]).Replace(map);
@@ -246,7 +247,7 @@ class SuperSized : Alteration{
 }
 
 class STTF : Alteration{
-    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
+    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         map.Delete(inventory.Select("Checkpoint&(Ring|Gate)"));
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").Replace(map);

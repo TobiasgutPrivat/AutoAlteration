@@ -5,6 +5,13 @@
 //     }
 // }
 
+class Penalty : Alteration {
+    public override void Run(Map map){
+        inventory.Select("Platform&(Ice|Dirt)").RemoveKeyword("Platform").AddKeyword("DecoPlatform").Replace(map);
+        inventory.Select("Platform&(Tech|Grass)").Print().RemoveKeyword(["Platform","Grass","Tech"]).AddKeyword("DecoPlatform").Replace(map);
+        map.PlaceStagedBlocks();
+    }
+}
 
 class Dirt : Alteration {
     public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new HeavyDirt())];
