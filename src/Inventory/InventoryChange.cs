@@ -51,6 +51,13 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
 }
 
 public class NoCPBlocks: InventoryChange {
+/*************  ✨ Codeium Command ⭐  *************/
+        /// <summary>
+        /// Removes all Checkpoints and Multilaps from the given inventory. Adds NoCP versions of all roads and platforms.
+        /// </summary>
+        /// <param name="inventory">The inventory to modify</param>
+        /// <param name="mapSpecific">Whether the inventory is for a specific map. In this case, the new blocks will be prefixed with "NoCP_".</param>
+/******  547bd915-b204-4e7c-9e8b-47ca2fe09a11  *******/
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         Inventory tempInventory = new();
         tempInventory.AddArticles(inventory.Select(BlockType.Item).Select("Center&(Checkpoint|Multilap|MapStart)").RemoveKeyword("Center"));
