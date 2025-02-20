@@ -136,7 +136,6 @@ public class Inventory { // represents all available articles which can be place
         return new(Alteration.inventory.articles.Except(a.articles).ToList());
     }
 
-    [Obsolete]
     public Inventory Sub(Inventory inventory) =>
         new(articles.Except(inventory.articles).ToList());
 
