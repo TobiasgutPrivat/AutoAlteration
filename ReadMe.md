@@ -44,6 +44,8 @@ To have more control, or to develop some stuff you need to setup the full Projec
 ### Available Alterations
 Those are the currently available Alterations
 
+Submitting to Altered Nadeo still goes under their regulations (don't spam create AN Maps)
+
 (Some Alterations, are not fully what they are in Altered Nadeo)
 
 <strong>Effect Alterations</strong>

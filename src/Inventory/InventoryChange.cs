@@ -50,6 +50,32 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : Inven
     }
 }
 
+public class LightSurface(CustomBlockAlteration customBlockAlteration) : InventoryChange {
+    public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
+    public readonly string folder = Path.Combine(AltertionConfig.ApplicationDataFolder, customBlockAlteration.GetType().Name + "light");
+
+    public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
+        if (!Directory.Exists(folder)) { 
+            GenerateBlockSet();
+        }
+        
+        inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+
+        inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
+            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+    }
+
+    public void GenerateBlockSet() {
+        Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
+        if (!Directory.Exists(folder)) { 
+            Directory.CreateDirectory(folder + "Temp");//Temp in case something goes wrong
+        }
+        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"), folder + "Temp", customBlockAlteration.GetType().Name);
+        Directory.Move(folder + "Temp", folder);
+    }
+}
+
 public class NoCPBlocks: InventoryChange {
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         Inventory tempInventory = new();

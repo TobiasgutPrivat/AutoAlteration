@@ -2,9 +2,11 @@
 public abstract class Alteration: PosUtils {
     public abstract void Run(Map map);
 
-    public virtual string Description { get{ return "No description given";} }
-    public virtual bool Published { get{ return false;} }
-    public virtual bool HasFlaws { get{ return true;} }
+    public virtual string Description => "No description given"; // Alteration Description
+    public virtual bool Published => false; // Alteration is published in Auto Alteration -> determines if shown in UI-App
+    public virtual bool LikeAN => false; // made in the same way as in Altered Nadeo
+    public virtual bool Complete => false; // alteration sometimes needs manual additions
+
 
     // Changes which get applied on base inventory before the Alteration is executed
     public virtual List<InventoryChange> InventoryChanges { get; } = [];

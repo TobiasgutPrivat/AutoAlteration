@@ -39,12 +39,22 @@ abstract class EffectAlteration: Alteration {
     }
 }
 class Cruise: EffectAlteration {
+    public override string Description => "places Cruise Effect on every Checkpoint (small offset to avoid skip)";
+    public override bool Published => true;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"Cruise",Move(0,0,1));
     }
 }
 
 class Fragile: EffectAlteration {
+    public override string Description => "places Fragile Effect on every Checkpoint (small offset to avoid skip)";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"Fragile",Move(0,0,1));
         PlaceStartEffect(map,"Fragile");
@@ -54,6 +64,11 @@ class Fragile: EffectAlteration {
 //TODO 100 Fragile, Fragile + remove reset + start (Macro)block
 
 class FreeWheel: EffectAlteration {
+    public override string Description => "places Turbo and NoEngine Effect on every Checkpoint (small offset to avoid skip)";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"Turbo");
         PlaceStartEffect(map,"Turbo");
@@ -63,13 +78,25 @@ class FreeWheel: EffectAlteration {
 }
 
 class Glider: EffectAlteration {
+    public override string Description => "places Yellow Reactor and NoEngine Effect on every Checkpoint (small offset to avoid skip)";
+    public override bool Published => true;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"Boost",oriented: true);
         PlaceStartEffect(map,"Boost",oriented: true);
+        PlaceCPEffect(map,"NoEngine",Move(0,0,1));
+        PlaceStartEffect(map,"NoEngine",Move(0,0,3));
     }
 }
 
 class NoBrake: EffectAlteration {
+    public override string Description => "places NoBrake Effect on every Checkpoint (small offset to avoid skip)";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"NoBrake",Move(0,0,1));
         PlaceStartEffect(map,"NoBrake");
@@ -77,6 +104,10 @@ class NoBrake: EffectAlteration {
 }
 
 class NoEffect: EffectAlteration {
+    public override string Description => "replaces all Effects with their normal Block version";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+
     public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select(SelAllEffects)
@@ -89,6 +120,11 @@ class NoEffect: EffectAlteration {
 //TODO no-grip (custom)block
 
 class NoSteer: EffectAlteration {
+    public override string Description => "places NoSteering Effect on every Checkpoint (small offset to avoid skip)";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"NoSteering",Move(0,0,1));
         PlaceStartEffect(map,"NoSteering");
@@ -96,6 +132,11 @@ class NoSteer: EffectAlteration {
 }
 
 class RandomDankness: EffectAlteration {
+    public override string Description => "replaces Checkpoint and Effect Blocks with random Effects";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select("Checkpoint&!((Slope|Slope2)&(Left|Right))").RemoveKeyword("Checkpoint")
             .ReplaceWithRandom(map,AllEffects);
@@ -113,6 +154,11 @@ class RandomDankness: EffectAlteration {
 }
 
 class RandomEffects: EffectAlteration {
+    public override string Description => "replaces all Effects with random Effects";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select(SelAllEffects)
             .RemoveKeyword(AllEffects)
@@ -122,6 +168,11 @@ class RandomEffects: EffectAlteration {
 }
 
 class Reactor: EffectAlteration {
+    public override string Description => "places Red Reactor Effect on every Checkpoint";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"Boost2",oriented: true);
         PlaceStartEffect(map,"Boost2",oriented: true);
@@ -129,6 +180,11 @@ class Reactor: EffectAlteration {
 }
 
 class ReactorDown: EffectAlteration {
+    public override string Description => "places Red Reactor Effect on every Checkpoint (reactor rotated 180°)";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
         PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
@@ -136,6 +192,11 @@ class ReactorDown: EffectAlteration {
 }
 
 class RedEffects: EffectAlteration {
+    public override string Description => "replaces all Effects with Red Turbo";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         inventory.Select(SelAllEffects).RemoveKeyword(AllEffects).AddKeyword("Turbo2").Replace(map);
         map.PlaceStagedBlocks();
@@ -143,6 +204,11 @@ class RedEffects: EffectAlteration {
 }
 
 class RngBooster: EffectAlteration {
+    public override string Description => "replaces all Effects with RNG Turbo";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         inventory.Select(SelAllEffects).RemoveKeyword(AllEffects).AddKeyword("TurboRoulette").Replace(map);
         map.PlaceStagedBlocks();
@@ -151,6 +217,11 @@ class RngBooster: EffectAlteration {
 
 
 class SlowMo: EffectAlteration {
+    public override string Description => "places SlowMotion Effect on every Checkpoint (small offset to avoid skip)";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         PlaceCPEffect(map,"SlowMotion",Move(0,0,1));
         PlaceStartEffect(map,"SlowMotion");
