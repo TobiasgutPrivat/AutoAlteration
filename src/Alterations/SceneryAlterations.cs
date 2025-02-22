@@ -3,6 +3,11 @@ using GBX.NET.Engines.Game;
 
 class SnowScenery : Alteration
 {
+    public override string Description => "turns scenery into snow";
+    public override bool Published => true;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
     public override void Run(Map map)
     {
         // Scenery blocks: 

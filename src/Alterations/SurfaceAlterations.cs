@@ -6,6 +6,11 @@
 // }
 
 class Dirt : Alteration {
+    public override string Description => "replaces all drivable surfaces with Dirt";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new DirtSurface())];
     public override void Run(Map map){
         // map.PlaceRelative(inventory.Select("MapStart"),"RoadTechToThemeSnowRoadMagnet");
@@ -19,6 +24,11 @@ class Dirt : Alteration {
 //flooded manual
 
 class Grass : Alteration {
+    public override string Description => "replaces all drivable surfaces with Grass";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new GrassSurface())];
     public override void Run(Map map){
         inventory.Select("!Grass&!OpenGrassRoad&!OpenGrassZone").AddKeyword("GrassSurface").Replace(map);
@@ -27,6 +37,11 @@ class Grass : Alteration {
 }
 
 class Ice : Alteration {
+    public override string Description => "replaces all drivable surfaces with Ice";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new IceSurface())];
     public override void Run(Map map){
         inventory.Select("!Ice&!OpenIceRoad&!OpenIceZone&!RoadIce").AddKeyword("IceSurface").Replace(map);
@@ -35,6 +50,11 @@ class Ice : Alteration {
 }
 
 class Magnet : Alteration {
+    public override string Description => "replaces all drivable surfaces with Magnet";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new MagnetSurface())];
     public override void Run(Map map){
         inventory.AddKeyword("MagnetSurface").Replace(map);
@@ -45,6 +65,10 @@ class Magnet : Alteration {
 //mixed manual
 
 class Penalty : Alteration {
+    public override string Description => "replaces all drivable surfaces with according Penalty surface";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
 
     public override void Run(Map map){
         inventory.Select("Platform&(Ice|Dirt)").RemoveKeyword("Platform").AddKeyword("DecoPlatform").Replace(map);
@@ -75,6 +99,11 @@ class Penalty : Alteration {
 }
 
 class Plastic : Alteration {
+    public override string Description => "replaces all drivable surfaces with Plastic";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new PlasticSurface())];
     public override void Run(Map map){
         inventory.Select("!Plastic&!OpenPlasticRoad&!OpenPlasticZone&!RoadPlastic").AddKeyword("PlasticSurface").Replace(map);
@@ -83,6 +112,11 @@ class Plastic : Alteration {
 }
 
 class Road : Alteration {
+    public override string Description => "replaces all drivable surfaces with Tech";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new TechSurface())];
     public override void Run(Map map){
         inventory.Select("!Tech&!OpenTechRoad&!OpenTechZone&!RoadTech").AddKeyword("TechSurface").Replace(map);
@@ -91,6 +125,11 @@ class Road : Alteration {
 }
 
 class Wood : Alteration {
+    public override string Description => "replaces all drivable surfaces with Wood";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new WoodSurface())];
     public override void Run(Map map){
         inventory.AddKeyword("WoodSurface").Replace(map);
@@ -100,6 +139,11 @@ class Wood : Alteration {
 }
 
 class Bobsleigh : Alteration { //half manual
+    public override string Description => "replaces all roads with Bobsleigh";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override void Run(Map map){
         inventory.Select("RoadBump|RoadDirt|RoadTech").RemoveKeyword(["RoadBump","RoadDirt","RoadTech"]).AddKeyword("RoadIce").Replace(map);
         map.PlaceStagedBlocks();
@@ -109,6 +153,11 @@ class Bobsleigh : Alteration { //half manual
 //pipe manual
 
 class Sausage : Alteration { //half manual
+    public override string Description => "replaces all roads with Sausage";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override void Run(Map map){
         inventory.Select("RoadIce|RoadDirt|RoadTech").RemoveKeyword(["RoadIce","RoadDirt","RoadTech"]).AddKeyword("RoadBump").Replace(map);
         map.PlaceStagedBlocks();
@@ -118,6 +167,11 @@ class Sausage : Alteration { //half manual
 //slot-track manual
 
 class Surfaceless: Alteration {
+    public override string Description => "removes all non-Pillar blocks, exccept for Start, Finish and Checkpoints";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override void Run(Map map){    
         Inventory Blocks = inventory.Select(BlockType.Block);
         map.PlaceRelative(Blocks.Select("MapStart"),inventory.GetArticle("GateStartCenter32m"));
@@ -133,6 +187,11 @@ class Surfaceless: Alteration {
 
 
 class RouteOnly: Alteration {
+    public override string Description => "removes all non-drivable surfaces";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
     public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new RouteOnlyBlock())];
     public override void Run(Map map){
         inventory.AddKeyword("RouteOnlyBlock").Replace(map);

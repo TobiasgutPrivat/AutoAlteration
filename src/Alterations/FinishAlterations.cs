@@ -1,4 +1,9 @@
 class OneBack: Alteration {
+    public override string Description => "moves the Finish one Tile back";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         map.Move(inventory.Select("Finish|Multilap"), Move(0,0,32));
         map.PlaceStagedBlocks();
@@ -6,6 +11,11 @@ class OneBack: Alteration {
 }
 
 class OneForward: Alteration {
+    public override string Description => "moves the Finish one Tile forward";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         map.Move(inventory.Select("Finish|Multilap"), Move(0,0,-32));
         map.PlaceStagedBlocks();
@@ -13,6 +23,11 @@ class OneForward: Alteration {
 }
 
 class OneDown: Alteration {
+    public override string Description => "moves the Finish one Tile down";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         inventory.Select("Finish|Multilap").Edit().PlaceRelative(map,Move(0,-8,0));
         map.Delete(inventory.Select("Finish|Multilap"),true);
@@ -21,6 +36,11 @@ class OneDown: Alteration {
 }
 
 class OneLeft: Alteration {
+    public override string Description => "moves the Finish one Tile to the left";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         map.Move(inventory.Select("Finish|Multilap"), Move(32,0,0));
         map.PlaceStagedBlocks();
@@ -28,6 +48,11 @@ class OneLeft: Alteration {
 }
 
 class OneRight: Alteration {
+    public override string Description => "moves the Finish one Tile to the right";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         map.Move(inventory.Select("Finish|Multilap"), Move(-32,0,0));
         map.PlaceStagedBlocks();
@@ -35,6 +60,11 @@ class OneRight: Alteration {
 }
 
 class OneUP: Alteration {
+    public override string Description => "moves the Finish one Tile up";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         map.Move(inventory.Select("Finish|Multilap"), Move(0,8,0));
         map.PlaceStagedBlocks();
@@ -42,6 +72,11 @@ class OneUP: Alteration {
 }
 
 class TwoUP: Alteration {
+    public override string Description => "moves the Finish two Tiles up";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         map.Move(inventory.Select("Finish|Multilap"), Move(0,16,0));
         map.PlaceStagedBlocks();
@@ -57,8 +92,13 @@ class TwoUP: Alteration {
 //TODO Ground-Clippers, Pillars at y=0 get (custom) finishblock
 
 class Inclined : Alteration {
+    public override string Description => "tilt's the start and finish down";
+    public override bool Published => true;
+    public override bool LikeAN => false;
+    public override bool Complete => true;
+
     public override void Run(Map map){
-        inventory.Select("MapStart|Multilap").Edit().PlaceRelative(map,Rotate(0,0.2f*PI,0));
+        inventory.Select("MapStart|Multilap|Finish").Edit().PlaceRelative(map,Rotate(0,0.2f*PI,0));
         map.Delete(inventory.Select("MapStart"),true);
         map.PlaceStagedBlocks();
     }
@@ -81,6 +121,11 @@ class Inclined : Alteration {
 //TODO sky is the finish (Macro)block
 
 class ThereAndBack : Alteration {
+    public override string Description => "replaces Start with Multilap and Finish with Checkpoint";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         inventory.Select("Finish").RemoveKeyword("Finish").AddKeyword("Checkpoint").Replace(map);//TODO (Custom)blocks (No removekeyword)
         inventory.Select("MapStart").RemoveKeyword("MapStart").AddKeyword("Multilap").Replace(map);//TODO (Custom)blocks

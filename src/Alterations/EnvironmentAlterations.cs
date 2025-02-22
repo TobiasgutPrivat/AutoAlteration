@@ -13,24 +13,44 @@ abstract class EnvironmentAlterations: Alteration {
 }
 
 class Stadium: EnvironmentAlterations {
+    public override string Description => "adds Stadium Carswitch at Start and replaces all Carswitchgates";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         SetGamePlay(map,"Stadium");
     }
 }
 
 class Snow: EnvironmentAlterations {
+    public override string Description => "adds Snow Carswitch at Start and replaces all Carswitchgates";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         SetGamePlay(map,"Snow");
     }
 }
 
 class Rally: EnvironmentAlterations {
+    public override string Description => "adds Rally Carswitch at Start and replaces all Carswitchgates";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         SetGamePlay(map,"Rally");
     }
 }
 
 class Desert: EnvironmentAlterations {
+    public override string Description => "adds Desert Carswitch at Start and replaces all Carswitchgates";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
     public override void Run(Map map){
         SetGamePlay(map,"Desert");
     }
@@ -39,12 +59,22 @@ class Desert: EnvironmentAlterations {
 //Snow Carswitch manual
 
 class SnowCarswitchToDesert: Alteration {
+    public override string Description => "changes Snow Carswitch to Desert Carswitch";
+    public override bool Published => false;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Desert").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 class SnowCarswitchToRally: Alteration {
+    public override string Description => "changes Snow Carswitch to Rally Carswitch";
+    public override bool Published => false;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
     public override void Run(Map map){
         inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Rally").Replace(map);
         map.PlaceStagedBlocks();
