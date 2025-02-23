@@ -1,3 +1,4 @@
+using System.Reflection;
 using GBX.NET;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
@@ -61,6 +62,53 @@ class DevUtils{
             if (x.Keywords.Any(y => y == "")){Console.WriteLine("Empty Keyword found in " + x.Name);}
             if (x.ToShapes.Any(y => y == "")){Console.WriteLine("Empty ToShape found in " + x.Name);}
         });
+    }
+
+    public static void GenerateAlterationList()
+    {
+        Dictionary<string, List<Alteration>> AlterationCategories = new() {
+            {"Effect Alterations", [new Cruise(),new Fragile(),new FreeWheel(),new Glider(),new NoBrake(),new NoEffect(),new NoSteer(),new RandomDankness(),new RandomEffects(),new Reactor(),new ReactorDown(),new RedEffects(),new RngBooster(),new SlowMo()]},
+            {"Environment Alterations", [new Stadium(),new Snow(), new Rally(), new Desert(), new SnowCarswitchToDesert(), new SnowCarswitchToRally()]},
+            {"Finish Alterations", [new OneBack(), new OneForward(), new OneDown(), new OneLeft(), new OneRight(), new TwoUP(), new Inclined(), new ThereAndBack()]},
+            {"Gamemode Alterations", [new Race(), new Stunt(), new Platform()]},
+            {"Surface Alterations", [new Dirt(), new Grass(), new Ice(), new Magnet(), new Penalty(), new Plastic(), new Road(), new Wood(), new Bobsleigh(), new Sausage(), new Surfaceless(), new RouteOnly()]},
+        };
+
+        Assembly assembly = Assembly.GetExecutingAssembly();
+        List<Type> types = assembly.GetTypes().ToList();
+        List<Alteration> alterations = types.Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration))).Select(t => Activator.CreateInstance(t) as Alteration).Where(a => a.Published).ToList();
+        Dictionary<string, List<string>> CategoryTexts = new();
+        foreach (Alteration alteration in alterations)
+        {
+            bool hasCategory = false;
+            foreach (KeyValuePair<string, List<Alteration>> category in AlterationCategories)
+            {
+                if (category.Value.Select(x => x.GetType()).Contains(alteration.GetType())){
+                    hasCategory = true;
+                    if (!CategoryTexts.ContainsKey(category.Key)){
+                        CategoryTexts.Add(category.Key, new List<string>());
+                    }
+                    CategoryTexts[category.Key].Add(
+                        "- <span " + (!alteration.Complete ? "style=\"color: gray;\" ": "") + "title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") +"</span>"
+                    );
+                }
+            }
+            if (!hasCategory){
+                if (!CategoryTexts.ContainsKey("Other Alterations")){
+                    CategoryTexts.Add("Other Alterations", new List<string>());
+                }
+                CategoryTexts["Other Alterations"].Add(
+                    "- <span " + (!alteration.Complete ? "style=\"color: gray;\" ": "") + "title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") +"</span>"
+                );
+            }
+        }
+        string text = "";
+        foreach (KeyValuePair<string, List<string>> category in CategoryTexts)
+        {
+            text += "<strong>" + category.Key + "</strong>\n";
+            text += string.Join("\n", category.Value) + "\n\n";
+        }
+        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "AlterationList.md"), text);
     }
 }
 

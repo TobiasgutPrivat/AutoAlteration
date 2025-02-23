@@ -5,7 +5,8 @@ AltertionConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"
 AltertionConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-new AlterationScript ("Campaign.json").RunConfig();
+// new AlterationScript ("Campaign.json").RunConfig();
+DevUtils.GenerateAlterationList();
 
 //TODO LightSurface Template
 // AutoAlteration.AlterAll(new LightWood(), Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AltertionConfig.CustomBlocksFolder, "LightSurface"), "LightWood");

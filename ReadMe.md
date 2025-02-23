@@ -50,73 +50,79 @@ Submitting to Altered Nadeo still goes under their regulations (don't spam creat
 
 Hover over Alterations to see Description
 
-\* differs from Altered Nadeo
+\* can differ from Altered Nadeo
 
-<span style="color: gray;">gray:</span> incomplete
-
+<span style="color: gray;">gray:</span> can be incomplete
 
 <strong>Effect Alterations</strong>
-- Cruise
-- Fragile
-- FreeWheel
-- Glider
-- NoBrake
-- NoEffect
-- NoSteer
-- RandomDankness
-- RandomEffects
-- Reactor
-- ReactorDown
-- RedEffects
-- RngBooster
-- SlowMo
-
-<strong>Finish Alterations</strong>
-- OneBack
-- OneForward
-- OneDown
-- OneLeft
-- OneRight
-- OneUP
-- TwoUP
-- Inclined
-- ThereAndBack
+- <span style="color: gray;" title="places Cruise Effect on every Checkpoint (small offset to avoid skip)">Cruise*</span>
+- <span style="color: gray;" title="places Fragile Effect on every Checkpoint (small offset to avoid skip)">Fragile</span>
+- <span style="color: gray;" title="places Turbo and NoEngine Effect on every Checkpoint (small offset to avoid skip)">FreeWheel</span>
+- <span style="color: gray;" title="places Yellow Reactor and NoEngine Effect on every Checkpoint (small offset to avoid skip)">Glider*</span>
+- <span style="color: gray;" title="places NoBrake Effect on every Checkpoint (small offset to avoid skip)">NoBrake</span>
+- <span style="color: gray;" title="replaces all Effects with their normal Block version">NoEffect</span>
+- <span style="color: gray;" title="places NoSteering Effect on every Checkpoint (small offset to avoid skip)">NoSteer</span>
+- <span title="replaces Checkpoint and Effect Blocks with random Effects">RandomDankness</span>
+- <span title="replaces all Effects with random Effects">RandomEffects</span>
+- <span title="places Red Reactor Effect on every Checkpoint">Reactor</span>
+- <span title="places Red Reactor Effect on every Checkpoint (reactor rotated 180°)">ReactorDown</span>
+- <span title="replaces all Effects with Red Turbo">RedEffects</span>
+- <span title="replaces all Effects with RNG Turbo">RngBooster</span>
+- <span style="color: gray;" title="places SlowMotion Effect on every Checkpoint (small offset to avoid skip)">SlowMo</span>
 
 <strong>Environment Alterations</strong>
-- Stadium
-- Snow
-- Rally
-- Desert
+- <span title="adds Stadium Carswitch at Start and replaces all Carswitchgates">Stadium</span>
+- <span title="adds Snow Carswitch at Start and replaces all Carswitchgates">Snow</span>
+- <span title="adds Rally Carswitch at Start and replaces all Carswitchgates">Rally</span>
+- <span title="adds Desert Carswitch at Start and replaces all Carswitchgates">Desert</span>
 
-<strong>GameMode Alterations</strong>
-- Race
-- Stunt
+<strong>Finish Alterations</strong>
+- <span title="moves the Finish one Tile back">OneBack</span>
+- <span title="moves the Finish one Tile forward">OneForward</span>
+- <span title="moves the Finish one Tile down">OneDown</span>
+- <span title="moves the Finish one Tile to the left">OneLeft</span>
+- <span title="moves the Finish one Tile to the right">OneRight</span>
+- <span title="moves the Finish two Tiles up">TwoUP</span>
+- <span title="tilt's the start and finish down">Inclined*</span>
+
+
+<strong>Surface Alterations</strong>
+- <span style="color: gray;" title="replaces all drivable surfaces with according Penalty surface">Penalty</span>
+- <span style="color: gray;" title="replaces all roads with Bobsleigh">Bobsleigh</span>
+- <span style="color: gray;" title="replaces all roads with Sausage">Sausage</span>
+- <span style="color: gray;" title="removes all non-Pillar blocks, exccept for Start, Finish and Checkpoints">Surfaceless</span>
+
 
 <strong>Other Alterations</strong>
-- AntiBooster
-- Boosterless
-- Broken
-- Checkpointnt
-- CPBoost
-- CPFull
-- CPLess
-- CPLink
-- CPsRotated
-- Earthquake
-- Fast
-- Flipped
-- Holes
-- NoItems
-- RandomBlocks
-- RingCP
-- SpeedLimit
-- StartOneDown
-- STTF
-- Tilted
-- Yeet
-- YeetDown
-- YeetMaxUp
-- YepTree
+- <span title="moves the Finish one Tile up">OneUP</span>
+- <span title="Rotates all boosters and reactors by 180°">AntiBooster</span>
+- <span title="Removes all boosters and reactors (replaces with base blocks)">Boosterless</span>
+- <span title="Replaces all Effects with Engine Off">Broken</span>
+- <span style="color: gray;" title="Blocks all Checkpoints with pillars">Checkpointnt</span>
+- <span title="Swaps Boosters with Checkpoints">CPBoost</span>
+- <span title="Replaces all Blocks with their checkpoint variant if available (Direction depends on original block)">CPFull*</span>
+- <span title="Removes all boosters and reactors (replaces with base blocks)">CPLess</span>
+- <span title="Links all CP's together">CPLink</span>
+- <span title="Rotates all CP's by 90 degrees">CPsRotated</span>
+- <span title="Moves the whole map by 1 million meters, making it feel like an earthquake">Earthquake</span>
+- <span title="Replaces all checkpoints with red Turbo">Fast</span>
+- <span title="Flips the whole map on its head">Flipped</span>
+- <span title="Replaces all Blocks with their hole variant if available">Holes</span>
+- <span title="Removes all Items">NoItems</span>
+- <span title="Places some additional random Blocks (based on Blocks in the Map) with random Position">RandomBlocks</span>
+- <span title="Replaces all CP's with a RingCP">RingCP</span>
+- <span title="Deletes all Boosters and Reactors leaving Gaps">SpeedLimit</span>
+- <span title="Moves the start 1 unit down">StartOneDown</span>
+- <span title="Replaces all CP's with their normal Block-Variant">STTF</span>
+- <span title="Tilt's the whole Map by a limited random Amount around all euler Angles">Tilted</span>
+- <span title="Replaces all CP's with a Red Reactor">Yeet</span>
+- <span title="Replaces all CP's with a Red Reactor rotated by 180°">YeetDown</span>
+- <span title="Replaces all CP's with a Red Reactor, and moves the Finish up to the build limit">YeetMaxUp</span>
+- <span title="Removes 10% of all Blocks">RandomHoles</span>
+- <span title="Places a CP on every Tree">YepTree</span>
+- <span title="Rotates all Blocks by 180°">Rotated</span>
+- <span title="Spreads all Blocks apart by ~7%">Gaps</span>
+- <span style="color: gray;" title="turns scenery into snow">SnowScenery*</span>
 
 ## Folder Application
 Description how the new Maps are stored.
