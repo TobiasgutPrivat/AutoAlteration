@@ -46,7 +46,14 @@ Those are the currently available Alterations
 
 Submitting to Altered Nadeo still goes under their regulations (don't spam create AN Maps)
 
-(Some Alterations, are not fully what they are in Altered Nadeo)
+**Legend**:
+
+Hover over Alterations to see Description
+
+\* differs from Altered Nadeo
+
+<span style="color: gray;">gray:</span> incomplete
+
 
 <strong>Effect Alterations</strong>
 - Cruise

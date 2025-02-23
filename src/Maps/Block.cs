@@ -20,6 +20,7 @@ public class Block {
     public bool IsFree;
     public bool IsClip;
     public bool IsGround;
+    public bool IsGhost;
     public bool IsAir;
     public CGameCtnBlockSkin? Skin;
     // public CGameCtnAnchoredObject? SnappedOnItem;
@@ -54,6 +55,7 @@ public class Block {
         color = block.Color;
         IsFree = block.IsFree;
         IsClip = block.IsClip;
+        IsGhost = block.IsGhost;
         // BlockFlags = block.Flags;
 
         IsGround = block.IsGround;
@@ -134,7 +136,7 @@ public class Block {
                 (int)(position.coords.Y + offset.Y + AltertionConfig.FreeBlockHeightOffset) / 8 , 
                 (int)(position.coords.Z + offset.Z)/ 32
                 );
-
+            block.IsGhost = IsGhost;
         } else {
             block.IsFree = true;
             block.AbsolutePositionInMap = position.coords;
@@ -142,7 +144,6 @@ public class Block {
         }
 
         block.WaypointSpecialProperty = WaypointSpecialProperty;
-        block.IsGhost = false;
         block.IsClip = IsClip;
         block.IsGround = IsGround;
         block.Color = color;
