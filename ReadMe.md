@@ -52,23 +52,23 @@ Hover over Alterations to see Description
 
 \* can differ from Altered Nadeo
 
-<span style="color: gray;">gray:</span> can be incomplete
+/ can be incomplete
 
 <strong>Effect Alterations</strong>
-- <span style="color: gray;" title="places Cruise Effect on every Checkpoint (small offset to avoid skip)">Cruise*</span>
-- <span style="color: gray;" title="places Fragile Effect on every Checkpoint (small offset to avoid skip)">Fragile</span>
-- <span style="color: gray;" title="places Turbo and NoEngine Effect on every Checkpoint (small offset to avoid skip)">FreeWheel</span>
-- <span style="color: gray;" title="places Yellow Reactor and NoEngine Effect on every Checkpoint (small offset to avoid skip)">Glider*</span>
-- <span style="color: gray;" title="places NoBrake Effect on every Checkpoint (small offset to avoid skip)">NoBrake</span>
-- <span style="color: gray;" title="replaces all Effects with their normal Block version">NoEffect</span>
-- <span style="color: gray;" title="places NoSteering Effect on every Checkpoint (small offset to avoid skip)">NoSteer</span>
+- <span title="places Cruise Effect on every Checkpoint (small offset to avoid skip)">Cruise*/</span>
+- <span title="places Fragile Effect on every Checkpoint (small offset to avoid skip)">Fragile/</span>
+- <span title="places Turbo and NoEngine Effect on every Checkpoint (small offset to avoid skip)">FreeWheel/</span>
+- <span title="places Yellow Reactor and NoEngine Effect on every Checkpoint (small offset to avoid skip)">Glider*/</span>
+- <span title="places NoBrake Effect on every Checkpoint (small offset to avoid skip)">NoBrake/</span>
+- <span title="replaces all Effects with their normal Block version">NoEffect/</span>
+- <span title="places NoSteering Effect on every Checkpoint (small offset to avoid skip)">NoSteer/</span>
 - <span title="replaces Checkpoint and Effect Blocks with random Effects">RandomDankness</span>
 - <span title="replaces all Effects with random Effects">RandomEffects</span>
 - <span title="places Red Reactor Effect on every Checkpoint">Reactor</span>
 - <span title="places Red Reactor Effect on every Checkpoint (reactor rotated 180°)">ReactorDown</span>
 - <span title="replaces all Effects with Red Turbo">RedEffects</span>
 - <span title="replaces all Effects with RNG Turbo">RngBooster</span>
-- <span style="color: gray;" title="places SlowMotion Effect on every Checkpoint (small offset to avoid skip)">SlowMo</span>
+- <span title="places SlowMotion Effect on every Checkpoint (small offset to avoid skip)">SlowMo/</span>
 
 <strong>Environment Alterations</strong>
 - <span title="adds Stadium Carswitch at Start and replaces all Carswitchgates">Stadium</span>
@@ -85,20 +85,18 @@ Hover over Alterations to see Description
 - <span title="moves the Finish two Tiles up">TwoUP</span>
 - <span title="tilt's the start and finish down">Inclined*</span>
 
-
 <strong>Surface Alterations</strong>
-- <span style="color: gray;" title="replaces all drivable surfaces with according Penalty surface">Penalty</span>
-- <span style="color: gray;" title="replaces all roads with Bobsleigh">Bobsleigh</span>
-- <span style="color: gray;" title="replaces all roads with Sausage">Sausage</span>
-- <span style="color: gray;" title="removes all non-Pillar blocks, exccept for Start, Finish and Checkpoints">Surfaceless</span>
-
+- <span title="replaces all drivable surfaces with according Penalty surface">Penalty/</span>
+- <span title="replaces all roads with Bobsleigh">Bobsleigh/</span>
+- <span title="replaces all roads with Sausage">Sausage/</span>
+- <span title="removes all non-Pillar blocks, exccept for Start, Finish and Checkpoints">Surfaceless/</span>
 
 <strong>Other Alterations</strong>
 - <span title="moves the Finish one Tile up">OneUP</span>
 - <span title="Rotates all boosters and reactors by 180°">AntiBooster</span>
 - <span title="Removes all boosters and reactors (replaces with base blocks)">Boosterless</span>
 - <span title="Replaces all Effects with Engine Off">Broken</span>
-- <span style="color: gray;" title="Blocks all Checkpoints with pillars">Checkpointnt</span>
+- <span title="Blocks all Checkpoints with pillars">Checkpointnt/</span>
 - <span title="Swaps Boosters with Checkpoints">CPBoost</span>
 - <span title="Replaces all Blocks with their checkpoint variant if available (Direction depends on original block)">CPFull*</span>
 - <span title="Removes all boosters and reactors (replaces with base blocks)">CPLess</span>
@@ -122,7 +120,7 @@ Hover over Alterations to see Description
 - <span title="Places a CP on every Tree">YepTree</span>
 - <span title="Rotates all Blocks by 180°">Rotated</span>
 - <span title="Spreads all Blocks apart by ~7%">Gaps</span>
-- <span style="color: gray;" title="turns scenery into snow">SnowScenery*</span>
+- <span title="turns scenery into snow">SnowScenery*/</span>
 
 ## Folder Application
 Description how the new Maps are stored.

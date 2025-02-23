@@ -96,7 +96,7 @@ class DevUtils{
             }
 
             value.Add(
-                "- <span " + (!alteration.Complete ? "style=\"color: gray;\" ": "") + "title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") +"</span>"
+                "- <span title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") + (!alteration.Complete ? "/": "") +"</span>"
             );
         }
         string text = "";
