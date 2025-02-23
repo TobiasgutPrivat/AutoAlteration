@@ -10,6 +10,7 @@ public class AltertionConfig {
     public static string BlockDataPath = "";
     public static string CustomBlocksFolder = "";
     public static string ApplicationDataFolder = "";
+    public static int FreeBlockHeightOffset = 64;// when converting to freeblcok it has a 64m offset depends on Map Template i think
     public static List<string> Keywords = [];
     public static List<string> ToKeywords = [];
     public static List<string> customBlockAltNames = [];

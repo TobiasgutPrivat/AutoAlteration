@@ -1,3 +1,4 @@
+using System.Collections;
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.Engines.GameData;
@@ -32,12 +33,12 @@ public class Block {
     public short ItemFlags; //Stores relevant placement info
     public string Path = "";
 
-    public void PlaceInMap(CGameCtnChallenge map){
+    public void PlaceInMap(CGameCtnChallenge map, bool revertFreeBlock){
         switch (blockType){
             case BlockType.Block:
             case BlockType.CustomBlock:
             case BlockType.Pillar:
-                PlaceBlockInMap(map);
+                PlaceBlockInMap(map, revertFreeBlock);
                 break;
             case BlockType.Item:
             case BlockType.CustomItem:
@@ -75,10 +76,10 @@ public class Block {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
-            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32));
+            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AltertionConfig.FreeBlockHeightOffset ,block.Coord.Z * 32));
             position.AddPosition(GetDirectionOffset(block));
 
-            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - 64,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));// 64m offset depends on Map Template i think
+            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AltertionConfig.FreeBlockHeightOffset ,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
         }
     }
 
@@ -98,11 +99,48 @@ public class Block {
         };
     }
 
-    private void PlaceBlockInMap(CGameCtnChallenge map) {
+    private void PlaceBlockInMap(CGameCtnChallenge map, bool revertFreeBlock) {
         CGameCtnBlock block = map.PlaceBlock(name,new(0,0,0),Direction.North);
-        block.IsFree = true;
-        block.AbsolutePositionInMap = position.coords;
-        block.PitchYawRoll = position.pitchYawRoll;
+        float yaw = (float)Math.Round(position.pitchYawRoll.X / (Alteration.PI/2),5);
+        if (revertFreeBlock 
+            && position.coords.X % 32 == 0 && position.coords.Y % 8 == 0 && position.coords.Z % 32 == 0
+            && position.pitchYawRoll.Y == 0 && position.pitchYawRoll.Z == 0
+            && yaw % 1 == 0 
+            ) {
+            block.IsFree = false;
+            switch (yaw) {
+                case 0:
+                    block.Direction = Direction.North;
+                    break;
+                case 1:
+                case -3:
+                    block.Direction = Direction.West;
+                    break;
+                case 2:
+                case -2:
+                    block.Direction = Direction.South;
+                    break;
+                case 3:
+                case -1:
+                    block.Direction = Direction.East;
+                    break;
+                default:
+                    throw new Exception("Invalid direction");
+            }
+            Vec3 offset = -GetDirectionOffset(block).coords;
+
+            block.Coord = new Int3(
+                (int)(position.coords.X + offset.X)  / 32, 
+                (int)(position.coords.Y + offset.Y + AltertionConfig.FreeBlockHeightOffset) / 8 , 
+                (int)(position.coords.Z + offset.Z)/ 32
+                );
+
+        } else {
+            block.IsFree = true;
+            block.AbsolutePositionInMap = position.coords;
+            block.PitchYawRoll = position.pitchYawRoll;
+        }
+
         block.WaypointSpecialProperty = WaypointSpecialProperty;
         block.IsGhost = false;
         block.IsClip = IsClip;

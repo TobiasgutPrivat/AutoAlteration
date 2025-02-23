@@ -192,14 +192,14 @@ public class Map
   #endregion
 
   #region placement
-  public void PlaceStagedBlocks(){
+  public void PlaceStagedBlocks(bool revertFreeBlock = true){
     foreach (var block in stagedBlocks){
-      PlaceBlock(block);
+      PlaceBlock(block, revertFreeBlock);
     } 
     stagedBlocks = [];
   }
 
-  private void PlaceBlock(Block block){ // expects the block to be deleted after placing -> could cause nameing issues if not
+  private void PlaceBlock(Block block, bool revertFreeBlock){ // expects the block to be deleted after placing -> could cause nameing issues if not
     block.name = block.name.TrimStart('\\');
     switch (block.blockType){
         case BlockType.CustomBlock:
@@ -220,7 +220,7 @@ public class Map
           break;
       }
 
-    block.PlaceInMap(map);
+    block.PlaceInMap(map, revertFreeBlock);
   }
   #endregion
 
