@@ -80,27 +80,24 @@ class DevUtils{
         Dictionary<string, List<string>> CategoryTexts = new();
         foreach (Alteration alteration in alterations)
         {
-            bool hasCategory = false;
-            foreach (KeyValuePair<string, List<Alteration>> category in AlterationCategories)
+            string? category = null;
+            foreach (KeyValuePair<string, List<Alteration>> pair in AlterationCategories)
             {
-                if (category.Value.Select(x => x.GetType()).Contains(alteration.GetType())){
-                    hasCategory = true;
-                    if (!CategoryTexts.ContainsKey(category.Key)){
-                        CategoryTexts.Add(category.Key, new List<string>());
-                    }
-                    CategoryTexts[category.Key].Add(
-                        "- <span " + (!alteration.Complete ? "style=\"color: gray;\" ": "") + "title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") +"</span>"
-                    );
+                if (pair.Value.Select(x => x.GetType()).Contains(alteration.GetType())){
+                    category = pair.Key;
+                    break;
                 }
             }
-            if (!hasCategory){
-                if (!CategoryTexts.ContainsKey("Other Alterations")){
-                    CategoryTexts.Add("Other Alterations", new List<string>());
-                }
-                CategoryTexts["Other Alterations"].Add(
-                    "- <span " + (!alteration.Complete ? "style=\"color: gray;\" ": "") + "title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") +"</span>"
-                );
+            category ??= "Other Alterations";
+            if (!CategoryTexts.TryGetValue(category, out List<string>? value))
+            {
+                value = [];
+                CategoryTexts.Add(category, value);
             }
+
+            value.Add(
+                "- <span " + (!alteration.Complete ? "style=\"color: gray;\" ": "") + "title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") +"</span>"
+            );
         }
         string text = "";
         foreach (KeyValuePair<string, List<string>> category in CategoryTexts)
