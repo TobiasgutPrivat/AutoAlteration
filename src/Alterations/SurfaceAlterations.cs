@@ -93,7 +93,7 @@ class Penalty : Alteration {
         notCheckpoints.Select("OpenGrassRoad").RemoveKeyword(["OpenGrassRoad","Curve1"]).AddKeyword(["DecoPlatform"]).Replace(map);
         notCheckpoints.Select("OpenDirtRoad").RemoveKeyword(["OpenDirtRoad","Curve1"]).AddKeyword(["DecoPlatform", "Dirt"]).Replace(map);
         notCheckpoints.Select("OpenIceRoad").RemoveKeyword(["OpenIceRoad","Curve1"]).AddKeyword(["DecoPlatform", "Ice"]).Replace(map);
-        //TODO OpenRoads
+        
         map.PlaceStagedBlocks();
     }
 }
@@ -184,7 +184,6 @@ class Surfaceless: Alteration {
 }
 
 //TODO underwater (Macroblock)
-
 
 class RouteOnly: Alteration {
     public override string Description => "removes all non-drivable surfaces";

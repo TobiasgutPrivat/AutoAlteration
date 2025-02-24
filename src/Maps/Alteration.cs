@@ -48,5 +48,6 @@ public abstract class Alteration: PosUtils {
         inventory.RemoveArticles(inventory.Select("v2").RemoveKeyword("v2").Align());
         inventory.Select("v2").EditOriginal().RemoveKeyword("v2");
         inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
+        inventory.Select("Grasss").EditOriginal().RemoveKeyword("Grasss").AddKeyword("Grass");
     }
 }
