@@ -6,12 +6,12 @@ public class AutoAlteration {
             AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
         }
     }
-    public static void AlterFolder(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+    public static void AlterFolder(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.item.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name);
+            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name,skipUnchanged);
         }
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.block.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name);
+            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name,skipUnchanged);
         }
     }
 
@@ -22,11 +22,11 @@ public class AutoAlteration {
             AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
         }
     }
-    public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name) {
-        AlterFolder(alterations,sourceFolder,destinationFolder,Name);
+    public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {
+        AlterFolder(alterations,sourceFolder,destinationFolder,Name,skipUnchanged);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name,skipUnchanged);
         }
     }
     
@@ -38,7 +38,7 @@ public class AutoAlteration {
         Console.WriteLine(destinationFile);
     }
 
-    public static void AlterFile(SList<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name) {
+    public static void AlterFile(SList<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name, bool skipUnchanged = true) {
         CustomBlock customBlock;
         try {
             customBlock = new CustomBlock(sourceFile);
@@ -46,7 +46,7 @@ public class AutoAlteration {
             Console.WriteLine("Load Error " + sourceFile);
             return;
         }
-        if (AlterationLogic.Alter(alterations, customBlock)){
+        if (!skipUnchanged || AlterationLogic.Alter(alterations, customBlock)){
             customBlock.Name += Name;
             customBlock.customBlock.Name = customBlock.Name;
             customBlock.Save(destinationFile);

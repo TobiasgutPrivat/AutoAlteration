@@ -41,7 +41,7 @@ public class Article {
         string vanillaName = Name;
 
         // for customblocksets get size from unaltered version
-        AltertionConfig.customBlockAltNames.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        AltertionConfig.CustomBlockSets.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
         List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList(); 
         if (vanillaVersion.Count > 0) { 
             Width = vanillaVersion.First().Width;

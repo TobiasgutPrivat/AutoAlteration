@@ -117,7 +117,7 @@ class Road : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> InventoryChanges => [new LightSurface(new TechSurface())];
+    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new TechSurface())];
     public override void Run(Map map){
         inventory.Select("!Tech&!OpenTechRoad&!OpenTechZone&!RoadTech").AddKeyword("TechSurface").Replace(map);
         map.PlaceStagedBlocks();
@@ -130,10 +130,13 @@ class Wood : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> InventoryChanges => [new LightSurface(new WoodSurface())];
+    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface(),false)];
     public override void Run(Map map){
-        inventory.AddKeyword("WoodSurface").Replace(map);
+        Inventory platform = inventory.Select("Platform");
+        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
+        (!platform).AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
         //TODO Light variant with only partial Customblocks
+        map.stagedBlocks.ForEach(x => x.IsAir = true);//TODO fix air-mode issue on customblocks to not need this
         map.PlaceStagedBlocks();
     }
 }

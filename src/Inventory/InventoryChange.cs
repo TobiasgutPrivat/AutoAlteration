@@ -24,56 +24,44 @@ public class CustomBlockFolder(string subFolder) : InventoryChange {
     }
 }
 
-public class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : InventoryChange {
+public class CustomBlockSet(CustomBlockAlteration customBlockAlteration, bool skipUnchanged = true) : InventoryChange {
     public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
-    public readonly string folder = Path.Combine(AltertionConfig.ApplicationDataFolder, customBlockAlteration.GetType().Name);
+    public readonly bool skipUnchanged = skipUnchanged;
+
+    public virtual string GetFolder() { return Path.Combine(AltertionConfig.ApplicationDataFolder, GetSetName()); }
+    public virtual string GetSetName() { return customBlockAlteration.GetType().Name; }
+    public virtual string GetOrigin() { return Path.Combine(AltertionConfig.CustomBlocksFolder, "Vanilla"); }
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
-        if (!Directory.Exists(folder)) { 
+        if (!Directory.Exists(GetFolder())) { 
             GenerateBlockSet();
         }
         
-        inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
+        inventory.AddArticles(Directory.GetFiles(GetFolder(), "*.Block.Gbx", SearchOption.AllDirectories)
             .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
 
-        inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
+        inventory.AddArticles(Directory.GetFiles(GetFolder(), "*.Item.Gbx", SearchOption.AllDirectories)
             .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
     }
 
     public void GenerateBlockSet() {
         Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
-        if (!Directory.Exists(folder)) { 
-            Directory.CreateDirectory(folder + "Temp");//Temp in case something goes wrong
+        if (!Directory.Exists(GetFolder())) { 
+            Directory.CreateDirectory(GetFolder() + "Temp");//Temp in case something goes wrong
         }
-        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AltertionConfig.CustomBlocksFolder, "Vanilla"), folder + "Temp", customBlockAlteration.GetType().Name);
-        Directory.Move(folder + "Temp", folder);
+        AutoAlteration.AlterAll(customBlockAlteration, GetOrigin(), GetFolder() + "Temp", GetSetName(),skipUnchanged);
+        Directory.Move(GetFolder() + "Temp", GetFolder());
     }
 }
 
-public class LightSurface(CustomBlockAlteration customBlockAlteration) : InventoryChange {
-    public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
-    public readonly string folder = Path.Combine(AltertionConfig.ApplicationDataFolder, customBlockAlteration.GetType().Name + "light");
+public class LightSurface(CustomBlockAlteration customBlockAlteration, bool skipUnchanged = true) : CustomBlockSet(customBlockAlteration, skipUnchanged) {
+    public override string GetSetName() { return customBlockAlteration.GetType().Name + "Light"; }
+    public override string GetOrigin() { return Path.Combine(AltertionConfig.CustomBlocksFolder, "LightSurface"); }
+}
 
-    public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
-        if (!Directory.Exists(folder)) { 
-            GenerateBlockSet();
-        }
-        
-        inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
-
-        inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
-    }
-
-    public void GenerateBlockSet() {
-        Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
-        if (!Directory.Exists(folder)) { 
-            Directory.CreateDirectory(folder + "Temp");//Temp in case something goes wrong
-        }
-        AutoAlteration.AlterAll(customBlockAlteration, Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"), folder + "Temp", customBlockAlteration.GetType().Name);
-        Directory.Move(folder + "Temp", folder);
-    }
+public class HeavySurface(CustomBlockAlteration customBlockAlteration, bool skipUnchanged = true) : CustomBlockSet(customBlockAlteration, skipUnchanged) {
+    public override string GetSetName() { return customBlockAlteration.GetType().Name + "Heavy"; }
+    public override string GetOrigin() { return Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"); }
 }
 
 public class NoCPBlocks: InventoryChange {

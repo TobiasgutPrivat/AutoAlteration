@@ -34,8 +34,6 @@ LoopStart
 VerySmall
 Screen155
 Oscillate
-LightTech
-HeavyDirt
 Cylinder
 DiagLeft
 Sponsors

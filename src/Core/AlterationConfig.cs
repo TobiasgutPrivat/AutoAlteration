@@ -10,10 +10,11 @@ public class AltertionConfig {
     public static string BlockDataPath = "";
     public static string CustomBlocksFolder = "";
     public static string ApplicationDataFolder = "";
-    public static int FreeBlockHeightOffset = 64;// when converting to freeblcok it has a 64m offset depends on Map Template i think
+    public static int FreeBlockHeightOffset = 64;// when converting to freeblock it has a 64m offset depends on Map Template i think
     public static List<string> Keywords = [];
     public static List<string> ToKeywords = [];
-    public static List<string> customBlockAltNames = [];
+    public static List<string> CustomBlockSets = [];
+    // public static List<string> customBlockAltNames = [];//depracted
 
     public static void Load() {
         Gbx.LZO = new MiniLZO();
@@ -30,6 +31,9 @@ public class AltertionConfig {
 
         ToKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
         ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "ToKeywords.txt"))).ToList();
+
+        CustomBlockSets = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","CustomBlockSets.txt")).ToList();
+        CustomBlockSets = CustomBlockSets.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "CustomBlockSets.txt"))).ToList();
         
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
         Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "Keywords.txt"))).ToList();
@@ -37,8 +41,9 @@ public class AltertionConfig {
         Keywords = File.ReadAllLines(Path.Combine(DataFolder,"Inventory","KeywordsStart.txt")).Concat(Keywords).ToList();
         Keywords = loadKeywordsFile(Path.Combine(ApplicationDataFolder, "KeywordsStart.txt")).Concat(Keywords).ToList();
 
-        customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
-        Keywords = customBlockAltNames.Concat(Keywords).ToList(); // Add custom blocks Alterations at start of keywords
+        // currently depracted
+        // customBlockAltNames = Assembly.GetExecutingAssembly().GetTypes().Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(CustomBlockAlteration))).Select(x => x.Name).ToList();
+        // Keywords = customBlockAltNames.Concat(Keywords).ToList(); // Add custom blocks Alterations at start of keywords
     }
 
     private static List<string> loadKeywordsFile(string path){

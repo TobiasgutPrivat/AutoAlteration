@@ -87,7 +87,14 @@ public class Map
   }
 
   private void ExtractEmbeddedBlocks(string path){
-    ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
+    ZipArchive zipArchive;
+    try { 
+      zipArchive = map.OpenReadEmbeddedZipData(); 
+    } catch {
+      Console.WriteLine("No previously Embedded Blocks"); 
+      return; 
+    }
+    
     zipArchive.Entries.ToList().ForEach(x => {
       string filePath = path + "\\" + x.Name; // Extract without Folderstructure (FullName)
       Directory.CreateDirectory(Path.GetDirectoryName(filePath));

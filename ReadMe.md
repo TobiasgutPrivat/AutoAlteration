@@ -1,12 +1,6 @@
 <!--
-TODO 
-Mark which Alterations differ from Altered Nadeo
-Fix Some Blocks wrong rotation -> Comments in Block.cs
-
-Define Alteration Properties for Alterations
+TODO's:
 Apply Alteration Properties in UI
-
-Rotation subtraction incorrect, testable using Tilted, but so far nowhere needed (probably rotation order issue)
 
 Roadmap Customblock Alterations:
 1. Issue with air mode
@@ -27,7 +21,7 @@ Auto Alterations provides Functionality to automaticly create Trackmania Map-Alt
 
 This Project is based on the GBX.NET Framework from BigBang (Nationsconverter Guy).
 
-It's still in early development, so there will probably be some Bugs and Problems. Contribution to the repository is very welcome, feel free to create pull requests.
+Contribution to the repository is very welcome, feel free to create pull requests.
 
 If you encounter problems or you have some questions/ideas etc. please contact me on Discord <strong>(Tobias2g#5288)</strong>
 
