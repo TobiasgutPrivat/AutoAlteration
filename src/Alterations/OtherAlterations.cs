@@ -442,8 +442,10 @@ class YepTree: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockFolder("YepTree")];
+
     public override void Run(Map map){    
-        map.PlaceRelative(inventory.Select("Tree|Cactus|Fir|Palm|Cypress|Spring|Summer|Winter|Fall"),inventory.GetArticle("GateCheckpointCenter8mv2"));
+        map.PlaceRelative(inventory.Select("Tree|Cactus|Fir|Palm|Cypress|Spring|Summer|Winter|Fall"),inventory.GetArticle("YepTree-TreeCheckpointTrigger"));
         map.PlaceStagedBlocks();
     }
 }
