@@ -110,21 +110,30 @@ class DevUtils{
 }
 
 class CustomBlockAirTest : Alteration {
-    int id = 1000000; //known options: 1000, 1000000, 1001000, 1002000
+    int id = 1000000; 
+    //known options: 1000, 1000000, 1001000, 1002000
+    // 100100 is good for most to have correct model, (Exception ex. dirtroad curve2)
+    // 1002001 bad for all, 
+    // 1000 bad for all
+    // 1000000 good for all if air-mode false, (only known exception: RoadTechTiltTransition2Up1LeftChicane)
+    // last digit doesn't really matter
     public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface())];
     public override void Run(Map map)
     {
         Inventory platform = inventory.Select("Platform");
         platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(map,Move(new Vec3(0,100,0)));
         (!platform).AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(map,Move(new Vec3(0,100,0)));
-        map.stagedBlocks.ForEach(block => block.IsAir = true);
-        map.PlaceStagedBlocks();
+        map.stagedBlocks.ForEach(block => block.IsAir = false);
+        map.PlaceStagedBlocks(false);
         // turns out to be not in air mode and not wood
         platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
         (!platform).AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
-        map.stagedBlocks.ForEach(block => block.IsAir = false);
-        map.PlaceStagedBlocks();
+        map.stagedBlocks.ForEach(block => block.IsAir = true);
+        // map.stagedBlocks.ForEach(block => block. = false);
+        map.PlaceStagedBlocks(false);
         // turns out to be in airmode and as wood
+
+        // seams like IsAir = true + id = 1001000 is working
     }
 }
 

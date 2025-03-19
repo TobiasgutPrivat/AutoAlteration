@@ -1,12 +1,7 @@
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
-class CustomSurfaceAlteration : CustomBlockAlteration {
-    int? id;
-
-    public CustomSurfaceAlteration(int? id = null) {
-        this.id = id;
-    }
+class CustomSurfaceAlteration(int? id = 1000000) : CustomBlockAlteration { // 100100 is good for most to have correct model, 1002001 bad for all, 1000000 good for all if air-mode false
 
     public override bool Run(CustomBlock customBlock)
     {
@@ -68,7 +63,6 @@ class MagnetSurface : CustomSurfaceAlteration {
     }
 }
 class WoodSurface : CustomSurfaceAlteration {
-    public WoodSurface(int? id = null) : base(id) {}
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Material\\ThemeSnowRoad", "Stadium\\Media\\Material\\ThemeSnowRoad",CPlugSurface.MaterialId.Wood);
     }

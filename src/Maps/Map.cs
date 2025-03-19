@@ -130,12 +130,13 @@ public class Map
     }
   }
 
-  public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null){
+  public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null, Func<CGameCtnBlock,bool>? blockCondition = null){
     string ArticleName = atArticle.Name;
     if (atArticle.Type == BlockType.CustomBlock) ArticleName = atArticle.Name + ".Block.Gbx";
     if (atArticle.Type == BlockType.CustomItem) ArticleName = atArticle.Name + ".Item.Gbx";
     ArticleName = ArticleName.Replace("/","\\");
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){
+      if (blockCondition != null && !blockCondition(ctnBlock)) continue;
       stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName)){
@@ -143,8 +144,8 @@ public class Map
     }
   }
 
-  public void PlaceRelative(Inventory inventory, Article newArticle, MoveChain ?moveChain = null)=>
-    inventory.articles.ForEach(a => PlaceRelative(a, newArticle, moveChain));
+  public void PlaceRelative(Inventory inventory, Article newArticle, MoveChain ?moveChain = null, Func<CGameCtnBlock,bool>? blockCondition = null)=> //TODO maybe move to inventory
+    inventory.articles.ForEach(a => PlaceRelative(a, newArticle, moveChain, blockCondition));
   
   public void ReplaceWithRandom(Article oldArticle, Inventory newInventory,MoveChain ?moveChain = null){
     if (newInventory.articles.Count == 0) return;
@@ -152,13 +153,13 @@ public class Map
     Delete(oldArticle);
   }
 
-  public void Replace(Article oldArticle, Article article, MoveChain ?moveChain = null){
-    PlaceRelative(oldArticle, article,moveChain);
+  public void Replace(Article oldArticle, Article article, MoveChain ?moveChain = null, Func<CGameCtnBlock,bool>? blockCondition = null){
+    PlaceRelative(oldArticle, article,moveChain, blockCondition);
     Delete(oldArticle);
   }
   
-  public void Replace(Inventory inventory, Article article, MoveChain ?moveChain = null){
-    PlaceRelative(inventory, article,moveChain);
+  public void Replace(Inventory inventory, Article article, MoveChain ?moveChain = null, Func<CGameCtnBlock,bool>? blockCondition = null){
+    PlaceRelative(inventory, article,moveChain, blockCondition);
     Delete(inventory);
   }
 
