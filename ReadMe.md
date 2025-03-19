@@ -2,6 +2,11 @@
 TODO's:
 Apply Alteration Properties in UI
 
+Modular Alterations:
+  Make basic Alterations have constructor properties with maybe default properties (Surface for Surface Alterations, default offset for Effect-alts) they do execute the alteration
+  Specific can extend/use basic ones by defining constructor properties they might add some more functionality
+
+
 Roadmap Customblock Alterations:
 1. Issue with air mode
 2. Issue Altering of EmbeddedBlocks don't appear ingame as embedded (can be done first)
