@@ -46,7 +46,7 @@ public class AutoAlteration {
             Console.WriteLine("Load Error " + sourceFile);
             return;
         }
-        if (!skipUnchanged || AlterationLogic.Alter(alterations, customBlock)){
+        if (AlterationLogic.Alter(alterations, customBlock) || !skipUnchanged){ //Skip unchanged in back to avoid skipping alteration
             customBlock.Name += Name;
             customBlock.customBlock.Name = customBlock.Name;
             customBlock.Save(destinationFile);
