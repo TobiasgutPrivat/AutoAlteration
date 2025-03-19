@@ -2,7 +2,8 @@ using GBX.NET;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
-class LightSurfaceAlteration : CustomSurfaceAlteration {
+class LightSurfaceBlock : CustomSurfaceAlteration {
+    //doesn't change the surface
     public override bool Run(CustomBlock customBlock) {
         bool changed = false;
         if (customBlock.customBlock.WaypointType != CGameItemModel.EWaypointType.None){
@@ -27,17 +28,12 @@ class LightSurfaceAlteration : CustomSurfaceAlteration {
         return changed;
     }
 
-    public static bool LightSurface(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer, string Surface, string RoadSurface, CPlugSurface.MaterialId SurfacePhysicId){
+    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer){
+        //TODO check why some are unchanged
         layer.Crystal.Faces = layer.Crystal.Faces.Where(x => DrivableMaterials.Contains(GetMaterialLink(x))).ToArray();
         if (layer.Crystal.Faces.Length == 0){
             return false;
         }
-        if (customBlock.Name.Contains("Road") && !customBlock.Name.Contains("Open")){
-            layer.Crystal.Faces.ToList().ForEach(x => GetMaterialUserInst(x).Link = RoadSurface);
-        } else {
-            layer.Crystal.Faces.ToList().ForEach(x => GetMaterialUserInst(x).Link = Surface);
-        }
-        layer.Crystal.Faces.ToList().ForEach(x => GetMaterialUserInst(x).SurfacePhysicId = SurfacePhysicId);
         
         // move all positions closer to topmiddle point
         // Will have issues with surfaces looking away from topmiddle point
@@ -58,11 +54,5 @@ class LightSurfaceAlteration : CustomSurfaceAlteration {
             return new Vec3(X, Y, Z);
             }).ToArray();
         return true;
-    }
-}
-
-class LightWood : LightSurfaceAlteration {
-    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
-        return LightSurface(customBlock, layer,"Stadium\\Media\\Material\\ThemeSnowRoad", "Stadium\\Media\\Material\\ThemeSnowRoad",CPlugSurface.MaterialId.Wood);
     }
 }

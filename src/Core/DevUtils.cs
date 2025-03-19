@@ -107,6 +107,10 @@ class DevUtils{
         }
         File.WriteAllText(Path.Combine(AltertionConfig.devPath, "AlterationList.md"), text);
     }
+
+    public static void generateLightSurfaceBlocks() {
+        AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Join(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Join(AltertionConfig.CustomBlocksFolder, "LightSurface"), "");
+    }
 }
 
 class CustomBlockAirTest : Alteration {
