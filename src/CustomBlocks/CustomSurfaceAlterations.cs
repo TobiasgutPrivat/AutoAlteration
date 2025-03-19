@@ -1,6 +1,25 @@
+using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
 class CustomSurfaceAlteration : CustomBlockAlteration {
+    int? id;
+
+    public CustomSurfaceAlteration(int? id = null) {
+        this.id = id;
+    }
+
+    public override bool Run(CustomBlock customBlock)
+    {
+        if (id != null) {
+            if (customBlock.Type == BlockType.Block && customBlock.customBlock.EntityModelEdition is not null) {
+                CGameBlockItem Block = (CGameBlockItem)customBlock.customBlock.EntityModelEdition;
+                Block.CustomizedVariants?.ForEach(x => x.Id = id!.Value);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public static List<string> DrivableMaterials = ["Stadium\\Media\\Material\\ThemeSnowRoad","Stadium\\Media\\Material\\ThemeSnowRoadBorder"];// currently only from Wood; other surfaces: "Stadium\\Media\\Material\\PlatformTech","Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech","Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech","Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech","Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech","Stadium\\Media\\Material\\RoadBump","Stadium\\Media\\Material\\RoadTech","Stadium\\Media\\Material\\RoadDirt","Stadium\\Media\\Material\\RoadIce","Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic","Stadium\\Media\\Modifier\\PlatformDirt\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformGrass\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformIce\\OpenTechBorders","Stadium\\Media\\Material\\OpenTechBorders",; Top of TrackWall: "Stadium\\Media\\Material\\TrackWallClips"
 
     public static bool HeavySurface(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer, string Surface, string RoadSurface, CPlugSurface.MaterialId SurfacePhysicId){
@@ -49,6 +68,7 @@ class MagnetSurface : CustomSurfaceAlteration {
     }
 }
 class WoodSurface : CustomSurfaceAlteration {
+    public WoodSurface(int? id = null) : base(id) {}
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Material\\ThemeSnowRoad", "Stadium\\Media\\Material\\ThemeSnowRoad",CPlugSurface.MaterialId.Wood);
     }

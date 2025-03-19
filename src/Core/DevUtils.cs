@@ -109,6 +109,25 @@ class DevUtils{
     }
 }
 
+class CustomBlockAirTest : Alteration {
+    int id = 1000000; //known options: 1000, 1000000, 1001000, 1002000
+    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface())];
+    public override void Run(Map map)
+    {
+        Inventory platform = inventory.Select("Platform");
+        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(map,Move(new Vec3(0,100,0)));
+        (!platform).AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(map,Move(new Vec3(0,100,0)));
+        map.stagedBlocks.ForEach(block => block.IsAir = true);
+        map.PlaceStagedBlocks();
+        // turns out to be not in air mode and not wood
+        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
+        (!platform).AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
+        map.stagedBlocks.ForEach(block => block.IsAir = false);
+        map.PlaceStagedBlocks();
+        // turns out to be in airmode and as wood
+    }
+}
+
 class Replace : Alteration {
     public override void Run(Map map)
     {
