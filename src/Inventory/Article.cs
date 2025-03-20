@@ -100,6 +100,9 @@ public class Article {
         } else {
             nameSplits = [name];
         }
+
+        //CustomblockSets, could have issues if set is part of toKeywords
+        SplitByKeywords(nameSplits, AltertionConfig.CustomBlockSets, Keywords);
         
         //Keywords
         SplitByKeywords(nameSplits, AltertionConfig.Keywords, Keywords);

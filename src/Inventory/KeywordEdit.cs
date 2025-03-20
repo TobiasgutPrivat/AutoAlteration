@@ -83,6 +83,7 @@ public class KeywordEdit {
             Article ?article = Alteration.inventory.AlignArticle(a);
             if (article != null) {
                 map.PlaceRelative(a, article, moveChain);
+                // Console.WriteLine("Matching article found for: " + a.KeywordString());
             } else {
                 // Console.WriteLine("No matching article found for: " + a.KeywordString());
             }
