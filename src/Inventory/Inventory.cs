@@ -121,6 +121,9 @@ public class Inventory { // represents all available articles which can be place
     public Inventory Select(BlockType blockType) =>
         new(articles.Where(a => a.Type == blockType).ToList());
 
+    public Inventory Select(Predicate<Article> condition) =>
+        new(articles.Where(a => condition(a)).ToList());
+
     public static Inventory operator &(Inventory a, Inventory b)
     {
         return new(a.articles.Intersect(b.articles).ToList());

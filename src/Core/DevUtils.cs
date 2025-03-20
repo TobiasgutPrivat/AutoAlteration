@@ -172,3 +172,19 @@ class FixAutoRotation : Alteration {
         map.PlaceStagedBlocks();
     }
 }
+
+class NothingBlock : CustomBlockAlteration {
+    public override bool Run(CustomBlock customBlock) { return true; }
+}
+
+class EmbedTest : Alteration {
+    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new NothingBlock())];
+    public override void Run(Map map){
+        Inventory specific = inventory.Select(article => article.MapSpecific);
+        (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","NothingBlockHeavy"]).Replace(map);
+        (!specific).AddKeyword(["NothingBlockHeavy"]).Replace(map);
+        specific.AddKeyword(["NothingBlock"]).Replace(map);
+        map.stagedBlocks.ForEach(x => x.IsAir = false);
+        map.PlaceStagedBlocks(false);
+    }
+}

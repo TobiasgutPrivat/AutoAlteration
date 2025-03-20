@@ -96,7 +96,7 @@ public class Map
     }
     
     zipArchive.Entries.ToList().ForEach(x => {
-      string filePath = path + "\\" + x.Name; // Extract without Folderstructure (FullName)
+      string filePath = path + "\\" + x.FullName; // Extract without Folderstructure (FullName)
       Directory.CreateDirectory(Path.GetDirectoryName(filePath));
       x.ExtractToFile(filePath);
     });
@@ -108,12 +108,11 @@ public class Map
     string TempExportsFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Exports");
     if (!Directory.Exists(TempFolder)) { Directory.CreateDirectory(TempFolder); }
     if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
-    if (!Directory.Exists(TempExportsFolder)) { 
-      Directory.CreateDirectory(TempExportsFolder);
-      ExtractEmbeddedBlocks(TempFolder);
-    }
+    if (!Directory.Exists(TempExportsFolder)) { Directory.CreateDirectory(TempExportsFolder); }
+    ExtractEmbeddedBlocks(TempExportsFolder);
     AutoAlteration.AlterAll(customBlockAlteration,TempExportsFolder,CustomFolder,customBlockAlteration.GetType().Name);
-    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetType().Name).ChangeInventory(Alteration.inventory,true);
+    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetType().Name + "\\Items").ChangeInventory(Alteration.inventory,true);
+    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetType().Name + "\\Blocks").ChangeInventory(Alteration.inventory,true);
   }
   #endregion
 
