@@ -141,6 +141,7 @@ class Wood : Alteration {
         //TODO for replaced block place Pillar if was air previously (use replace(blockCondition: {if isAir}))
         platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
         (!platform).AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
+        (!platform).AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(map);
         //TODO some more blocks not yet handled
         //TODO get full block set
         map.stagedBlocks.ForEach(x => x.IsAir = false);
