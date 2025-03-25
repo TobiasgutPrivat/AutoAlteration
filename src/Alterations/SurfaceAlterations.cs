@@ -137,11 +137,12 @@ class Wood : Alteration {
     
     public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface(),false)];
     public override void Run(Map map){
-        Inventory platform = inventory.Select("Platform");
         //TODO for replaced block place Pillar if was air previously (use replace(blockCondition: {if isAir}))
-        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
-        (!platform).AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
-        (!platform).AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(map);
+        Inventory specific = inventory.Select(article => article.MapSpecific);
+        (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
+        (!specific).AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
+        (!specific).AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(map);
+        specific.AddKeyword(["WoodSurface"]).Replace(map);
         //TODO some more blocks not yet handled
         //TODO get full block set
         map.stagedBlocks.ForEach(x => x.IsAir = false);
