@@ -45,7 +45,7 @@ public abstract class Alteration: PosUtils {
         inventory.Select(BlockType.Block).Select("Gate").EditOriginal().RemoveKeyword("Gate").AddKeyword("Ring");
         inventory.Select("Special").EditOriginal().RemoveKeyword("Special");
         inventory.Select("Start&!(Slope2|Loop|DiagRight|DiagLeft|Slope|Inflatable)").EditOriginal().RemoveKeyword("Start").AddKeyword("MapStart");
-        inventory.RemoveArticles(inventory.Select("v2").RemoveKeyword("v2").Align());
+        inventory.RemoveArticles(inventory.Select("v2").RemoveKeyword("v2").Align().getAligned());
         inventory.Select("v2").EditOriginal().RemoveKeyword("v2");
         inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
         inventory.Select("Grasss").EditOriginal().RemoveKeyword("Grasss").AddKeyword("Grass");

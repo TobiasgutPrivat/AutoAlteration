@@ -6,9 +6,9 @@ public abstract class InventoryChange: PosUtils {
 
 public class NormalizeCheckpoint: InventoryChange {
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
-        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Straight").Align().EditOriginal().RemoveKeyword("Straight");
-        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align().EditOriginal().RemoveKeyword("StraightX2");
-        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Base").Align().EditOriginal().RemoveKeyword("Base");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Straight").Align().getAligned().EditOriginal().RemoveKeyword("Straight");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align().getAligned().EditOriginal().RemoveKeyword("StraightX2");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Base").Align().getAligned().EditOriginal().RemoveKeyword("Base");
     }
 }
 
@@ -67,7 +67,7 @@ public class HeavySurface(CustomBlockAlteration customBlockAlteration, bool skip
 public class NoCPBlocks: InventoryChange {
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         Inventory tempInventory = new();
-        tempInventory.AddArticles(inventory.Select(BlockType.Item).Select("Center&(Checkpoint|Multilap|MapStart)").RemoveKeyword("Center"));
+        tempInventory.AddArticles(inventory.Select(BlockType.Item).Select("Center&(Checkpoint|Multilap|MapStart)").RemoveKeyword("Center").Align().getAligned());
         AddRoadNoCPBlocks(tempInventory,"Tech");
         AddRoadNoCPBlocks(tempInventory,"Dirt");
         AddRoadNoCPBlocks(tempInventory,"Bump");
@@ -152,8 +152,8 @@ public class CheckpointTrigger: InventoryChange {
     }
 
     private static void CreateTriggerArticle(Inventory inventory,string selection,Vec3 offset, Vec3 rotation) {
-        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Checkpoint").Select(selection).RemoveKeyword("Checkpoint").AddKeyword("CheckpointTrigger").SetChain(Move(offset).Rotate(rotation)));
-        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Multilap").Select(selection).RemoveKeyword("Multilap").AddKeyword("MultilapTrigger").SetChain(Move(offset).Rotate(rotation)));
+        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Checkpoint").Select(selection).RemoveKeyword("Checkpoint").AddKeyword("CheckpointTrigger").SetChain(Move(offset).Rotate(rotation)).Align().getAligned());
+        inventory.AddArticles(inventory.Select(BlockType.Block).Select("Multilap").Select(selection).RemoveKeyword("Multilap").AddKeyword("MultilapTrigger").SetChain(Move(offset).Rotate(rotation)).Align().getAligned());
     }
 }
 

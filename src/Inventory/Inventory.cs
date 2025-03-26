@@ -172,13 +172,29 @@ public class Inventory { // represents all available articles which can be place
         return null;
     }
 
+    public Inventory AlignMultiple(Article article, List<string> addKeywords) {
+        List<Article> articles = [];
+        addKeywords.ForEach(k => {
+            Article clonedArticle = article.CloneArticle();
+            clonedArticle.Keywords.Add(k);
+            Article ?Match = AlignArticle(clonedArticle);
+            if (Match != null) {
+                articles.Add(Match);
+            }
+        });
+        return new Inventory(articles);
+    }
+
     #region Edit
     public Inventory AddArticles(SList<Article> newArticles) {
         articles.AddRange(newArticles);
         return this;
     }
-    public Inventory AddArticles(KeywordEdit inventory) =>
-        AddArticles(inventory.articles);
+
+    public Inventory AddArticles(Inventory inventory) {
+        articles.AddRange(inventory.articles);
+        return this;
+    }
 
     public Inventory RemoveArticles(Inventory removeInventory) {
         articles = articles.Where(a => !removeInventory.articles.Contains(a)).ToList();

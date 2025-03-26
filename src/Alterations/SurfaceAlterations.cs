@@ -145,7 +145,8 @@ class Wood : Alteration {
         HeavyReplace.Add((!specific).AddKeyword(["WoodSurfaceHeavy","Middle"]));
         HeavyReplace.Add((!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]));
         //TODO some more blocks not yet handled
-        Inventory replaced = HeavyReplace.Align(); //blocks which will be replaced by Heavy later
+        HeavyReplace.Align();
+        Inventory replaced = HeavyReplace.getOriginal(); //blocks which will be replaced by Heavy later
 
         // 2. place Pillars on blocks which will be replaced by Heavy and were not air
         KeywordEdit Pillar = replaced.RemoveKeyword([""]); //TODO align to pillars

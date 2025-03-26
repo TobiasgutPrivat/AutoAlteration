@@ -1,7 +1,7 @@
 using GBX.NET.Engines.Game;
 
 public class KeywordEdit {
-    public Dictionary<Article,Article?> articles = []; //TODO maybe store alignements as values in dict with edited as keys
+    public Dictionary<Article,Article?> articles = []; //Keys: cloned articles, Values: aligned articles (from org inventory)
 
     public KeywordEdit(List<Article> articles) {
         articles.ForEach(a => this.articles.Add(a,null));
@@ -72,34 +72,31 @@ public class KeywordEdit {
 
     public void ReplaceWithRandom(Map map,List<string> addKeywords,MoveChain ?moveChain = null){
         articles.Keys.ToList().ForEach( a => {
-            map.ReplaceWithRandom(a, AlignMultiple(a, addKeywords), moveChain);
+            map.ReplaceWithRandom(a, Alteration.inventory.AlignMultiple(a, addKeywords), moveChain);
         });
     }
 
     public void PlaceRelativeWithRandom(Map map,List<string> addKeywords,MoveChain ?moveChain = null){
         articles.Keys.ToList().ForEach( a => {
-            map.PlaceRelativeWithRandom(a, AlignMultiple(a, addKeywords), moveChain);
+            map.PlaceRelativeWithRandom(a, Alteration.inventory.AlignMultiple(a, addKeywords), moveChain);
         });
     }
 
-    public static Inventory AlignMultiple(Article a,List<string> addKeywords) {
-        List<Article> articles = [];
-        addKeywords.ForEach(k => {
-            Article article = a.CloneArticle();
-            article.Keywords.Add(k);
-            Article ?Match = Alteration.inventory.AlignArticle(article);
-            if (Match != null) {
-                articles.Add(Match);
-            }
-        });
-        return new Inventory(articles);
-    }
-
-    public Inventory Align() {
+    public KeywordEdit Align() {
         articles.ToList().ForEach( a => {
             articles[a.Key] = Alteration.inventory.AlignArticle(a.Key);
         });
+        //only keep aligned articles
+        articles = articles.Where(a => a.Value != null).ToDictionary(a => a.Key, a => a.Value);
+        return this;
+    }
+
+    public Inventory getAligned() {
         return new Inventory(articles.Values.Where(a => a != null).ToList() as List<Article>);
+    }
+
+    public Inventory getOriginal() {
+        return new Inventory(articles.Keys.Select(a => Alteration.inventory.GetArticle(a.Name)).ToList());
     }
 
     public KeywordEdit Add(KeywordEdit other) {
