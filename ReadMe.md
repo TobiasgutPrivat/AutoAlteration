@@ -20,6 +20,10 @@ Make Configurable Alterations
 apply on Nation Converter (check with BigBang)
 
 Maybe make Keywords not case sensitive
+
+Maybe merge Inventory and KeywordEdit:
+  store as Dict<Article,Article?> (Key:selected Article, Value: aligned according to Keywords)
+  on each change create new Inventory (if editing Articles use cloned ones), cache all of them
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
