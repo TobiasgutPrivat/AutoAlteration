@@ -1,7 +1,7 @@
 using GBX.NET;
 using GBX.NET.Engines.Plug;
 
-class SupersizedBlock : CustomBlockAlteration {
+public class SupersizedBlock : CustomBlockAlteration {
     private float factor;
     public SupersizedBlock(float factor = 2) { this.factor = factor; }
 
@@ -29,7 +29,7 @@ class SupersizedBlock : CustomBlockAlteration {
     }
 }
 
-class MiniBlock : CustomBlockAlteration {
+public class MiniBlock : CustomBlockAlteration {
     private static readonly float factor = 0.5f;
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => new Vec3(x.X * factor, x.Y * factor, x.Z * factor)).ToArray();
@@ -55,7 +55,7 @@ class MiniBlock : CustomBlockAlteration {
     }
 }
 
-class InvisibleBlock : CustomBlockAlteration {
+public class InvisibleBlock : CustomBlockAlteration {
     public override bool AlterMeshCrystal(CustomBlock customBlock, CPlugCrystal MeshCrystal) {
         CustomBlock LowCube = new CustomBlock(Path.Combine(AltertionConfig.DataFolder, "Templates","LowCubeLayer.Item.Gbx"));
         CPlugCrystal.GeometryLayer layer = LowCube.MeshCrystals[0].Layers[0] as CPlugCrystal.GeometryLayer;

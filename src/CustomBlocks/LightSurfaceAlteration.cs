@@ -2,7 +2,7 @@ using GBX.NET;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
-class LightSurfaceBlock : CustomSurfaceAlteration {
+public class LightSurfaceBlock : CustomSurfaceAlteration {
     //doesn't change the surface
     public override bool Run(CustomBlock customBlock) {
         bool changed = false;
