@@ -1,11 +1,11 @@
-// class LightSurface : Alteration {
+// public class LightSurface : Alteration {
 //     public void AlterLightSurface(Map map, string Surface) {
 //         inventory.Select("!Light" + Surface + "&(RoadTech|RoadBump|RoadDirt|RoadIce|OpenGrassRoad|OpenDirtRoad|OpenTechRoad|OpenIceRoad|OpenGrassZone|OpenDirtZone|OpenTechZone|OpenIceZone)").AddKeyword("Light" + Surface).PlaceRelative(map);
 //         inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
 //     }
 // }
 
-class Dirt : Alteration {
+public class Dirt : Alteration {
     public override string Description => "replaces all drivable surfaces with Dirt";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -23,7 +23,7 @@ class Dirt : Alteration {
 
 //flooded manual
 
-class Grass : Alteration {
+public class Grass : Alteration {
     public override string Description => "replaces all drivable surfaces with Grass";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -41,7 +41,7 @@ class Grass : Alteration {
     }
 }
 
-class Ice : Alteration {
+public class Ice : Alteration {
     public override string Description => "replaces all drivable surfaces with Ice";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -54,7 +54,7 @@ class Ice : Alteration {
     }
 }
 
-class Magnet : Alteration {
+public class Magnet : Alteration {
     public override string Description => "replaces all drivable surfaces with Magnet";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -69,7 +69,7 @@ class Magnet : Alteration {
 
 //mixed manual
 
-class Penalty : Alteration {
+public class Penalty : Alteration {
     public override string Description => "replaces all drivable surfaces with according Penalty surface";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -103,7 +103,7 @@ class Penalty : Alteration {
     }
 }
 
-class Plastic : Alteration {
+public class Plastic : Alteration {
     public override string Description => "replaces all drivable surfaces with Plastic";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -116,7 +116,7 @@ class Plastic : Alteration {
     }
 }
 
-class Road : Alteration {
+public class Road : Alteration {
     public override string Description => "replaces all drivable surfaces with Tech";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -129,7 +129,7 @@ class Road : Alteration {
     }
 }
 
-class Wood : Alteration {
+public class Wood : Alteration {
     public override string Description => "replaces all drivable surfaces with Wood";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -150,7 +150,7 @@ class Wood : Alteration {
     }
 }
 
-class Bobsleigh : Alteration { //half manual
+public class Bobsleigh : Alteration { //half manual
     public override string Description => "replaces all roads with Bobsleigh";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -164,7 +164,7 @@ class Bobsleigh : Alteration { //half manual
 
 //pipe manual
 
-class Sausage : Alteration { //half manual
+public class Sausage : Alteration { //half manual
     public override string Description => "replaces all roads with Sausage";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -178,7 +178,7 @@ class Sausage : Alteration { //half manual
 
 //slot-track manual
 
-class Surfaceless: Alteration {
+public class Surfaceless: Alteration {
     public override string Description => "removes all non-Pillar blocks, exccept for Start, Finish and Checkpoints";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -197,7 +197,7 @@ class Surfaceless: Alteration {
 
 //TODO underwater (Macroblock)
 
-class RouteOnly: Alteration {
+public class RouteOnly: Alteration {
     public override string Description => "removes all non-drivable surfaces";
     public override bool Published => false;
     public override bool LikeAN => true;

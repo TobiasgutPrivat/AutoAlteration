@@ -1,4 +1,4 @@
-abstract class EffectAlteration: Alteration {
+abstract public class EffectAlteration: Alteration {
     public string SelAllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
     public List<string> AllEffects = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"];
     public override List<InventoryChange> InventoryChanges => [new CheckpointTrigger()];
@@ -38,7 +38,7 @@ abstract class EffectAlteration: Alteration {
         map.PlaceStagedBlocks();
     }
 }
-class Cruise: EffectAlteration {
+public class Cruise: EffectAlteration {
     public override string Description => "places Cruise Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => false;
@@ -49,7 +49,7 @@ class Cruise: EffectAlteration {
     }
 }
 
-class Fragile: EffectAlteration {
+public class Fragile: EffectAlteration {
     public override string Description => "places Fragile Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -63,7 +63,7 @@ class Fragile: EffectAlteration {
 
 //TODO 100 Fragile, Fragile + remove reset + start (Macro)block
 
-class FreeWheel: EffectAlteration {
+public class FreeWheel: EffectAlteration {
     public override string Description => "places Turbo and NoEngine Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -77,7 +77,7 @@ class FreeWheel: EffectAlteration {
     }
 }
 
-class Glider: EffectAlteration {
+public class Glider: EffectAlteration {
     public override string Description => "places Yellow Reactor and NoEngine Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => false;
@@ -91,7 +91,7 @@ class Glider: EffectAlteration {
     }
 }
 
-class NoBrake: EffectAlteration {
+public class NoBrake: EffectAlteration {
     public override string Description => "places NoBrake Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -103,7 +103,7 @@ class NoBrake: EffectAlteration {
     }
 }
 
-class NoEffect: EffectAlteration {
+public class NoEffect: EffectAlteration {
     public override string Description => "replaces all Effects with their normal Block version";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -119,7 +119,7 @@ class NoEffect: EffectAlteration {
 
 //TODO no-grip (custom)block
 
-class NoSteer: EffectAlteration {
+public class NoSteer: EffectAlteration {
     public override string Description => "places NoSteering Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -131,7 +131,7 @@ class NoSteer: EffectAlteration {
     }
 }
 
-class RandomDankness: EffectAlteration {
+public class RandomDankness: EffectAlteration {
     public override string Description => "replaces Checkpoint and Effect Blocks with random Effects";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -153,7 +153,7 @@ class RandomDankness: EffectAlteration {
     }
 }
 
-class RandomEffects: EffectAlteration {
+public class RandomEffects: EffectAlteration {
     public override string Description => "replaces all Effects with random Effects";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -167,7 +167,7 @@ class RandomEffects: EffectAlteration {
     }
 }
 
-class Reactor: EffectAlteration {
+public class Reactor: EffectAlteration {
     public override string Description => "places Red Reactor Effect on every Checkpoint";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -179,7 +179,7 @@ class Reactor: EffectAlteration {
     }
 }
 
-class ReactorDown: EffectAlteration {
+public class ReactorDown: EffectAlteration {
     public override string Description => "places Red Reactor Effect on every Checkpoint (reactor rotated 180°)";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -191,7 +191,7 @@ class ReactorDown: EffectAlteration {
     }
 }
 
-class RedEffects: EffectAlteration {
+public class RedEffects: EffectAlteration {
     public override string Description => "replaces all Effects with Red Turbo";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -203,7 +203,7 @@ class RedEffects: EffectAlteration {
     }
 }
 
-class RngBooster: EffectAlteration {
+public class RngBooster: EffectAlteration {
     public override string Description => "replaces all Effects with RNG Turbo";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -216,7 +216,7 @@ class RngBooster: EffectAlteration {
 }
 
 
-class SlowMo: EffectAlteration {
+public class SlowMo: EffectAlteration {
     public override string Description => "places SlowMotion Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;

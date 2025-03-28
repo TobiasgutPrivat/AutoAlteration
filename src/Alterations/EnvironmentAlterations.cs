@@ -1,4 +1,4 @@
-abstract class EnvironmentAlterations: Alteration {
+abstract public class EnvironmentAlterations: Alteration {
     public static void SetGamePlay(Map map, string GamePlay){
         inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword(GamePlay).Replace(map);
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
@@ -12,7 +12,7 @@ abstract class EnvironmentAlterations: Alteration {
     }
 }
 
-class Stadium: EnvironmentAlterations {
+public class Stadium: EnvironmentAlterations {
     public override string Description => "adds Stadium Carswitch at Start and replaces all Carswitchgates";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -23,7 +23,7 @@ class Stadium: EnvironmentAlterations {
     }
 }
 
-class Snow: EnvironmentAlterations {
+public class Snow: EnvironmentAlterations {
     public override string Description => "adds Snow Carswitch at Start and replaces all Carswitchgates";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -34,7 +34,7 @@ class Snow: EnvironmentAlterations {
     }
 }
 
-class Rally: EnvironmentAlterations {
+public class Rally: EnvironmentAlterations {
     public override string Description => "adds Rally Carswitch at Start and replaces all Carswitchgates";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -45,7 +45,7 @@ class Rally: EnvironmentAlterations {
     }
 }
 
-class Desert: EnvironmentAlterations {
+public class Desert: EnvironmentAlterations {
     public override string Description => "adds Desert Carswitch at Start and replaces all Carswitchgates";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -58,7 +58,7 @@ class Desert: EnvironmentAlterations {
 
 //Snow Carswitch manual
 
-class SnowCarswitchToDesert: Alteration {
+public class SnowCarswitchToDesert: Alteration {
     public override string Description => "changes Snow Carswitch to Desert Carswitch";
     public override bool Published => false;
     public override bool LikeAN => false;
@@ -69,7 +69,7 @@ class SnowCarswitchToDesert: Alteration {
         map.PlaceStagedBlocks();
     }
 }
-class SnowCarswitchToRally: Alteration {
+public class SnowCarswitchToRally: Alteration {
     public override string Description => "changes Snow Carswitch to Rally Carswitch";
     public override bool Published => false;
     public override bool LikeAN => false;
