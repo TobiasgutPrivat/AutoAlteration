@@ -28,7 +28,7 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration, bool sk
     public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
     public readonly bool skipUnchanged = skipUnchanged;
 
-    public virtual string GetFolder() { return Path.Combine(AltertionConfig.ApplicationDataFolder, GetSetName()); }
+    public virtual string GetFolder() { return Path.Combine(AltertionConfig.CacheFolder, GetSetName()); }
     public virtual string GetSetName() { return customBlockAlteration.GetType().Name; }
     public virtual string GetOrigin() { return Path.Combine(AltertionConfig.CustomBlocksFolder, "Vanilla"); }
 
