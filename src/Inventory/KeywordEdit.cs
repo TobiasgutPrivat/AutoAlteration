@@ -91,6 +91,10 @@ public class KeywordEdit {
         return this;
     }
 
+    public Inventory getEdited() {
+        return new Inventory(articles.Keys.ToList());
+    }
+
     public Inventory getAligned() {
         return new Inventory(articles.Values.Where(a => a != null).ToList() as List<Article>);
     }
