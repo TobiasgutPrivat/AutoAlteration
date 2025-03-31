@@ -37,7 +37,9 @@ public class AlterationLogic {
             .Cast<CustomBlockSet>().ToList().ForEach(
                 x => map.GenerateCustomBlocks(x.customBlockAlteration)); //includes updating inventory
                 
-        Alteration.inventory.Export("WithMapBlocks");
+        if (AltertionConfig.devMode){ //logging
+            Alteration.inventory.Export("WithMapBlocks");
+        }
 
         //alteration
         foreach (Alteration alteration in alterations) {

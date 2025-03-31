@@ -6,7 +6,7 @@ using GBX.NET;
 
 //TODO altered-camera needs (Mediatracker)
 
-class AntiBooster: Alteration {
+public class AntiBooster: Alteration {
     public override string Description => "Rotates all boosters and reactors by 180°";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -27,7 +27,7 @@ class AntiBooster: Alteration {
 
 //backwards (manual)
 
-class Boosterless: Alteration {
+public class Boosterless: Alteration {
     public override string Description => "Removes all boosters and reactors (replaces with base blocks)";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -49,7 +49,7 @@ class Boosterless: Alteration {
 
 //TODO boss-overlayed (multiple) Maps
 
-class Broken: EffectAlteration {
+public class Broken: EffectAlteration {
     public override string Description => "Replaces all Effects with Engine Off";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -67,7 +67,7 @@ class Broken: EffectAlteration {
 
 //Cacti (manual)
 
-class Checkpointnt: EffectAlteration { //only blocks Checkpoints
+public class Checkpointnt: EffectAlteration { //only blocks Checkpoints
     public override string Description => "Blocks all Checkpoints with pillars";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -93,7 +93,7 @@ class Checkpointnt: EffectAlteration { //only blocks Checkpoints
 
 //TODO color-combined (multiple) Maps
 
-class CPBoost : Alteration{
+public class CPBoost : Alteration{
     public override string Description => "Swaps Boosters with Checkpoints";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -114,7 +114,7 @@ class CPBoost : Alteration{
 
 //cp1 kept (manual)
 
-class CPFull : Alteration{
+public class CPFull : Alteration{
     public override string Description => "Replaces all Blocks with their checkpoint variant if available (Direction depends on original block)";
     public override bool Published => true;
     public override bool LikeAN => false;
@@ -127,7 +127,7 @@ class CPFull : Alteration{
     }
 }
 
-class CPLess : Alteration{
+public class CPLess : Alteration{
     public override string Description => "Removes all boosters and reactors (replaces with base blocks)";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -138,7 +138,7 @@ class CPLess : Alteration{
     }
 }
 
-class CPLink : Alteration{
+public class CPLink : Alteration{
     public override string Description => "Links all CP's together";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -160,7 +160,7 @@ class CPLink : Alteration{
     }
 }
 
-class CPsRotated : Alteration{
+public class CPsRotated : Alteration{
     public override string Description => "Rotates all CP's by 90 degrees";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -174,7 +174,7 @@ class CPsRotated : Alteration{
 
 //TODO Dragonyeet (Macroblock)
 
-class Earthquake : Alteration{
+public class Earthquake : Alteration{
     public override string Description => "Moves the whole map by 1 million meters, making it feel like an earthquake";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -187,7 +187,7 @@ class Earthquake : Alteration{
     }
 }
 
-class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
+public class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
     public override string Description => "Replaces all checkpoints with red Turbo";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -200,7 +200,7 @@ class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
     }
 }
 
-class Flipped: EffectAlteration {
+public class Flipped: EffectAlteration {
     public override string Description => "Flips the whole map on its head";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -217,7 +217,7 @@ class Flipped: EffectAlteration {
     }
 }
 
-class Holes : Alteration{
+public class Holes : Alteration{
     public override string Description => "Replaces all Blocks with their hole variant if available";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -236,7 +236,7 @@ class Holes : Alteration{
 //mini-rpg (manual)
 
 //TODO mirrored
-class Mirrored: EffectAlteration {//TODO Prototype
+public class Mirrored: EffectAlteration {//TODO Prototype
     public override string Description => "Mirrors the whole map on its z-axis";
     public override bool Published => false;
     public override bool LikeAN => false;
@@ -254,7 +254,7 @@ class Mirrored: EffectAlteration {//TODO Prototype
     }
 }
 
-class NoItems: Alteration {
+public class NoItems: Alteration {
     public override string Description => "Removes all Items";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -268,7 +268,7 @@ class NoItems: Alteration {
 
 //TODO Poolhunters (custom)block links manual //Only reasonable if asked for
 
-class RandomBlocks : Alteration{
+public class RandomBlocks : Alteration{
     public override string Description => "Places some additional random Blocks (based on Blocks in the Map) with random Position";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -284,7 +284,7 @@ class RandomBlocks : Alteration{
     }
 }
 
-class RingCP : Alteration{
+public class RingCP : Alteration{
     public override string Description => "Replaces all CP's with a RingCP";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -304,7 +304,7 @@ class RingCP : Alteration{
 
 //select-del (manual)
  
-class SpeedLimit: Alteration {
+public class SpeedLimit: Alteration {
     public override string Description => "Deletes all Boosters and Reactors leaving Gaps";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -315,7 +315,7 @@ class SpeedLimit: Alteration {
     }
 }
 
-class StartOneDown: Alteration {
+public class StartOneDown: Alteration {
     public override string Description => "Moves the start 1 unit down";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -328,7 +328,7 @@ class StartOneDown: Alteration {
     }
 }
 
-class SuperSized : Alteration{
+public class SuperSized : Alteration{
     public override string Description => "Scales the whole map by factor 2";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -346,7 +346,7 @@ class SuperSized : Alteration{
     }
 }
 
-class STTF : Alteration{
+public class STTF : Alteration{
     public override string Description => "Replaces all CP's with their normal Block-Variant";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -364,7 +364,7 @@ class STTF : Alteration{
 
 //symmetrical (manual) (Editor)
 
-class Tilted: Alteration {
+public class Tilted: Alteration {
     public override string Description => "Tilt's the whole Map by a limited random Amount around all euler Angles";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -378,7 +378,7 @@ class Tilted: Alteration {
     }
 }
 
-class Yeet: Alteration {
+public class Yeet: Alteration {
     public override string Description => "Replaces all CP's with a Red Reactor";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -391,7 +391,7 @@ class Yeet: Alteration {
     }
 }
 
-class YeetDown: Alteration {
+public class YeetDown: Alteration {
     public override string Description => "Replaces all CP's with a Red Reactor rotated by 180°";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -404,7 +404,7 @@ class YeetDown: Alteration {
     }
 }
 
-class YeetMaxUp: Alteration {
+public class YeetMaxUp: Alteration {
     public override string Description => "Replaces all CP's with a Red Reactor, and moves the Finish up to the build limit";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -421,7 +421,7 @@ class YeetMaxUp: Alteration {
 }
 
 //New ------------------------------------------------------------------------------
-class RandomHoles: Alteration {
+public class RandomHoles: Alteration {
     public override string Description => "Removes 10% of all Blocks";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -436,7 +436,7 @@ class RandomHoles: Alteration {
     }
 }
 
-class YepTree: Alteration {
+public class YepTree: Alteration {
     public override string Description => "Places a CP on every Tree";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -450,7 +450,7 @@ class YepTree: Alteration {
     }
 }
 
-class Rotated: Alteration {
+public class Rotated: Alteration {
     public override string Description => "Rotates all Blocks by 180°";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -462,7 +462,7 @@ class Rotated: Alteration {
     }
 }
 
-class Mini : Alteration {
+public class Mini : Alteration {
     public override string Description => "Scales all Blocks by factor 0.5";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -477,7 +477,7 @@ class Mini : Alteration {
     }
 }
 
-class Invisible : Alteration {
+public class Invisible : Alteration {
     public override string Description => "Replaces all Blocks apart from Start, Finish and Checkpoints with an invisible version";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -491,7 +491,7 @@ class Invisible : Alteration {
     }
 }
 
-class Gaps : Alteration {
+public class Gaps : Alteration {
     public override string Description => "Spreads all Blocks apart by ~7%";
     public override bool Published => true;
     public override bool LikeAN => true;

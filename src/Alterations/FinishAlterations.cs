@@ -1,4 +1,4 @@
-class OneBack: Alteration {
+public class OneBack: Alteration {
     public override string Description => "moves the Finish one Tile back";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -10,7 +10,7 @@ class OneBack: Alteration {
     }
 }
 
-class OneForward: Alteration {
+public class OneForward: Alteration {
     public override string Description => "moves the Finish one Tile forward";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -22,7 +22,7 @@ class OneForward: Alteration {
     }
 }
 
-class OneDown: Alteration {
+public class OneDown: Alteration {
     public override string Description => "moves the Finish one Tile down";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -35,7 +35,7 @@ class OneDown: Alteration {
     }
 }
 
-class OneLeft: Alteration {
+public class OneLeft: Alteration {
     public override string Description => "moves the Finish one Tile to the left";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -47,7 +47,7 @@ class OneLeft: Alteration {
     }
 }
 
-class OneRight: Alteration {
+public class OneRight: Alteration {
     public override string Description => "moves the Finish one Tile to the right";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -59,7 +59,7 @@ class OneRight: Alteration {
     }
 }
 
-class OneUP: Alteration {
+public class OneUP: Alteration {
     public override string Description => "moves the Finish one Tile up";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -71,7 +71,7 @@ class OneUP: Alteration {
     }
 }
 
-class TwoUP: Alteration {
+public class TwoUP: Alteration {
     public override string Description => "moves the Finish two Tiles up";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -91,7 +91,7 @@ class TwoUP: Alteration {
 
 //TODO Ground-Clippers, Pillars at y=0 get (custom) finishblock
 
-class Inclined : Alteration {
+public class Inclined : Alteration {
     public override string Description => "tilt's the start and finish down";
     public override bool Published => true;
     public override bool LikeAN => false;
@@ -120,7 +120,7 @@ class Inclined : Alteration {
 
 //TODO sky is the finish (Macro)block
 
-class ThereAndBack : Alteration {
+public class ThereAndBack : Alteration {
     public override string Description => "replaces Start with Multilap and Finish with Checkpoint";
     public override bool Published => false;
     public override bool LikeAN => true;

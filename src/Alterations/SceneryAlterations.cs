@@ -1,7 +1,7 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
 
-class SnowScenery : Alteration
+public class SnowScenery : Alteration
 {
     public override string Description => "turns scenery into snow";
     public override bool Published => true;

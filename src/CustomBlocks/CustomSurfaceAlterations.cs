@@ -1,7 +1,7 @@
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
-class CustomSurfaceAlteration(int? id = 1000000) : CustomBlockAlteration { // 100100 is good for most to have correct model, 1002001 bad for all, 1000000 good for all if air-mode false
+public class CustomSurfaceAlteration(int? id = 1000000) : CustomBlockAlteration { // 100100 is good for most to have correct model, 1002001 bad for all, 1000000 good for all if air-mode false
 
     public override bool Run(CustomBlock customBlock)
     {
@@ -29,46 +29,46 @@ class CustomSurfaceAlteration(int? id = 1000000) : CustomBlockAlteration { // 10
 }
 
 
-class TechSurface : CustomSurfaceAlteration {
+public class TechSurface : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Material\\PlatformTech", "Stadium\\Media\\Material\\RoadTech",CPlugSurface.MaterialId.Tech);
     }
 }
 
-class DirtSurface : CustomSurfaceAlteration {
+public class DirtSurface : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech", "Stadium\\Media\\Material\\RoadDirt",CPlugSurface.MaterialId.Dirt);
     }
 }
 
-class GrassSurface : CustomSurfaceAlteration {
+public class GrassSurface : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech", "Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech",CPlugSurface.MaterialId.Green);
     }
 }
 
-class IceSurface : CustomSurfaceAlteration {
+public class IceSurface : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech", "Stadium\\Media\\Material\\RoadIce",CPlugSurface.MaterialId.Ice);
     }
 }
-class PlasticSurface : CustomSurfaceAlteration {
+public class PlasticSurface : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech", "Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech",CPlugSurface.MaterialId.Plastic);
     }
 }
-class MagnetSurface : CustomSurfaceAlteration {
+public class MagnetSurface : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic", "Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic",CPlugSurface.MaterialId.TechSuperMagnetic);
     }
 }
-class WoodSurface : CustomSurfaceAlteration {
+public class WoodSurface : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         return HeavySurface(customBlock, layer,"Stadium\\Media\\Material\\ThemeSnowRoad", "Stadium\\Media\\Material\\ThemeSnowRoad",CPlugSurface.MaterialId.Wood);
     }
 }
 
-class RouteOnlyBlock : CustomSurfaceAlteration {
+public class RouteOnlyBlock : CustomSurfaceAlteration {
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {
         // layer.Crystal.Faces = layer.Crystal.Faces.ToList().Where(x => DrivableMaterials.Contains(GetMaterialSurfacePhysicId(x)) || (x.Material.MaterialUserInst.SurfaceGameplayId != CPlugMaterialUserInst.GameplayId.None)).ToArray();
         return true;

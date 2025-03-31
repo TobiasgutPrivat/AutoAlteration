@@ -10,6 +10,7 @@ public class AltertionConfig {
     public static string BlockDataPath = "";
     public static string CustomBlocksFolder = "";
     public static string ApplicationDataFolder = "";
+    public static string CacheFolder = "";
     public static int FreeBlockHeightOffset = 64;// when converting to freeblock it has a 64m offset depends on Map Template i think
     public static List<string> Keywords = [];
     public static List<string> ToKeywords = [];
@@ -27,6 +28,7 @@ public class AltertionConfig {
 
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
         ApplicationDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
+        CacheFolder = Path.Combine(ApplicationDataFolder, "Cache");
         BlockDataPath = Path.Combine(DataFolder, "Inventory","BlockData.json");
 
         ToKeywords = File.ReadAllLines(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();

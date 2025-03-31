@@ -8,6 +8,4 @@ AltertionConfig.Load();
 new AlterationScript ("Campaign.json").RunConfig();
 
 //TODO LightSurface Template
-// AutoAlteration.AlterAll(new LightWood(), Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AltertionConfig.CustomBlocksFolder, "LightSurface"), "LightWood");
-
-// DevUtils.LogMaterialInfo("C:/Users/Tobias/AppData/Roaming/AutoAlteration/HeavyPlastic");
+// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AltertionConfig.CustomBlocksFolder, "LightSurface"), "");

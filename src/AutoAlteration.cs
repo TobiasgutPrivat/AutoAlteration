@@ -68,21 +68,21 @@ public class AutoAlteration {
     }
 
     public static List<Alteration> GetImplementedAlterations() {
-        return Assembly.GetExecutingAssembly().GetTypes()
+        return Assembly.GetAssembly(typeof(Alteration))?.GetExportedTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration)))
             .Select(t => Activator.CreateInstance(t) as Alteration)
             .OfType<Alteration>()
             .Where(x => x.Published)
             .OrderBy(x => x.GetType().Name)
-            .ToList();
+            .ToList() ?? [];
     }
     public static List<CustomBlockAlteration> GetImplementedBlockAlterations() {
-        return Assembly.GetExecutingAssembly().GetTypes()
+        return Assembly.GetAssembly(typeof(Alteration))?.GetExportedTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CustomBlockAlteration)))
             .Select(t => Activator.CreateInstance(t) as CustomBlockAlteration)
             .OfType<CustomBlockAlteration>()
             .Where(x => x.Published)
             .OrderBy(x => x.GetType().Name)
-            .ToList();
+            .ToList() ?? [];
     }
 }
