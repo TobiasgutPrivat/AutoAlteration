@@ -8,7 +8,8 @@ Contribution to the repository is very welcome, feel free to create pull request
 If you encounter problems or you have some questions/ideas etc. please contact me on Discord <strong>(Tobias2g#5288)</strong>
 
 [Guide to implementing Alterations](https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing)
-## How to use
+
+# How to use
 UI-App recommended for normal use.
 
 [Download](https://1drv.ms/u/c/bf971998d3da6c52/Ec43uQOtQZdInmv-en32fmAB_-tn0nyNPD2hQr8z4424sw?e=ttExio)
@@ -17,7 +18,7 @@ Also Alteration Scripts can be defined using json files. [Example](https://1drv.
 
 To have more control, or to develop some stuff you need to setup the full Project (see Installation)
 
-### Available Alterations
+## Available Alterations
 Those are the currently available Alterations
 
 Submitting to Altered Nadeo still goes under their regulations (don't spam create AN Maps)
@@ -98,7 +99,7 @@ Hover over Alterations to see Description
 - <span title="Spreads all Blocks apart by ~7%">Gaps</span>
 - <span title="turns scenery into snow">SnowScenery*/</span>
 
-### Folder Application
+## Folder Application
 Description how the new Maps are stored.
 
 According to selected way:
@@ -121,7 +122,7 @@ Loads all Maps from selected {Source} (FolderPath, including subfolders)
 
 Saves altered Maps to "{Destination}/{Previous Subfolder}/{SubfolderName} {Name}/{Previous FileName} {Name}.map.gbx"
 
-### Alteration Scripts
+## Alteration Scripts
 For often used Alterations, scripts can be made.
 
 **Store** in "%appdata%/AutoAlteration/scripts/" as *.json
@@ -142,6 +143,8 @@ For often used Alterations, scripts can be made.
 >     ]
 
 Has to follow json formatting rules
+
+# Development
 
 ## Known Issues
 - The position of Items which are snapped onto something are read incorrectly, resulting in small offsets.
