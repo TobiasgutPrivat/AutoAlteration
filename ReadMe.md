@@ -1,26 +1,3 @@
-<!--
-RoadMap:
-
-- Modular Alterations:
-    Make basic Alterations have constructor properties with maybe default properties (Surface for Surface Alterations, default offset for Effect-alts) they do execute the alteration
-    Specific can extend/use basic ones by defining constructor properties they might add some more functionality
-    opt: allow scripts and UI to define Properties
-
-- apply on Nation Converter (check with BigBang)
-
-- Roadmap Customblock Alterations:
-  - Placement of reembeded Blocks (prob. issue with path)
-  - Altering previously embedded blocks sometimes causes corruption
-  - Full customblok-sets (Heavy -> light, Vanilla)
-
-- make Keywords not case sensitive (easy way: lower case everything)
-
-Opt.:
-  Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
-  Multiple Maps Alterations (like Combined, sections joined)
-
-  Maybe ReadMe's for technical explanations into according folders
--->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
 
@@ -121,7 +98,7 @@ Hover over Alterations to see Description
 - <span title="Spreads all Blocks apart by ~7%">Gaps</span>
 - <span title="turns scenery into snow">SnowScenery*/</span>
 
-## Folder Application
+### Folder Application
 Description how the new Maps are stored.
 
 According to selected way:
@@ -144,7 +121,7 @@ Loads all Maps from selected {Source} (FolderPath, including subfolders)
 
 Saves altered Maps to "{Destination}/{Previous Subfolder}/{SubfolderName} {Name}/{Previous FileName} {Name}.map.gbx"
 
-## Alteration Scripts
+### Alteration Scripts
 For often used Alterations, scripts can be made.
 
 **Store** in "%appdata%/AutoAlteration/scripts/" as *.json
@@ -179,7 +156,7 @@ Your Feedback or Ideas are also valueable, so you can write me that too.
 
 A guide to implementing Alterations will come soon
 
-### Setup Project
+## Setup Project
 1. Install git if you haven't: https://git-scm.com/downloads
 2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0 (make sure nuget is available)
 3. Clone this GitHub Repository into any Folder. You can use this Command in cmd:
@@ -191,6 +168,27 @@ In that case make sure you have correct package source using:
 > dotnet nuget add source https://api.nuget.org/v3/index.json
 -->
 
+## RoadMap
+- Modular Alterations:
+    Make basic Alterations have constructor properties with maybe default properties (Surface for Surface Alterations, default offset for Effect-alts) they do execute the alteration
+    Specific can extend/use basic ones by defining constructor properties they might add some more functionality
+    opt: allow scripts and UI to define Properties
+
+- apply on Nation Converter (check with BigBang)
+
+- Roadmap Customblock Alterations:
+  - Placement of reembeded Blocks (prob. issue with path)
+  - Altering previously embedded blocks sometimes causes corruption
+  - Full customblok-sets (Heavy -> light, Vanilla)
+
+- make Keywords not case sensitive (easy way: lower case everything)
+
+Opt.:
+  Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
+  Multiple Maps Alterations (like Combined, sections joined)
+
+  Maybe ReadMe's for technical explanations into according folders
+
 # Technical Documentation
 This Documentation contains
 - Code Structure
@@ -198,30 +196,6 @@ This Documentation contains
 - Some Process explanaitions
 
 Further detailing Explanations are in code
-
-## Note TODO Blocks
-
-**requires**:
-constructor from Item/Block, according to article Type
-place into map
-
-one base class to allow transfer as one list: 
-Block: represent blocks which are already available (previously embedded/Vanilla Inventory)
-
-Item(Block) for AnchoredObject: represent blocks which are already available in (previously embedded/Vanilla Inventory)
-
-CustomBlock(Block) custom Blocks -> add path to constructor. requires embedding in map 
-CustomItem(Item) custom Items -> add path to constructor. requires embedding in map
-
-## Note TODO PositionChange
-**constructor**: save Properties to move with
-
-**Action**
-input: Block, Article
-modify: Article
-
-## placing requirements Blocks
-
 
 ## Code Structure
 Description of basic Purpose of all code-Files
@@ -307,13 +281,13 @@ DataFolder modifyable per DevMode, DevPath (for Development)
 
 - **Inventory/Keywords:** most Keywords used to split up Article Names (Orderd by Length)
 
-- **Inventory/KeywordsStart:** Keywordswhich should be used first
+- **Inventory/KeywordsStart:** Keywords which should be used first
 
-**LowCubeLayer:** used for invisible blocks
+- **Inventory/ToKeywords:** Keywords which have diffrent meaning depending on it's position behind or before a "To"-Keyword
 
-**IceSkin:** used for SnowScenery Wall skin
+- **Inventory/CustomBlockSets:** Keywords which are added for CustomblockSets, matching to the Folder Names in userdata/cache/
 
-**script/:** place to store Alteration scriptfiles
+**Templates/** some files containing data copied in some Alterations
 
 **dev/** some data exports for debugging
 
@@ -321,13 +295,16 @@ DataFolder modifyable per DevMode, DevPath (for Development)
 in ApplicationData ("%appdata%/Autoalteration/")
 Data which can vary depending on Usage
 
-**Keywords/KeywordsStart:** here additional Keywords can be defined
+**Keywordfiles:** here additional Keywords can be defined, same purpose as in Global Data
 
-**CustomBlockSets:** If a customblock set is needed it get's generated into it's Folder AutoAlteration/{SetName}/
+**Cache/**
+  **CustomBlockSets:** If a customblock set is needed it get's generated into it's Folder AutoAlteration/{SetName}/
+
+**script/:** place to store Alteration scriptfiles
 
 ## Processes (To be documented)
 
-### Map Alteration
+### Map Alteration Process
 From Map file to altered Map file (AutoAlteration.AlterFile)
 
 1. Load Map using Map constructor
@@ -348,12 +325,6 @@ From Map file to altered Map file (AutoAlteration.AlterFile)
 7. Apply Alterations on Map (alteration.Run)
 
 8. save map with new Name
-
-### CustomBlock Alteration
-
-### Inventory Selection
-
-### InventoryEdit Alignment
 
 ## Trackmania circumstances
 
@@ -404,6 +375,4 @@ From Map file to altered Map file (AutoAlteration.AlterFile)
 **\*Note CustomBlock Paths**
 Usually when embedding customblocks they can have a full path.
 
-In this Project only the Name is used for indexing and when embedding new Blocks, for simplicity reasons.
-
-**Potential Problem** this can cause issues if two blocks have the same name but diffrent Path
+In this Project full path's are only used for previously embedded Blocks.
