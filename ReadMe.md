@@ -183,11 +183,13 @@ In that case make sure you have correct package source using:
 
 - make Keywords not case sensitive (easy way: lower case everything)
 
+<!-- 
 Opt.:
   Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
   Multiple Maps Alterations (like Combined, sections joined)
 
   Maybe ReadMe's for technical explanations into according folders
+-->
 
 # Technical Documentation
 This Documentation contains
