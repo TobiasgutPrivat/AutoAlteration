@@ -1,25 +1,25 @@
 <!--
-TODO's:
-Apply Alteration Properties in UI
+RoadMap:
 
-Modular Alterations:
-  Make basic Alterations have constructor properties with maybe default properties (Surface for Surface Alterations, default offset for Effect-alts) they do execute the alteration
-  Specific can extend/use basic ones by defining constructor properties they might add some more functionality
+- Modular Alterations:
+    Make basic Alterations have constructor properties with maybe default properties (Surface for Surface Alterations, default offset for Effect-alts) they do execute the alteration
+    Specific can extend/use basic ones by defining constructor properties they might add some more functionality
+    opt: allow scripts and UI to define Properties
 
+- apply on Nation Converter (check with BigBang)
 
-Roadmap Customblock Alterations:
-1. Issue with air mode
-2. Issue Altering of EmbeddedBlocks don't appear ingame as embedded (can be done first)
-   A Thought -> For Customblocks, it could be defined that the ones from AutoAlt do have unique names, and for mapspecific the Path would be included, mapspecific should not need to be matching to Vanilla Blocks
-3. Opt. Solution for StaticModel-customblocks
+- Roadmap Customblock Alterations:
+  - Placement of reembeded Blocks (prob. issue with path)
+  - Altering previously embedded blocks sometimes causes corruption
+  - Full customblok-sets (Heavy -> light, Vanilla)
+
+- make Keywords not case sensitive (easy way: lower case everything)
 
 Opt.:
-Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
-Multiple Maps Alterations (like Combined, sections joined)
-Make Configurable Alterations
-apply on Nation Converter (check with BigBang)
+  Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)
+  Multiple Maps Alterations (like Combined, sections joined)
 
-Maybe make Keywords not case sensitive
+  Maybe ReadMe's for technical explanations into according folders
 -->
 # Auto Alterations
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.
