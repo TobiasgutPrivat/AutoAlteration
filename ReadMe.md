@@ -184,8 +184,6 @@ In that case make sure you have correct package source using:
   - Altering previously embedded blocks sometimes causes corruption
   - Full customblok-sets (Heavy -> light, Vanilla)
 
-- make Keywords not case sensitive (easy way: lower case everything)
-
 <!-- 
 Opt.:
   Get WR for Map, extract releveant info (finish, cpOrder, nearest path rotation, Gearchanges)

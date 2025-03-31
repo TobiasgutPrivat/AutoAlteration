@@ -82,8 +82,8 @@ public class Article {
         splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
 
         //Name
-        string name = splits.Last(); // filename/blockname
-        List<string> nameSplits = []; //Individual Parts of the name, Keywords get cut out, spereating the string
+        string name = splits.Last(); // the filename/blockname
+        List<string> nameSplits = []; // Individual Parts of the name, Keywords get cut out, spereating the string
 
         //ToKeywords
         int toPos = GetToPos(name) ?? -1; // Extract ToKeywords (mostly shapes) to avoid naming conflicts
