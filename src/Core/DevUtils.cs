@@ -188,3 +188,10 @@ class EmbedTest : Alteration {
         map.PlaceStagedBlocks(false);
     }
 }
+
+class AirPillars : Alteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Pillar).Edit().Replace(map);
+        map.PlaceStagedBlocks(false);
+    }    
+}
