@@ -7,8 +7,8 @@ public class Inventory { // represents all available articles which can be place
     private Dictionary<string,Inventory> cachedInventories = [];
 
     public void Export(string Name) {
-        Directory.CreateDirectory(Path.Combine(AltertionConfig.devPath,"Inventory"));
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles));
+        Directory.CreateDirectory(Path.Combine(AlterationConfig.devPath,"Inventory"));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles));
     }
     
     public Inventory Select(string keywordFilter)  {

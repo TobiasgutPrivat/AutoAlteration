@@ -41,7 +41,7 @@ public class Article {
         string vanillaName = Name;
 
         // for customblocksets get size from unaltered version
-        AltertionConfig.CustomBlockSets.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        AlterationConfig.CustomBlockSets.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
         List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList(); 
         if (vanillaVersion.Count > 0) { 
             Width = vanillaVersion.First().Width;
@@ -94,7 +94,7 @@ public class Article {
 
             List<string> ToSplits = [ToString];
 
-            SplitByKeywords(ToSplits, AltertionConfig.ToKeywords, ToShapes);
+            SplitByKeywords(ToSplits, AlterationConfig.ToKeywords, ToShapes);
             Keywords.Add("To");
             nameSplits.AddRange(ToSplits);
         } else {
@@ -102,10 +102,10 @@ public class Article {
         }
 
         //CustomblockSets, could have issues if set is part of toKeywords
-        SplitByKeywords(nameSplits, AltertionConfig.CustomBlockSets, Keywords);
+        SplitByKeywords(nameSplits, AlterationConfig.CustomBlockSets, Keywords);
         
         //Keywords
-        SplitByKeywords(nameSplits, AltertionConfig.Keywords, Keywords);
+        SplitByKeywords(nameSplits, AlterationConfig.Keywords, Keywords);
 
         Keywords.AddRange(nameSplits);
         
@@ -128,7 +128,7 @@ public class Article {
     public int? GetToPos(string name) {
         if(name.Contains("To")){
             int toPos = name.IndexOf("To"); //check if "to" is not part of another keyword
-            if (AltertionConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
+            if (AlterationConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
                 return GetToPos(name[(toPos + 2)..]) + toPos + 2;
             } else {
                 return toPos;

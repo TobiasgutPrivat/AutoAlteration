@@ -69,9 +69,14 @@ public class AutoAlteration {
 
     public static List<Alteration> GetImplementedAlterations() {
         return Assembly.GetAssembly(typeof(Alteration))?.GetExportedTypes()
+            //get all classes that are subclasses of Alteration
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration)))
+            //filter out the ones that have constructor parameters or have default values
+            .Where(t => t.GetConstructors().Any(c => c.GetParameters().Length == 0 || c.GetParameters().All(p => p.HasDefaultValue)))
+            //create instances
             .Select(t => Activator.CreateInstance(t) as Alteration)
             .OfType<Alteration>()
+            //filter out the ones that are not published
             .Where(x => x.Published)
             .OrderBy(x => x.GetType().Name)
             .ToList() ?? [];

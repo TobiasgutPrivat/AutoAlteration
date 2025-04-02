@@ -78,10 +78,10 @@ public class Block {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
-            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AltertionConfig.FreeBlockHeightOffset ,block.Coord.Z * 32));
+            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AlterationConfig.FreeBlockHeightOffset ,block.Coord.Z * 32));
             position.AddPosition(GetDirectionOffset(block));
 
-            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AltertionConfig.FreeBlockHeightOffset ,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
+            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AlterationConfig.FreeBlockHeightOffset ,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
         }
     }
 
@@ -133,7 +133,7 @@ public class Block {
 
             block.Coord = new Int3(
                 (int)(position.coords.X + offset.X)  / 32, 
-                (int)(position.coords.Y + offset.Y + AltertionConfig.FreeBlockHeightOffset) / 8 , 
+                (int)(position.coords.Y + offset.Y + AlterationConfig.FreeBlockHeightOffset) / 8 , 
                 (int)(position.coords.Z + offset.Z)/ 32
                 );
             block.IsGhost = IsGhost;

@@ -1,10 +1,11 @@
 ﻿//Initial load
 
-AltertionConfig.devMode = true;
-AltertionConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","dev");
-AltertionConfig.Load();
+AlterationConfig.devMode = true;
+AlterationConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","dev");
+AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
+//TODO test edited Alterations
 new AlterationScript ("Campaign.json").RunConfig();
 
 //TODO LightSurface Template

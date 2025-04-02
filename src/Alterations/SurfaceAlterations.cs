@@ -1,9 +1,46 @@
-// public class LightSurface : Alteration {
-//     public void AlterLightSurface(Map map, string Surface) {
-//         inventory.Select("!Light" + Surface + "&(RoadTech|RoadBump|RoadDirt|RoadIce|OpenGrassRoad|OpenDirtRoad|OpenTechRoad|OpenIceRoad|OpenGrassZone|OpenDirtZone|OpenTechZone|OpenIceZone)").AddKeyword("Light" + Surface).PlaceRelative(map);
-//         inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
-//     }
-// }
+public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool light = false) : Alteration {
+    public override string Description => "replaces all drivable surfaces with " + Surface;
+    public override bool Published => false;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
+    public override List<InventoryChange> InventoryChanges => light ? [new LightSurface(SurfaceAlt)] : [new HeavySurface(SurfaceAlt)];
+
+    public override void Run(Map map) {
+        if (light) {
+            Inventory Platform = inventory.Select("Platform");
+            Platform.RemoveKeyword([Surface,"Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
+            //TODO think about Opens
+            map.PlaceStagedBlocks();
+            (!Platform).Select($"!Platform&!{Surface}&!Open{Surface}Road&!Open{Surface}Zone").AddKeyword($"{Surface}SurfaceLight").PlaceRelative(map);
+            map.stagedBlocks.ForEach(x => x.IsAir = false);
+            map.PlaceStagedBlocks(false);
+        } else {
+            //TODO get full block set
+            Inventory specific = inventory.Select(article => article.MapSpecific); //handle mapSpecifics seperately
+
+            // 1. find blocks which should be replaced by Heavy
+            KeywordEdit HeavyReplace = specific.Edit().AddKeyword($"{Surface}SurfaceHeavy");
+            HeavyReplace.Add((!specific).AddKeyword([$"{Surface}SurfaceHeavy","Middle"]));
+            HeavyReplace.Add((!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic",$"{Surface}SurfaceHeavy"]));
+            //TODO some more blocks not yet handled
+            HeavyReplace.Align();
+            Inventory replaced = HeavyReplace.getOriginal(); //blocks which will be replaced by Heavy later
+
+            // 2. place Pillars on blocks which will be replaced by Heavy and were not air
+            KeywordEdit Pillar = replaced.RemoveKeyword([""]); //TODO align to pillars
+
+            Pillar.PlaceRelative(map,blockCondition: block => !block.Bit21); //place Pillars for blocks which were not in AirMode
+            map.PlaceStagedBlocks();
+
+            // 3. replace blocks
+            HeavyReplace.Replace(map);
+            specific.AddKeyword([$"{Surface}Surface"]).Replace(map);
+            map.stagedBlocks.ForEach(x => x.IsAir = false);
+            map.PlaceStagedBlocks(false);
+        }
+    }
+}
 
 public class Dirt : Alteration {
     public override string Description => "replaces all drivable surfaces with Dirt";

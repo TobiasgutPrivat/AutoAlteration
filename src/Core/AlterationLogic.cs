@@ -5,11 +5,11 @@ public class AlterationLogic {
     private static List<Alteration> ?lastAlterations;
     public static void Alter(List<Alteration> alterations, Map map) {
         //cleanup
-        if (Directory.Exists(Path.Join(AltertionConfig.CustomBlocksFolder,"Temp"))){
-            Directory.Delete(Path.Join(AltertionConfig.CustomBlocksFolder,"Temp"),true);
+        if (Directory.Exists(Path.Join(AlterationConfig.CustomBlocksFolder,"Temp"))){
+            Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder,"Temp"),true);
         }
-        if (Directory.Exists(Path.Join(AltertionConfig.CustomBlocksFolder,"Exports"))){
-            Directory.Delete(Path.Join(AltertionConfig.CustomBlocksFolder,"Exports"),true);
+        if (Directory.Exists(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"))){
+            Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"),true);
         }
         Alteration.inventory.ClearSpecific();
 
@@ -18,11 +18,19 @@ public class AlterationLogic {
             // needs Inventory recreation
             Alteration.CreateInventory(); //Resets Inventory to Vanilla
             foreach (Alteration alteration in alterations) {
-                alteration.InventoryChanges.ForEach(x => x.ChangeInventory(Alteration.inventory));
+                alteration.InventoryChanges.ForEach(change => {
+                    (change as CustomBlockSet)?.GetAdditionalKeywords().ForEach(keyword => {
+                        if (!AlterationConfig.CustomBlockSets.Contains(keyword)) {
+                            AlterationConfig.CustomBlockSets.Add(keyword);
+                            AlterationConfig.Keywords.Add(keyword);
+                        }
+                    });
+                    change.ChangeInventory(Alteration.inventory);
+                });
             }
             Alteration.DefaultInventoryChanges();
 
-            if (AltertionConfig.devMode){ //logging
+            if (AlterationConfig.devMode){ //logging
                 Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
             }
         }
@@ -37,7 +45,7 @@ public class AlterationLogic {
             .Cast<CustomBlockSet>().ToList().ForEach(
                 x => map.GenerateCustomBlocks(x.customBlockAlteration)); //includes updating inventory
                 
-        if (AltertionConfig.devMode){ //logging
+        if (AlterationConfig.devMode){ //logging
             Alteration.inventory.Export("WithMapBlocks");
         }
 

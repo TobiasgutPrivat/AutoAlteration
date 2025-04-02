@@ -2,7 +2,7 @@ using GBX.NET;
 using GBX.NET.LZO;
 using GBX.NET.ZLib;
 
-public class AltertionConfig {
+public class AlterationConfig {
     public static string devPath = "";
     public static bool devMode = false;
     public static string DataFolder = "";
@@ -32,8 +32,8 @@ public class AltertionConfig {
         ToKeywords = loadKeywordsFile(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
         ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "ToKeywords.txt"))).ToList();
 
-        CustomBlockSets = loadKeywordsFile(Path.Combine(DataFolder, "Inventory","CustomBlockSets.txt")).ToList();
-        CustomBlockSets = CustomBlockSets.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "CustomBlockSets.txt"))).ToList();
+        // CustomBlockSets = loadKeywordsFile(Path.Combine(DataFolder, "Inventory","CustomBlockSets.txt")).ToList();
+        // CustomBlockSets = CustomBlockSets.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "CustomBlockSets.txt"))).ToList();
         
         Keywords = loadKeywordsFile(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
         Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "Keywords.txt"))).ToList();

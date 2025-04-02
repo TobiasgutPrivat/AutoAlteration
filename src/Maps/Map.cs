@@ -103,9 +103,9 @@ public class Map
   }
 
   public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
-    string TempFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Temp");
+    string TempFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Temp");
     string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetType().Name);
-    string TempExportsFolder = Path.Join(AltertionConfig.CustomBlocksFolder,"Exports");
+    string TempExportsFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Exports");
     if (!Directory.Exists(TempFolder)) { Directory.CreateDirectory(TempFolder); }
     if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
     if (!Directory.Exists(TempExportsFolder)) { Directory.CreateDirectory(TempExportsFolder); }

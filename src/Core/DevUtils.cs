@@ -16,11 +16,11 @@ class DevUtils{
 
     public static void LogMaterialInfo(string Folder) {
         // string sourceFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks/Vanilla");
-        string destinationFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks","MaterialInfo");
+        string destinationFolder = Path.Combine(AlterationConfig.DataFolder, "CustomBlocks","MaterialInfo");
         AutoAlteration.AlterAll([new MaterialInfo()], Folder, destinationFolder, "MaterialInfo");
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "SurfacePhysicIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "SurfaceGameplayIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "SurfacePhysicIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "SurfaceGameplayIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
     }
 
     public static void StringToName(string projectFolder) {
@@ -32,7 +32,7 @@ class DevUtils{
     }
 
     public static void NonColidableFix() {
-        foreach (string file in Directory.GetFiles(Path.Join(AltertionConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
+        foreach (string file in Directory.GetFiles(Path.Join(AlterationConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
         {
             Gbx.LZO = new MiniLZO();
             // Gbx.ZLib = new ZLib();
@@ -105,11 +105,11 @@ class DevUtils{
             text += "<strong>" + category.Key + "</strong>\n";
             text += string.Join("\n", category.Value) + "\n\n";
         }
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "AlterationList.md"), text);
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "AlterationList.md"), text);
     }
 
     public static void generateLightSurfaceBlocks() {
-        AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Join(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Join(AltertionConfig.CustomBlocksFolder, "LightSurface"), "");
+        AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Join(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Join(AlterationConfig.CustomBlocksFolder, "LightSurface"), "");
     }
 }
 

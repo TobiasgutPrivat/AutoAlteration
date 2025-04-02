@@ -49,14 +49,14 @@ public class Boosterless: Alteration {
 
 //TODO boss-overlayed (multiple) Maps
 
-public class Broken: EffectAlteration {
+public class Broken: CPEffect {
     public override string Description => "Replaces all Effects with Engine Off";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(SelAllEffects)
+        inventory.Select(EffectUtils.SelAllEffects)
             .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up"])
             .AddKeyword("NoEngine").Replace(map);
         map.PlaceStagedBlocks();
@@ -67,7 +67,7 @@ public class Broken: EffectAlteration {
 
 //Cacti (manual)
 
-public class Checkpointnt: EffectAlteration { //only blocks Checkpoints
+public class Checkpointnt: CPEffect { //only blocks Checkpoints
     public override string Description => "Blocks all Checkpoints with pillars";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -174,7 +174,7 @@ public class CPsRotated : Alteration{
 
 //TODO Dragonyeet (Macroblock)
 
-public class Earthquake : Alteration{
+public class Earthquake : Alteration {
     public override string Description => "Moves the whole map by 1 million meters, making it feel like an earthquake";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -200,7 +200,7 @@ public class Fast: Alteration { //TODO Wall and tilted platform (check Inventory
     }
 }
 
-public class Flipped: EffectAlteration {
+public class Flipped: Alteration {
     public override string Description => "Flips the whole map on its head";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -211,13 +211,11 @@ public class Flipped: EffectAlteration {
         // from (1,9,1) to (48,38,48)
         map.StageAll(RotateCenter(0,PI,0));
         map.PlaceStagedBlocks();
-        PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
-        PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
-        map.PlaceStagedBlocks();
+        new CPEffect("Boost",RotateMid(PI,0,0),true, true).Run(map);
     }
 }
 
-public class Holes : Alteration{
+public class Holes : Alteration {
     public override string Description => "Replaces all Blocks with their hole variant if available";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -236,7 +234,7 @@ public class Holes : Alteration{
 //mini-rpg (manual)
 
 //TODO mirrored
-public class Mirrored: EffectAlteration {//TODO Prototype
+public class Mirrored: CPEffect {//TODO Prototype
     public override string Description => "Mirrors the whole map on its z-axis";
     public override bool Published => false;
     public override bool LikeAN => false;
@@ -268,7 +266,7 @@ public class NoItems: Alteration {
 
 //TODO Poolhunters (custom)block links manual //Only reasonable if asked for
 
-public class RandomBlocks : Alteration{
+public class RandomBlocks : Alteration {
     public override string Description => "Places some additional random Blocks (based on Blocks in the Map) with random Position";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -284,7 +282,7 @@ public class RandomBlocks : Alteration{
     }
 }
 
-public class RingCP : Alteration{
+public class RingCP : Alteration {
     public override string Description => "Replaces all CP's with a RingCP";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -346,7 +344,7 @@ public class SuperSized : Alteration{
     }
 }
 
-public class STTF : Alteration{
+public class STTF : Alteration {
     public override string Description => "Replaces all CP's with their normal Block-Variant";
     public override bool Published => true;
     public override bool LikeAN => true;

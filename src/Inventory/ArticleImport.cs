@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 class ArticleImport {
 
     public static List<Article> ImportVanillaInventory(){
-        string json = File.ReadAllText(AltertionConfig.BlockDataPath);
+        string json = File.ReadAllText(AlterationConfig.BlockDataPath);
         // expected json Format:
         // [
         //     {

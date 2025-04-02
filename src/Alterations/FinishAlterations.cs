@@ -1,86 +1,48 @@
-public class OneBack: Alteration {
+public class MoveFinish(MoveChain move): Alteration {
+    public override string Description => "Moves the Finish to a new position";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
+    public override void Run(Map map){
+        map.Move(inventory.Select("Finish|Multilap"), move);
+        map.PlaceStagedBlocks();
+    }
+}
+public class OneBack: MoveFinish {
     public override string Description => "moves the Finish one Tile back";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
 
-    public override void Run(Map map){
-        map.Move(inventory.Select("Finish|Multilap"), Move(0,0,32));
-        map.PlaceStagedBlocks();
-    }
+    public OneBack(): base(Move(0,0,32)) { }
 }
 
-public class OneForward: Alteration {
+public class OneForward: MoveFinish {
     public override string Description => "moves the Finish one Tile forward";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        map.Move(inventory.Select("Finish|Multilap"), Move(0,0,-32));
-        map.PlaceStagedBlocks();
-    }
+    public OneForward(): base(Move(0,0,-32)) { }
 }
 
-public class OneDown: Alteration {
+public class OneDown: MoveFinish {
     public override string Description => "moves the Finish one Tile down";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        inventory.Select("Finish|Multilap").Edit().PlaceRelative(map,Move(0,-8,0));
-        map.Delete(inventory.Select("Finish|Multilap"),true);
-        map.PlaceStagedBlocks();
-    }
+    public OneDown(): base(Move(0,-8,0)) { }
 }
 
-public class OneLeft: Alteration {
+public class OneLeft: MoveFinish {
     public override string Description => "moves the Finish one Tile to the left";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        map.Move(inventory.Select("Finish|Multilap"), Move(32,0,0));
-        map.PlaceStagedBlocks();
-    }
+    public OneLeft(): base(Move(32,0,0)) { }
 }
 
-public class OneRight: Alteration {
+public class OneRight: MoveFinish {
     public override string Description => "moves the Finish one Tile to the right";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        map.Move(inventory.Select("Finish|Multilap"), Move(-32,0,0));
-        map.PlaceStagedBlocks();
-    }
+    public OneRight(): base(Move(-32,0,0)) { }
 }
 
-public class OneUP: Alteration {
+public class OneUP: MoveFinish {
     public override string Description => "moves the Finish one Tile up";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        map.Move(inventory.Select("Finish|Multilap"), Move(0,8,0));
-        map.PlaceStagedBlocks();
-    }
+    public OneUP(): base(Move(0,8,0)) { }
 }
 
-public class TwoUP: Alteration {
+public class TwoUP: MoveFinish {
     public override string Description => "moves the Finish two Tiles up";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        map.Move(inventory.Select("Finish|Multilap"), Move(0,16,0));
-        map.PlaceStagedBlocks();
-    }
+    public TwoUP(): base(Move(0,16,0)) { }
 }
 
 //better reverse (manual)
