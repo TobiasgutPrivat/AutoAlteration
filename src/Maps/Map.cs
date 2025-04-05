@@ -206,8 +206,10 @@ public class Map
     stagedBlocks = [];
   }
 
-  private void PlaceBlock(Block block, bool revertFreeBlock){ // expects the block to be deleted after placing -> could cause nameing issues if not
+  private void PlaceBlock(Block block, bool revertFreeBlock){
     block.name = block.name.TrimStart('\\');
+    string orgName = block.name;
+
     switch (block.blockType){
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
@@ -215,10 +217,8 @@ public class Map
             embeddedBlocks.Add(block.name, block.blockType);
           }
           block.name += ".Block.Gbx_CustomBlock";
-          // PlaceTypeBlock(block);
           break;
         case BlockType.CustomItem:
-          // block.name = (block.name.Split('\\').Last() + ".Item.Gbx").Replace("\\","/");
           if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
             EmbedBlock("Items/" + block.name + ".Item.Gbx",block.Path);
             embeddedBlocks.Add(block.name, block.blockType);
@@ -228,6 +228,8 @@ public class Map
       }
 
     block.PlaceInMap(map, revertFreeBlock);
+
+    block.name = orgName;
   }
   #endregion
 
@@ -250,6 +252,7 @@ public class Map
     }));
     map.AnchoredObjects = [];
   }
+
   public void SetBuildDimension(Vec2 Origin, Vec2 Target){ //TODO test this
     map.MapCoordOrigin = Origin;
     map.MapCoordTarget = Target;

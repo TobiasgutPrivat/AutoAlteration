@@ -429,8 +429,8 @@ public class RandomHoles: Alteration {
 
     public override void Run(Map map){
         Random rand = new();
-        Inventory normals = !(inventory.Select(BlockType.Pillar)).Select("!MapStart&!Finish&!Checkpoint&!Multilap");
-        normals.Edit().Replace(map);
+        Inventory specials = inventory.Select("MapStart|Finish|Multilap");
+        (!specials).Edit().Replace(map);
         map.stagedBlocks = map.stagedBlocks.Where(x => !(rand.Next() % 10 == 0)).ToList();
         map.PlaceStagedBlocks();
     }

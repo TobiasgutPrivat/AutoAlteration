@@ -194,6 +194,7 @@ public class Block {
         item.AnchorTreeId = AnchorTreeId;
         item.Scale = 1;
         item.Flags = ItemFlags;
+        // item.PackDesc could be used for tagging
     }
     #endregion
 }

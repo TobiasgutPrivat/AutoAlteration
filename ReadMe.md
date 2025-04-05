@@ -177,6 +177,8 @@ In that case make sure you have correct package source using:
     Specific can extend/use basic ones by defining constructor properties they might add some more functionality
     opt: allow scripts and UI to define Properties
 
+- find solution for DefaultRotation (maybe mark auto-placed blocks)
+
 - apply on Nation Converter (check with BigBang)
 
 - Roadmap Customblock Alterations:
