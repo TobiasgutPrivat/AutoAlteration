@@ -38,3 +38,41 @@ public class SnowScenery : Alteration
         map.map.BakedBlocks.ToList().ForEach(x => x.Skin = GrassSkin);
     }
 }
+
+public class SandScenery : Alteration
+{
+    public override string Description => "turns scenery into dirt";
+    public override bool Published => true;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
+    public override void Run(Map map)
+    {
+        // Scenery blocks: 
+        inventory.Select("Deco|Water|DecoWall|DecoPlatform").RemoveKeyword(["Grass","Ice"]).AddKeyword("Dirt").Replace(map);
+        // Actual blocks: 
+        inventory.Select("PenaltyIce|Penalty").RemoveKeyword(["PenaltyIce","Penalty"]).AddKeyword("PenaltyDirt").Replace(map);
+        // Open Road/Zone
+        // inventory.Select("OpenIceRoad|OpenTechRoad").RemoveKeyword(["OpenIceRoad","OpenTechRoad"]).AddKeyword("OpenDirtRoad").Replace(map);
+        // inventory.Select("OpenIceZone|OpenTechZone").RemoveKeyword(["OpenIceZone","OpenTechZone"]).AddKeyword("OpenDirtZone").Replace(map);
+        // Trees
+        map.Replace(inventory.GetArticles([ "FirSnowTall" ]), inventory.GetArticle("FirTall"));
+        map.Replace(inventory.GetArticles([ "FirSnowMedium" ]), inventory.GetArticle("FirMedium"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeTall" ]), inventory.GetArticle("FallTreeTall"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeBig" ]), inventory.GetArticle("FallTreeBig"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeMedium" ]), inventory.GetArticle("FallTreeMedium"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeSmall" ]), inventory.GetArticle("FallTreeSmall"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeVerySmall" ]), inventory.GetArticle("FallTreeVerySmall"));
+ 
+        map.Replace(inventory.GetArticles([ "FrozenTreeMedium" ]), inventory.GetArticle("FallTreeMedium"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeMedium" ]), inventory.GetArticle("SummerPalmTree"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeMedium" ]), inventory.GetArticle("SpringCherryTree"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeMedium" ]), inventory.GetArticle("Spring"));
+        map.Replace(inventory.GetArticles([ "FrozenTreeMedium" ]), inventory.GetArticle("Summer"));
+        
+        // // CGameCtnBlockSkin GrassSkin = Gbx.Parse<CGameCtnBlockSkin>("C:/Users/ar/Desktop/AutoAlteration/AutoAlteration/data/Templates/IceSkin.gbx");
+        // map.map.Blocks.ToList().ForEach(x => x.Skin = GrassSkin);
+        // map.map.BakedBlocks.ToList().ForEach(x => x.Skin = GrassSkin);
+        map.PlaceStagedBlocks();
+    }
+}
