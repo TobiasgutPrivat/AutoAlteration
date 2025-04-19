@@ -15,7 +15,7 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
         } else{
             GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         }
-        map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
+        map.PlaceRelative(start.Select("!Water&!RoadIce"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
         map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,0).AddChain(moveChain));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
         inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));

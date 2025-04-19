@@ -168,7 +168,8 @@ class FixAutoRotation : Alteration {
     {
         Inventory DecoWall = inventory.Select("DecoWall");
         map.Move(DecoWall.Select("LoopEnd&!Center&!Side"), RotateMid(PI*0.5f,0,0));
-        map.Move(DecoWall.Select("Arch&Slope2&(UTop|End|Straight)"), RotateMid(PI*0.5f,0,0));//not sure if Straight is correct
+        map.Move(DecoWall.Select("Arch&Slope2&(UTop|End)"), RotateMid(PI*0.5f,0,0));
+        map.Move(DecoWall.Select("Arch&Slope2&Straight"), RotateMid(-PI*0.5f,0,0));
         map.PlaceStagedBlocks();
     }
 }
@@ -187,4 +188,11 @@ class EmbedTest : Alteration {
         map.stagedBlocks.ForEach(x => x.IsAir = false);
         map.PlaceStagedBlocks(false);
     }
+}
+
+class AirPillars : Alteration {
+    public override void Run(Map map){
+        inventory.Select(BlockType.Pillar).Edit().Replace(map);
+        map.PlaceStagedBlocks(false);
+    }    
 }
