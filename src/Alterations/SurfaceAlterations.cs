@@ -68,8 +68,12 @@ public class Grass : Alteration {
 
     public override List<InventoryChange> InventoryChanges => [new LightSurface(new GrassSurface())];
     public override void Run(Map map){
-        Inventory Platform = inventory.Select("Platform");
+        Inventory Platform = inventory.Select("Platform").Select("Grass|Dirt|Plastic|Ice|Tech");
         Platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword("Grass").Replace(map);
+
+        inventory.Select("OpenTechRoad|OpenDirtRoad|OpenGrassRoad|OpenIceRoad").RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword("OpenGrassRoad").Replace(map);
+        inventory.Select("OpenTechZone|OpenDirtZone|OpenGrassZone|OpenIceZone").RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword("OpenGrassZone").Replace(map);
+        
         //TODO think about Opens
         map.PlaceStagedBlocks();
         (!Platform).Select("!Platform&!Grass&!OpenGrassRoad&!OpenGrassZone").AddKeyword("GrassSurfaceLight").PlaceRelative(map);
