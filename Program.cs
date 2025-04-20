@@ -8,5 +8,5 @@ AlterationConfig.Load();
 //TODO test edited Alterations
 new AlterationScript ("Campaign.json").RunConfig();
 
-//TODO LightSurface Template
-// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AltertionConfig.CustomBlocksFolder, "LightSurface"), "");
+// LightSurface Template
+// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AlterationConfig.CustomBlocksFolder, "LightSurface"), "");

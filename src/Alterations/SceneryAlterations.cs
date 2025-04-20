@@ -39,7 +39,7 @@ public class SnowScenery : Alteration
 
         map.PlaceStagedBlocks();
         
-        var skinPath = Path.Combine(AltertionConfig.DataFolder, "Templates", "IceSkin.Gbx");
+        var skinPath = Path.Combine(AlterationConfig.DataFolder, "Templates", "IceSkin.Gbx");
         CGameCtnBlockSkin IceSkin = Gbx.Parse<CGameCtnBlockSkin>(skinPath);
 
         map.map.Blocks.ToList().ForEach(x => x.Skin = IceSkin);
@@ -92,7 +92,7 @@ public class SandScenery : Alteration
         // map.Replace(inventory.GetArticles([ "Winter" ]), inventory.GetArticle("SummerPalmTree"));
 
         
-        var skinPath = Path.Combine(AltertionConfig.DataFolder, "Templates", "DirtSkin.Gbx");
+        var skinPath = Path.Combine(AlterationConfig.DataFolder, "Templates", "DirtSkin.Gbx");
         CGameCtnBlockSkin SandSkin = Gbx.Parse<CGameCtnBlockSkin>(skinPath);
 
         map.map.Blocks.ToList().ForEach(x => x.Skin = SandSkin);
@@ -144,7 +144,7 @@ public class GrassScenery : Alteration
         // map.Replace(inventory.GetArticles([ "SpringPalmTree", "SummerPalmTree", "Summer" ]), inventory.GetArticle("SpringCherryTree"));
 
 
-        var skinPath = Path.Combine(AltertionConfig.DataFolder, "Templates", "GrassSkin.Gbx");
+        var skinPath = Path.Combine(AlterationConfig.DataFolder, "Templates", "GrassSkin.Gbx");
         CGameCtnBlockSkin GrassSkin = Gbx.Parse<CGameCtnBlockSkin>(skinPath);
 
         map.map.Blocks.ToList().ForEach(x => x.Skin = GrassSkin);

@@ -1,18 +1,22 @@
-public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool light = false,Alteration? sceneryAlteration = null) : Alteration {
+public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null, bool light = false,Alteration? sceneryAlteration = null) : Alteration {
     public override string Description => "replaces all drivable surfaces with " + Surface;
     public override bool Published => false;
     public override bool LikeAN => false;
     public override bool Complete => false;
 
     public override List<InventoryChange> InventoryChanges => light ? [new LightSurface(SurfaceAlt)] : [new HeavySurface(SurfaceAlt)];
+    public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
 
     public override void Run(Map map) {
         if (light) {
+            if (Surface == null || !VanillaSurfaces.Contains(Surface)) {
+                throw new Exception("Light SurfaceAlterations requires a VanillaSurface type to be specified.");
+            }
             //working apart from light CP/Start still noted as CP/Start
             Inventory Platform = inventory.Select("Platform").Select("Grass|Dirt|Plastic|Ice|Tech");
-            Platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
-            inventory.Select("OpenTechRoad|OpenDirtRoad|OpenGrassRoad|OpenIceRoad").RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword("OpenGrassRoad").Replace(map);
-            inventory.Select("OpenTechZone|OpenDirtZone|OpenGrassZone|OpenIceZone").RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword("OpenGrassZone").Replace(map);
+            Platform.RemoveKeyword(VanillaSurfaces).AddKeyword(Surface).Replace(map);
+            inventory.Select("OpenTechRoad|OpenDirtRoad|OpenGrassRoad|OpenIceRoad").RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword($"Open{Surface}Road").Replace(map);
+            inventory.Select("OpenTechZone|OpenDirtZone|OpenGrassZone|OpenIceZone").RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword($"Open{Surface}Zone").Replace(map);
             map.PlaceStagedBlocks();
             (!Platform).Select($"!Platform&!{Surface}&!Open{Surface}Road&!Open{Surface}Zone").AddKeyword($"{Surface}SurfaceLight").PlaceRelative(map);
             map.stagedBlocks.ForEach(x => x.IsAir = false);
@@ -24,7 +28,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
             // 1. find blocks which should be replaced by Heavy
             KeywordEdit HeavyReplace = specific.Edit().AddKeyword($"{Surface}SurfaceHeavy");
             HeavyReplace.Add((!specific).AddKeyword([$"{Surface}SurfaceHeavy","Middle"]));
-            HeavyReplace.Add((!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic",$"{Surface}SurfaceHeavy"]));
+            HeavyReplace.Add((!specific).Select("Platform").RemoveKeyword(VanillaSurfaces).AddKeyword(["Plastic",$"{Surface}SurfaceHeavy"]));
             //TODO some more blocks not yet handled
             HeavyReplace.Align();
             Inventory replaced = HeavyReplace.getOriginal(); //blocks which will be replaced by Heavy later

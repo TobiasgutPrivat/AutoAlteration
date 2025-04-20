@@ -10,7 +10,14 @@ public class LightSurfaceBlock : CustomBlockAlteration {
             customBlock.customBlock.WaypointType = CGameItemModel.EWaypointType.None;
             changed = true;
         }
-        //TODO: remove taging as CP or Start
+        // avoid declaration as start/finish/checkpoint
+        if (customBlock.Type == BlockType.Block && customBlock.customBlock.EntityModelEdition is not null){
+            CGameBlockItem Block = (CGameBlockItem)customBlock.customBlock.EntityModelEdition;
+            if (Block.ArchetypeBlockInfoId.Contains("Start") || Block.ArchetypeBlockInfoId.Contains("Finish") || Block.ArchetypeBlockInfoId.Contains("Checkpoint")){
+                Block.ArchetypeBlockInfoId = "RoadTechStraight"; //doesn't matter as long as it's in air-mode and not on ground
+                changed = true;
+            }
+        }
         return changed;
     }
     public override bool AlterMeshCrystal(CustomBlock customBlock, CPlugCrystal MeshCrystal) {
@@ -30,6 +37,7 @@ public class LightSurfaceBlock : CustomBlockAlteration {
     }
 
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer){
+        float offset = 0.04f;
         //TODO check why some are unchanged
         layer.Crystal.Faces = layer.Crystal.Faces.Where(x => CustomSurfaceAlteration.DrivableMaterials.Contains(GetMaterialLink(x))).ToArray();
         if (layer.Crystal.Faces.Length == 0){
@@ -41,16 +49,16 @@ public class LightSurfaceBlock : CustomBlockAlteration {
         Vec3 topMiddle = GetTopMiddle(layer.Crystal);
         layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => {
             float X,Y,Z;
-            Y = x.Y + .02f;
+            Y = x.Y + offset;
             if (x.X > topMiddle.X){
-                X = x.X - .02f;
+                X = x.X - offset;
             } else {
-                X = x.X + .02f;
+                X = x.X + offset;
             }
             if (x.Z > topMiddle.Z){
-                Z = x.Z - .02f;
+                Z = x.Z - offset;
             } else {
-                Z = x.Z + .02f;
+                Z = x.Z + offset;
             }
             return new Vec3(X, Y, Z);
             }).ToArray();
