@@ -100,13 +100,17 @@ public class Map
       Directory.CreateDirectory(Path.GetDirectoryName(filePath));
       x.ExtractToFile(filePath);
     });
+    return;
   }
 
   public void GenerateCustomBlocks(CustomBlockAlteration customBlockAlteration){
     string TempFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Temp");
     string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetType().Name);
     string TempExportsFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Exports");
-    if (!Directory.Exists(TempFolder)) { Directory.CreateDirectory(TempFolder); }
+    if (!Directory.Exists(TempFolder)) { 
+      Directory.CreateDirectory(Path.Join(TempFolder, customBlockAlteration.GetType().Name ,"\\Items")); 
+      Directory.CreateDirectory(Path.Join(TempFolder, customBlockAlteration.GetType().Name ,"\\Blocks")); 
+    }
     if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
     if (!Directory.Exists(TempExportsFolder)) { Directory.CreateDirectory(TempExportsFolder); }
     ExtractEmbeddedBlocks(TempExportsFolder);

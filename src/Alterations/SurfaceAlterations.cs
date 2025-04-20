@@ -1,4 +1,4 @@
-public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool light = false) : Alteration {
+public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool light = false,Alteration? sceneryAlteration = null) : Alteration {
     public override string Description => "replaces all drivable surfaces with " + Surface;
     public override bool Published => false;
     public override bool LikeAN => false;
@@ -8,9 +8,11 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
 
     public override void Run(Map map) {
         if (light) {
-            Inventory Platform = inventory.Select("Platform");
-            Platform.RemoveKeyword([Surface,"Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
-            //TODO think about Opens
+            //working apart from light CP/Start still noted as CP/Start
+            Inventory Platform = inventory.Select("Platform").Select("Grass|Dirt|Plastic|Ice|Tech");
+            Platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(Surface).Replace(map);
+            inventory.Select("OpenTechRoad|OpenDirtRoad|OpenGrassRoad|OpenIceRoad").RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword("OpenGrassRoad").Replace(map);
+            inventory.Select("OpenTechZone|OpenDirtZone|OpenGrassZone|OpenIceZone").RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword("OpenGrassZone").Replace(map);
             map.PlaceStagedBlocks();
             (!Platform).Select($"!Platform&!{Surface}&!Open{Surface}Road&!Open{Surface}Zone").AddKeyword($"{Surface}SurfaceLight").PlaceRelative(map);
             map.stagedBlocks.ForEach(x => x.IsAir = false);
@@ -39,21 +41,20 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
             map.stagedBlocks.ForEach(x => x.IsAir = false);
             map.PlaceStagedBlocks(false);
         }
+
+        if (sceneryAlteration != null) {
+            sceneryAlteration.Run(map);
+        }
     }
 }
 
-public class Dirt : Alteration {
+public class Dirt : Surface {
     public override string Description => "replaces all drivable surfaces with Dirt";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override List<InventoryChange> InventoryChanges => [new LightSurface(new DirtSurface())];
-    public override void Run(Map map){
-        // map.PlaceRelative(inventory.Select("MapStart"),"RoadTechToThemeSnowRoadMagnet");
-        inventory.Select("!Dirt&!OpenDirtRoad&!OpenDirtZone&!RoadDirt").AddKeyword("DirtSurface").Replace(map);
-        map.PlaceStagedBlocks();
-    }
+    public Dirt() : base(new DirtSurface(), "Dirt", true, new SandScenery()) { }
 }
 
 //TODO Fast-Magnet

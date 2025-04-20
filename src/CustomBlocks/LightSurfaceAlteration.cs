@@ -2,7 +2,7 @@ using GBX.NET;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
-public class LightSurfaceBlock : CustomSurfaceAlteration {
+public class LightSurfaceBlock : CustomBlockAlteration {
     //doesn't change the surface
     public override bool Run(CustomBlock customBlock) {
         bool changed = false;
@@ -10,6 +10,7 @@ public class LightSurfaceBlock : CustomSurfaceAlteration {
             customBlock.customBlock.WaypointType = CGameItemModel.EWaypointType.None;
             changed = true;
         }
+        //TODO: remove taging as CP or Start
         return changed;
     }
     public override bool AlterMeshCrystal(CustomBlock customBlock, CPlugCrystal MeshCrystal) {
@@ -30,7 +31,7 @@ public class LightSurfaceBlock : CustomSurfaceAlteration {
 
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer){
         //TODO check why some are unchanged
-        layer.Crystal.Faces = layer.Crystal.Faces.Where(x => DrivableMaterials.Contains(GetMaterialLink(x))).ToArray();
+        layer.Crystal.Faces = layer.Crystal.Faces.Where(x => CustomSurfaceAlteration.DrivableMaterials.Contains(GetMaterialLink(x))).ToArray();
         if (layer.Crystal.Faces.Length == 0){
             return false;
         }
