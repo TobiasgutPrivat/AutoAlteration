@@ -1,4 +1,3 @@
-using System.Collections;
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.Engines.GameData;
@@ -50,7 +49,7 @@ public class Block {
 
     #region Blocks
         
-    public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
+    public Block(CGameCtnBlock block,Article fromArticle,  Article article, int freeBlockHeightOffset, MoveChain ?moveChain)
     {
         color = block.Color;
         IsFree = block.IsFree;
@@ -62,7 +61,7 @@ public class Block {
         Skin = block.Skin;
         IsAir = block.Bit21;
         WaypointSpecialProperty = block.WaypointSpecialProperty;
-        position = GetBlockPosition(block);
+        position = GetBlockPosition(block, freeBlockHeightOffset);
 
 
         name = article.Name;
@@ -74,14 +73,11 @@ public class Block {
         article.MoveChain.Subtract(position,article);
     }
 
-    public static Position GetBlockPosition(CGameCtnBlock block) {
+    public static Position GetBlockPosition(CGameCtnBlock block, int freeBlockHeightOffset) {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
-            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AlterationConfig.FreeBlockHeightOffset ,block.Coord.Z * 32));
-            position.AddPosition(GetDirectionOffset(block));
-
-            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AlterationConfig.FreeBlockHeightOffset ,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
+            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - freeBlockHeightOffset ,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
         }
     }
 
@@ -133,7 +129,7 @@ public class Block {
 
             block.Coord = new Int3(
                 (int)(position.coords.X + offset.X)  / 32, 
-                (int)(position.coords.Y + offset.Y + AlterationConfig.FreeBlockHeightOffset) / 8 , 
+                (int)(position.coords.Y + offset.Y + map.DecoBaseHeightOffset*8) / 8 , 
                 (int)(position.coords.Z + offset.Z)/ 32
                 );
             block.IsGhost = IsGhost;

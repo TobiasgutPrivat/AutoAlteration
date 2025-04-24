@@ -8,6 +8,7 @@ public class Map
   public CGameCtnChallenge map;
   public List<Block> stagedBlocks = [];
   public Dictionary<string,BlockType> embeddedBlocks = []; //Format: "Blocks/SomeFolder/BlockName.Block.Gbx" -> "SomeFolder\\BlockName" (like name in Inventory)
+  public int FreeBlockHeightOffset = 0;
 
   private Replay WRReplay;
 
@@ -17,6 +18,7 @@ public class Map
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
+    FreeBlockHeightOffset = map.DecoBaseHeightOffset*8;
     
     embeddedBlocks = GetEmbeddedBlocks();
   }
@@ -126,7 +128,7 @@ public class Map
     if (newArticles.Count == 0) return;
     Random rand = new();
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock.Name)){
-      stagedBlocks.Add(new Block(ctnBlock,atBlock,newArticles[rand.Next(newArticles.Count)],moveChain));
+      stagedBlocks.Add(new Block(ctnBlock,atBlock,newArticles[rand.Next(newArticles.Count)],FreeBlockHeightOffset,moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock.Name)){
       stagedBlocks.Add(new Block(ctnItem,atBlock,newArticles[rand.Next(newArticles.Count)],moveChain));
@@ -140,7 +142,7 @@ public class Map
     ArticleName = ArticleName.Replace("/","\\");
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){
       if (blockCondition != null && !blockCondition(ctnBlock)) continue;
-      stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,moveChain));
+      stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,FreeBlockHeightOffset,moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName)){
       stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,moveChain));
@@ -247,7 +249,7 @@ public class Map
   public void StageAll(MoveChain ?moveChain = null){
     stagedBlocks.AddRange(map.Blocks.Select(x => {
       Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
-      return new Block(x,article,article, moveChain);
+      return new Block(x,article,article,FreeBlockHeightOffset,moveChain);
     }));
     map.Blocks = [];
     stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
