@@ -1,4 +1,3 @@
-using System.IO;
 using GBX.NET;
 using GBX.NET.Engines.Game;
 

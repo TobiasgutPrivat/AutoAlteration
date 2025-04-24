@@ -163,17 +163,6 @@ class Nothing : Alteration {
     }
 }
 
-class FixAutoRotation : Alteration {
-    public override void Run(Map map)
-    {
-        Inventory DecoWall = inventory.Select("DecoWall");
-        map.Move(DecoWall.Select("LoopEnd&!Center&!Side"), RotateMid(PI*0.5f,0,0));
-        map.Move(DecoWall.Select("Arch&Slope2&(UTop|End)"), RotateMid(PI*0.5f,0,0));
-        map.Move(DecoWall.Select("Arch&Slope2&Straight"), RotateMid(-PI*0.5f,0,0));
-        map.PlaceStagedBlocks();
-    }
-}
-
 class NothingBlock : CustomBlockAlteration {
     public override bool Run(CustomBlock customBlock) { return true; }
 }

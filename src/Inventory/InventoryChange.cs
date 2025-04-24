@@ -2,7 +2,6 @@ using GBX.NET;
 
 public abstract class InventoryChange: PosUtils {
     public abstract void ChangeInventory(Inventory inventory, bool mapSpecific = false);
-    // public virtual List<string> GetAdditionalKeywords() { return []; }
 }
 
 public class NormalizeCheckpoint: InventoryChange {

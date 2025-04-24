@@ -40,7 +40,7 @@ class ArticleImport {
                     blockType = BlockType.Block;
                     break;
             }
-            articles.Add(new Article((int)item.Height, (int)item.Width, (int)item.Length, blockType, (string)item.Name, (bool)item.Theme, (bool)item.DefaultRotation));
+            articles.Add(new Article((int)item.Height, (int)item.Width, (int)item.Length, blockType, (string)item.Name, (bool)item.Theme));
         }
         return articles;
     }

@@ -1,4 +1,3 @@
-
 public abstract class Alteration: PosUtils {
     public abstract void Run(Map map);
 
@@ -10,6 +9,8 @@ public abstract class Alteration: PosUtils {
 
     // Changes which get applied on base inventory before the Alteration is executed
     public virtual List<InventoryChange> InventoryChanges { get; } = [];
+
+    public virtual List<Alteration> AlterationsBefore { get; } = [];//TODO: use this for cleaner implementation of alterations
 
     public static Inventory inventory = new();
     
@@ -49,5 +50,11 @@ public abstract class Alteration: PosUtils {
         inventory.Select("v2").EditOriginal().RemoveKeyword("v2");
         inventory.Select("Oriented").EditOriginal().RemoveKeyword("Oriented");
         inventory.Select("Grasss").EditOriginal().RemoveKeyword("Grasss").AddKeyword("Grass");
+
+        
+        Inventory DecoWall = inventory.Select("DecoWall");
+        DecoWall.Select("LoopEnd&!Center&!Side").articles.ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
+        DecoWall.Select("Arch&Slope2&(UTop|End)").articles.ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
+        DecoWall.Select("Arch&Slope2&Straight").articles.ForEach(a => a.DefaultRotation = new RotateMid(new(-PI*0.5f,0,0)));
     }
 }

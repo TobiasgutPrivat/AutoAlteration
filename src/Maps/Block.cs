@@ -63,21 +63,26 @@ public class Block {
         WaypointSpecialProperty = block.WaypointSpecialProperty;
         position = GetBlockPosition(block, freeBlockHeightOffset);
 
+        if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
+            article.DefaultRotation?.Apply(position,article);
+        };
 
         name = article.Name;
         blockType = article.Type;
         Path = article.Path;
         
-        fromArticle.MoveChain.Apply(position,article);
-        moveChain?.Apply(position,article);
-        article.MoveChain.Subtract(position,article);
+        fromArticle.MoveChain.Apply(position,article); // specific like for CPGate-Position
+        moveChain?.Apply(position,article); // the Altering moves
+        article.MoveChain.Subtract(position,article); // specific like for CPGate-Position
     }
 
     public static Position GetBlockPosition(CGameCtnBlock block, int freeBlockHeightOffset) {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
-            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - freeBlockHeightOffset ,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
+            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - freeBlockHeightOffset ,block.Coord.Z * 32));
+            position.AddPosition(GetDirectionOffset(block));
+            return position;
         }
     }
 
@@ -95,6 +100,10 @@ public class Block {
             Direction.West => new((0, 0, article.Width * 32), (Alteration.PI * 0.5f, 0, 0)),
             _ => Position.Zero,
         };
+    }
+
+    public static Position GetDefaultRotationOffset(CGameCtnBlock block) {
+        return new Position(Vec3.Zero, Vec3.Zero);//TODO
     }
 
     private void PlaceBlockInMap(CGameCtnChallenge map, bool revertFreeBlock) {
@@ -146,6 +155,9 @@ public class Block {
         block.Color = color;
         block.Skin = Skin;
         block.Bit21 = IsAir;
+        if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
+            block.Author += "AutoAltTag";
+        }
         // block.Flags = BlockFlags;
     }
 
