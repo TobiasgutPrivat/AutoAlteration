@@ -1,4 +1,5 @@
 public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null, bool light = false,Alteration? sceneryAlteration = null) : Alteration {
+    // light and Heavy SurfaceAlterations base blocks from HeavyWood (in CustomBlocks/HeavySurface/)
     public override string Description => "replaces all drivable surfaces with " + Surface;
     public override bool Published => false;
     public override bool LikeAN => false;
@@ -65,35 +66,20 @@ public class Dirt : Surface {
 
 //flooded manual
 
-public class Grass : Alteration {
+public class Grass : Surface {
     public override string Description => "replaces all drivable surfaces with Grass";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-
-    public override List<InventoryChange> InventoryChanges => [new LightSurface(new GrassSurface())];
-    public override void Run(Map map){
-        Inventory Platform = inventory.Select("Platform");
-        Platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword("Grass").Replace(map);
-        //TODO think about Opens
-        map.PlaceStagedBlocks();
-        (!Platform).Select("!Platform&!Grass&!OpenGrassRoad&!OpenGrassZone").AddKeyword("GrassSurfaceLight").PlaceRelative(map);
-        map.stagedBlocks.ForEach(x => x.IsAir = false);
-        map.PlaceStagedBlocks(false);
-    }
+    public Grass() : base(new GrassSurface(), "Grass", true, new GrassScenery()) { }
 }
 
-public class Ice : Alteration {
+public class Ice : Surface {
     public override string Description => "replaces all drivable surfaces with Ice";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    
-    public override List<InventoryChange> InventoryChanges => [new LightSurface(new IceSurface())];
-    public override void Run(Map map){
-        inventory.Select("!Ice&!OpenIceRoad&!OpenIceZone&!RoadIce").AddKeyword("IceSurface").Replace(map);
-        map.PlaceStagedBlocks();
-    }
+    public Ice() : base(new IceSurface(), "Ice", true) { }
 }
 
 public class Magnet : Alteration {

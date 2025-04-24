@@ -3,6 +3,8 @@ using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
 public class LightSurfaceBlock : CustomBlockAlteration {
+    //TODO: makes really awfull textures
+    
     //doesn't change the surface
     public override bool Run(CustomBlock customBlock) {
         bool changed = false;
@@ -55,11 +57,12 @@ public class LightSurfaceBlock : CustomBlockAlteration {
             } else {
                 X = x.X + offset;
             }
-            if (x.Z > topMiddle.Z){
+            if (x.Z > topMiddle.Z){ //usually not necessary
                 Z = x.Z - offset;
             } else {
                 Z = x.Z + offset;
             }
+            Z = x.Z;
             return new Vec3(X, Y, Z);
             }).ToArray();
         return true;
