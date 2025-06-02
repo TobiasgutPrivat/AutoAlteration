@@ -109,7 +109,7 @@ public class Block {
     private void PlaceBlockInMap(CGameCtnChallenge map, bool revertFreeBlock) {
         CGameCtnBlock block = map.PlaceBlock(name,new(0,0,0),Direction.North);
         float yaw = (float)Math.Round(position.pitchYawRoll.X / (Alteration.PI/2),5);
-        if (revertFreeBlock 
+        if (!IsFree && revertFreeBlock 
             && position.coords.X % 32 == 0 && position.coords.Y % 8 == 0 && position.coords.Z % 32 == 0
             && position.pitchYawRoll.Y == 0 && position.pitchYawRoll.Z == 0
             && yaw % 1 == 0 
