@@ -183,7 +183,7 @@ public class Earthquake : Alteration {
     public override void Run(Map map){
         map.StageAll();
         map.stagedBlocks.ForEach(x => x.position.coords += new Vec3(1000000,500000,1000000));
-        map.PlaceStagedBlocks();
+        map.PlaceStagedBlocks(false);
     }
 }
 
