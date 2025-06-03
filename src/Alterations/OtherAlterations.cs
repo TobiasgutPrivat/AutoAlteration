@@ -180,10 +180,13 @@ public class Earthquake : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    public override void Run(Map map)
+    {
+        Vec3 offset = new(1000000, 500000, 1000000);
         map.StageAll();
-        map.stagedBlocks.ForEach(x => x.position.coords += new Vec3(1000000,500000,1000000));
+        map.stagedBlocks.ForEach(x => x.position.coords += offset);
         map.PlaceStagedBlocks(false);
+        map.map.ThumbnailPosition += offset;
     }
 }
 
