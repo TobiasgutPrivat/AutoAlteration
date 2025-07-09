@@ -187,6 +187,7 @@ public class Earthquake : Alteration {
         map.stagedBlocks.ForEach(x => x.position.coords += offset);
         map.PlaceStagedBlocks(false);
         map.map.ThumbnailPosition += offset;
+        // map.map.ClipIntro.Tracks[0].Blocks[0].Keys[0].Position
     }
 }
 

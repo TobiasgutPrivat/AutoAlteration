@@ -6,7 +6,7 @@ public class AlterationConfig {
     public static string devPath = "";
     public static bool devMode = false;
     public static string DataFolder = "";
-    public static string BlockDataPath = "";
+    public static string BlockPropertiesPath = "";
     public static string CustomBlocksFolder = "";
     public static string ApplicationDataFolder = "";
     public static string CacheFolder = "";
@@ -26,7 +26,7 @@ public class AlterationConfig {
         CustomBlocksFolder = Path.Combine(DataFolder, "CustomBlocks");
         ApplicationDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
         CacheFolder = Path.Combine(ApplicationDataFolder, "Cache");
-        BlockDataPath = Path.Combine(DataFolder, "Inventory","BlockData.json");
+        BlockPropertiesPath = Path.Combine(DataFolder, "Inventory","BlocksAndItemsProperties.json");
 
         ToKeywords = loadKeywordsFile(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
         ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "ToKeywords.txt"))).ToList();

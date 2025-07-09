@@ -74,7 +74,7 @@ public class AutoAlteration {
             //filter out the ones that have constructor parameters or have default values
             .Where(t => t.GetConstructors().Any(c => c.GetParameters().Length == 0 || c.GetParameters().All(p => p.HasDefaultValue)))
             //create instances
-            .Select(t => Activator.CreateInstance(t) as Alteration)
+            .Select(t => t.GetConstructor(Type.EmptyTypes)?.Invoke(null) as Alteration)
             .OfType<Alteration>()
             //filter out the ones that are not published
             .Where(x => x.Published)

@@ -282,7 +282,7 @@ DataFolder modifyable per DevMode, DevPath (for Development)
 
 **Inventory/:** Data defining Keywords and vanilla Articles
 
-- **Inventory/BlockData:** Vanilla Articles in json format: [{Height,Width,Length,type,Name,Theme,Defaultrotation}]
+- **Inventory/BlocksAndItemsProperties:** Vanilla Articles in json format
 
 - **Inventory/Keywords:** most Keywords used to split up Article Names (Orderd by Length)
 

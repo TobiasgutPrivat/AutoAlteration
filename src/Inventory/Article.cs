@@ -11,7 +11,6 @@ public class Article {
     public int Height = 1;
     public string Path = "";
     // public bool DefaultRotation;
-    public bool Theme;
     public bool MapSpecific = false;
     public Move? DefaultRotation;
 
@@ -25,14 +24,13 @@ public class Article {
         Width = width;
     }
     
-    public Article(int Height, int Width, int Length, BlockType Type, string Name, bool Theme){
+    public Article(int Height, int Width, int Length, BlockType Type, string Name){
         this.Name = Name;
         LoadKeywords();
         this.Type = Type;
         this.Length = Length;
         this.Width = Width;
         this.Height = Height;
-        this.Theme = Theme;
     }
 
     public Article(string name,BlockType type, string Path, bool mapSpecific = false){
