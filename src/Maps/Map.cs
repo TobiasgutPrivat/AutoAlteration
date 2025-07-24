@@ -77,11 +77,14 @@ public class Map
     if (map.EmbeddedZipData != null && map.EmbeddedZipData.Length > 0) {
       ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
       return zipArchive.Entries.Select(x => x.FullName)
-        .Where(x => x.Contains(".Block.Gbx") || x.Contains(".Item.Gbx"))
+        .Where(x => x.Contains(".Block.Gbx", StringComparison.OrdinalIgnoreCase) || x.Contains(".Item.Gbx", StringComparison.OrdinalIgnoreCase))
         .Select(x => {
-          BlockType type = x.Contains(".Item.Gbx") ? BlockType.CustomItem : BlockType.CustomBlock;
-          string name = x.Replace("/","\\").Replace("Items\\","").Replace("Blocks\\","").Replace(".Item.Gbx","").Replace(".Block.Gbx","");
-          return (name,type);})
+          BlockType type = x.Contains(".Item.Gbx", StringComparison.OrdinalIgnoreCase) ? BlockType.CustomItem : BlockType.CustomBlock;
+          string name = x.Replace("/","\\").Replace(".Item.Gbx","", StringComparison.OrdinalIgnoreCase).Replace(".Block.Gbx","", StringComparison.OrdinalIgnoreCase);//removed: .Replace("Items\\","").Replace("Blocks\\","")
+          //assuming every embedded name has Items// or Blocks// at the start which needs to be removed //TODO check if this is correct
+          name = name.Substring(name.IndexOf('\\', 1) + 1);
+          return (name, type);
+        })
         .ToDictionary();
     } else {
       return [];
@@ -248,13 +251,13 @@ public class Map
 
   public void StageAll(MoveChain ?moveChain = null){
     stagedBlocks.AddRange(map.Blocks.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
+      Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace(".Block.Gbx_CustomBlock","", StringComparison.OrdinalIgnoreCase));
       return new Block(x,article,article,FreeBlockHeightOffset,moveChain);
     }));
     map.Blocks = [];
     stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id.Replace(".Item.Gbx",""));
-      return new Block(x,article,article, moveChain);
+      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id.Replace(".Item.Gbx", "", StringComparison.OrdinalIgnoreCase));
+      return new Block(x, article, article, moveChain);
     }));
     map.AnchoredObjects = [];
   }
