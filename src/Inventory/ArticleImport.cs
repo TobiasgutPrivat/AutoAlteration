@@ -3,7 +3,8 @@ using Newtonsoft.Json;
 class ArticleImport {
 
     public static List<Article> ImportVanillaInventory(){
-        string json = File.ReadAllText(AlterationConfig.BlockPropertiesPath);
+        string BlockJson = File.ReadAllText(AlterationConfig.BlockDataPath);
+        string ItemJson = File.ReadAllText(AlterationConfig.ItemDataPath);
         // expected json Format:
         // [
         //     {
@@ -18,9 +19,13 @@ class ArticleImport {
         //     ...
         // ]
 
-        json = BlockPropertiesCorrections(json);
+        BlockJson = BlockPropertiesCorrections(BlockJson);
+        ItemJson = BlockPropertiesCorrections(ItemJson);
         
-        var jsonArray = JsonConvert.DeserializeObject<dynamic[]>(json);
+        var BlockJsonArray = JsonConvert.DeserializeObject<dynamic[]>(BlockJson);
+        var ItemJsonArray = JsonConvert.DeserializeObject<dynamic[]>(ItemJson);
+
+        var jsonArray = BlockJsonArray.Concat(ItemJsonArray);
         Dictionary<string,Article> articles = [];
         foreach (var item in jsonArray)
         {
@@ -48,6 +53,7 @@ class ArticleImport {
     }
     
     public static string BlockPropertiesCorrections(string json) { //Hardcoded corrections, depends on imported Data
+        //TODO split into block and item corrections, check whats still needed
         json = json.Replace("PlatformGrassSlope2UTop", "PlatformGrasssSlope2UTop");
         json = json.Replace("PlatForm", "Platform");
         json = json.Replace("ShowFogger8M", "ShowFogger8m");
