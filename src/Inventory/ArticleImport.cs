@@ -33,15 +33,15 @@ class ArticleImport {
             switch ((string)item.type)
             {
                 case "block":
-                    articles[(string)item.name] = new Article((int)item.size.z, (int)item.size.y, (int)item.size.x, BlockType.Block, (string)item.name);
+                    articles[(string)item.name] = new Article((int)item.size.y, (int)item.size.x, (int)item.size.z, BlockType.Block, (string)item.name);
                     foreach (var pillar in item.pillar)
                     {
                         if (articles.ContainsKey((string)pillar.name)) continue;
-                        articles[(string)pillar.name] = new Article((int)pillar.size.z, (int)pillar.size.y, (int)pillar.size.x, BlockType.Pillar, (string)pillar.name);
+                        articles[(string)pillar.name] = new Article((int)pillar.size.y, (int)pillar.size.x, (int)pillar.size.z, BlockType.Pillar, (string)pillar.name);
                     }
                     break;
                 case "item":
-                    articles[(string)item.name] = new Article((int)item.size.z, (int)item.size.y, (int)item.size.x, BlockType.Item, (string)item.name);
+                    articles[(string)item.name] = new Article((int)item.size.y, (int)item.size.x, (int)item.size.z, BlockType.Item, (string)item.name);
                     break;
                 default:
                     Console.WriteLine("Blocktype missing");
