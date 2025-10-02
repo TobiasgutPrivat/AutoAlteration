@@ -37,7 +37,8 @@ class ArticleImport {
                     foreach (var pillar in item.pillar)
                     {
                         if (articles.ContainsKey((string)pillar.name)) continue;
-                        articles[(string)pillar.name] = new Article((int)pillar.size.y, (int)pillar.size.x, (int)pillar.size.z, BlockType.Pillar, (string)pillar.name);
+                        //TODO fix sizes of pillars in data, temporarly using item size
+                        articles[(string)pillar.name] = new Article((int)item.size.y, (int)item.size.x, (int)item.size.z, BlockType.Pillar, (string)pillar.name);
                     }
                     break;
                 case "item":
