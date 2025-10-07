@@ -230,7 +230,7 @@ public class Surfaceless: Alteration {
         map.PlaceRelative(Blocks.Select("Checkpoint"),inventory.GetArticle("GateCheckpointCenter32m"));
         map.PlaceRelative(Blocks.Select("Finish"),inventory.GetArticle("GateFinishCenter32m"));
         inventory.Select(BlockType.Item).Select("MapStart&Finish&Checkpoint").Edit().PlaceRelative(map);
-        map.Delete(inventory.Sub(inventory.Select(BlockType.Pillar)));
+        map.Delete(inventory.Except(inventory.Select(BlockType.Pillar)));
         map.PlaceStagedBlocks();
     }
 }
@@ -246,7 +246,7 @@ public class RouteOnly: Alteration {
     public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new RouteOnlyBlock())];
     public override void Run(Map map){
         inventory.AddKeyword("RouteOnlyBlock").Replace(map);
-        map.Delete(inventory.Sub(inventory.Select(BlockType.Item).Select("MapStart|Finish|Checkpoint")));
+        map.Delete(inventory.Except(inventory.Select(BlockType.Item).Select("MapStart|Finish|Checkpoint")));
         map.PlaceStagedBlocks();
     }
 }

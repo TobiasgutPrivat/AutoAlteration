@@ -19,6 +19,7 @@ public class Map
     map = gbx.Node;
     map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
     FreeBlockHeightOffset = map.DecoBaseHeightOffset*8;
+    map.Comments += "\nAltered using AutoAlteration";
     
     embeddedBlocks = GetEmbeddedBlocks();
   }

@@ -7,19 +7,24 @@ public class AirMode: Alteration {
     public override bool Complete => false;
 
     public override void Run(Map map)
-    {
+    {//DecoPlatformSlope2Straight
         map.StageAll();
         List<Block> airBlocks = map.stagedBlocks.Where(x => x.IsAir).ToList();
         map.stagedBlocks = map.stagedBlocks.Where(x => !x.IsAir).ToList();
         map.PlaceStagedBlocks(false); //Place Air Blocks
 
-        // TODO add Pillars below tilted non-Air blocks
-        inventory.Select("RoadTech|RoadDirt|RoadIce|RoadBump").RemoveKeyword(["RoadTech","RoadDirt","RoadIce","RoadBump"]).AddKeyword("TrackWall").PlaceRelative(map);
+        // TODO exclude those without tilt
+        Inventory tiltedBlocks = inventory.Select(BlockType.Block).Select(x => x.Height > 1);
+        tiltedBlocks.Select("RoadTech|RoadDirt|RoadIce|RoadBump").RemoveKeyword(["RoadTech","RoadDirt","RoadIce","RoadBump"]).AddKeyword("TrackWall").PlaceRelative(map);
 
+        Inventory Platforms = tiltedBlocks.Select("DecoPlatform|Platform");
+        Inventory notGrass = Platforms.Select("Dirt|Ice|Plastic|Road");
+        notGrass.RemoveKeyword(["DecoPlatform","Platform","Plastic","Grass","DecoCliff","To"]).AddKeyword(["DecoWall"]).PlaceRelative(map);
+        Platforms.Except(notGrass).RemoveKeyword(["DecoPlatform","Platform","Grass","DecoCliff","To"]).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map); //Deco-Grass is missing Keyword Grass
 
         map.StageAll();
         map.stagedBlocks.AddRange(airBlocks);
-        map.PlaceStagedBlocks();
+        map.PlaceStagedBlocks(false);
     }
 }
 

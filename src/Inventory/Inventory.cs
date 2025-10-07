@@ -139,7 +139,7 @@ public class Inventory { // represents all available articles which can be place
         return new(Alteration.inventory.articles.Except(a.articles).ToList());
     }
 
-    public Inventory Sub(Inventory inventory) =>
+    public Inventory Except(Inventory inventory) =>
         new(articles.Except(inventory.articles).ToList());
 
     public Article GetArticle(string name) {
