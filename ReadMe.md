@@ -227,9 +227,10 @@ In that case make sure you have correct package source using:
 - apply on Nation Converter (check with BigBang)
 
 - Roadmap Customblock Alterations:
-  - Placement of reembeded Blocks (prob. issue with path)
-  - Altering previously embedded blocks sometimes causes corruption
-  - Full customblok-sets (Heavy -> light, Vanilla)
+  - Altering previously embedded blocks causes corruption
+  - LightSurfaceBlock causes lightmap issues (solvable by resave)
+    -> Solution: have fixed lightBlock-Set
+  - do air-mode alteration
 
 <!--
 Opt.:
