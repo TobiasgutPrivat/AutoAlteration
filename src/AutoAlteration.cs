@@ -3,7 +3,14 @@ using System.Reflection;
 public class AutoAlteration {
     public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
+            try {
+                AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
+            } catch (Exception ex) {
+                Console.WriteLine($"Error altering {mapFile}:");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                continue;
+            }
         }
     }
     public static void AlterFolder(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {

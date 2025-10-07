@@ -36,9 +36,13 @@ public class AlterationLogic {
         }
 
         //Map specific custom blocks
-        Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)).ToList());
-        if (map.embeddedBlocks.Count != 0 & AlterationConfig.devMode){ //logging
-            Alteration.inventory.Export("WithMapBlocks");
+        if (map.embeddedBlocks.Count != 0){
+            Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)).ToList());
+            Alteration.inventory.cachedInventories.Clear();
+            if (AlterationConfig.devMode)
+            { //logging
+                Alteration.inventory.Export("WithMapBlocks");
+            }
         }
 
         //Generate Map specific custom blocks sets

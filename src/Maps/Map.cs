@@ -82,8 +82,16 @@ public class Map
         .Select(x => {
           BlockType type = x.Contains(".Item.Gbx", StringComparison.OrdinalIgnoreCase) ? BlockType.CustomItem : BlockType.CustomBlock;
           string name = x.Replace("/","\\").Replace(".Item.Gbx","", StringComparison.OrdinalIgnoreCase).Replace(".Block.Gbx","", StringComparison.OrdinalIgnoreCase);//removed: .Replace("Items\\","").Replace("Blocks\\","")
-          //assuming every embedded name has Items// or Blocks// at the start which needs to be removed //TODO check if this is correct
-          name = name.Substring(name.IndexOf('\\', 1) + 1);
+          // assuming that every embedded block has Items\ or Blocks\ at the start which needs to be removed
+          int itemPos = name.IndexOf("Items\\");                                                                                                                                                           //assuming every embedded name has Items// or Blocks// at the start which needs to be removed //TODO check if this is correct
+          int blockPos = name.IndexOf("Blocks\\");
+          if (itemPos != -1) {
+            name = name.Substring(itemPos + 6);
+          } else if (blockPos != -1) {
+            name = name.Substring(blockPos + 7);
+          } else {
+            throw new Exception("Embedded Block without Items\\ or Blocks\\ in the name");
+          }
           return (name, type);
         })
         .ToDictionary();
