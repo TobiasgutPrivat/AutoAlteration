@@ -1,8 +1,8 @@
 public class GameMode(string mode) : Alteration {
     public override string Description => $"sets Map to {mode}Mode";
-    public override bool Published => false;
+    public override bool Published => true;
     public override bool LikeAN => true;
-    public override bool Complete => false; //untested
+    public override bool Complete => true; //untested
 
     public override void Run(Map map) {
         map.map.MapType = "TrackMania\\" + mode;
@@ -22,5 +22,7 @@ public class Platform : GameMode {
 }
 
 public class Secret : GameMode {
+    public override bool Published => false;
+    public override bool Complete => false; //type doesn't exist
     public Secret() : base("TM_Secret") { }
 }

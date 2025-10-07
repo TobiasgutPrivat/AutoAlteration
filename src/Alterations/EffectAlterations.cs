@@ -15,8 +15,9 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
         } else{
             GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         }
-        map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
-        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,0).AddChain(moveChain));
+        map.PlaceRelative(start.Select("!Water&!RoadIce&!RoadBump"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
+        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,-2).AddChain(moveChain));
+        map.PlaceRelative(start.Select("RoadBump"), GateSpecial,Move(0,-16,2).AddChain(moveChain));
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
         inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
         map.PlaceStagedBlocks();
@@ -78,8 +79,8 @@ public class FreeWheel(): CPEffect {
     public override bool Complete => false;
 
     public override void Run(Map map){
-        new CPEffect("Turbo",includeStart: true).Run(map);
-        new CPEffect("NoEngine",Move(0,0,1)).Run(map);
+        new CPEffect("Turbo").Run(map);
+        new CPEffect("NoEngine",Move(0,0,1),includeStart: false).Run(map);
         new StartEffect("NoEngine",Move(0,0,3)).Run(map);
     }
 }
@@ -91,8 +92,8 @@ public class Glider(): CPEffect {
     public override bool Complete => false;
 
     public override void Run(Map map){
-        new CPEffect("Boost",includeStart: true).Run(map);
-        new CPEffect("NoEngine",Move(0,0,1)).Run(map);
+        new CPEffect("Boost").Run(map);
+        new CPEffect("NoEngine",Move(0,0,1),includeStart: false).Run(map);
         new StartEffect("NoEngine",Move(0,0,3)).Run(map);
     }
 }
