@@ -5,12 +5,24 @@ public class AlterationScript {
     public string filePath = "";
 
     public AlterationScript(string filePath){
-        this.filePath = filePath;
+
+        if (!filePath.Contains(':'))
+        {
+            this.filePath = Path.Combine(AlterationConfig.ApplicationDataFolder, "scripts", filePath);
+        }
+        else
+        {
+            this.filePath = filePath;
+        }
     }
 
     public void RunConfig(){
         if (!filePath.Contains(':')){
             filePath = Path.Combine(AlterationConfig.ApplicationDataFolder,"scripts", filePath);
+        }
+        if (!File.Exists(filePath)){
+            File.Copy(Path.Combine(AlterationConfig.DataFolder, "Templates", "ScriptTemplate.json"), filePath);
+            throw new Exception("Script did not exist, Template copied to " + filePath);
         }
         foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
         {
@@ -19,7 +31,7 @@ public class AlterationScript {
                 item.GetProperty("Source").GetString(),
                 item.GetProperty("Destination").GetString(),
                 item.GetProperty("Name").GetString(),
-                item.GetProperty("Alterations").EnumerateArray().Select(x => 
+                item.GetProperty("Alterations").EnumerateArray().Select(x =>
                     GetAlteration(x.GetString())
                     ).ToList()
             );

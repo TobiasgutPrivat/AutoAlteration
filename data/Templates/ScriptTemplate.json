@@ -1,0 +1,15 @@
+[
+    {
+        "Type": "File/Folder/FullFolder",
+        "Source": "Path/to/your/existing/file/or/folder",
+        "Destination": "Path/to/your/target/folder",
+        "Name": "AddedName",
+        "Alterations": [
+            "Alteration1", 
+            "opt additional alterations ..."
+        ]
+    },
+    {
+        opt additional config...
+    }
+]
