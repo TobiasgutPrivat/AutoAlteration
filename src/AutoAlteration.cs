@@ -39,7 +39,16 @@ public class AutoAlteration {
     
     public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
         Map map = new Map(sourceFile);
-        AlterationLogic.Alter(alterations, map);
+        List<Alteration>? allAlterations = [];
+        foreach (Alteration alteration in alterations)
+        {
+            if (alteration.AlterationsBefore != null)
+            {
+                allAlterations.AddRange(alteration.AlterationsBefore);
+            }
+            allAlterations.Add(alteration);
+        }
+        AlterationLogic.Alter(allAlterations, map);
         map.map.MapName = map.map.MapName + " " + Name;
         map.Save(destinationFile);
         Console.WriteLine(destinationFile);

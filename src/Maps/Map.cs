@@ -102,11 +102,11 @@ public class Map
 
   private void ExtractEmbeddedBlocks(string path){
     ZipArchive zipArchive;
-    try { 
-      zipArchive = map.OpenReadEmbeddedZipData(); 
-    } catch {
-      return; 
+    if (map.EmbeddedZipData == null || map.EmbeddedZipData.Length == 0)
+    {
+      return;
     }
+    zipArchive = map.OpenReadEmbeddedZipData();
     
     zipArchive.Entries.ToList().ForEach(x => {
       string filePath = path + "\\" + x.FullName; // Extract without Folderstructure (FullName)

@@ -10,7 +10,7 @@ public abstract class Alteration: PosUtils {
     // Changes which get applied on base inventory before the Alteration is executed
     public virtual List<InventoryChange> InventoryChanges { get; } = [];
 
-    public virtual List<Alteration> AlterationsBefore { get; } = [];//TODO: use this for cleaner implementation of alterations
+    public virtual List<Alteration> AlterationsBefore { get; } = [];// applied in AlterFile()
 
     public static Inventory inventory = new();
     

@@ -166,6 +166,8 @@ public class Wood : Alteration {
     public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface(),false)];
     public override void Run(Map map){
         inventory.AddKeyword("WoodSurfaceHeavy").Replace(map);
+        inventory.AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(map);
+        inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
         map.PlaceStagedBlocks(false);
     }
 }
