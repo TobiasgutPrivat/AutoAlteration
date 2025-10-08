@@ -105,7 +105,6 @@ public class Map
     try { 
       zipArchive = map.OpenReadEmbeddedZipData(); 
     } catch {
-      Console.WriteLine("No previously Embedded Blocks"); 
       return; 
     }
     

@@ -1,28 +1,38 @@
 using GBX.NET;
 
 public class AirMode: Alteration {
-    public override string Description => "Turn all Blocks to Air-Mode";
-    public override bool Published => false;
-    public override bool LikeAN => false;
+    public override string Description => "Turn all Blocks to Air-Mode, should not change anything";
+    public override bool Published => true;
+    public override bool LikeAN => true;
     public override bool Complete => false;
 
     public override void Run(Map map)
-    {//DecoPlatformSlope2Straight
+    {
         map.StageAll();
         List<Block> airBlocks = map.stagedBlocks.Where(x => x.IsAir).ToList();
         map.stagedBlocks = map.stagedBlocks.Where(x => !x.IsAir).ToList();
-        map.PlaceStagedBlocks(false); //Place Air Blocks
+        map.PlaceStagedBlocks(false); //Place Air Blocks to modify
 
-        // TODO exclude those without tilt
+        // Platforms
         Inventory tiltedBlocks = inventory.Select(BlockType.Block).Select(x => x.Height > 1);
+        tiltedBlocks.Export("TiltedBlocks");
         tiltedBlocks.Select("RoadTech|RoadDirt|RoadIce|RoadBump").RemoveKeyword(["RoadTech","RoadDirt","RoadIce","RoadBump"]).AddKeyword("TrackWall").PlaceRelative(map);
 
         Inventory Platforms = tiltedBlocks.Select("DecoPlatform|Platform");
-        Inventory notGrass = Platforms.Select("Dirt|Ice|Plastic|Road");
-        notGrass.RemoveKeyword(["DecoPlatform","Platform","Plastic","Grass","DecoCliff","To"]).AddKeyword(["DecoWall"]).PlaceRelative(map);
-        Platforms.Except(notGrass).RemoveKeyword(["DecoPlatform","Platform","Grass","DecoCliff","To"]).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map); //Deco-Grass is missing Keyword Grass
+        Inventory notGrassPillar = Platforms.Select("Dirt|Ice|Plastic");
+        List<string> removeKeywords = ["DecoPlatform","Platform","Plastic","Grass","Tech","DecoCliff","DecoHill","To","X2"];
+        notGrassPillar.RemoveKeyword(removeKeywords).AddKeyword(["DecoWall"]).PlaceRelative(map);
+        Platforms.Except(notGrassPillar).RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map); //Deco-Grass is missing Keyword Grass
 
-        map.StageAll();
+        // DecoHills
+        Inventory DecoHills = tiltedBlocks.Select("DecoHill");
+        Inventory notGrassHills = Platforms.Select("Dirt|Ice");
+
+        notGrassHills.RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(map,RotateMid(new Vec3(-PI/2,0,0)));
+        DecoHills.Except(notGrassHills).RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map,RotateMid(new Vec3(-PI/2,0,0)));
+
+        // map.StageAll(); // only set air mode if pillar could be set accordingly, can be changed if pillars done completely
+        map.stagedBlocks.ForEach(x => x.IsAir = true);
         map.stagedBlocks.AddRange(airBlocks);
         map.PlaceStagedBlocks(false);
     }

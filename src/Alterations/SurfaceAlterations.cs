@@ -162,30 +162,10 @@ public class Wood : Alteration {
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    
+    public override List<Alteration> AlterationsBefore => [new AirMode()];
     public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface(),false)];
     public override void Run(Map map){
-        //TODO get full block set
-        Inventory specific = inventory.Select(article => article.MapSpecific); //handle mapSpecifics seperately
-
-        // 1. find blocks which should be replaced by Heavy
-        KeywordEdit HeavyReplace = specific.Edit().AddKeyword("WoodSurfaceHeavy");
-        HeavyReplace.Add((!specific).AddKeyword(["WoodSurfaceHeavy","Middle"]));
-        HeavyReplace.Add((!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]));
-        //TODO some more blocks not yet handled
-        HeavyReplace.Align();
-        Inventory replaced = HeavyReplace.getOriginal(); //blocks which will be replaced by Heavy later
-
-        // 2. place Pillars on blocks which will be replaced by Heavy and were not air
-        KeywordEdit Pillar = replaced.RemoveKeyword([""]); //TODO align to pillars
-
-        Pillar.PlaceRelative(map,blockCondition: block => !block.Bit21); //place Pillars for blocks which were not in AirMode
-        map.PlaceStagedBlocks();
-
-        // 3. replace blocks
-        HeavyReplace.Replace(map);
-        specific.AddKeyword(["WoodSurface"]).Replace(map);
-        map.stagedBlocks.ForEach(x => x.IsAir = false);
+        inventory.AddKeyword("WoodSurfaceHeavy").Replace(map);
         map.PlaceStagedBlocks(false);
     }
 }

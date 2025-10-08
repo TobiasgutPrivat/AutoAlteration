@@ -8,7 +8,7 @@ public class Inventory { // represents all available articles which can be place
 
     public void Export(string Name) {
         Directory.CreateDirectory(Path.Combine(AlterationConfig.devPath,"Inventory"));
-        File.WriteAllText(Path.Combine(AlterationConfig.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles, Formatting.Indented));
     }
     
     public Inventory Select(string keywordFilter)  {

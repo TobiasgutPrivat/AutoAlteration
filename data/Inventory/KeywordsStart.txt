@@ -21,6 +21,7 @@ RoadBump
 SnowRoad
 RoadDirt
 DecoWall
+DecoHill
 RoadTech
 ZoneLeft
 DecoPlatform
