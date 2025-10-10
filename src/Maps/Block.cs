@@ -26,7 +26,8 @@ public class Block {
     // public CGameCtnBlock? SnappedOnBlock;
     // public CGameCtnAnchoredObject? PlacedOnItem;
     // public Vec3 PivotPosition;
-    // public Byte3 BlockUnitCoord;
+    public Byte3 BlockUnitCoord;
+    public MacroblockInstance? MacroblockReference;
     public CGameWaypointSpecialProperty? WaypointSpecialProperty; //Stores CPLink info
     public string? AnchorTreeId;
     // public int BlockFlags; //not needed, causes issue with placing
@@ -87,9 +88,13 @@ public class Block {
     }
 
     public static Position GetDirectionOffset(CGameCtnBlock block) {
-        Article ?article = Alteration.inventory.GetArticle(block.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
-        if (article == null){
-            Console.WriteLine("No article found for model: " + block.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
+        Article article;
+        try
+        {
+            article = Alteration.inventory.GetArticle(block.BlockModel.Id.Replace("_CustomBlock", ""));
+        }
+        catch
+        {
             return Position.Zero;
         }
         return block.Direction switch
@@ -172,7 +177,8 @@ public class Block {
         // SnappedOnBlock = item.SnappedOnBlock;
         // SnappedOnItem = item.SnappedOnItem;
         // PlacedOnItem = item.PlacedOnItem;
-        // BlockUnitCoord = item.BlockUnitCoord;
+        BlockUnitCoord = item.BlockUnitCoord;
+        MacroblockReference = item.MacroblockReference;
         AnchorTreeId = item.AnchorTreeId;
         WaypointSpecialProperty = item.WaypointSpecialProperty;
         color = item.Color;
@@ -196,7 +202,8 @@ public class Block {
         // item.SnappedOnBlock = SnappedOnBlock;
         // item.PlacedOnItem = PlacedOnItem;
         // item.PivotPosition = PivotPosition;
-        // item.BlockUnitCoord = BlockUnitCoord;
+        item.BlockUnitCoord = BlockUnitCoord;
+        item.MacroblockReference = MacroblockReference;
         item.WaypointSpecialProperty = WaypointSpecialProperty;
         item.Color = color;
         item.AnchorTreeId = AnchorTreeId;

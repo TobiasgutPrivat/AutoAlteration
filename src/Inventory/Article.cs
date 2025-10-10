@@ -83,6 +83,7 @@ public class Article {
 
         //Name
         string name = splits.Last(); // the filename/blockname
+        name = name.Replace(".Block.Gbx", "", StringComparison.OrdinalIgnoreCase).Replace(".Item.gbx", "", StringComparison.OrdinalIgnoreCase); // remove file ending if present
         List<string> nameSplits = []; // Individual Parts of the name, Keywords get cut out, spereating the string
 
         //ToKeywords

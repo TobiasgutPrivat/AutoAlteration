@@ -81,7 +81,7 @@ public class Map
         .Where(x => x.Contains(".Block.Gbx", StringComparison.OrdinalIgnoreCase) || x.Contains(".Item.Gbx", StringComparison.OrdinalIgnoreCase))
         .Select(x => {
           BlockType type = x.Contains(".Item.Gbx", StringComparison.OrdinalIgnoreCase) ? BlockType.CustomItem : BlockType.CustomBlock;
-          string name = x.Replace("/","\\").Replace(".Item.Gbx","", StringComparison.OrdinalIgnoreCase).Replace(".Block.Gbx","", StringComparison.OrdinalIgnoreCase);//removed: .Replace("Items\\","").Replace("Blocks\\","")
+          string name = x.Replace("/","\\");
           // assuming that every embedded block has Items\ or Blocks\ at the start which needs to be removed
           int itemPos = name.IndexOf("Items\\");                                                                                                                                                           //assuming every embedded name has Items// or Blocks// at the start which needs to be removed //TODO check if this is correct
           int blockPos = name.IndexOf("Blocks\\");
@@ -148,8 +148,7 @@ public class Map
 
   public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
     string ArticleName = atArticle.Name;
-    if (atArticle.Type == BlockType.CustomBlock) ArticleName = atArticle.Name + ".Block.Gbx";
-    if (atArticle.Type == BlockType.CustomItem) ArticleName = atArticle.Name + ".Item.Gbx";
+    if (atArticle.Type == BlockType.CustomBlock) ArticleName += "_CustomBlock";
     ArticleName = ArticleName.Replace("/","\\");
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){
       if (blockCondition != null && !blockCondition(ctnBlock)) continue;
@@ -187,8 +186,7 @@ public class Map
 
   public void Delete(Article Block, bool includePillars = false){
     string ArticleName = Block.Name;
-    if (Block.Type == BlockType.CustomBlock) ArticleName = Block.Name + ".Block.Gbx";
-    if (Block.Type == BlockType.CustomItem) ArticleName = Block.Name + ".Item.Gbx";
+    if (Block.Type == BlockType.CustomBlock) ArticleName = Block.Name + "_CustomBlock";
     ArticleName = ArticleName.Replace("/","\\");
     List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == ArticleName).ToList();
     map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != ArticleName).ToList();
@@ -230,17 +228,16 @@ public class Map
     switch (block.blockType){
         case BlockType.CustomBlock:
           if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-            EmbedBlock("Blocks/" + block.name + ".Block.Gbx",block.Path);
+            EmbedBlock("Blocks/" + block.name,block.Path);
             embeddedBlocks.Add(block.name, block.blockType);
           }
-          block.name += ".Block.Gbx_CustomBlock";
+          block.name += "_CustomBlock";
           break;
         case BlockType.CustomItem:
           if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-            EmbedBlock("Items/" + block.name + ".Item.Gbx",block.Path);
+            EmbedBlock("Items/" + block.name,block.Path);
             embeddedBlocks.Add(block.name, block.blockType);
           }
-          block.name += ".Item.Gbx";
           break;
       }
 
@@ -259,12 +256,12 @@ public class Map
 
   public void StageAll(MoveChain ?moveChain = null){
     stagedBlocks.AddRange(map.Blocks.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace(".Block.Gbx_CustomBlock","", StringComparison.OrdinalIgnoreCase));
+      Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
       return new Block(x,article,article,FreeBlockHeightOffset,moveChain);
     }));
     map.Blocks = [];
     stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id.Replace(".Item.Gbx", "", StringComparison.OrdinalIgnoreCase));
+      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id);
       return new Block(x, article, article, moveChain);
     }));
     map.AnchoredObjects = [];
