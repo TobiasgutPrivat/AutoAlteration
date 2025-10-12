@@ -1,7 +1,7 @@
 using GBX.NET;
 
 public class Article {
-    public string Name;
+    public string Name = "";
     public MoveChain MoveChain = new();
     public BlockType Type;
     public List<string> Keywords = [];
@@ -14,7 +14,10 @@ public class Article {
     public bool MapSpecific = false;
     public Move? DefaultRotation;
 
-    public Article(string name,BlockType type,SList<string> keywords,SList<string>? toShape = null,MoveChain ?moveChain = null,int length = 1, int width = 1){
+    public Article() { }
+
+    public Article(string name, BlockType type, SList<string> keywords, SList<string>? toShape = null, MoveChain? moveChain = null, int length = 1, int width = 1)
+    {
         Name = name;
         Type = type;
         Keywords = keywords;
@@ -84,6 +87,7 @@ public class Article {
         //Name
         string name = splits.Last(); // the filename/blockname
         name = name.Replace(".Block.Gbx", "", StringComparison.OrdinalIgnoreCase).Replace(".Item.gbx", "", StringComparison.OrdinalIgnoreCase); // remove file ending if present
+        int nameLength = name.Replace("_", "").Length + Keywords.Sum(k => k.Length);
         List<string> nameSplits = []; // Individual Parts of the name, Keywords get cut out, spereating the string
 
         //ToKeywords
@@ -91,15 +95,15 @@ public class Article {
 
         if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
-            nameSplits.Add(name[..toPos]);
+            nameSplits.AddRange(name[..toPos].Split("_"));
 
-            List<string> ToSplits = [ToString];
+            List<string> ToSplits = ToString.Split("_").ToList();
 
             SplitByKeywords(ToSplits, AlterationConfig.ToKeywords, ToShapes);
             Keywords.Add("To");
             nameSplits.AddRange(ToSplits);
         } else {
-            nameSplits = [name];
+            nameSplits = name.Split("_").ToList();
         }
 
         //CustomblockSets, could have issues if set is part of toKeywords
@@ -110,7 +114,9 @@ public class Article {
 
         Keywords.AddRange(nameSplits);
         
-        CheckFullNameCoverage();
+        if (nameLength != Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length)) {
+            Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
+        }
     }
 
     private static void SplitByKeywords(List<string> splits, IEnumerable<string> keywords, List<string> collection) {
@@ -141,7 +147,8 @@ public class Article {
     
     private void CheckFullNameCoverage() {
         int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length);
-        if (Name.Split(['/', '\\'],StringSplitOptions.None).Sum(k => k.Length) != keywordLength) {
+        int nameLength = Name.Replace(".item.gbx", "", StringComparison.OrdinalIgnoreCase).Replace(".block.gbx", "", StringComparison.OrdinalIgnoreCase).Split(['_','/', '\\'],StringSplitOptions.None).Sum(k => k.Length);
+        if (nameLength != keywordLength) {
             Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }

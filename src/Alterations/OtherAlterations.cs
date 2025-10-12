@@ -424,15 +424,17 @@ public class Tilted: Alteration {
     public override void Run(Map map)
     {
         Random rand = new();
-        if (angle != null) {
-            map.StageAll(RotateCenter(angle.Value));
+        if (angle == null) {
+            angle = new Vec3(rand.Next() % 1000f / 200f, (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f), (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f));
         }
-        else
-        {
-            map.StageAll(RotateCenter(rand.Next() % 100f / 125f - 0.4f, rand.Next() % 100f / 125f - 0.4f, rand.Next() % 100f / 125f - 0.4f));
-        }
+        map.StageAll(RotateCenter(angle.Value));
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
         map.PlaceStagedBlocks();
+
+        Position thumbNailPos = new Position(map.map.ThumbnailPosition, map.map.ThumbnailPitchYawRoll);
+        RotateCenter(angle.Value).Apply(thumbNailPos, new Article());
+        map.map.ThumbnailPosition = thumbNailPos.coords;
+        map.map.ThumbnailPitchYawRoll = thumbNailPos.pitchYawRoll;
     }
 }
 
