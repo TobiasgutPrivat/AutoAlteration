@@ -230,7 +230,8 @@ In that case make sure you have correct package source using:
   - Altering previously embedded blocks causes corruption
   - LightSurfaceBlock causes lightmap issues (solvable by resave)
     -> Solution: have fixed lightBlock-Set
-  - do air-mode alteration
+    - maybe more details to solve
+  - figure out where base (side of bottom parts) and groundmode is defined (needed in customizedvariants in order to modify)
 
 <!--
 Opt.:
