@@ -9,6 +9,7 @@ public class CustomBlockAlteration {
     public virtual bool AlterTrigger(CustomBlock customBlock, CPlugCrystal.TriggerLayer layer) {return false;}
     public virtual bool AlterSpawn(CustomBlock customBlock, CPlugCrystal.SpawnPositionLayer layer) {return false;}
     public virtual bool AlterMeshCrystal(CustomBlock customBlock, CPlugCrystal MeshCrystal) {return false;}
+    public virtual bool AlterMesh(CustomBlock customBlock, CPlugSolid2Model Mesh) {return false;}
     public virtual bool Run(CustomBlock customBlock) {return false;}
 
     public static Vec3 GetTopMiddle(CPlugCrystal.Crystal mesh) {
@@ -23,6 +24,8 @@ public class CustomBlockAlteration {
     public static string GetMaterialLink(CPlugCrystal.Face face) =>
         face.Material?.MaterialUserInst?.Link ?? "";
     public static string GetMaterialLink(CPlugCrystal.Material face) =>
+        face.MaterialUserInst?.Link ?? "";
+    public static string GetMaterialLink(CPlugSolid2Model.Material face) =>
         face.MaterialUserInst?.Link ?? "";
     public static CPlugSurface.MaterialId GetMaterialSurfacePhysicId(CPlugCrystal.Face face) =>
         face.Material?.MaterialUserInst?.SurfacePhysicId ?? CPlugSurface.MaterialId.XXX_Null;

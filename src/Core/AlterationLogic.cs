@@ -50,7 +50,7 @@ public class AlterationLogic {
             .SelectMany(alteration => alteration.InventoryChanges)
             .Where(change => change is CustomBlockSet)
             .Cast<CustomBlockSet>().ToList().ForEach(
-                x => map.GenerateCustomBlocks(x.customBlockAlteration)); //includes updating inventory
+                map.GenerateCustomBlocks); //includes updating inventory
                 
         if (AlterationConfig.devMode){ //logging
             Alteration.inventory.Export("WithMapBlocks");
@@ -70,15 +70,7 @@ public class AlterationLogic {
         foreach (CustomBlockAlteration alteration in alterations) {
             changed = alteration.Run(customBlock);
             customBlock.MeshCrystals.ForEach(x => changed = AlterMeshCrystal(alteration, customBlock, x) || changed);
-            // if (customBlock.Type == BlockType.Block) {
-            //     customBlock.Block.CustomizedVariants.ToList().ForEach(x => {
-            //         if (x.Crystal != null) {
-            //             changed = AlterMeshCrystal(alteration, customBlock, x.Crystal) || changed;
-            //         }
-            //     });
-            // } else {
-            //     changed = AlterMeshCrystal(alteration, customBlock, customBlock.Item.MeshCrystal) || changed;
-            // }
+            customBlock.Models.ForEach(x => changed = alteration.AlterMesh(customBlock, x) || changed);
         }
         mapCount++;
         return changed;

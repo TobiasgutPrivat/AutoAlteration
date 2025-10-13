@@ -4,14 +4,30 @@ using GBX.NET.Engines.Plug;
 public class CustomSurfaceAlteration(string Surface, string RoadSurface, CPlugSurface.MaterialId SurfacePhysicId) : CustomBlockAlteration {
     public static List<string> DrivableMaterials = ["Stadium\\Media\\Material\\ThemeSnowRoad","Stadium\\Media\\Material\\ThemeSnowRoadBorder","Stadium\\Media\\Material\\PlatformTech","Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech","Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech","Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech","Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech","Stadium\\Media\\Material\\RoadBump","Stadium\\Media\\Material\\RoadTech","Stadium\\Media\\Material\\RoadDirt","Stadium\\Media\\Material\\RoadIce","Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic","Stadium\\Media\\Modifier\\PlatformDirt\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformGrass\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformIce\\OpenTechBorders","Stadium\\Media\\Material\\OpenTechBorders"];// Top of TrackWall: "Stadium\\Media\\Material\\TrackWallClips"
 
-    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer){
+    public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer)
+    {
         string SurfaceToUse = customBlock.Name.Contains("Road") && !customBlock.Name.Contains("Open") ? RoadSurface : Surface;
         List<CPlugCrystal.Face> facesToModify = layer.Crystal.Faces.ToList().Where(x => GetMaterialLink(x) != SurfaceToUse && DrivableMaterials.Contains(GetMaterialLink(x))).ToList();
-        facesToModify.ForEach(x => {
-            x.Material.MaterialUserInst.Link = SurfaceToUse;
+        facesToModify.ForEach(x =>
+        {
+            x.Material!.MaterialUserInst!.Link = SurfaceToUse;
             x.Material.MaterialUserInst.SurfacePhysicId = SurfacePhysicId;
-            });
+        });
         return facesToModify.Count > 0;
+    }
+    
+    public override bool AlterMesh(CustomBlock customBlock, CPlugSolid2Model Mesh)
+    {
+        bool altered = false;
+        if (Mesh.CustomMaterials is null) return false;
+        Mesh.CustomMaterials.ToList().ForEach(x => {
+            if (DrivableMaterials.Contains(GetMaterialLink(x)) && GetMaterialLink(x) != Surface) {
+                x.MaterialUserInst!.Link = Surface;
+                x.MaterialUserInst.SurfacePhysicId = SurfacePhysicId;
+                altered = true;
+            }
+        });
+        return altered;
     }
 }
 
