@@ -17,10 +17,10 @@ public class CustomBlockFolder(string subFolder) : InventoryChange {
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
         inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(x.Replace(folder,"")[..^10], BlockType.CustomBlock, x, mapSpecific)).ToList());
+            .Select(x => new Article(x.Replace(folder,""), BlockType.CustomBlock, x, mapSpecific)).ToList());
 
         inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(x.Replace(folder,"")[..^9], BlockType.CustomItem, x, mapSpecific)).ToList());
+            .Select(x => new Article(x.Replace(folder,""), BlockType.CustomItem, x, mapSpecific)).ToList());
     }
 }
 
@@ -39,10 +39,10 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration, bool sk
         }
         
         inventory.AddArticles(Directory.GetFiles(GetFolder(), "*.Block.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^10], BlockType.CustomBlock, x)).ToList());
+            .Select(x => new Article(Path.GetFileName(x), BlockType.CustomBlock, x)).ToList());
 
         inventory.AddArticles(Directory.GetFiles(GetFolder(), "*.Item.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x)[..^9], BlockType.CustomItem, x)).ToList());
+            .Select(x => new Article(Path.GetFileName(x), BlockType.CustomItem, x)).ToList());
     }
 
     public void GenerateBlockSet() {

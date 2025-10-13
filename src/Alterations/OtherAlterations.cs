@@ -35,6 +35,9 @@ public class AirMode: Alteration {
         map.stagedBlocks.ForEach(x => x.IsAir = true);
         map.stagedBlocks.AddRange(airBlocks);
         map.PlaceStagedBlocks(false);
+        map.StageAll();
+        map.stagedBlocks.ForEach(x => x.IsGround = false);
+        map.PlaceStagedBlocks();
     }
 }
 

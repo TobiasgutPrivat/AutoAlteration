@@ -9,9 +9,9 @@ AlterationConfig.Load();
 new AlterationScript("Campaign.json").RunConfig();
 
 // direct Alteration
-// string from = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Under10";
-// string to = "C:/Users/Tobias/Documents/Trackmania2020/Maps/Altered Under10/Tilted";
-// AutoAlteration.AlterFolder(new Tilted(new GBX.NET.Vec3(0, 0.3926f, 0)), from, to + " North", "Tilted");
+// string from = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBase.Block.Gbx";
+// string to = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBaseSuperSized.Block.Gbx";
+// AutoAlteration.AlterFile(new Wood(), from, to, "SuperSized");
 
 // LightSurface Template
 // AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine("C:/Users/Tobias/Documents/Trackmania2020/Blocks", "LightSurface"), "");

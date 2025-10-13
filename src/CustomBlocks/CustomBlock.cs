@@ -17,6 +17,7 @@ public class CustomBlock
       if (customBlock.EntityModelEdition is not null){
         CGameBlockItem Block = (CGameBlockItem)customBlock.EntityModelEdition;
         if (Block.CustomizedVariants is not null){
+          // Note: if no CustomizedVariants, then Archetype is used -> cannot be altered
           MeshCrystals.AddRange(Block.CustomizedVariants.Select(x => x.Crystal).OfType<CPlugCrystal>().ToList());
         }
       }
