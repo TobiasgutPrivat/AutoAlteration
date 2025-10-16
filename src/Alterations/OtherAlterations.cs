@@ -415,28 +415,20 @@ public class Tilted: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
     
-    public Vec3? angle = null;
-
     public Tilted() { }
     
-    public Tilted(Vec3 angle)
-    {
-        this.angle = angle;
-    }
-
     public override void Run(Map map)
     {
         Random rand = new();
-        if (angle == null) {
-            angle = new Vec3(rand.Next() % 1000f / 200f, (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f), (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f));
-        }
-        map.StageAll(RotateCenter(angle.Value));
+        Vec3 angle = new Vec3(rand.Next() % 1000f / 200f, (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f), (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f));
+        Console.WriteLine(angle);
+        map.StageAll(RotateCenter(angle));
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
         map.PlaceStagedBlocks();
 
         Position thumbNailPos = new Position(map.map.ThumbnailPosition, map.map.ThumbnailPitchYawRoll);
-        RotateCenter(angle.Value).Apply(thumbNailPos, new Article());
-        map.map.ThumbnailPosition = thumbNailPos.coords;
+        RotateCenter(angle).Apply(thumbNailPos, new Article());
+        map.map.ThumbnailPosition = new Vec3(thumbNailPos.coords.X, thumbNailPos.coords.Y + 300, thumbNailPos.coords.Z);
         map.map.ThumbnailPitchYawRoll = thumbNailPos.pitchYawRoll;
     }
 }

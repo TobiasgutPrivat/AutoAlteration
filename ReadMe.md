@@ -232,6 +232,7 @@ In that case make sure you have correct package source using:
     -> Solution: have fixed lightBlock-Set
     - maybe more details to solve
   - figure out where base (side of bottom parts) and groundmode is defined (needed in customizedvariants in order to modify)
+    -> prob 1000000 for non-ground, 0 for ground
 
 <!--
 Opt.:
