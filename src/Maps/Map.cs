@@ -64,7 +64,7 @@ public class Map
   #endregion
 
   #region embedding
-  private void EmbedBlock(string name, string path){
+  public void EmbedBlock(string name, string path){
     map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
     {
       ZipArchiveEntry entry = zipArchive.CreateEntry(name);
@@ -100,7 +100,7 @@ public class Map
     }
   }
 
-  private void ExtractEmbeddedBlocks(string path){
+  public void ExtractEmbeddedBlocks(string path){
     ZipArchive zipArchive;
     if (map.EmbeddedZipData == null || map.EmbeddedZipData.Length == 0)
     {
@@ -109,9 +109,10 @@ public class Map
     zipArchive = map.OpenReadEmbeddedZipData();
     
     zipArchive.Entries.ToList().ForEach(x => {
-      string filePath = path + "\\" + x.FullName; // Extract without Folderstructure (FullName)
+      string name = x.FullName.Split("Blocks\\").Last().Split("Items\\").Last().Split("Blocks/").Last().Split("Items/").Last();
+      string filePath = path + "\\" + name; // Extract with Folderstructure (FullName)
       Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-      x.ExtractToFile(filePath);
+      x.ExtractToFile(filePath, true);
     });
     return;
   }

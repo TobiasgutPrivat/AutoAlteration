@@ -1,5 +1,7 @@
+using System.IO.Compression;
 using System.Reflection;
 using GBX.NET;
+using GBX.NET.Engines.Game;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 using GBX.NET.LZO;
@@ -171,17 +173,40 @@ class EmbedTest : Alteration {
     public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new NothingBlock())];
     public override void Run(Map map){
         Inventory specific = inventory.Select(article => article.MapSpecific);
-        (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","NothingBlockHeavy"]).Replace(map);
-        (!specific).AddKeyword(["NothingBlockHeavy"]).Replace(map);
+        // (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","NothingBlockHeavy"]).Replace(map);
+        // (!specific).AddKeyword(["NothingBlockHeavy"]).Replace(map);
         specific.AddKeyword(["NothingBlock"]).Replace(map);
-        map.stagedBlocks.ForEach(x => x.IsAir = false);
+        // map.stagedBlocks.ForEach(x => x.IsAir = false);
         map.PlaceStagedBlocks(false);
     }
 }
 
-class AirPillars : Alteration {
-    public override void Run(Map map){
+class AirPillars : Alteration
+{
+    public override void Run(Map map)
+    {
         inventory.Select(BlockType.Pillar).Edit().Replace(map);
         map.PlaceStagedBlocks(false);
-    }    
+    }
+}
+
+class TestReEmbed()
+{
+    public static void testReEmbed()
+    {
+        // //reembeding: works
+        // Map map = new Map("C:/Users/Tobias/Documents/Trackmania2020/Maps/Test/TestEmbed.map.gbx");
+        // map.ExtractEmbeddedBlocks("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed");
+        // string path = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed/Test/RoadTechStraightWoodEdit.Block.Gbx";
+        // map.map.EmbeddedZipData = [];
+        // map.EmbedBlock("Test/RoadTechStraightWoodEdit.Block.Gbx",path);
+        // map.Save("C:/Users/Tobias/Documents/Trackmania2020/Maps/Test/A01-Race Test.map.gbx");
+
+        // resaving block: resaved block cant be used anymore
+        Map map = new Map("C:/Users/Tobias/Documents/Trackmania2020/Maps/Test/TestEmbed.map.gbx");
+        map.ExtractEmbeddedBlocks("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed");
+        string path = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed/Test/RoadTechStraightWoodEdit.Block.Gbx";
+        Gbx gbx = Gbx.Parse<CGameItemModel>(path);
+        gbx.Save(path + "resaved.block.gbx");
+    }
 }
