@@ -37,6 +37,7 @@ public class AlterationConfig {
         // CustomBlockSets = CustomBlockSets.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "CustomBlockSets.txt"))).ToList();
         
         Keywords = loadKeywordsFile(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
+        Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(DataFolder,"Inventory","OldGameKeywords.txt"))).ToList();
         Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "Keywords.txt"))).ToList();
         Keywords = Keywords.OrderBy(x => x.Length).Reverse().ToList();
         Keywords = loadKeywordsFile(Path.Combine(DataFolder,"Inventory","KeywordsStart.txt")).Concat(Keywords).ToList();

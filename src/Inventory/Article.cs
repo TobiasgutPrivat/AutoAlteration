@@ -144,14 +144,6 @@ public class Article {
             return null;
         }
     }
-    
-    private void CheckFullNameCoverage() {
-        int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length);
-        int nameLength = Name.Replace(".item.gbx", "", StringComparison.OrdinalIgnoreCase).Replace(".block.gbx", "", StringComparison.OrdinalIgnoreCase).Split(['_','/', '\\'],StringSplitOptions.None).Sum(k => k.Length);
-        if (nameLength != keywordLength) {
-            Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
-        }
-    }
     #endregion
 
     public string KeywordString() =>
