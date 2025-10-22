@@ -419,9 +419,9 @@ public class Tilted: Alteration {
     
     public override void Run(Map map)
     {
+        //TODO add grass blocks at the bottom of stadium
         Random rand = new();
         Vec3 angle = new Vec3(rand.Next() % 1000f / 200f, (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f), (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f));
-        Console.WriteLine(angle);
         map.StageAll(RotateCenter(angle));
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
         map.PlaceStagedBlocks();

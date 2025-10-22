@@ -6,8 +6,8 @@ AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 //TODO test edited Alterations
-// new AlterationScript("TMNF.json").RunConfig();
-TestReEmbed.testReEmbed();
+new AlterationScript("Campaign.json").RunConfig();
+// TestReEmbed.testReEmbed();
 
 // direct Alteration
 // string from = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBase.Block.Gbx";

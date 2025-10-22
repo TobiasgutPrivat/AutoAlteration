@@ -23,10 +23,10 @@ public class AutoAlteration {
     }
 
     public static void AlterAll(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
-        AlterFolder(alterations,sourceFolder,Path.Combine(destinationFolder, Path.GetFileName(sourceFolder) + " - " + Name),Name);
+        AlterFolder(alterations,sourceFolder,destinationFolder + " " + Name,Name);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder + " " + Name, Path.GetFileName(Directory)),Name);
         }
     }
     public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {

@@ -37,10 +37,10 @@ public class Map
   }
 
   private void RemoveAuthor(){
-    map.AuthorTime = null;
-    map.GoldTime = null;
-    map.SilverTime = null;
-    map.BronzeTime = null;
+    map.AuthorTime = TmEssentials.TimeInt32.MaxValue;
+    map.GoldTime = TmEssentials.TimeInt32.MaxValue;
+    map.SilverTime = TmEssentials.TimeInt32.MaxValue;
+    map.BronzeTime = TmEssentials.TimeInt32.MaxValue;
     map.AuthorScore = 0;
     map.AuthorExtraInfo = null;
     map.AuthorLogin = null;
