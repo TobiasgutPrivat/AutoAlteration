@@ -37,7 +37,11 @@ public class AlterationLogic {
 
         //Map specific custom blocks
         if (map.embeddedBlocks.Count != 0){
-            Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)).ToList());
+            
+            Alteration.inventory.AddArticles(map.embeddedBlocks
+                // check if embedded block without first folder is already in inventory (needed for NC2 maps)
+                .Where(x => Alteration.inventory.GetArticle(x.Key.Substring(x.Key.IndexOf(Path.DirectorySeparatorChar)+1)) == null
+                ).Select(x => new Article(x.Key, x.Value,"",true)).ToList());
             Alteration.inventory.cachedInventories.Clear();
             if (AlterationConfig.devMode)
             { //logging

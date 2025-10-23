@@ -262,7 +262,9 @@ public class Map
     }));
     map.Blocks = [];
     stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id);
+      // workaround for NC2 maps
+      string model = x.ItemModel.Id.StartsWith("NC2") ? x.ItemModel.Id.Substring(x.ItemModel.Id.IndexOf(Path.DirectorySeparatorChar)+1) : x.ItemModel.Id;
+      Article? article = Alteration.inventory.GetArticle(model);
       return new Block(x, article, article, moveChain);
     }));
     map.AnchoredObjects = [];

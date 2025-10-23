@@ -142,13 +142,13 @@ public class Inventory { // represents all available articles which can be place
     public Inventory Except(Inventory inventory) =>
         new(articles.Except(inventory.articles).ToList());
 
-    public Article GetArticle(string name) {
+    public Article? GetArticle(string name) {
         if (name.Contains(":")) {
             name = name.Split(':')[1]; //in case the name is given as club:Name
         }
         List<Article> match = articles.Where(a => a.Name == name).ToList();
         if (match.Count == 0) {
-            throw new Exception("No article with name: " + name);
+            return null;
         }
         return match.First();
     }

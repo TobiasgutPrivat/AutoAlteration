@@ -6,7 +6,7 @@ AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 //TODO test edited Alterations
-new AlterationScript("Campaign.json").RunConfig();
+new AlterationScript("TMNF.json").RunConfig();
 // TestReEmbed.testReEmbed();
 
 // direct Alteration

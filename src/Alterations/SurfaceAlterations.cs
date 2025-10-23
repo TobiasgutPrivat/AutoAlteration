@@ -163,11 +163,11 @@ public class Wood : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     public override List<Alteration> AlterationsBefore => [new AirMode()];
-    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface(),false)];
+    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface(),false),new TMNF(),new TMNFCustom(new WoodSurface())];
     public override void Run(Map map){
-        inventory.AddKeyword("WoodSurfaceHeavy").Replace(map);
-        inventory.AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(map);
-        inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
+        inventory.AddKeyword("WoodSurface").Replace(map);
+        inventory.AddKeyword(["WoodSurface","Middle"]).Replace(map);
+        inventory.Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurface"]).Replace(map);
         map.PlaceStagedBlocks(false);
     }
 }

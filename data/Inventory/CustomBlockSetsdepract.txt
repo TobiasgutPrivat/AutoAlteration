@@ -1,6 +1,0 @@
-WoodSurfaceHeavy
-WoodSurface
-NothingBlockHeavy
-NothingBlock
-GrassSurfaceLight
-GrassSurface
