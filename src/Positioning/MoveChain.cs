@@ -1,8 +1,9 @@
 using GBX.NET;
 
-public class MoveChain {
+public class MoveChain : List<Move> {
     public List<Move> moves = [];
-    public MoveChain(){}
+    public MoveChain() { }
+    
     public MoveChain Clone() {
         MoveChain clone = new();
         clone.moves.AddRange(moves);
@@ -17,7 +18,7 @@ public class MoveChain {
     public void Subtract(Position position,Article article){
         moves.Reverse();
         foreach(Move move in moves){
-            move.vector = -move.vector;
+            move.vector = -move.vector; //TODO doesnt fully work for rotations
             move.Apply(position,article);
             move.vector = -move.vector;
         }
