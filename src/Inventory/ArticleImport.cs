@@ -3,49 +3,58 @@ using Newtonsoft.Json;
 class ArticleImport {
 
     public static List<Article> ImportVanillaInventory(){
-        string json = File.ReadAllText(AltertionConfig.BlockDataPath);
+        string BlockJson = File.ReadAllText(AlterationConfig.BlockDataPath);
+        string ItemJson = File.ReadAllText(AlterationConfig.ItemDataPath);
         // expected json Format:
         // [
         //     {
-        //         "Height": int,
-        //         "Width": int,
-        //         "Length": int,
-        //         "type": "Block"/"Item"/"Pillar"
-        //         "Name": string,
-        //         "Theme": bool,
-        //         "DefaultRotation": bool
+        //         "size": {
+        //             "x": int,
+        //             "y": int,
+        //             "z": int
+        //         },
+        //         "type": "block"/"item"/"pillar"
+        //         "name": string,
         //     },
         //     ...
         // ]
 
-        json = BlockDataCorrections(json);
+        BlockJson = BlockPropertiesCorrections(BlockJson);
+        ItemJson = BlockPropertiesCorrections(ItemJson);
         
-        var jsonArray = JsonConvert.DeserializeObject<dynamic[]>(json);
-        List<Article> articles = [];
+        var BlockJsonArray = JsonConvert.DeserializeObject<dynamic[]>(BlockJson);
+        var ItemJsonArray = JsonConvert.DeserializeObject<dynamic[]>(ItemJson);
+
+        var jsonArray = BlockJsonArray.Concat(ItemJsonArray);
+        Dictionary<string,Article> articles = [];
         foreach (var item in jsonArray)
         {
             BlockType blockType = BlockType.Block;
-            switch ((string) item.type) {
-                case "Block":
-                    blockType = BlockType.Block;
+            switch ((string)item.type)
+            {
+                case "block":
+                    articles[(string)item.name] = new Article((int)item.size.y, (int)item.size.x, (int)item.size.z, BlockType.Block, (string)item.name);
+                    foreach (var pillar in item.pillar)
+                    {
+                        if (articles.ContainsKey((string)pillar.name)) continue;
+                        //TODO fix sizes of pillars in data, temporarly using item size
+                        articles[(string)pillar.name] = new Article((int)item.size.y, (int)item.size.x, (int)item.size.z, BlockType.Pillar, (string)pillar.name);
+                    }
                     break;
-                case "Item":
-                    blockType = BlockType.Item;
-                    break;
-                case "Pillar":
-                    blockType = BlockType.Pillar;
+                case "item":
+                    articles[(string)item.name] = new Article((int)item.size.y, (int)item.size.x, (int)item.size.z, BlockType.Item, (string)item.name);
                     break;
                 default:
                     Console.WriteLine("Blocktype missing");
-                    blockType = BlockType.Block;
                     break;
             }
-            articles.Add(new Article((int)item.Height, (int)item.Width, (int)item.Length, blockType, (string)item.Name, (bool)item.Theme, (bool)item.DefaultRotation));
+            
         }
-        return articles;
+        return articles.Values.ToList();
     }
-
-    public static string BlockDataCorrections(string json){ //Hardcoded corrections, depends on imported Data
+    
+    public static string BlockPropertiesCorrections(string json) { //Hardcoded corrections, depends on imported Data
+        //TODO split into block and item corrections, check whats still needed
         json = json.Replace("PlatformGrassSlope2UTop", "PlatformGrasssSlope2UTop");
         json = json.Replace("PlatForm", "Platform");
         json = json.Replace("ShowFogger8M", "ShowFogger8m");
@@ -56,6 +65,6 @@ class ArticleImport {
         json = json.Replace("RoadIceWithWallDiagRightStraight", "RoadIceDiagRightWithWallStraight");
         json = json.Replace("\"GateSpecialBoost\"", "\"GateSpecialBoostOriented\"");
         json = json.Replace("\"GateSpecialBoost2\"", "\"GateSpecialBoost2Oriented\"");
-        return json[..1] + "{\"Height\":1,\"Width\":1,\"Length\":1,\"type\":\"Block\",\"Name\":\"OpenIceRoadToZoneRight\",\"Theme\":false,\"DefaultRotation\":false}," + json[1..];
+        return json;
     }
 }

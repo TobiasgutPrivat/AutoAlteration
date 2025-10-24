@@ -1,4 +1,3 @@
-using System.Collections;
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.Engines.GameData;
@@ -27,7 +26,8 @@ public class Block {
     // public CGameCtnBlock? SnappedOnBlock;
     // public CGameCtnAnchoredObject? PlacedOnItem;
     // public Vec3 PivotPosition;
-    // public Byte3 BlockUnitCoord;
+    public Byte3 BlockUnitCoord;
+    public MacroblockInstance? MacroblockReference;
     public CGameWaypointSpecialProperty? WaypointSpecialProperty; //Stores CPLink info
     public string? AnchorTreeId;
     // public int BlockFlags; //not needed, causes issue with placing
@@ -50,7 +50,7 @@ public class Block {
 
     #region Blocks
         
-    public Block(CGameCtnBlock block,Article fromArticle,  Article article, MoveChain ?moveChain)
+    public Block(CGameCtnBlock block,Article fromArticle,  Article article, int freeBlockHeightOffset, MoveChain ?moveChain)
     {
         color = block.Color;
         IsFree = block.IsFree;
@@ -62,33 +62,39 @@ public class Block {
         Skin = block.Skin;
         IsAir = block.Bit21;
         WaypointSpecialProperty = block.WaypointSpecialProperty;
-        position = GetBlockPosition(block);
+        position = GetBlockPosition(block, freeBlockHeightOffset);
 
+        if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
+            article.DefaultRotation?.Apply(position,article);
+        };
 
         name = article.Name;
         blockType = article.Type;
         Path = article.Path;
         
-        fromArticle.MoveChain.Apply(position,article);
-        moveChain?.Apply(position,article);
-        article.MoveChain.Subtract(position,article);
+        fromArticle.MoveChain.Apply(position,article); // specific like for CPGate-Position
+        moveChain?.Apply(position,article); // the Altering moves
+        article.MoveChain.Subtract(position,article); // specific like for CPGate-Position
     }
 
-    public static Position GetBlockPosition(CGameCtnBlock block) {
+    public static Position GetBlockPosition(CGameCtnBlock block, int freeBlockHeightOffset) {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
-            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AltertionConfig.FreeBlockHeightOffset ,block.Coord.Z * 32));
+            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - freeBlockHeightOffset ,block.Coord.Z * 32));
             position.AddPosition(GetDirectionOffset(block));
-
-            return new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - AltertionConfig.FreeBlockHeightOffset ,block.Coord.Z * 32)).AddPosition(GetDirectionOffset(block));
+            return position;
         }
     }
 
     public static Position GetDirectionOffset(CGameCtnBlock block) {
-        Article ?article = Alteration.inventory.GetArticle(block.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
-        if (article == null){
-            Console.WriteLine("No article found for model: " + block.BlockModel.Id.Replace(".Block.Gbx_CustomBlock",""));
+        Article article;
+        try
+        {
+            article = Alteration.inventory.GetArticle(block.BlockModel.Id.Replace("_CustomBlock", ""));
+        }
+        catch
+        {
             return Position.Zero;
         }
         return block.Direction switch
@@ -101,10 +107,14 @@ public class Block {
         };
     }
 
+    public static Position GetDefaultRotationOffset(CGameCtnBlock block) {
+        return new Position(Vec3.Zero, Vec3.Zero);//TODO
+    }
+
     private void PlaceBlockInMap(CGameCtnChallenge map, bool revertFreeBlock) {
         CGameCtnBlock block = map.PlaceBlock(name,new(0,0,0),Direction.North);
         float yaw = (float)Math.Round(position.pitchYawRoll.X / (Alteration.PI/2),5);
-        if (revertFreeBlock 
+        if (!IsFree && revertFreeBlock 
             && position.coords.X % 32 == 0 && position.coords.Y % 8 == 0 && position.coords.Z % 32 == 0
             && position.pitchYawRoll.Y == 0 && position.pitchYawRoll.Z == 0
             && yaw % 1 == 0 
@@ -133,7 +143,7 @@ public class Block {
 
             block.Coord = new Int3(
                 (int)(position.coords.X + offset.X)  / 32, 
-                (int)(position.coords.Y + offset.Y + AltertionConfig.FreeBlockHeightOffset) / 8 , 
+                (int)(position.coords.Y + offset.Y + map.DecoBaseHeightOffset*8) / 8 , 
                 (int)(position.coords.Z + offset.Z)/ 32
                 );
             block.IsGhost = IsGhost;
@@ -150,6 +160,9 @@ public class Block {
         block.Color = color;
         block.Skin = Skin;
         block.Bit21 = IsAir;
+        if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
+            block.Author += "AutoAltTag";
+        }
         // block.Flags = BlockFlags;
     }
 
@@ -164,7 +177,8 @@ public class Block {
         // SnappedOnBlock = item.SnappedOnBlock;
         // SnappedOnItem = item.SnappedOnItem;
         // PlacedOnItem = item.PlacedOnItem;
-        // BlockUnitCoord = item.BlockUnitCoord;
+        BlockUnitCoord = item.BlockUnitCoord;
+        MacroblockReference = item.MacroblockReference;
         AnchorTreeId = item.AnchorTreeId;
         WaypointSpecialProperty = item.WaypointSpecialProperty;
         color = item.Color;
@@ -188,12 +202,14 @@ public class Block {
         // item.SnappedOnBlock = SnappedOnBlock;
         // item.PlacedOnItem = PlacedOnItem;
         // item.PivotPosition = PivotPosition;
-        // item.BlockUnitCoord = BlockUnitCoord;
+        item.BlockUnitCoord = BlockUnitCoord;
+        item.MacroblockReference = MacroblockReference;
         item.WaypointSpecialProperty = WaypointSpecialProperty;
         item.Color = color;
         item.AnchorTreeId = AnchorTreeId;
         item.Scale = 1;
         item.Flags = ItemFlags;
+        // item.PackDesc could be used for tagging
     }
     #endregion
 }

@@ -1,11 +1,19 @@
 ﻿//Initial load
 
-AltertionConfig.devMode = true;
-AltertionConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","dev");
-AltertionConfig.Load();
+AlterationConfig.devMode = true;
+AlterationConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","dev");
+AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
-new AlterationScript ("Campaign.json").RunConfig();
+//TODO test edited Alterations
+new AlterationScript("Campaign.json").RunConfig();
+// TestReEmbed.testReEmbed();
 
-//TODO LightSurface Template
-// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AltertionConfig.CustomBlocksFolder, "LightSurface"), "");
+// direct Alteration
+// string from = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBase.Block.Gbx";
+// string to = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBaseSuperSized.Block.Gbx";
+// AutoAlteration.AlterFile(new Wood(), from, to, "SuperSized");
+
+// LightSurface Template
+// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine("C:/Users/Tobias/Documents/Trackmania2020/Blocks", "LightSurface"), "");
+// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AlterationConfig.CustomBlocksFolder, "LightSurface"), "");

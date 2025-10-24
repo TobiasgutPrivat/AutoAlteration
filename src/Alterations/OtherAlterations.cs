@@ -1,26 +1,69 @@
 using GBX.NET;
 
+public class AirMode: Alteration {
+    public override string Description => "Turn all Blocks to Air-Mode, should not change anything";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
+    public override void Run(Map map)
+    {
+        map.StageAll();
+        List<Block> airBlocks = map.stagedBlocks.Where(x => x.IsAir).ToList();
+        map.stagedBlocks = map.stagedBlocks.Where(x => !x.IsAir).ToList();
+        map.PlaceStagedBlocks(false); //Place Air Blocks to modify
+
+        // Platforms
+        Inventory tiltedBlocks = inventory.Select(BlockType.Block).Select(x => x.Height > 1);
+        tiltedBlocks.Export("TiltedBlocks");
+        tiltedBlocks.Select("RoadTech|RoadDirt|RoadIce|RoadBump").RemoveKeyword(["RoadTech","RoadDirt","RoadIce","RoadBump"]).AddKeyword("TrackWall").PlaceRelative(map);
+
+        Inventory Platforms = tiltedBlocks.Select("DecoPlatform|Platform");
+        Inventory notGrassPillar = Platforms.Select("Dirt|Ice|Plastic");
+        List<string> removeKeywords = ["DecoPlatform","Platform","Plastic","Grass","Tech","DecoCliff","DecoHill","To","X2"];
+        notGrassPillar.RemoveKeyword(removeKeywords).AddKeyword(["DecoWall"]).PlaceRelative(map);
+        Platforms.Except(notGrassPillar).RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map); //Deco-Grass is missing Keyword Grass
+
+        // DecoHills
+        Inventory DecoHills = tiltedBlocks.Select("DecoHill");
+        Inventory notGrassHills = Platforms.Select("Dirt|Ice");
+
+        notGrassHills.RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(map,RotateMid(new Vec3(-PI/2,0,0)));
+        DecoHills.Except(notGrassHills).RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map,RotateMid(new Vec3(-PI/2,0,0)));
+
+        // map.StageAll(); // only set air mode if pillar could be set accordingly, can be changed if pillars done completely
+        map.stagedBlocks.ForEach(x => x.IsAir = true);
+        map.stagedBlocks.AddRange(airBlocks);
+        map.PlaceStagedBlocks(false);
+        map.StageAll();
+        map.stagedBlocks.ForEach(x => x.IsGround = false);
+        map.PlaceStagedBlocks();
+    }
+}
+
 //flat2d (manual)
 
 //a08 (manual)
 
 //TODO altered-camera needs (Mediatracker)
 
-public class AntiBooster: Alteration {
+public class AntiBooster : Alteration
+{
     public override string Description => "Rotates all boosters and reactors by 180°";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    public override void Run(Map map)
+    {
         Inventory boosters = inventory.Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette");
         Inventory tiltedBoosters = boosters.Select("Slope|Slope2|Tilt|Tilt2");
-        tiltedBoosters.Select("Up").RemoveKeyword("Up").AddKeyword("Down").Replace(map);        
+        tiltedBoosters.Select("Up").RemoveKeyword("Up").AddKeyword("Down").Replace(map);
         tiltedBoosters.Select("Down").RemoveKeyword("Down").AddKeyword("Up").Replace(map);
         tiltedBoosters.Select("Left").RemoveKeyword("Left").AddKeyword("Right").Replace(map);
-        tiltedBoosters.Select("Right").RemoveKeyword("Right").AddKeyword("Left").Replace(map);;
+        tiltedBoosters.Select("Right").RemoveKeyword("Right").AddKeyword("Left").Replace(map); ;
         map.PlaceStagedBlocks();
-        map.Move(boosters,RotateMid(PI,0,0));
+        map.Move(boosters, RotateMid(PI, 0, 0));
         map.PlaceStagedBlocks();
     }
 }
@@ -49,14 +92,14 @@ public class Boosterless: Alteration {
 
 //TODO boss-overlayed (multiple) Maps
 
-public class Broken: EffectAlteration {
+public class Broken: CPEffect {
     public override string Description => "Replaces all Effects with Engine Off";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(SelAllEffects)
+        inventory.Select(EffectUtils.SelAllEffects)
             .RemoveKeyword(["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","Right","Left","Down","Up"])
             .AddKeyword("NoEngine").Replace(map);
         map.PlaceStagedBlocks();
@@ -67,7 +110,7 @@ public class Broken: EffectAlteration {
 
 //Cacti (manual)
 
-public class Checkpointnt: EffectAlteration { //only blocks Checkpoints
+public class Checkpointnt: CPEffect { //only blocks Checkpoints
     public override string Description => "Blocks all Checkpoints with pillars";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -174,16 +217,20 @@ public class CPsRotated : Alteration{
 
 //TODO Dragonyeet (Macroblock)
 
-public class Earthquake : Alteration{
+public class Earthquake : Alteration {
     public override string Description => "Moves the whole map by 1 million meters, making it feel like an earthquake";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    public override void Run(Map map)
+    {
+        Vec3 offset = new(1000000, 500000, 1000000);
         map.StageAll();
-        map.stagedBlocks.ForEach(x => x.position.coords += new Vec3(1000000,500000,1000000));
-        map.PlaceStagedBlocks();
+        map.stagedBlocks.ForEach(x => x.position.coords += offset);
+        map.PlaceStagedBlocks(false);
+        map.map.ThumbnailPosition += offset;
+        // map.map.ClipIntro.Tracks[0].Blocks[0].Keys[0].Position
     }
 }
 
@@ -200,7 +247,7 @@ public class Fast: Alteration { //TODO Wall and tilted platform (check Inventory
     }
 }
 
-public class Flipped: EffectAlteration {
+public class Flipped: Alteration {
     public override string Description => "Flips the whole map on its head";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -211,13 +258,11 @@ public class Flipped: EffectAlteration {
         // from (1,9,1) to (48,38,48)
         map.StageAll(RotateCenter(0,PI,0));
         map.PlaceStagedBlocks();
-        PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
-        PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
-        map.PlaceStagedBlocks();
+        new CPEffect("Boost",RotateMid(PI,0,0),true, true).Run(map);
     }
 }
 
-public class Holes : Alteration{
+public class Holes : Alteration {
     public override string Description => "Replaces all Blocks with their hole variant if available";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -236,7 +281,7 @@ public class Holes : Alteration{
 //mini-rpg (manual)
 
 //TODO mirrored
-public class Mirrored: EffectAlteration {//TODO Prototype
+public class Mirrored: CPEffect {//TODO Prototype
     public override string Description => "Mirrors the whole map on its z-axis";
     public override bool Published => false;
     public override bool LikeAN => false;
@@ -268,7 +313,7 @@ public class NoItems: Alteration {
 
 //TODO Poolhunters (custom)block links manual //Only reasonable if asked for
 
-public class RandomBlocks : Alteration{
+public class RandomBlocks : Alteration {
     public override string Description => "Places some additional random Blocks (based on Blocks in the Map) with random Position";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -284,7 +329,7 @@ public class RandomBlocks : Alteration{
     }
 }
 
-public class RingCP : Alteration{
+public class RingCP : Alteration {
     public override string Description => "Replaces all CP's with a RingCP";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -346,7 +391,7 @@ public class SuperSized : Alteration{
     }
 }
 
-public class STTF : Alteration{
+public class STTF : Alteration {
     public override string Description => "Replaces all CP's with their normal Block-Variant";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -369,12 +414,22 @@ public class Tilted: Alteration {
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
-
-    public override void Run(Map map){
+    
+    public Tilted() { }
+    
+    public override void Run(Map map)
+    {
+        //TODO add grass blocks at the bottom of stadium
         Random rand = new();
-        map.StageAll(RotateCenter(rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f,rand.Next() % 100f/125f - 0.4f));
+        Vec3 angle = new Vec3(rand.Next() % 1000f / 200f, (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f), (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f));
+        map.StageAll(RotateCenter(angle));
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
         map.PlaceStagedBlocks();
+
+        Position thumbNailPos = new Position(map.map.ThumbnailPosition, map.map.ThumbnailPitchYawRoll);
+        RotateCenter(angle).Apply(thumbNailPos, new Article());
+        map.map.ThumbnailPosition = new Vec3(thumbNailPos.coords.X, thumbNailPos.coords.Y + 300, thumbNailPos.coords.Z);
+        map.map.ThumbnailPitchYawRoll = thumbNailPos.pitchYawRoll;
     }
 }
 
@@ -429,8 +484,8 @@ public class RandomHoles: Alteration {
 
     public override void Run(Map map){
         Random rand = new();
-        Inventory normals = !(inventory.Select(BlockType.Pillar)).Select("!MapStart&!Finish&!Checkpoint&!Multilap");
-        normals.Edit().Replace(map);
+        Inventory specials = inventory.Select("MapStart|Finish|Multilap");
+        (!specials).Edit().Replace(map);
         map.stagedBlocks = map.stagedBlocks.Where(x => !(rand.Next() % 10 == 0)).ToList();
         map.PlaceStagedBlocks();
     }

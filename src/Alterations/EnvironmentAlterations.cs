@@ -1,5 +1,10 @@
-abstract public class EnvironmentAlterations: Alteration {
-    public static void SetGamePlay(Map map, string GamePlay){
+public class ChangeEnvironment(string GamePlay): Alteration {
+    public override string Description => $"adds {GamePlay} Carswitch at Start and replaces all Carswitchgates";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
+    public override void Run(Map map){
         inventory.Select("Gameplay").RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword(GamePlay).Replace(map);
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateGameplay" + GamePlay);
@@ -12,71 +17,38 @@ abstract public class EnvironmentAlterations: Alteration {
     }
 }
 
-public class Stadium: EnvironmentAlterations {
-    public override string Description => "adds Stadium Carswitch at Start and replaces all Carswitchgates";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        SetGamePlay(map,"Stadium");
-    }
+public class Stadium: ChangeEnvironment {
+    public Stadium(): base("Stadium") { }
 }
 
-public class Snow: EnvironmentAlterations {
-    public override string Description => "adds Snow Carswitch at Start and replaces all Carswitchgates";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        SetGamePlay(map,"Snow");
-    }
+public class Snow: ChangeEnvironment {
+    public Snow(): base("Snow") { }
 }
 
-public class Rally: EnvironmentAlterations {
-    public override string Description => "adds Rally Carswitch at Start and replaces all Carswitchgates";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        SetGamePlay(map,"Rally");
-    }
+public class Rally: ChangeEnvironment {
+    public Rally(): base("Rally") { }
 }
 
-public class Desert: EnvironmentAlterations {
-    public override string Description => "adds Desert Carswitch at Start and replaces all Carswitchgates";
-    public override bool Published => true;
-    public override bool LikeAN => true;
-    public override bool Complete => true;
-
-    public override void Run(Map map){
-        SetGamePlay(map,"Desert");
-    }
+public class Desert: ChangeEnvironment {
+    public Desert(): base("Desert") { }
 }
 
 //Snow Carswitch manual
 
-public class SnowCarswitchToDesert: Alteration {
-    public override string Description => "changes Snow Carswitch to Desert Carswitch";
+public class ChangeSnowCarswitch(string GamePlay): Alteration {
+    public override string Description => $"changes Snow Carswitch to {GamePlay} Carswitch";
     public override bool Published => false;
     public override bool LikeAN => false;
     public override bool Complete => false;
 
     public override void Run(Map map){
-        inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Desert").Replace(map);
+        inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword(GamePlay).Replace(map);
         map.PlaceStagedBlocks();
     }
 }
-public class SnowCarswitchToRally: Alteration {
-    public override string Description => "changes Snow Carswitch to Rally Carswitch";
-    public override bool Published => false;
-    public override bool LikeAN => false;
-    public override bool Complete => false;
-
-    public override void Run(Map map){
-        inventory.Select("Gameplay&Snow").RemoveKeyword("Snow").AddKeyword("Rally").Replace(map);
-        map.PlaceStagedBlocks();
-    }
+public class SnowCarswitchToRally: ChangeSnowCarswitch {
+    public SnowCarswitchToRally(): base("Rally") { }
+}
+public class SnowCarswitchToDesert: ChangeSnowCarswitch {
+    public SnowCarswitchToDesert(): base("Desert") { }
 }

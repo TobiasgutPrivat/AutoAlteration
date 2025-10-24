@@ -1,5 +1,7 @@
+using System.IO.Compression;
 using System.Reflection;
 using GBX.NET;
+using GBX.NET.Engines.Game;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 using GBX.NET.LZO;
@@ -16,11 +18,11 @@ class DevUtils{
 
     public static void LogMaterialInfo(string Folder) {
         // string sourceFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks/Vanilla");
-        string destinationFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks","MaterialInfo");
+        string destinationFolder = Path.Combine(AlterationConfig.DataFolder, "CustomBlocks","MaterialInfo");
         AutoAlteration.AlterAll([new MaterialInfo()], Folder, destinationFolder, "MaterialInfo");
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "SurfacePhysicIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "SurfaceGameplayIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "SurfacePhysicIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "SurfaceGameplayIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
     }
 
     public static void StringToName(string projectFolder) {
@@ -32,7 +34,7 @@ class DevUtils{
     }
 
     public static void NonColidableFix() {
-        foreach (string file in Directory.GetFiles(Path.Join(AltertionConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
+        foreach (string file in Directory.GetFiles(Path.Join(AlterationConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
         {
             Gbx.LZO = new MiniLZO();
             // Gbx.ZLib = new ZLib();
@@ -105,11 +107,11 @@ class DevUtils{
             text += "<strong>" + category.Key + "</strong>\n";
             text += string.Join("\n", category.Value) + "\n\n";
         }
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath, "AlterationList.md"), text);
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "AlterationList.md"), text);
     }
 
     public static void generateLightSurfaceBlocks() {
-        AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Join(AltertionConfig.CustomBlocksFolder, "HeavySurface"), Path.Join(AltertionConfig.CustomBlocksFolder, "LightSurface"), "");
+        AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Join(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Join(AlterationConfig.CustomBlocksFolder, "LightSurface"), "");
     }
 }
 
@@ -163,16 +165,6 @@ class Nothing : Alteration {
     }
 }
 
-class FixAutoRotation : Alteration {
-    public override void Run(Map map)
-    {
-        Inventory DecoWall = inventory.Select("DecoWall");
-        map.Move(DecoWall.Select("LoopEnd&!Center&!Side"), RotateMid(PI*0.5f,0,0));
-        map.Move(DecoWall.Select("Arch&Slope2&(UTop|End|Straight)"), RotateMid(PI*0.5f,0,0));//not sure if Straight is correct
-        map.PlaceStagedBlocks();
-    }
-}
-
 class NothingBlock : CustomBlockAlteration {
     public override bool Run(CustomBlock customBlock) { return true; }
 }
@@ -181,10 +173,40 @@ class EmbedTest : Alteration {
     public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new NothingBlock())];
     public override void Run(Map map){
         Inventory specific = inventory.Select(article => article.MapSpecific);
-        (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","NothingBlockHeavy"]).Replace(map);
-        (!specific).AddKeyword(["NothingBlockHeavy"]).Replace(map);
+        // (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","NothingBlockHeavy"]).Replace(map);
+        // (!specific).AddKeyword(["NothingBlockHeavy"]).Replace(map);
         specific.AddKeyword(["NothingBlock"]).Replace(map);
-        map.stagedBlocks.ForEach(x => x.IsAir = false);
+        // map.stagedBlocks.ForEach(x => x.IsAir = false);
         map.PlaceStagedBlocks(false);
+    }
+}
+
+class AirPillars : Alteration
+{
+    public override void Run(Map map)
+    {
+        inventory.Select(BlockType.Pillar).Edit().Replace(map);
+        map.PlaceStagedBlocks(false);
+    }
+}
+
+class TestReEmbed()
+{
+    public static void testReEmbed()
+    {
+        // //reembeding: works
+        // Map map = new Map("C:/Users/Tobias/Documents/Trackmania2020/Maps/Test/TestEmbed.map.gbx");
+        // map.ExtractEmbeddedBlocks("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed");
+        // string path = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed/Test/RoadTechStraightWoodEdit.Block.Gbx";
+        // map.map.EmbeddedZipData = [];
+        // map.EmbedBlock("Test/RoadTechStraightWoodEdit.Block.Gbx",path);
+        // map.Save("C:/Users/Tobias/Documents/Trackmania2020/Maps/Test/A01-Race Test.map.gbx");
+
+        // resaving block: resaved block cant be used anymore
+        Map map = new Map("C:/Users/Tobias/Documents/Trackmania2020/Maps/Test/TestEmbed.map.gbx");
+        map.ExtractEmbeddedBlocks("C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed");
+        string path = "C:/Users/Tobias/Documents/Programmieren/AutoAlteration/data/CustomBlocks/dev/TestEmbed/Test/RoadTechStraightWoodEdit.Block.Gbx";
+        Gbx gbx = Gbx.Parse<CGameItemModel>(path);
+        gbx.Save(path + "resaved.block.gbx");
     }
 }

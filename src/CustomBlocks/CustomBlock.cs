@@ -7,6 +7,7 @@ public class CustomBlock
   public CGameItemModel customBlock;
   public string Name;
   public List<CPlugCrystal> MeshCrystals = [];
+  public List<CPlugSolid2Model> Models = [];
   public BlockType Type;
   public CustomBlock(string blockPath)
   { 
@@ -17,6 +18,7 @@ public class CustomBlock
       if (customBlock.EntityModelEdition is not null){
         CGameBlockItem Block = (CGameBlockItem)customBlock.EntityModelEdition;
         if (Block.CustomizedVariants is not null){
+          // Note: if no CustomizedVariants, then Archetype is used -> cannot be altered
           MeshCrystals.AddRange(Block.CustomizedVariants.Select(x => x.Crystal).OfType<CPlugCrystal>().ToList());
         }
       }
@@ -34,9 +36,9 @@ public class CustomBlock
 
       if (customBlock.EntityModel is not null){
         CGameCommonItemEntityModel Item = (CGameCommonItemEntityModel)customBlock.EntityModel;
-        // if (Item.MeshCrystal is not null){ //TODO
-        //   MeshCrystals.Add(Item.MeshCrystal);
-        // }
+        if (Item.StaticObject is not null && Item.StaticObject.Mesh is not null){ //TODO
+          Models.Add(Item.StaticObject.Mesh);
+        }
       }
       Name = Path.GetFileName(blockPath)[..^9];
     } else {

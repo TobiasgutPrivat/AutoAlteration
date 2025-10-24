@@ -2,13 +2,23 @@ using GBX.NET;
 using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 
-public class LightSurfaceBlock : CustomSurfaceAlteration {
+public class LightSurfaceBlock : CustomBlockAlteration {
+    //TODO: makes really awfull textures
+    
     //doesn't change the surface
     public override bool Run(CustomBlock customBlock) {
         bool changed = false;
         if (customBlock.customBlock.WaypointType != CGameItemModel.EWaypointType.None){
             customBlock.customBlock.WaypointType = CGameItemModel.EWaypointType.None;
             changed = true;
+        }
+        // avoid declaration as start/finish/checkpoint
+        if (customBlock.Type == BlockType.Block && customBlock.customBlock.EntityModelEdition is not null){
+            CGameBlockItem Block = (CGameBlockItem)customBlock.customBlock.EntityModelEdition;
+            if (Block.ArchetypeBlockInfoId.Contains("Start") || Block.ArchetypeBlockInfoId.Contains("Finish") || Block.ArchetypeBlockInfoId.Contains("Checkpoint")){
+                Block.ArchetypeBlockInfoId = "RoadTechStraight"; //doesn't matter as long as it's in air-mode and not on ground
+                changed = true;
+            }
         }
         return changed;
     }
@@ -29,8 +39,9 @@ public class LightSurfaceBlock : CustomSurfaceAlteration {
     }
 
     public override bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer){
+        float offset = 0.04f;
         //TODO check why some are unchanged
-        layer.Crystal.Faces = layer.Crystal.Faces.Where(x => DrivableMaterials.Contains(GetMaterialLink(x))).ToArray();
+        layer.Crystal.Faces = layer.Crystal.Faces.Where(x => CustomSurfaceAlteration.DrivableMaterials.Contains(GetMaterialLink(x))).ToArray();
         if (layer.Crystal.Faces.Length == 0){
             return false;
         }
@@ -40,17 +51,18 @@ public class LightSurfaceBlock : CustomSurfaceAlteration {
         Vec3 topMiddle = GetTopMiddle(layer.Crystal);
         layer.Crystal.Positions = layer.Crystal.Positions.ToList().Select(x => {
             float X,Y,Z;
-            Y = x.Y + .02f;
+            Y = x.Y + offset;
             if (x.X > topMiddle.X){
-                X = x.X - .02f;
+                X = x.X - offset;
             } else {
-                X = x.X + .02f;
+                X = x.X + offset;
             }
-            if (x.Z > topMiddle.Z){
-                Z = x.Z - .02f;
+            if (x.Z > topMiddle.Z){ //usually not necessary
+                Z = x.Z - offset;
             } else {
-                Z = x.Z + .02f;
+                Z = x.Z + offset;
             }
+            Z = x.Z;
             return new Vec3(X, Y, Z);
             }).ToArray();
         return true;

@@ -2,15 +2,15 @@ using GBX.NET;
 using GBX.NET.LZO;
 using GBX.NET.ZLib;
 
-public class AltertionConfig {
+public class AlterationConfig {
     public static string devPath = "";
     public static bool devMode = false;
     public static string DataFolder = "";
     public static string BlockDataPath = "";
+    public static string ItemDataPath = "";
     public static string CustomBlocksFolder = "";
     public static string ApplicationDataFolder = "";
     public static string CacheFolder = "";
-    public static int FreeBlockHeightOffset = 64;// when converting to freeblock it has a 64m offset depends on Map Template i think
     public static List<string> Keywords = [];
     public static List<string> ToKeywords = [];
     public static List<string> CustomBlockSets = [];
@@ -28,14 +28,16 @@ public class AltertionConfig {
         ApplicationDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AutoAlteration");
         CacheFolder = Path.Combine(ApplicationDataFolder, "Cache");
         BlockDataPath = Path.Combine(DataFolder, "Inventory","BlockData.json");
+        ItemDataPath = Path.Combine(DataFolder, "Inventory","ItemData.json");
 
         ToKeywords = loadKeywordsFile(Path.Combine(DataFolder, "Inventory","ToKeywords.txt")).ToList();
         ToKeywords = ToKeywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "ToKeywords.txt"))).ToList();
 
-        CustomBlockSets = loadKeywordsFile(Path.Combine(DataFolder, "Inventory","CustomBlockSets.txt")).ToList();
-        CustomBlockSets = CustomBlockSets.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "CustomBlockSets.txt"))).ToList();
+        // CustomBlockSets = loadKeywordsFile(Path.Combine(DataFolder, "Inventory","CustomBlockSets.txt")).ToList();
+        // CustomBlockSets = CustomBlockSets.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "CustomBlockSets.txt"))).ToList();
         
         Keywords = loadKeywordsFile(Path.Combine(DataFolder,"Inventory","Keywords.txt")).ToList();
+        Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(DataFolder,"Inventory","OldGameKeywords.txt"))).ToList();
         Keywords = Keywords.Concat(loadKeywordsFile(Path.Combine(ApplicationDataFolder, "Keywords.txt"))).ToList();
         Keywords = Keywords.OrderBy(x => x.Length).Reverse().ToList();
         Keywords = loadKeywordsFile(Path.Combine(DataFolder,"Inventory","KeywordsStart.txt")).Concat(Keywords).ToList();

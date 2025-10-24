@@ -4,11 +4,11 @@ public class Inventory { // represents all available articles which can be place
     public List<Article> articles = [];
     public Inventory() {}
     public Inventory(List<Article> articles) {this.articles = articles;}
-    private Dictionary<string,Inventory> cachedInventories = [];
+    public Dictionary<string,Inventory> cachedInventories = [];
 
     public void Export(string Name) {
-        Directory.CreateDirectory(Path.Combine(AltertionConfig.devPath,"Inventory"));
-        File.WriteAllText(Path.Combine(AltertionConfig.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles));
+        Directory.CreateDirectory(Path.Combine(AlterationConfig.devPath,"Inventory"));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath,"Inventory","Inventory" + Name + ".json"), JsonConvert.SerializeObject(articles, Formatting.Indented));
     }
     
     public Inventory Select(string keywordFilter)  {
@@ -139,10 +139,13 @@ public class Inventory { // represents all available articles which can be place
         return new(Alteration.inventory.articles.Except(a.articles).ToList());
     }
 
-    public Inventory Sub(Inventory inventory) =>
+    public Inventory Except(Inventory inventory) =>
         new(articles.Except(inventory.articles).ToList());
 
     public Article GetArticle(string name) {
+        if (name.Contains(":")) {
+            name = name.Split(':')[1]; //in case the name is given as club:Name
+        }
         List<Article> match = articles.Where(a => a.Name == name).ToList();
         if (match.Count == 0) {
             throw new Exception("No article with name: " + name);
@@ -218,8 +221,14 @@ public class Inventory { // represents all available articles which can be place
     public KeywordEdit EditOriginal() =>
         new KeywordEdit(articles);
 
-    public void ClearSpecific() =>
+    public void ClearSpecific()
+    {
+        int before = articles.Count;
         articles = articles.Where(a => !a.MapSpecific).ToList();
+        if (before != articles.Count){
+            cachedInventories.Clear();
+        }
+    }
         
     #endregion
     

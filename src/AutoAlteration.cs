@@ -3,7 +3,14 @@ using System.Reflection;
 public class AutoAlteration {
     public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
+            try {
+                AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
+            } catch (Exception ex) {
+                Console.WriteLine($"Error altering {mapFile}:");
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+                continue;
+            }
         }
     }
     public static void AlterFolder(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {
@@ -16,10 +23,10 @@ public class AutoAlteration {
     }
 
     public static void AlterAll(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
-        AlterFolder(alterations,sourceFolder,Path.Combine(destinationFolder, Path.GetFileName(sourceFolder) + " - " + Name),Name);
+        AlterFolder(alterations,sourceFolder,destinationFolder + " " + Name,Name);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder + " " + Name, Path.GetFileName(Directory)),Name);
         }
     }
     public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {
@@ -32,7 +39,16 @@ public class AutoAlteration {
     
     public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
         Map map = new Map(sourceFile);
-        AlterationLogic.Alter(alterations, map);
+        List<Alteration>? allAlterations = [];
+        foreach (Alteration alteration in alterations)
+        {
+            if (alteration.AlterationsBefore != null)
+            {
+                allAlterations.AddRange(alteration.AlterationsBefore);
+            }
+            allAlterations.Add(alteration);
+        }
+        AlterationLogic.Alter(allAlterations, map);
         map.map.MapName = map.map.MapName + " " + Name;
         map.Save(destinationFile);
         Console.WriteLine(destinationFile);
@@ -69,9 +85,14 @@ public class AutoAlteration {
 
     public static List<Alteration> GetImplementedAlterations() {
         return Assembly.GetAssembly(typeof(Alteration))?.GetExportedTypes()
+            //get all classes that are subclasses of Alteration
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration)))
-            .Select(t => Activator.CreateInstance(t) as Alteration)
+            //filter out the ones that have constructor parameters or have default values
+            .Where(t => t.GetConstructors().Any(c => c.GetParameters().Length == 0 || c.GetParameters().All(p => p.HasDefaultValue)))
+            //create instances
+            .Select(t => t.GetConstructor(Type.EmptyTypes)?.Invoke(null) as Alteration)
             .OfType<Alteration>()
+            //filter out the ones that are not published
             .Where(x => x.Published)
             .OrderBy(x => x.GetType().Name)
             .ToList() ?? [];

@@ -1,8 +1,34 @@
-abstract public class EffectAlteration: Alteration {
-    public string SelAllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
-    public List<string> AllEffects = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"];
+class EffectUtils {
+    public static string SelAllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
+    public static List<string> AllEffects = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"];
+}
+
+public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool oriented = false): Alteration {
+    public override void Run(Map map)
+    {
+        if (Effect == "") throw new Exception("Not intended to be used without Effect");
+        moveChain ??= new();
+        Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
+        Article GateSpecial;
+        if (oriented) {
+            GateSpecial = inventory.GetArticle("GateSpecial" + Effect + "Oriented");
+        } else{
+            GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
+        }
+        map.PlaceRelative(start.Select("!Water&!RoadIce&!RoadBump"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
+        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,-2).AddChain(moveChain));
+        map.PlaceRelative(start.Select("RoadBump"), GateSpecial,Move(0,-16,2).AddChain(moveChain));
+        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
+        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
+        map.PlaceStagedBlocks();
+    }
+}
+
+public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool oriented = false, bool includeStart = true): Alteration {
+    public override string Description => "places an Effect on every Checkpoint";
     public override List<InventoryChange> InventoryChanges => [new CheckpointTrigger()];
-    public static void PlaceCPEffect(Map map, string Effect,MoveChain ?moveChain = null, bool oriented = false) {
+    public override void Run(Map map) {
+        if (Effect == "") throw new Exception("Not intended to be used without Effect");
         moveChain ??= new();
         Article GateSpecial;
         if (oriented) {
@@ -21,117 +47,94 @@ abstract public class EffectAlteration: Alteration {
         map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial,moveChain);
 
         map.PlaceStagedBlocks();
-    }
-    public static void PlaceStartEffect(Map map, string Effect,MoveChain ?moveChain = null, bool oriented = false){
-        moveChain ??= new();
-        Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
-        Article GateSpecial;
-        if (oriented) {
-            GateSpecial = inventory.GetArticle("GateSpecial" + Effect + "Oriented");
-        } else{
-            GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
+        if (includeStart) {
+            new StartEffect(Effect,moveChain,oriented).Run(map);
         }
-        map.PlaceRelative(start.Select("!Water&!(RoadIce)"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
-        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,0).AddChain(moveChain));
-        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
-        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
-        map.PlaceStagedBlocks();
     }
 }
-public class Cruise: EffectAlteration {
+public class Cruise: CPEffect {
     public override string Description => "places Cruise Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override void Run(Map map){
-        PlaceCPEffect(map,"Cruise",Move(0,0,1));
-    }
+    public Cruise() : base("Cruise",Move(0,0,1)) {}
 }
 
-public class Fragile: EffectAlteration {
+public class Fragile: CPEffect {
     public override string Description => "places Fragile Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Map map){
-        PlaceCPEffect(map,"Fragile",Move(0,0,1));
-        PlaceStartEffect(map,"Fragile");
-    }
+    public Fragile() : base("Fragile",includeStart: true) {}
 }
 
 //TODO 100 Fragile, Fragile + remove reset + start (Macro)block
 
-public class FreeWheel: EffectAlteration {
+public class FreeWheel(): CPEffect {
     public override string Description => "places Turbo and NoEngine Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => false;
 
     public override void Run(Map map){
-        PlaceCPEffect(map,"Turbo");
-        PlaceStartEffect(map,"Turbo");
-        PlaceCPEffect(map,"NoEngine",Move(0,0,1));
-        PlaceStartEffect(map,"NoEngine",Move(0,0,3));
+        new CPEffect("Turbo").Run(map);
+        new CPEffect("NoEngine",Move(0,0,1),includeStart: false).Run(map);
+        new StartEffect("NoEngine",Move(0,0,3)).Run(map);
     }
 }
 
-public class Glider: EffectAlteration {
+public class Glider(): CPEffect {
     public override string Description => "places Yellow Reactor and NoEngine Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => false;
     public override bool Complete => false;
 
     public override void Run(Map map){
-        PlaceCPEffect(map,"Boost",oriented: true);
-        PlaceStartEffect(map,"Boost",oriented: true);
-        PlaceCPEffect(map,"NoEngine",Move(0,0,1));
-        PlaceStartEffect(map,"NoEngine",Move(0,0,3));
+        new CPEffect("Boost").Run(map);
+        new CPEffect("NoEngine",Move(0,0,1),includeStart: false).Run(map);
+        new StartEffect("NoEngine",Move(0,0,3)).Run(map);
     }
 }
 
-public class NoBrake: EffectAlteration {
+public class NoBrake: CPEffect {
     public override string Description => "places NoBrake Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Map map){
-        PlaceCPEffect(map,"NoBrake",Move(0,0,1));
-        PlaceStartEffect(map,"NoBrake");
-    }
+    public NoBrake() : base("NoBrake",Move(0,0,1),includeStart: true) {}
 }
 
-public class NoEffect: EffectAlteration {
+public class NoEffect: Alteration {
     public override string Description => "replaces all Effects with their normal Block version";
     public override bool Published => true;
     public override bool LikeAN => true;
+    public override bool Complete => true;
 
     public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
+
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select(SelAllEffects)
-            .RemoveKeyword(AllEffects).Replace(map);
-        map.Delete(inventory.Select(BlockType.Item).Select(SelAllEffects));
+        inventory.Select(BlockType.Block).Select(EffectUtils.SelAllEffects)
+            .RemoveKeyword(EffectUtils.AllEffects).Replace(map);
+        map.Delete(inventory.Select(BlockType.Item).Select(EffectUtils.SelAllEffects));
         map.PlaceStagedBlocks();
     }
 }
 
 //TODO no-grip (custom)block
 
-public class NoSteer: EffectAlteration {
+public class NoSteer: CPEffect {
     public override string Description => "places NoSteering Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Map map){
-        PlaceCPEffect(map,"NoSteering",Move(0,0,1));
-        PlaceStartEffect(map,"NoSteering");
-    }
+    public NoSteer() : base("NoSteering",Move(0,0,1),includeStart: true) {}
 }
 
-public class RandomDankness: EffectAlteration {
+public class RandomDankness: Alteration {
     public override string Description => "replaces Checkpoint and Effect Blocks with random Effects";
     public override bool Published => true;
     public override bool LikeAN => true;
@@ -139,93 +142,84 @@ public class RandomDankness: EffectAlteration {
 
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select("Checkpoint&!((Slope|Slope2)&(Left|Right))").RemoveKeyword("Checkpoint")
-            .ReplaceWithRandom(map,AllEffects);
+            .ReplaceWithRandom(map,EffectUtils.AllEffects);
         inventory.Select(BlockType.Block).Select("Checkpoint&Slope&(Left|Right)").RemoveKeyword(["Checkpoint","Slope"]).AddKeyword("Tilt")
-            .ReplaceWithRandom(map,AllEffects);
+            .ReplaceWithRandom(map,EffectUtils.AllEffects);
         inventory.Select(BlockType.Block).Select("Checkpoint&Slope2&(Left|Right)").RemoveKeyword(["Checkpoint","Slope2"]).AddKeyword("Tilt2")
-            .ReplaceWithRandom(map,AllEffects);
+            .ReplaceWithRandom(map,EffectUtils.AllEffects);
         inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"])
-            .ReplaceWithRandom(map,AllEffects);
-        inventory.Select(SelAllEffects)
-            .RemoveKeyword(AllEffects)
-            .ReplaceWithRandom(map,AllEffects);
+            .ReplaceWithRandom(map,EffectUtils.AllEffects);
+        inventory.Select(EffectUtils.SelAllEffects)
+            .RemoveKeyword(EffectUtils.AllEffects)
+            .ReplaceWithRandom(map,EffectUtils.AllEffects);
         map.PlaceStagedBlocks();
     }
 }
 
-public class RandomEffects: EffectAlteration {
+public class RandomEffects: Alteration {
     public override string Description => "replaces all Effects with random Effects";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select(SelAllEffects)
-            .RemoveKeyword(AllEffects)
-            .ReplaceWithRandom(map,AllEffects);
+        inventory.Select(BlockType.Block).Select(EffectUtils.SelAllEffects)
+            .RemoveKeyword(EffectUtils.AllEffects)
+            .ReplaceWithRandom(map,EffectUtils.AllEffects);
         map.PlaceStagedBlocks();
     }
 }
 
-public class Reactor: EffectAlteration {
+public class Reactor: CPEffect {
     public override string Description => "places Red Reactor Effect on every Checkpoint";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        PlaceCPEffect(map,"Boost2",oriented: true);
-        PlaceStartEffect(map,"Boost2",oriented: true);
-    }
+    public Reactor() : base("Boost2",oriented: true, includeStart: true) {}
 }
 
-public class ReactorDown: EffectAlteration {
+public class ReactorDown: CPEffect {
     public override string Description => "places Red Reactor Effect on every Checkpoint (reactor rotated 180°)";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        PlaceCPEffect(map,"Boost2",RotateMid(PI,0,0),true);
-        PlaceStartEffect(map,"Boost2",RotateMid(PI,0,0),true);
-    }
+    public ReactorDown() : base("Boost2",RotateMid(PI,0,0),true,true) {}
 }
 
-public class RedEffects: EffectAlteration {
+public class RedEffects: Alteration {
     public override string Description => "replaces all Effects with Red Turbo";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(SelAllEffects).RemoveKeyword(AllEffects).AddKeyword("Turbo2").Replace(map);
+        inventory.Select(EffectUtils.SelAllEffects).RemoveKeyword(EffectUtils.AllEffects).AddKeyword("Turbo2").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 
-public class RngBooster: EffectAlteration {
+public class RngBooster: Alteration {
     public override string Description => "replaces all Effects with RNG Turbo";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(SelAllEffects).RemoveKeyword(AllEffects).AddKeyword("TurboRoulette").Replace(map);
+        inventory.Select(EffectUtils.SelAllEffects).RemoveKeyword(EffectUtils.AllEffects).AddKeyword("TurboRoulette").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
 
 
-public class SlowMo: EffectAlteration {
+public class SlowMo: CPEffect {
     public override string Description => "places SlowMotion Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Map map){
-        PlaceCPEffect(map,"SlowMotion",Move(0,0,1));
-        PlaceStartEffect(map,"SlowMotion");
-    }
+    public SlowMo() : base("SlowMotion",Move(0,0,1),includeStart: true) {}
 }
 
 //TODO WetWheels (custom)block

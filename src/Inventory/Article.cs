@@ -1,5 +1,7 @@
+using GBX.NET;
+
 public class Article {
-    public string Name;
+    public string Name = "";
     public MoveChain MoveChain = new();
     public BlockType Type;
     public List<string> Keywords = [];
@@ -8,11 +10,14 @@ public class Article {
     public int Length = 1;
     public int Height = 1;
     public string Path = "";
-    public bool DefaultRotation;
-    public bool Theme;
+    // public bool DefaultRotation;
     public bool MapSpecific = false;
+    public Move? DefaultRotation;
 
-    public Article(string name,BlockType type,SList<string> keywords,SList<string>? toShape = null,MoveChain ?moveChain = null,int length = 1, int width = 1){
+    public Article() { }
+
+    public Article(string name, BlockType type, SList<string> keywords, SList<string>? toShape = null, MoveChain? moveChain = null, int length = 1, int width = 1)
+    {
         Name = name;
         Type = type;
         Keywords = keywords;
@@ -22,15 +27,13 @@ public class Article {
         Width = width;
     }
     
-    public Article(int Height, int Width, int Length, BlockType Type, string Name, bool Theme, bool DefaultRotation){
+    public Article(int Height, int Width, int Length, BlockType Type, string Name){
         this.Name = Name;
         LoadKeywords();
         this.Type = Type;
         this.Length = Length;
         this.Width = Width;
         this.Height = Height;
-        this.DefaultRotation = DefaultRotation;
-        this.Theme = Theme;
     }
 
     public Article(string name,BlockType type, string Path, bool mapSpecific = false){
@@ -41,7 +44,7 @@ public class Article {
         string vanillaName = Name;
 
         // for customblocksets get size from unaltered version
-        AltertionConfig.CustomBlockSets.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        AlterationConfig.CustomBlockSets.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
         List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList(); 
         if (vanillaVersion.Count > 0) { 
             Width = vanillaVersion.First().Width;
@@ -83,6 +86,8 @@ public class Article {
 
         //Name
         string name = splits.Last(); // the filename/blockname
+        name = name.Replace(".Block.Gbx", "", StringComparison.OrdinalIgnoreCase).Replace(".Item.gbx", "", StringComparison.OrdinalIgnoreCase); // remove file ending if present
+        int nameLength = name.Replace("_", "").Length + Keywords.Sum(k => k.Length);
         List<string> nameSplits = []; // Individual Parts of the name, Keywords get cut out, spereating the string
 
         //ToKeywords
@@ -90,26 +95,28 @@ public class Article {
 
         if (toPos != -1) {
             string ToString = name[(toPos + 2)..];
-            nameSplits.Add(name[..toPos]);
+            nameSplits.AddRange(name[..toPos].Split("_"));
 
-            List<string> ToSplits = [ToString];
+            List<string> ToSplits = ToString.Split("_").ToList();
 
-            SplitByKeywords(ToSplits, AltertionConfig.ToKeywords, ToShapes);
+            SplitByKeywords(ToSplits, AlterationConfig.ToKeywords, ToShapes);
             Keywords.Add("To");
             nameSplits.AddRange(ToSplits);
         } else {
-            nameSplits = [name];
+            nameSplits = name.Split("_").ToList();
         }
 
         //CustomblockSets, could have issues if set is part of toKeywords
-        SplitByKeywords(nameSplits, AltertionConfig.CustomBlockSets, Keywords);
+        SplitByKeywords(nameSplits, AlterationConfig.CustomBlockSets, Keywords);
         
         //Keywords
-        SplitByKeywords(nameSplits, AltertionConfig.Keywords, Keywords);
+        SplitByKeywords(nameSplits, AlterationConfig.Keywords, Keywords);
 
         Keywords.AddRange(nameSplits);
         
-        CheckFullNameCoverage();
+        if (nameLength != Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length)) {
+            Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
+        }
     }
 
     private static void SplitByKeywords(List<string> splits, IEnumerable<string> keywords, List<string> collection) {
@@ -128,20 +135,13 @@ public class Article {
     public int? GetToPos(string name) {
         if(name.Contains("To")){
             int toPos = name.IndexOf("To"); //check if "to" is not part of another keyword
-            if (AltertionConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
+            if (AlterationConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
                 return GetToPos(name[(toPos + 2)..]) + toPos + 2;
             } else {
                 return toPos;
             }
         }else {
             return null;
-        }
-    }
-    
-    private void CheckFullNameCoverage() {
-        int keywordLength = Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length);
-        if (Name.Split(['/', '\\'],StringSplitOptions.None).Sum(k => k.Length) != keywordLength) {
-            Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }
     #endregion
