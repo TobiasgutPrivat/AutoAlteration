@@ -94,6 +94,8 @@ public class Map
           }
           return (name, type);
         })
+        // check if embedded block without first folder is already in inventory (needed for NC2 maps)
+        .Where(x => Alteration.inventory.GetArticle(x.name.Substring(x.name.IndexOf(Path.DirectorySeparatorChar) + 1)) == null)
         .ToDictionary();
     } else {
       return [];
@@ -109,7 +111,9 @@ public class Map
     zipArchive = map.OpenReadEmbeddedZipData();
     
     zipArchive.Entries.ToList().ForEach(x => {
+
       string name = x.FullName.Split("Blocks\\").Last().Split("Items\\").Last().Split("Blocks/").Last().Split("Items/").Last();
+      if (!embeddedBlocks.ContainsKey(name)) { return; }
       string filePath = path + "\\" + name; // Extract with Folderstructure (FullName)
       Directory.CreateDirectory(Path.GetDirectoryName(filePath));
       x.ExtractToFile(filePath, true);

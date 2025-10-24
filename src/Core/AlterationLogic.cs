@@ -14,13 +14,18 @@ public class AlterationLogic {
         Alteration.inventory.ClearSpecific();
 
         //create inventory for Alteration
-        if (lastAlterations == null || alterations.Any(a => !lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
+        if (lastAlterations == null || alterations.Any(a => !lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count))
+        {
             // needs Inventory recreation
             Alteration.CreateInventory(); //Resets Inventory to Vanilla
-            foreach (Alteration alteration in alterations) {
-                alteration.InventoryChanges.ForEach(change => {
-                    (change as CustomBlockSet)?.GetAdditionalKeywords().ForEach(keyword => {
-                        if (!AlterationConfig.CustomBlockSets.Contains(keyword)) {
+            foreach (Alteration alteration in alterations)
+            {
+                alteration.InventoryChanges.ForEach(change =>
+                {
+                    (change as CustomBlockSet)?.GetAdditionalKeywords().ForEach(keyword =>
+                    {
+                        if (!AlterationConfig.CustomBlockSets.Contains(keyword))
+                        {
                             AlterationConfig.CustomBlockSets.Add(keyword);
                             AlterationConfig.Keywords.Add(keyword);
                         }
@@ -30,18 +35,16 @@ public class AlterationLogic {
             }
             Alteration.DefaultInventoryChanges();
 
-            if (AlterationConfig.devMode){ //logging
-                Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
+            if (AlterationConfig.devMode)
+            { //logging
+                Alteration.inventory.Export(string.Join("", alterations.Select(x => x.GetType().Name)));
             }
         }
 
         //Map specific custom blocks
+        // List<KeyValuePair<string, BlockType>> embeddedBlocks = map.embeddedBlocks.Where(x => Alteration.inventory.GetArticle(x.Key.Substring(x.Key.IndexOf(Path.DirectorySeparatorChar) + 1)) == null).ToList();
         if (map.embeddedBlocks.Count != 0){
-            
-            Alteration.inventory.AddArticles(map.embeddedBlocks
-                // check if embedded block without first folder is already in inventory (needed for NC2 maps)
-                .Where(x => Alteration.inventory.GetArticle(x.Key.Substring(x.Key.IndexOf(Path.DirectorySeparatorChar)+1)) == null
-                ).Select(x => new Article(x.Key, x.Value,"",true)).ToList());
+            Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)).ToList());
             Alteration.inventory.cachedInventories.Clear();
             if (AlterationConfig.devMode)
             { //logging
