@@ -172,16 +172,18 @@ In that case make sure you have correct package source using:
 -->
 
 ## RoadMap
-- Modular Alterations:
-    Make basic Alterations have constructor properties with maybe default properties (Surface for Surface Alterations, default offset for Effect-alts) they do execute the alteration
-    Specific can extend/use basic ones by defining constructor properties they might add some more functionality
-    opt: allow scripts and UI to define Properties
+- Refactoring
+  - Inventory non-static
+  - inheriting classes for Articles and placed Blocks (Block, Item, CustomBlock, CustomItem)
+  - opt. create ArticleProviders for example Vanilla, which would include some changes like adding trigger articles
+  - code Documentation
 
-- apply on Nation Converter (check with BigBang)
+- apply on Nation Converter (check with BigBang) -> almost done
 
 - Roadmap Customblock Alterations:
-  - Placement of reembeded Blocks (prob. issue with path)
-  - Altering previously embedded blocks sometimes causes corruption
+  - Placement of reembeded Blocks:
+    when loading extracted objects into gbx.net they corrupt
+  - visual issue (when alterting surface, or model, often some visual errors occur over normal model)
   - Full customblok-sets (Heavy -> light, Vanilla)
 
 <!-- 

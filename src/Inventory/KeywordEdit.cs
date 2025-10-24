@@ -1,6 +1,6 @@
 using GBX.NET.Engines.Game;
 
-public class KeywordEdit {
+public class KeywordEdit { //maybe call Alignement
     public Dictionary<Article,Article?> articles = []; //Keys: cloned articles, Values: aligned articles (from org inventory)
 
     public KeywordEdit(List<Article> articles) {
