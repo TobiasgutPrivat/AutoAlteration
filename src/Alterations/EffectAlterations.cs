@@ -26,7 +26,6 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
 
 public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool oriented = false, bool includeStart = true): Alteration {
     public override string Description => "places an Effect on every Checkpoint";
-    public override List<InventoryChange> InventoryChanges => [new CheckpointTrigger()];
     public override void Run(Map map) {
         if (Effect == "") throw new Exception("Not intended to be used without Effect");
         moveChain ??= new();
@@ -113,7 +112,6 @@ public class NoEffect: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new NoCPBlocks()];
 
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select(EffectUtils.SelAllEffects)

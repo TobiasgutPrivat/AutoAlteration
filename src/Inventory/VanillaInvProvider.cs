@@ -1,20 +1,21 @@
 using GBX.NET;
+using MathNet.Numerics.Statistics;
 using Newtonsoft.Json;
 
 /// <summary>
 /// Loads vanilla articles from json data files.
 /// </summary>
-class VanillaInvProvider
+class VanillaArticleProvider
 {
-    static Inventory? inventory = null;
+    static List<Article>? articles = null;
     static readonly float PI = (float)Math.PI;
-    public static Inventory GetInventory()
+    public static List<Article> GetArticles()
     {
-        inventory ??= GenerateInventory();
-        return inventory;
+        articles ??= GenerateArticles();
+        return articles;
     }
 
-    private static Inventory GenerateInventory()
+    private static List<Article> GenerateArticles()
     {
         string BlockJson = File.ReadAllText(AlterationConfig.BlockDataPath);
         string ItemJson = File.ReadAllText(AlterationConfig.ItemDataPath);
@@ -66,7 +67,8 @@ class VanillaInvProvider
         Inventory inventory = new(articles.Values.ToList());
         AddCheckpointTriggers(inventory);
         AddNonCPBlocks(inventory);
-        return inventory;
+        NormalizeCheckpoint(inventory);
+        return inventory.articles;
     }
 
     private static string BlockPropertiesCorrections(string json)
@@ -170,12 +172,21 @@ class VanillaInvProvider
         tempInventory.AddArticles(new Article("Platform" +surface+"WallStraight4",BlockType.Block,["Right","Wall","Platform",surface],null,[new Offset(0,0,32),new Rotate(PI*0.5f,0,0)]));
         tempInventory.AddArticles(new Article("Platform" +surface+"WallStraight4",BlockType.Block,["Left","Wall","Platform",surface],null,[new Offset(0,0,32),new Rotate(PI*0.5f,0,0)]));
     }
-    private static void AddIceRoadNoCPBlocks(Inventory tempInventory){
-        tempInventory.AddArticles(new Article("RoadIceWithWallStraight",BlockType.Block,["Left","WithWall","RoadIce"]));
-        tempInventory.AddArticles(new Article("RoadIceWithWallStraight",BlockType.Block,["Right","WithWall","RoadIce"],null,[new Offset(32,0,32),new Rotate(PI,0,0)]));
-        tempInventory.AddArticles(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,["DiagRight","Right","WithWall","RoadIce"],null));
-        tempInventory.AddArticles(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,["DiagLeft","Right","WithWall","RoadIce"],null,[new Offset(96,0,64),new Rotate(PI,0,0)]));
-        tempInventory.AddArticles(new Article("RoadIceDiagRightWithWallStraight",BlockType.Block,["DiagRight","Left","WithWall","RoadIce"],null,[new Offset(96,0,64),new Rotate(PI,0,0)]));
-        tempInventory.AddArticles(new Article("RoadIceDiagLeftWithWallStraight",BlockType.Block,["DiagLeft","Left","WithWall","RoadIce"],null));
+    private static void AddIceRoadNoCPBlocks(Inventory tempInventory)
+    {
+        tempInventory.AddArticles(new Article("RoadIceWithWallStraight", BlockType.Block, ["Left", "WithWall", "RoadIce"]));
+        tempInventory.AddArticles(new Article("RoadIceWithWallStraight", BlockType.Block, ["Right", "WithWall", "RoadIce"], null, [new Offset(32, 0, 32), new Rotate(PI, 0, 0)]));
+        tempInventory.AddArticles(new Article("RoadIceDiagRightWithWallStraight", BlockType.Block, ["DiagRight", "Right", "WithWall", "RoadIce"], null));
+        tempInventory.AddArticles(new Article("RoadIceDiagLeftWithWallStraight", BlockType.Block, ["DiagLeft", "Right", "WithWall", "RoadIce"], null, [new Offset(96, 0, 64), new Rotate(PI, 0, 0)]));
+        tempInventory.AddArticles(new Article("RoadIceDiagRightWithWallStraight", BlockType.Block, ["DiagRight", "Left", "WithWall", "RoadIce"], null, [new Offset(96, 0, 64), new Rotate(PI, 0, 0)]));
+        tempInventory.AddArticles(new Article("RoadIceDiagLeftWithWallStraight", BlockType.Block, ["DiagLeft", "Left", "WithWall", "RoadIce"], null));
+    }
+    
+    private static void NormalizeCheckpoint(Inventory inventory)
+    {
+        // TODO check if wanted, could cause issues with custom block set aligning
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Straight").Align().getAligned().EditOriginal().RemoveKeyword("Straight");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align().getAligned().EditOriginal().RemoveKeyword("StraightX2");
+        inventory.Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Base").Align().getAligned().EditOriginal().RemoveKeyword("Base");
     }
 }

@@ -76,7 +76,6 @@ public class Boosterless: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         map.Delete(inventory.Select(BlockType.Item).Select("Boost|Boost2|Turbo|Turbo2|TurboRoulette"));
         Inventory blocks = inventory.Select(BlockType.Block);
@@ -142,7 +141,6 @@ public class CPBoost : Alteration{
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Turbo").Replace(map);
         inventory.Select(BlockType.Block).Select("Turbo").RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(map);
@@ -163,7 +161,6 @@ public class CPFull : Alteration{
     public override bool LikeAN => false;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).AddKeyword("Checkpoint").Replace(map);
         map.PlaceStagedBlocks();
@@ -268,7 +265,6 @@ public class Holes : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         inventory.Select(BlockType.Block).AddKeyword("Hole").Replace(map);
         inventory.Select(BlockType.Block).AddKeyword(["Hole","With","24m"]).Replace(map);
@@ -335,7 +331,6 @@ public class RingCP : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new CheckpointTrigger()];
     public override void Run(Map map){
         Article GateCheckpoint = inventory.GetArticle("GateCheckpoint");
         map.PlaceRelative(inventory.Select(BlockType.Item).Select("Checkpoint"),GateCheckpoint,Move(-16,-12,-16));
@@ -397,7 +392,6 @@ public class STTF : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new NormalizeCheckpoint(), new NoCPBlocks()];
     public override void Run(Map map){
         map.Delete(inventory.Select("Checkpoint&(Ring|Gate)"));
         inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").Replace(map);

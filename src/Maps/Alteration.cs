@@ -15,7 +15,7 @@ public abstract class Alteration: PosUtils {
     public static Inventory inventory = new();
     
     public static void CreateInventory() {
-        inventory = VanillaInvProvider.GetInventory(); //Clear inventory when regenerating
+        inventory = new(VanillaArticleProvider.GetArticles()); //Clear inventory when regenerating
         if (AlterationConfig.devMode){
             inventory.Export("Vanilla");
         }
