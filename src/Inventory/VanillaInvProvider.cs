@@ -1,5 +1,4 @@
 using GBX.NET;
-using MathNet.Numerics.Statistics;
 using Newtonsoft.Json;
 
 /// <summary>
@@ -7,8 +6,8 @@ using Newtonsoft.Json;
 /// </summary>
 class VanillaArticleProvider
 {
-    static List<Article>? articles = null;
-    static readonly float PI = (float)Math.PI;
+    private static List<Article>? articles = null;
+    private static readonly float PI = (float)Math.PI;
     public static List<Article> GetArticles()
     {
         articles ??= GenerateArticles();
