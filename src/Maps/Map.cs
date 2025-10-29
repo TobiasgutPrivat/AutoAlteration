@@ -10,7 +10,7 @@ public class Map
   public Dictionary<string,BlockType> embeddedBlocks = []; //Format: "Blocks/SomeFolder/BlockName.Block.Gbx" -> "SomeFolder\\BlockName" (like name in Inventory)
   public int FreeBlockHeightOffset = 0;
 
-  private Replay WRReplay;
+  private Replay? WRReplay;
 
   #region loading
   public Map(string mapPath)
@@ -43,7 +43,7 @@ public class Map
     map.BronzeTime = TmEssentials.TimeInt32.MaxValue;
     map.AuthorScore = 0;
     map.AuthorExtraInfo = null;
-    map.AuthorLogin = null;
+    map.AuthorLogin = "Nadeo"; // test if resolves map play crash issue
     map.AuthorNickname = null;
     map.AuthorVersion = 0;
     map.AuthorZone = null;

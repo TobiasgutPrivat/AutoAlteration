@@ -1,3 +1,5 @@
+using GBX.NET.Engines.Plug;
+
 class EffectUtils {
     public static string SelAllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
     public static List<string> AllEffects = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"];
@@ -36,9 +38,11 @@ public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool orien
         } else{
             GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         }
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(map,moveChain);
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(map, moveChain);
 
+        Inventory tmnfCPs = inventory.Select(BlockType.CustomItem).Select("Checkpoint");
         Inventory triggers = inventory.Select("(CheckpointTrigger|MultilapTrigger)");
+        map.PlaceRelative(tmnfCPs, GateSpecial,Move(0,-20,0).AddChain(moveChain));
         map.PlaceRelative(triggers.Select("!Ring&!WithWall"), GateSpecial,Move(-16,-16,-16).AddChain(moveChain));
         map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
         map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(6,12,0).Rotate(0,0,PI*-0.5f).AddChain(moveChain));

@@ -1,3 +1,7 @@
+!!NOTE!!
+
+this branch is not intended to work reliably, it is just a quick solve to work fro Nationconverter maps
+
 # Auto Alterations
 
 Auto Alterations provides Functionality to automaticly create Trackmania Map-Alterations.

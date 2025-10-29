@@ -16,6 +16,7 @@ public class CustomBlockFolder(string subFolder) : InventoryChange {
     public readonly string folder = Path.Combine(AlterationConfig.CustomBlocksFolder, subFolder);
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
+        if (!Directory.Exists(folder)) return;
         inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
             .Select(x => new Article(x.Replace(folder,""), BlockType.CustomBlock, x, mapSpecific)).ToList());
 
@@ -30,7 +31,7 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration, bool sk
 
     public virtual List<string> GetAdditionalKeywords() { return [GetSetName()]; }
     public virtual string GetFolder() { return Path.Combine(AlterationConfig.CacheFolder, GetSetName()); }
-    public virtual string GetSetName() { return customBlockAlteration.GetType().Name; }
+    public virtual string GetSetName() { return customBlockAlteration.Name; }
     public virtual string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "Vanilla"); }
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
@@ -46,7 +47,7 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration, bool sk
     }
 
     public void GenerateBlockSet() {
-        Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
+        Console.WriteLine("Generating " + customBlockAlteration.Name + " block set...");
         if (!Directory.Exists(GetFolder())) { 
             Directory.CreateDirectory(GetFolder() + "Temp");//Temp in case something goes wrong
         }
@@ -56,15 +57,15 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration, bool sk
 }
 
 public class LightSurface(CustomBlockAlteration customBlockAlteration, bool skipUnchanged = true) : CustomBlockSet(customBlockAlteration, skipUnchanged) {
-    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.GetType().Name]; }
-    public override string GetSetName() { return customBlockAlteration.GetType().Name; }
+    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.Name]; }
+    public override string GetSetName() { return customBlockAlteration.Name; }
     public override string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "LightSurface"); }
 }
 
 public class HeavySurface(CustomBlockAlteration customBlockAlteration, bool skipUnchanged = true) : CustomBlockSet(customBlockAlteration, skipUnchanged)
 {
-    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.GetType().Name]; }
-    public override string GetSetName() { return customBlockAlteration.GetType().Name; }
+    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.Name]; }
+    public override string GetSetName() { return customBlockAlteration.Name; }
     public override string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"); }
 }
 
@@ -80,9 +81,9 @@ public class TMNF() : InventoryChange
 
 public class TMNFCustom(CustomBlockAlteration customBlockAlteration, bool skipUnchanged = true) : CustomBlockSet(customBlockAlteration, skipUnchanged)
 {
-    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.GetType().Name]; }
+    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.Name]; }
     public override string GetFolder() { return Path.Combine(AlterationConfig.CacheFolder, "TMNF" + GetSetName()); }
-    public override string GetSetName() { return customBlockAlteration.GetType().Name; }
+    public override string GetSetName() { return customBlockAlteration.Name; }
     public override string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "TMNF"); }
 }
 

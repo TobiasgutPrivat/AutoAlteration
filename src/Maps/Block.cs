@@ -50,7 +50,7 @@ public class Block {
 
     #region Blocks
         
-    public Block(CGameCtnBlock block,Article fromArticle,  Article article, int freeBlockHeightOffset, MoveChain ?moveChain)
+    public Block(CGameCtnBlock block,Article? fromArticle,  Article? article, int freeBlockHeightOffset, MoveChain ?moveChain)
     {
         color = block.Color;
         IsFree = block.IsFree;
@@ -65,16 +65,16 @@ public class Block {
         position = GetBlockPosition(block, freeBlockHeightOffset);
 
         if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
-            article.DefaultRotation?.Apply(position,article);
+            article?.DefaultRotation?.Apply(position,article);
         };
 
-        name = article.Name;
-        blockType = article.Type;
-        Path = article.Path;
+        name = article?.Name ?? block.BlockModel.Id;
+        blockType = article?.Type ?? BlockType.Block;
+        Path = article?.Path ?? "";
         
-        fromArticle.MoveChain.Apply(position,article); // specific like for CPGate-Position
+        fromArticle?.MoveChain.Apply(position,article); // specific like for CPGate-Position
         moveChain?.Apply(position,article); // the Altering moves
-        article.MoveChain.Subtract(position,article); // specific like for CPGate-Position
+        article?.MoveChain.Subtract(position,article); // specific like for CPGate-Position
     }
 
     public static Position GetBlockPosition(CGameCtnBlock block, int freeBlockHeightOffset) {
@@ -170,10 +170,7 @@ public class Block {
 
     #region Items
     
-    public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
-        blockType = BlockType.Item;
-        name = item.ItemModel.Id;
-
+    public Block(CGameCtnAnchoredObject item,Article? fromArticle, Article? article,MoveChain ?moveChain){
         // SnappedOnBlock = item.SnappedOnBlock;
         // SnappedOnItem = item.SnappedOnItem;
         // PlacedOnItem = item.PlacedOnItem;
@@ -187,13 +184,13 @@ public class Block {
         position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
         position.Move(item.PivotPosition); // PivotPosition is Offset which comes from snapping
 
-        name = article.Name;
-        blockType = article.Type;
-        Path = article.Path;
+        name = article?.Name ?? item.ItemModel.Id;
+        blockType = article?.Type ?? BlockType.Item;
+        Path = article?.Path ?? "";
 
-        fromArticle.MoveChain.Apply(position,article);
+        fromArticle?.MoveChain.Apply(position,article);
         moveChain?.Apply(position,article);
-        article.MoveChain.Subtract(position,article);
+        article?.MoveChain.Subtract(position,article);
     }
 
     private void PlaceItemInMap(CGameCtnChallenge map){

@@ -5,6 +5,7 @@ public class CustomBlockAlteration {
     public virtual string Description { get{ return "No description given";} }
     public virtual bool Published { get{ return false;} }
     public virtual bool HasFlaws { get{ return true;} }
+    public virtual string Name { get{ return GetType().Name;} }
     public virtual bool AlterGeometry(CustomBlock customBlock, CPlugCrystal.GeometryLayer layer) {return false;}
     public virtual bool AlterTrigger(CustomBlock customBlock, CPlugCrystal.TriggerLayer layer) {return false;}
     public virtual bool AlterSpawn(CustomBlock customBlock, CPlugCrystal.SpawnPositionLayer layer) {return false;}

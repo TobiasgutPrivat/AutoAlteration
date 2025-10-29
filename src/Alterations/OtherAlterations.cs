@@ -258,7 +258,7 @@ public class Flipped: Alteration {
         // from (1,9,1) to (48,38,48)
         map.StageAll(RotateCenter(0,PI,0));
         map.PlaceStagedBlocks();
-        new CPEffect("Boost",RotateMid(PI,0,0),true, true).Run(map);
+        new CPEffect("Boost2",RotateMid(PI,0,0),true, true).Run(map);
     }
 }
 
