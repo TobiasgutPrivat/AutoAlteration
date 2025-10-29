@@ -1,6 +1,4 @@
-using GBX.NET;
-
-public abstract class InventoryChange: PosUtils {
+public abstract class InventoryChange {
     public abstract void ChangeInventory(Inventory inventory, bool mapSpecific = false);
 }
 

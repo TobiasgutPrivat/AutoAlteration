@@ -56,7 +56,7 @@ public class Article {
     }
 
     public Article CloneArticle() =>
-        new(Name,Type,Keywords.ToList(),ToShapes.ToList(),MoveChain.Clone(),Length,Width);
+        new(Name,Type,Keywords.ToList(),ToShapes.ToList(),[.. MoveChain],Length,Width);
 
     public bool HasKeyword(string keyword) =>
         Keywords.Contains(keyword) || ToShapes.Contains(keyword);

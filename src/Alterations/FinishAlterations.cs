@@ -12,37 +12,37 @@ public class MoveFinish(MoveChain move): Alteration {
 public class OneBack: MoveFinish {
     public override string Description => "moves the Finish one Tile back";
 
-    public OneBack(): base(Move(0,0,32)) { }
+    public OneBack(): base(new Offset(0,0,32)) { }
 }
 
 public class OneForward: MoveFinish {
     public override string Description => "moves the Finish one Tile forward";
-    public OneForward(): base(Move(0,0,-32)) { }
+    public OneForward(): base(new Offset(0,0,-32)) { }
 }
 
 public class OneDown: MoveFinish {
     public override string Description => "moves the Finish one Tile down";
-    public OneDown(): base(Move(0,-8,0)) { }
+    public OneDown(): base(new Offset(0,-8,0)) { }
 }
 
 public class OneLeft: MoveFinish {
     public override string Description => "moves the Finish one Tile to the left";
-    public OneLeft(): base(Move(32,0,0)) { }
+    public OneLeft(): base(new Offset(32,0,0)) { }
 }
 
 public class OneRight: MoveFinish {
     public override string Description => "moves the Finish one Tile to the right";
-    public OneRight(): base(Move(-32,0,0)) { }
+    public OneRight(): base(new Offset(-32,0,0)) { }
 }
 
 public class OneUP: MoveFinish {
     public override string Description => "moves the Finish one Tile up";
-    public OneUP(): base(Move(0,8,0)) { }
+    public OneUP(): base(new Offset(0,8,0)) { }
 }
 
 public class TwoUP: MoveFinish {
     public override string Description => "moves the Finish two Tiles up";
-    public TwoUP(): base(Move(0,16,0)) { }
+    public TwoUP(): base(new Offset(0,16,0)) { }
 }
 
 //better reverse (manual)
@@ -60,7 +60,7 @@ public class Inclined : Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select("MapStart|Multilap|Finish").Edit().PlaceRelative(map,Rotate(0,0.2f*PI,0));
+        inventory.Select("MapStart|Multilap|Finish").Edit().PlaceRelative(map,new Rotate(0,0.2f*PI,0));
         map.Delete(inventory.Select("MapStart"),true);
         map.PlaceStagedBlocks();
     }

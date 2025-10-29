@@ -28,8 +28,8 @@ public class AirMode: Alteration {
         Inventory DecoHills = tiltedBlocks.Select("DecoHill");
         Inventory notGrassHills = Platforms.Select("Dirt|Ice");
 
-        notGrassHills.RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(map,RotateMid(new Vec3(-PI/2,0,0)));
-        DecoHills.Except(notGrassHills).RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map,RotateMid(new Vec3(-PI/2,0,0)));
+        notGrassHills.RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(map,new RotateMid(new Vec3(-PI/2,0,0)));
+        DecoHills.Except(notGrassHills).RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map,new RotateMid(new Vec3(-PI/2,0,0)));
 
         // map.StageAll(); // only set air mode if pillar could be set accordingly, can be changed if pillars done completely
         map.stagedBlocks.ForEach(x => x.IsAir = true);
@@ -63,7 +63,7 @@ public class AntiBooster : Alteration
         tiltedBoosters.Select("Left").RemoveKeyword("Left").AddKeyword("Right").Replace(map);
         tiltedBoosters.Select("Right").RemoveKeyword("Right").AddKeyword("Left").Replace(map); ;
         map.PlaceStagedBlocks();
-        map.Move(boosters, RotateMid(PI, 0, 0));
+        map.Move(boosters, new RotateMid(PI, 0, 0));
         map.PlaceStagedBlocks();
     }
 }
@@ -120,11 +120,11 @@ public class Checkpointnt: CPEffect { //only blocks Checkpoints
         Inventory triggers = inventory.Select("CheckpointTrigger|MultilapTrigger&!Ring");
         Article Pillar = inventory.GetArticle("ObstaclePillar2m");
         for (int i = 0; i < 13; i++){
-            map.PlaceRelative(triggers.Select("!Tilt&!WithWall"),Pillar,Move(12-i*2,0,0));
-            map.PlaceRelative(triggers.Select("Tilt&Left"),Pillar,Rotate(0,0,slope).Move(12-i*2,0,0));
-            map.PlaceRelative(triggers.Select("Tilt&Right"),Pillar,Rotate(0,0,-slope).Move(12-i*2,0,0));
+            map.PlaceRelative(triggers.Select("!Tilt&!WithWall"),Pillar,new Offset(12-i*2,0,0));
+            map.PlaceRelative(triggers.Select("Tilt&Left"),Pillar,[new Rotate(0,0,slope), new Offset(12-i*2,0,0)]);
+            map.PlaceRelative(triggers.Select("Tilt&Right"),Pillar,[new Rotate(0,0,-slope), new Offset(12-i*2,0,0)]);
             for (int j = 0; j < 3; j++){
-                map.PlaceRelative(triggers.Select("WithWall"),Pillar,Move(12-i*2,j*8,0));
+                map.PlaceRelative(triggers.Select("WithWall"),Pillar,new Offset(12-i*2,j*8,0));
             }
         } 
         map.PlaceStagedBlocks();
@@ -148,7 +148,7 @@ public class CPBoost : Alteration{
         inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Right","Left","Center","Checkpoint","v2"]).AddKeyword("Turbo").Replace(map);
         inventory.Select(BlockType.Item).Select("Turbo").AddKeyword("Center").RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(map);
         inventory.Select(BlockType.Item).Select("Turbo2").AddKeyword("Center").RemoveKeyword("Turbo2").AddKeyword("Checkpoint").Replace(map);
-        map.Replace(inventory.GetArticle("GateSpecial4mTurbo"),inventory.GetArticle("GateCheckpointCenter8mv2"),Move(2,0,0));//untested
+        map.Replace(inventory.GetArticle("GateSpecial4mTurbo"),inventory.GetArticle("GateCheckpointCenter8mv2"),new Offset(2,0,0));//untested
         map.PlaceStagedBlocks();
     }
 }
@@ -207,7 +207,7 @@ public class CPsRotated : Alteration{
     public override bool Complete => true;
 
     public override void Run(Map map){
-        map.Move(inventory.Select("Checkpoint"),RotateMid(PI*0.5f,0,0));
+        map.Move(inventory.Select("Checkpoint"),new RotateMid(PI*0.5f,0,0));
         map.PlaceStagedBlocks();
     }
 }
@@ -253,9 +253,9 @@ public class Flipped: Alteration {
     public override void Run(Map map){
         //Dimensions normal Stadium
         // from (1,9,1) to (48,38,48)
-        map.StageAll(RotateCenter(0,PI,0));
+        map.StageAll(new RotateCenter(0,PI,0));
         map.PlaceStagedBlocks();
-        new CPEffect("Boost",RotateMid(PI,0,0),true, true).Run(map);
+        new CPEffect("Boost",new RotateMid(PI,0,0),true, true).Run(map);
     }
 }
 
@@ -333,8 +333,8 @@ public class RingCP : Alteration {
 
     public override void Run(Map map){
         Article GateCheckpoint = inventory.GetArticle("GateCheckpoint");
-        map.PlaceRelative(inventory.Select(BlockType.Item).Select("Checkpoint"),GateCheckpoint,Move(-16,-12,-16));
-        map.PlaceRelative(inventory.Select(BlockType.Block).Select("CheckpointTrigger"),GateCheckpoint,Move(0,-12,0));
+        map.PlaceRelative(inventory.Select(BlockType.Item).Select("Checkpoint"),GateCheckpoint,new Offset(-16,-12,-16));
+        map.PlaceRelative(inventory.Select(BlockType.Block).Select("CheckpointTrigger"),GateCheckpoint,new Offset(0,-12,0));
         map.Delete(inventory.Select("Checkpoint"),true);
         map.PlaceStagedBlocks();
     }
@@ -362,7 +362,7 @@ public class StartOneDown: Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select("MapStart").Edit().PlaceRelative(map,Move(0,-8,0));
+        inventory.Select("MapStart").Edit().PlaceRelative(map,new Offset(0,-8,0));
         map.Delete(inventory.Select("MapStart"),true);
         map.PlaceStagedBlocks();
     }
@@ -416,12 +416,12 @@ public class Tilted: Alteration {
         //TODO add grass blocks at the bottom of stadium
         Random rand = new();
         Vec3 angle = new Vec3(rand.Next() % 1000f / 200f, (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f), (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f));
-        map.StageAll(RotateCenter(angle));
+        map.StageAll(new RotateCenter(angle));
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
         map.PlaceStagedBlocks();
 
         Position thumbNailPos = new Position(map.map.ThumbnailPosition, map.map.ThumbnailPitchYawRoll);
-        RotateCenter(angle).Apply(thumbNailPos, new Article());
+        new RotateCenter(angle).Apply(thumbNailPos, new Article());
         map.map.ThumbnailPosition = new Vec3(thumbNailPos.coords.X, thumbNailPos.coords.Y + 300, thumbNailPos.coords.Z);
         map.map.ThumbnailPitchYawRoll = thumbNailPos.pitchYawRoll;
     }
@@ -447,8 +447,8 @@ public class YeetDown: Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map,RotateMid(PI,0,0));
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map,RotateMid(PI,0,0));
+        inventory.Select(BlockType.Block).Select("Checkpoint").RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map,new RotateMid(PI,0,0));
+        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map,new RotateMid(PI,0,0));
         map.PlaceStagedBlocks();
     }
 }
@@ -506,7 +506,7 @@ public class Rotated: Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        map.Move(inventory.Select(BlockType.Block),RotateMid(PI,0,0));
+        map.Move(inventory.Select(BlockType.Block),new RotateMid(PI,0,0));
         map.PlaceStagedBlocks();
     }
 }

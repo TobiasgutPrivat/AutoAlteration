@@ -7,7 +7,7 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
     public override void Run(Map map)
     {
         if (Effect == "") throw new Exception("Not intended to be used without Effect");
-        moveChain ??= new();
+        moveChain ??= [];
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
         Article GateSpecial;
         if (oriented) {
@@ -15,11 +15,11 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
         } else{
             GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
         }
-        map.PlaceRelative(start.Select("!Water&!RoadIce&!RoadBump"), GateSpecial,Move(0,-16,0).AddChain(moveChain));
-        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,Move(0,-8,-2).AddChain(moveChain));
-        map.PlaceRelative(start.Select("RoadBump"), GateSpecial,Move(0,-16,2).AddChain(moveChain));
-        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,Move(0,-16,-2).AddChain(moveChain));
-        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,Move(0,0,-10).AddChain(moveChain));
+        map.PlaceRelative(start.Select("!Water&!RoadIce&!RoadBump"), GateSpecial,[new Offset(0,-16,0),.. moveChain]);
+        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,[new Offset(0,-8,-2), ..moveChain]);
+        map.PlaceRelative(start.Select("RoadBump"), GateSpecial,[new Offset(0,-16,2), ..moveChain]);
+        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,[new Offset(0,-16,-2), ..moveChain]);
+        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,[new Offset(0,0,-10), ..moveChain]);
         map.PlaceStagedBlocks();
     }
 }
@@ -38,11 +38,11 @@ public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool orien
         inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(map,moveChain);
 
         Inventory triggers = inventory.Select("(CheckpointTrigger|MultilapTrigger)");
-        map.PlaceRelative(triggers.Select("!Ring&!WithWall"), GateSpecial,Move(-16,-16,-16).AddChain(moveChain));
-        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
-        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),Move(6,12,0).Rotate(0,0,PI*-0.5f).AddChain(moveChain));
-        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(0,7,0).Rotate(0,0,PI).AddChain(moveChain));
-        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),Move(-6,12,0).Rotate(0,0,PI*0.5f).AddChain(moveChain));
+        map.PlaceRelative(triggers.Select("!Ring&!WithWall"), GateSpecial,[new Offset(-16,-16,-16), ..moveChain]);
+        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
+        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(6,12,0), new Rotate(0,0,PI*-0.5f), ..moveChain]);
+        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
+        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(-6,12,0), new Rotate(0,0,PI*0.5f), ..moveChain]);
         map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial,moveChain);
 
         map.PlaceStagedBlocks();
@@ -57,7 +57,7 @@ public class Cruise: CPEffect {
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public Cruise() : base("Cruise",Move(0,0,1)) {}
+    public Cruise() : base("Cruise",[new Offset(0,0,1)]) {}
 }
 
 public class Fragile: CPEffect {
@@ -79,8 +79,8 @@ public class FreeWheel(): CPEffect {
 
     public override void Run(Map map){
         new CPEffect("Turbo").Run(map);
-        new CPEffect("NoEngine",Move(0,0,1),includeStart: false).Run(map);
-        new StartEffect("NoEngine",Move(0,0,3)).Run(map);
+        new CPEffect("NoEngine",[new Offset(0,0,1)],includeStart: false).Run(map);
+        new StartEffect("NoEngine",[new Offset(0,0,3)]).Run(map);
     }
 }
 
@@ -92,8 +92,8 @@ public class Glider(): CPEffect {
 
     public override void Run(Map map){
         new CPEffect("Boost").Run(map);
-        new CPEffect("NoEngine",Move(0,0,1),includeStart: false).Run(map);
-        new StartEffect("NoEngine",Move(0,0,3)).Run(map);
+        new CPEffect("NoEngine",[new Offset(0,0,1)],includeStart: false).Run(map);
+        new StartEffect("NoEngine",[new Offset(0,0,3)]).Run(map);
     }
 }
 
@@ -103,7 +103,7 @@ public class NoBrake: CPEffect {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public NoBrake() : base("NoBrake",Move(0,0,1),includeStart: true) {}
+    public NoBrake() : base("NoBrake",[new Offset(0,0,1)],includeStart: true) {}
 }
 
 public class NoEffect: Alteration {
@@ -129,7 +129,7 @@ public class NoSteer: CPEffect {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public NoSteer() : base("NoSteering",Move(0,0,1),includeStart: true) {}
+    public NoSteer() : base("NoSteering",[new Offset(0,0,1)],includeStart: true) {}
 }
 
 public class RandomDankness: Alteration {
@@ -183,7 +183,7 @@ public class ReactorDown: CPEffect {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public ReactorDown() : base("Boost2",RotateMid(PI,0,0),true,true) {}
+    public ReactorDown() : base("Boost2",[new RotateMid(PI,0,0)],true,true) {}
 }
 
 public class RedEffects: Alteration {
@@ -217,7 +217,7 @@ public class SlowMo: CPEffect {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public SlowMo() : base("SlowMotion",Move(0,0,1),includeStart: true) {}
+    public SlowMo() : base("SlowMotion",new Offset(0,0,1),includeStart: true) {}
 }
 
 //TODO WetWheels (custom)block

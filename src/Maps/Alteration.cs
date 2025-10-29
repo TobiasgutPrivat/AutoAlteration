@@ -1,4 +1,4 @@
-public abstract class Alteration: PosUtils {
+public abstract class Alteration {
     public abstract void Run(Map map);
 
     public virtual string Description => "No description given"; // Alteration Description
@@ -13,6 +13,8 @@ public abstract class Alteration: PosUtils {
     public virtual List<Alteration> AlterationsBefore { get; } = [];// applied in AlterFile()
 
     public static Inventory inventory = new();
+    
+    public const float PI = (float)Math.PI;
     
     public static void CreateInventory() {
         inventory = new(VanillaArticleProvider.GetArticles()); //Clear inventory when regenerating

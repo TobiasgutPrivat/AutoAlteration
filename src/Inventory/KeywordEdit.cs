@@ -32,12 +32,12 @@ public class KeywordEdit { //maybe call Alignement
     }
 
     public KeywordEdit SetChain(MoveChain moveChain) {
-        articles.Keys.ToList().ForEach(a => a.MoveChain = moveChain.Clone());
+        articles.Keys.ToList().ForEach(a => a.MoveChain = [.. moveChain]);
         return this;
     }
 
     public KeywordEdit AddChain(MoveChain moveChain) {
-        articles.Keys.ToList().ForEach(a => a.MoveChain.AddChain(moveChain));
+        articles.Keys.ToList().ForEach(a => a.MoveChain.AddRange(moveChain));
         return this;
     }
 

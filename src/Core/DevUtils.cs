@@ -127,8 +127,8 @@ class CustomBlockAirTest : Alteration {
     public override void Run(Map map)
     {
         Inventory platform = inventory.Select("Platform");
-        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(map,Move(new Vec3(0,100,0)));
-        (!platform).AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(map,Move(new Vec3(0,100,0)));
+        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(map,new Offset(new Vec3(0,100,0)));
+        (!platform).AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(map,new Offset(new Vec3(0,100,0)));
         map.stagedBlocks.ForEach(block => block.IsAir = false);
         map.PlaceStagedBlocks(false);
         // turns out to be not in air mode and not wood
@@ -154,7 +154,7 @@ class Replace : Alteration {
 class Test : Alteration {
     public override void Run(Map map)
     {
-        inventory.Edit().Replace(map,Move(16,0,0));//Test if Rotation is before or after Move
+        inventory.Edit().Replace(map,new Offset(16,0,0));//Test if Rotation is before or after Move
         map.PlaceStagedBlocks();
     }
 }

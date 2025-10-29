@@ -1,4 +1,5 @@
 
+using System.Runtime.CompilerServices;
 using GBX.NET;
 
 public abstract class Move
@@ -30,6 +31,11 @@ public class Rotate: Move{
     public override void Apply(Position position, Article? article = null)
     {
         position.Rotate(vector);
+    }
+
+    public static Rotate operator -(Rotate move)
+    {
+        return new Rotate(-move.vector);
     }
 }
 
