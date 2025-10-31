@@ -11,12 +11,12 @@ public class SnowScenery : Alteration
     public override void Run(Map map)
     {
         // Scenery blocks: 
-        inventory.Select("Deco|Water|DecoWall|DecoPlatform").RemoveKeyword(["Grass","Dirt"]).AddKeyword("Ice").Replace(map);
+        inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Dirt"]).AddKeyword("Ice").Replace(map);
         // Actual blocks: 
-        inventory.Select("PenaltyDirt|Penalty").RemoveKeyword(["PenaltyDirt","Penalty"]).AddKeyword("PenaltyIce").Replace(map);
+        inventory.Any(["PenaltyDirt","Penalty"]).Edit().RemoveKeyword(["PenaltyDirt","Penalty"]).AddKeyword("PenaltyIce").Replace(map);
         
         Inventory WaterWall = inventory.Select("Water").Select("Wall");
-        WaterWall.RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Ice").Replace(map);
+        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Ice").Replace(map);
         
         // Open Road/Zone
         // inventory.Select("OpenDirtRoad|OpenTechRoad").RemoveKeyword(["OpenDirtRoad","OpenTechRoad"]).AddKeyword("OpenIceRoad").Replace(map);
@@ -57,12 +57,12 @@ public class SandScenery : Alteration
     public override void Run(Map map)
     {
         // Scenery blocks: 
-        inventory.Select("Deco|Water|DecoWall|DecoPlatform").RemoveKeyword(["Grass","Ice"]).AddKeyword("Dirt").Replace(map);
+        inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Ice"]).AddKeyword("Dirt").Replace(map);
         // Actual blocks: 
-        inventory.Select("PenaltyIce|Penalty").RemoveKeyword(["PenaltyIce","Penalty"]).AddKeyword("PenaltyDirt").Replace(map);
+        inventory.Any(["PenaltyIce","Penalty"]).Edit().RemoveKeyword(["PenaltyIce","Penalty"]).AddKeyword("PenaltyDirt").Replace(map);
         
         Inventory WaterWall = inventory.Select("Water").Select("Wall");
-        WaterWall.RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Dirt").Replace(map);
+        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Dirt").Replace(map);
         
         // Open Road/Zone
         // inventory.Select("OpenIceRoad|OpenTechRoad").RemoveKeyword(["OpenIceRoad","OpenTechRoad"]).AddKeyword("OpenDirtRoad").Replace(map);
@@ -110,16 +110,17 @@ public class GrassScenery : Alteration
     public override void Run(Map map)
     {
         // Scenery blocks: 
-        inventory.Select("Deco|Water|DecoWall|DecoPlatform").RemoveKeyword(["Dirt","Ice"]).Replace(map);
+        Inventory DecoWater = inventory.Any(["Deco", "Water", "DecoWall", "DecoPlatform"]);
+        DecoWater.Edit().RemoveKeyword(["Dirt","Ice"]).Replace(map);
         map.PlaceStagedBlocks();
-        inventory.Select("Deco|Water|DecoWall|DecoPlatform").AddKeyword("Grass").Replace(map);
+        DecoWater.Edit().AddKeyword("Grass").Replace(map);
         map.PlaceStagedBlocks();
 
         // Actual blocks: 
-        inventory.Select("PenaltyDirt|PenaltyIce").RemoveKeyword(["PenaltyDirt","PenaltyIce"]).Replace(map);
+        inventory.Any(["PenaltyDirt","PenaltyIce"]).Edit().RemoveKeyword(["PenaltyDirt","PenaltyIce"]).Replace(map);
 
         Inventory WaterWall = inventory.Select("Water").Select("Wall");
-        WaterWall.RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Grass").Replace(map);
+        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Grass").Replace(map);
 
         // Trees
         map.Replace(inventory.GetArticles([ "FirSnowTall" ]), inventory.GetArticle("FirTall"));

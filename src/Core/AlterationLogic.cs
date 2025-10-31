@@ -11,7 +11,7 @@ public class AlterationLogic {
         if (Directory.Exists(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"))){
             Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"),true);
         }
-        Alteration.inventory.ClearSpecific();
+        Alteration.inventory = Alteration.inventory.Select(a => !a.MapSpecific); //remove map specific articles from inventory
 
         //create inventory for Alteration
         if (lastAlterations == null || alterations.Any(a => !lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
@@ -37,7 +37,7 @@ public class AlterationLogic {
 
         //Map specific custom blocks
         if (map.embeddedBlocks.Count != 0){
-            Alteration.inventory.AddArticles(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)).ToList());
+            Alteration.inventory.Union(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)));
             Alteration.inventory.cachedInventories.Clear();
             if (AlterationConfig.devMode)
             { //logging

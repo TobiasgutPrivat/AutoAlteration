@@ -1,5 +1,4 @@
 class EffectUtils {
-    public static string SelAllEffects = "Boost|Boost2|Turbo|Turbo2|TurboRoulette|Fragile|NoSteering|SlowMotion|NoBrake|Cruise|Reset|NoEngine";
     public static List<string> AllEffects = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"];
 }
 
@@ -9,17 +8,16 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
         if (Effect == "") throw new Exception("Not intended to be used without Effect");
         moveChain ??= [];
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
-        Article GateSpecial;
-        if (oriented) {
-            GateSpecial = inventory.GetArticle("GateSpecial" + Effect + "Oriented");
-        } else{
-            GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
-        }
-        map.PlaceRelative(start.Select("!Water&!RoadIce&!RoadBump"), GateSpecial,[new Offset(0,-16,0),.. moveChain]);
-        map.PlaceRelative(start.Select("RoadIce"), GateSpecial,[new Offset(0,-8,-2), ..moveChain]);
-        map.PlaceRelative(start.Select("RoadBump"), GateSpecial,[new Offset(0,-16,2), ..moveChain]);
+        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") 
+            : inventory.GetArticle("GateSpecial" + Effect);
+        Inventory startRoadIce = start.Select("RoadIce");
+        Inventory startRoadBump = start.Select("RoadBump");
+        map.PlaceRelative((start/startRoadBump/startRoadIce).Not("Water"), GateSpecial,[new Offset(0,-16,0),.. moveChain]);
+        map.PlaceRelative(startRoadIce, GateSpecial,[new Offset(0,-8,-2), ..moveChain]);
+        map.PlaceRelative(startRoadBump, GateSpecial,[new Offset(0,-16,2), ..moveChain]);
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,[new Offset(0,-16,-2), ..moveChain]);
-        inventory.Select(BlockType.Item).Select("MapStart&Gate").AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,[new Offset(0,0,-10), ..moveChain]);
+        inventory.Select(BlockType.Item).Select("MapStart").Select("Gate").Edit()
+            .AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(map,[new Offset(0,0,-10), ..moveChain]);
         map.PlaceStagedBlocks();
     }
 }
@@ -28,21 +26,19 @@ public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool orien
     public override string Description => "places an Effect on every Checkpoint";
     public override void Run(Map map) {
         if (Effect == "") throw new Exception("Not intended to be used without Effect");
-        moveChain ??= new();
-        Article GateSpecial;
-        if (oriented) {
-            GateSpecial = inventory.GetArticle("GateSpecial" + Effect + "Oriented");
-        } else{
-            GateSpecial = inventory.GetArticle("GateSpecial" + Effect);
-        }
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(map,moveChain);
+        moveChain ??= [];
+        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") 
+            : inventory.GetArticle("GateSpecial" + Effect);
+        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(map,moveChain);
 
-        Inventory triggers = inventory.Select("(CheckpointTrigger|MultilapTrigger)");
-        map.PlaceRelative(triggers.Select("!Ring&!WithWall"), GateSpecial,[new Offset(-16,-16,-16), ..moveChain]);
-        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
-        map.PlaceRelative(triggers.Select("WithWall&Left"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(6,12,0), new Rotate(0,0,PI*-0.5f), ..moveChain]);
-        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
-        map.PlaceRelative(triggers.Select("WithWall&Right"), inventory.GetArticle("GateSpecial32m" + Effect),[new Offset(-6,12,0), new Rotate(0,0,PI*0.5f), ..moveChain]);
+        Inventory triggers = inventory.Select("CheckpointTrigger") | inventory.Select("MultilapTrigger)");
+        Inventory withWall = triggers.Select("WithWall");
+        map.PlaceRelative((triggers / withWall).Not("Ring"), GateSpecial, [new Offset(-16, -16, -16), .. moveChain]);
+        Article GateSpecial32 = inventory.GetArticle("GateSpecial32m" + Effect);
+        map.PlaceRelative(withWall.Select("Left"), GateSpecial32,[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
+        map.PlaceRelative(withWall.Select("Left"), GateSpecial32,[new Offset(6,12,0), new Rotate(0,0,PI*-0.5f), ..moveChain]);
+        map.PlaceRelative(withWall.Select("Right"), GateSpecial32,[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
+        map.PlaceRelative(withWall.Select("Right"), GateSpecial32,[new Offset(-6,12,0), new Rotate(0,0,PI*0.5f), ..moveChain]);
         map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial,moveChain);
 
         map.PlaceStagedBlocks();
@@ -114,9 +110,9 @@ public class NoEffect: Alteration {
 
 
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select(EffectUtils.SelAllEffects)
+        inventory.Select(BlockType.Block).Any(EffectUtils.AllEffects).Edit()
             .RemoveKeyword(EffectUtils.AllEffects).Replace(map);
-        map.Delete(inventory.Select(BlockType.Item).Select(EffectUtils.SelAllEffects));
+        map.Delete(inventory.Select(BlockType.Item).Any(EffectUtils.AllEffects));
         map.PlaceStagedBlocks();
     }
 }
@@ -139,15 +135,18 @@ public class RandomDankness: Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint&!((Slope|Slope2)&(Left|Right))").RemoveKeyword("Checkpoint")
+        Inventory blocks = inventory.Select(BlockType.Block);
+        Inventory checkpoints = blocks.Select("Checkpoint");
+        (checkpoints / (checkpoints.Any(["Slope","Slope2"]) & checkpoints.Any(["Left","Right"])))
+            .Edit().RemoveKeyword("Checkpoint")
             .ReplaceWithRandom(map,EffectUtils.AllEffects);
-        inventory.Select(BlockType.Block).Select("Checkpoint&Slope&(Left|Right)").RemoveKeyword(["Checkpoint","Slope"]).AddKeyword("Tilt")
+        checkpoints.Select("Slope").Any(["Left","Right"]).Edit().RemoveKeyword(["Checkpoint","Slope"]).AddKeyword("Tilt")
             .ReplaceWithRandom(map,EffectUtils.AllEffects);
-        inventory.Select(BlockType.Block).Select("Checkpoint&Slope2&(Left|Right)").RemoveKeyword(["Checkpoint","Slope2"]).AddKeyword("Tilt2")
+        checkpoints.Select("Slope2").Any(["Left","Right"]).Edit().RemoveKeyword(["Checkpoint","Slope2"]).AddKeyword("Tilt2")
             .ReplaceWithRandom(map,EffectUtils.AllEffects);
-        inventory.Select(BlockType.Item).Select("Checkpoint").RemoveKeyword(["Checkpoint","Left","Right","Center"])
+        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"])
             .ReplaceWithRandom(map,EffectUtils.AllEffects);
-        inventory.Select(EffectUtils.SelAllEffects)
+        inventory.Any(EffectUtils.AllEffects).Edit()
             .RemoveKeyword(EffectUtils.AllEffects)
             .ReplaceWithRandom(map,EffectUtils.AllEffects);
         map.PlaceStagedBlocks();
@@ -161,7 +160,7 @@ public class RandomEffects: Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select(EffectUtils.SelAllEffects)
+        inventory.Select(BlockType.Block).Any(EffectUtils.AllEffects).Edit()
             .RemoveKeyword(EffectUtils.AllEffects)
             .ReplaceWithRandom(map,EffectUtils.AllEffects);
         map.PlaceStagedBlocks();
@@ -193,7 +192,7 @@ public class RedEffects: Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(EffectUtils.SelAllEffects).RemoveKeyword(EffectUtils.AllEffects).AddKeyword("Turbo2").Replace(map);
+        inventory.Any(EffectUtils.AllEffects).Edit().RemoveKeyword(EffectUtils.AllEffects).AddKeyword("Turbo2").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
@@ -205,7 +204,7 @@ public class RngBooster: Alteration {
     public override bool Complete => true;
 
     public override void Run(Map map){
-        inventory.Select(EffectUtils.SelAllEffects).RemoveKeyword(EffectUtils.AllEffects).AddKeyword("TurboRoulette").Replace(map);
+        inventory.Any(EffectUtils.AllEffects).Edit().RemoveKeyword(EffectUtils.AllEffects).AddKeyword("TurboRoulette").Replace(map);
         map.PlaceStagedBlocks();
     }
 }
