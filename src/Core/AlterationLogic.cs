@@ -28,7 +28,6 @@ public class AlterationLogic {
                     change.ChangeInventory(Alteration.inventory);
                 });
             }
-            Alteration.DefaultInventoryChanges();
 
             if (AlterationConfig.devMode){ //logging
                 Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));

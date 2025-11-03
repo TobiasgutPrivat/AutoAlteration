@@ -229,6 +229,10 @@ In that case make sure you have correct package source using:
     when loading extracted objects into gbx.net they corrupt
   - lightmap issue (when alterting surface, or model, often some visual errors occur over normal model)
   - Full customblok-sets (Heavy -> light, Vanilla)
+    - Vanilla: export Plugin from Ar, or Openplanet Export needing .EDClassic.Gbx -> .Block.Gbx
+
+  - maybe resave plugin to fix lighting issue (ArEyeses dm) -> create full sets for ass Alterations
+  - 
 
 <!--
 Opt.:

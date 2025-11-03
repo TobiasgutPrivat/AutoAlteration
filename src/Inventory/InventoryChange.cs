@@ -6,11 +6,11 @@ public class CustomBlockFolder(string subFolder) : InventoryChange {
     public readonly string folder = Path.Combine(AlterationConfig.CustomBlocksFolder, subFolder);
 
     public override void ChangeInventory(Inventory inventory, bool mapSpecific = false) {
-        inventory.AddArticles(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(x.Replace(folder,""), BlockType.CustomBlock, x, mapSpecific)).ToList());
+        Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().ForEach(x =>
+            inventory.Add(new Article(x.Replace(folder, ""), BlockType.CustomBlock, x, mapSpecific)));
 
-        inventory.AddArticles(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(x.Replace(folder,""), BlockType.CustomItem, x, mapSpecific)).ToList());
+        Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().ForEach(x =>
+            inventory.Add(new Article(x.Replace(folder,""), BlockType.CustomItem, x, mapSpecific)));
     }
 }
 
@@ -28,11 +28,11 @@ public class CustomBlockSet(CustomBlockAlteration customBlockAlteration, bool sk
             GenerateBlockSet();
         }
         
-        inventory.AddArticles(Directory.GetFiles(GetFolder(), "*.Block.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x), BlockType.CustomBlock, x)).ToList());
+        Directory.GetFiles(GetFolder(), "*.Block.Gbx", SearchOption.AllDirectories).ToList().ForEach(x =>
+            inventory.Add(new Article(Path.GetFileName(x), BlockType.CustomBlock, x)));
 
-        inventory.AddArticles(Directory.GetFiles(GetFolder(), "*.Item.Gbx", SearchOption.AllDirectories)
-            .Select(x => new Article(Path.GetFileName(x), BlockType.CustomItem, x)).ToList());
+        Directory.GetFiles(GetFolder(), "*.Item.Gbx", SearchOption.AllDirectories).ToList().ForEach(x =>
+            inventory.Add(new Article(Path.GetFileName(x), BlockType.CustomItem, x)));
     }
 
     public void GenerateBlockSet() {

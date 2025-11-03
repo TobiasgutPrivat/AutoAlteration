@@ -2,7 +2,7 @@ using GBX.NET;
 using Newtonsoft.Json;
 
 /// <summary>
-/// Loads vanilla articles from json data files.
+/// Provides vanilla articles based on json data files.
 /// </summary>
 class VanillaArticleProvider
 {
@@ -32,8 +32,8 @@ class VanillaArticleProvider
         //     ...
         // ]
 
-        BlockJson = BlockPropertiesCorrections(BlockJson);
-        ItemJson = BlockPropertiesCorrections(ItemJson);
+        BlockJson = BlockDataCorrections(BlockJson);
+        ItemJson = ItemDataCorrections(ItemJson);
 
         dynamic[]? BlockJsonArray = JsonConvert.DeserializeObject<dynamic[]>(BlockJson) ?? [];
         dynamic[]? ItemJsonArray = JsonConvert.DeserializeObject<dynamic[]>(ItemJson) ?? [];
@@ -67,18 +67,22 @@ class VanillaArticleProvider
         Inventory inventory = [.. articles];
         articles.AddRange(CreateCheckpointTriggers(inventory));
         articles.AddRange(CreateNonCPBlocks());
-        NormalizeCheckpoint(inventory);
+        inventory = [.. articles];
+        NormalizeCheckpoint(inventory);//maybe earlier
         DefaultInventoryChanges(inventory);
         return [.. inventory];
     }
 
-    private static string BlockPropertiesCorrections(string json)
+    private static string ItemDataCorrections(string json)
     { //Hardcoded corrections, depends on imported Data
-        //TODO split into block and item corrections, check whats still needed
-        json = json.Replace("PlatformGrassSlope2UTop", "PlatformGrasssSlope2UTop");
-        json = json.Replace("PlatForm", "Platform");
         json = json.Replace("ShowFogger8M", "ShowFogger8m");
         json = json.Replace("ShowFogger16M", "ShowFogger16m");
+        return json;
+    }
+    private static string BlockDataCorrections(string json)
+    { //Hardcoded corrections, depends on imported Data
+        json = json.Replace("PlatformGrassSlope2UTop", "PlatformGrasssSlope2UTop"); //ingame spelled with "sss"
+        json = json.Replace("PlatForm", "Platform");
         json = json.Replace("CheckPoint", "Checkpoint");
         json = json.Replace("DecoHillSlope2curve2Out", "DecoHillSlope2Curve2Out");
         json = json.Replace("RoadIceWithWallDiagLeftStraight", "RoadIceDiagLeftWithWallStraight");
@@ -139,6 +143,7 @@ class VanillaArticleProvider
     
     /// <summary>
     /// For Checkpoints, adds blocks without checkpoint keyword but with orientation Keywords.
+    /// Needed for matching when Checkpoint Keyword removed
     /// </summary>
     private static List<Article> CreateNonCPBlocks() {
         List<Article> articles = [];
@@ -157,12 +162,14 @@ class VanillaArticleProvider
         articles.AddRange(CreatePlatformNoCPBlocks("Ice"));
         articles.AddRange(CreateIceRoadNoCPBlocks());
         Inventory tempInventory = [.. articles];
+        //set sizes
         tempInventory.Any(["DiagRight","DiagLeft"]).ToList().ForEach(x => {x.Width = 3;x.Height = 1;x.Length = 2;});
         tempInventory.Select("Slope2").ToList().ForEach(x => {x.Width = 1;x.Height = 3;x.Length = 1;});
-        tempInventory.Select("Slope|Tilt").ToList().ForEach(x => {x.Width = 1;x.Height = 2;x.Length = 1;});
+        tempInventory.Any(["Slope","Tilt"]).ToList().ForEach(x => {x.Width = 1;x.Height = 2;x.Length = 1;});
         tempInventory.Select("Wall").ToList().ForEach(x => {x.Width = 1;x.Height = 4;x.Length = 1;});
-        (tempInventory/tempInventory.Select(["DiagRight","DiagLeft","Slope2","Slope","Wall","Tilt"]))
-            .ToList().ForEach(x => {x.Width = 1;x.Height = 1;x.Length = 1;});
+        (tempInventory / tempInventory.Select(["DiagRight", "DiagLeft", "Slope2", "Slope", "Wall", "Tilt"]))
+            .ToList().ForEach(x => { x.Width = 1; x.Height = 1; x.Length = 1; });
+        
         return [.. tempInventory];
     }
 

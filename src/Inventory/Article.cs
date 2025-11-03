@@ -45,7 +45,7 @@ public class Article {
 
         // for customblocksets get size from unaltered version
         AlterationConfig.CustomBlockSets.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
-        List<Article> vanillaVersion = Alteration.inventory.articles.Where(a => a.Name == vanillaName).ToList(); 
+        List<Article> vanillaVersion = Alteration.inventory.Where(a => a.Name == vanillaName).ToList(); 
         if (vanillaVersion.Count > 0) { 
             Width = vanillaVersion.First().Width;
             Length = vanillaVersion.First().Length;

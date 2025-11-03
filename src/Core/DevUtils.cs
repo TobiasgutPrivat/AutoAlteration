@@ -59,11 +59,11 @@ class DevUtils{
         new CustomBlockFolder("").ChangeInventory(Alteration.inventory);
         // new NoCPBlocks().ChangeInventory(Alteration.inventory);
         // new CheckpointTrigger().ChangeInventory(Alteration.inventory);
-        Alteration.inventory.CheckDuplicates();
-        Alteration.inventory.articles.ForEach(x => {
-            if (x.Keywords.Any(y => y == "")){Console.WriteLine("Empty Keyword found in " + x.Name);}
-            if (x.ToShapes.Any(y => y == "")){Console.WriteLine("Empty ToShape found in " + x.Name);}
-        });
+        // Alteration.inventory.CheckDuplicates();
+        // Alteration.inventory.articles.ForEach(x => {
+        //     if (x.Keywords.Any(y => y == "")){Console.WriteLine("Empty Keyword found in " + x.Name);}
+        //     if (x.ToShapes.Any(y => y == "")){Console.WriteLine("Empty ToShape found in " + x.Name);}
+        // });
     }
 
     public static void GenerateAlterationList()
@@ -127,13 +127,13 @@ class CustomBlockAirTest : Alteration {
     public override void Run(Map map)
     {
         Inventory platform = inventory.Select("Platform");
-        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(map,new Offset(new Vec3(0,100,0)));
-        (!platform).AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(map,new Offset(new Vec3(0,100,0)));
+        platform.Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(map,new Offset(new Vec3(0,100,0)));
+        (inventory/platform).Edit().AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(map,new Offset(new Vec3(0,100,0)));
         map.stagedBlocks.ForEach(block => block.IsAir = false);
         map.PlaceStagedBlocks(false);
         // turns out to be not in air mode and not wood
-        platform.RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
-        (!platform).AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
+        platform.Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
+        (inventory/platform).Edit().AddKeyword(["WoodSurfaceHeavy"]).Replace(map);
         map.stagedBlocks.ForEach(block => block.IsAir = true);
         // map.stagedBlocks.ForEach(block => block. = false);
         map.PlaceStagedBlocks(false);
@@ -175,7 +175,7 @@ class EmbedTest : Alteration {
         Inventory specific = inventory.Select(article => article.MapSpecific);
         // (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","NothingBlockHeavy"]).Replace(map);
         // (!specific).AddKeyword(["NothingBlockHeavy"]).Replace(map);
-        specific.AddKeyword(["NothingBlock"]).Replace(map);
+        specific.Edit().AddKeyword(["NothingBlock"]).Replace(map);
         // map.stagedBlocks.ForEach(x => x.IsAir = false);
         map.PlaceStagedBlocks(false);
     }

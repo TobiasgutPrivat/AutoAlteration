@@ -12,6 +12,8 @@ public abstract class Alteration {
 
     public virtual List<Alteration> AlterationsBefore { get; } = [];// applied in AlterFile()
 
+    public static Inventory inventory = [];
+
     public const float PI = (float)Math.PI;
     
     public static void CreateInventory() {

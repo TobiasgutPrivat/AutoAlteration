@@ -136,14 +136,13 @@ public class Map
 
   #region actions
   public void PlaceRelativeWithRandom(Article atBlock, Inventory newInventory,MoveChain ?moveChain = null){
-    List<Article> newArticles = newInventory.articles;
-    if (newArticles.Count == 0) return;
+    if (newInventory.Count == 0) return;
     Random rand = new();
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock.Name)){
-      stagedBlocks.Add(new Block(ctnBlock,atBlock,newArticles[rand.Next(newArticles.Count)],FreeBlockHeightOffset,moveChain));
+      stagedBlocks.Add(new Block(ctnBlock,atBlock,newInventory.ToList()[rand.Next(newInventory.Count)],FreeBlockHeightOffset,moveChain));
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock.Name)){
-      stagedBlocks.Add(new Block(ctnItem,atBlock,newArticles[rand.Next(newArticles.Count)],moveChain));
+      stagedBlocks.Add(new Block(ctnItem,atBlock,newInventory.ToList()[rand.Next(newInventory.Count)],moveChain));
     }
   }
 
@@ -161,10 +160,10 @@ public class Map
   }
 
   public void PlaceRelative(Inventory inventory, Article newArticle, MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null)=> //TODO maybe move to inventory
-    inventory.articles.ForEach(a => PlaceRelative(a, newArticle, moveChain, blockCondition));
+    inventory.ToList().ForEach(a => PlaceRelative(a, newArticle, moveChain, blockCondition));
   
   public void ReplaceWithRandom(Article oldArticle, Inventory newInventory,MoveChain ?moveChain = null){
-    if (newInventory.articles.Count == 0) return;
+    if (newInventory.Count == 0) return;
     PlaceRelativeWithRandom(oldArticle, newInventory, moveChain);
     Delete(oldArticle);
   }
@@ -183,7 +182,7 @@ public class Map
     Replace(article, article, moveChain);
 
   public void Move(Inventory inventory, MoveChain moveChain) =>
-    inventory.articles.ForEach(a => Move(a, moveChain));
+    inventory.ToList().ForEach(a => Move(a, moveChain));
 
   public void Delete(Article Block, bool includePillars = false){
     string ArticleName = Block.Name;
@@ -208,7 +207,7 @@ public class Map
     map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != ArticleName).ToList();
   }
   public void Delete(Inventory inventory, bool includePillars = false){
-    foreach(var block in inventory.articles){
+    foreach(var block in inventory){
       Delete(block,includePillars);
     }
   }
