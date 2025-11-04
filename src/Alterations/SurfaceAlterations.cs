@@ -5,46 +5,46 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null,
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override List<InventoryChange> additionalArticles => light ? [new LightSurface(SurfaceAlt)] : [new HeavySurface(SurfaceAlt)];
+    internal override List<CustomBlockAlteration> customBlockAlts => [SurfaceAlt];
     public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
 
-    public override void Run(Map map) {
+    protected override void Run(Inventory inventory, Map map) {
         if (light) {
             if (Surface == null || !VanillaSurfaces.Contains(Surface)) {
                 throw new Exception("Light SurfaceAlterations requires a VanillaSurface type to be specified.");
             }
             //working apart from light CP/Start still noted as CP/Start
             Inventory Platform = inventory.Select("Platform").Any(["Grass","Dirt","Plastic","Ice","Tech"]);
-            Platform.Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(Surface).Replace(map);
-            inventory.Any(["OpenTechRoad", "OpenDirtRoad", "OpenGrassRoad", "OpenIceRoad"]).Edit().RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword($"Open{Surface}Road").Replace(map);
-            inventory.Any(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).Edit().RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword($"Open{Surface}Zone").Replace(map);
+            Platform.Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(Surface).Replace(inventory, map);
+            inventory.Any(["OpenTechRoad", "OpenDirtRoad", "OpenGrassRoad", "OpenIceRoad"]).Edit().RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword($"Open{Surface}Road").Replace(inventory, map);
+            inventory.Any(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).Edit().RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword($"Open{Surface}Zone").Replace(inventory, map);
             map.PlaceStagedBlocks();
-            (inventory/Platform).Not([$"Platform",$"{Surface}",$"Open{Surface}Road",$"Open{Surface}Zone"]).Edit().AddKeyword($"{Surface}SurfaceLight").PlaceRelative(map);
+            (inventory/Platform).Not([$"Platform",$"{Surface}",$"Open{Surface}Road",$"Open{Surface}Zone"]).Edit().AddKeyword($"{Surface}SurfaceLight").PlaceRelative(inventory, map);
             map.stagedBlocks.ForEach(x => x.IsAir = false);
             map.PlaceStagedBlocks(false);
         } else {
-            //TODO get full block set
-            Inventory specific = inventory.Select(article => article.MapSpecific); //handle mapSpecifics seperately
+            // //TODO get full block set
+            // Inventory specific = inventory.Select(article => article.MapSpecific); //handle mapSpecifics seperately
 
             // 1. find blocks which should be replaced by Heavy
-            KeywordEdit HeavyReplace = specific.Edit().AddKeyword($"{Surface}SurfaceHeavy");
-            HeavyReplace.Add((inventory/specific).Edit().AddKeyword([$"{Surface}SurfaceHeavy","Middle"]));
-            HeavyReplace.Add((inventory/specific).Select("Platform").Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(["Plastic",$"{Surface}SurfaceHeavy"]));
-            //TODO some more blocks not yet handled
-            HeavyReplace.Align();
-            Inventory replaced = HeavyReplace.getOriginal(); //blocks which will be replaced by Heavy later
+            // KeywordEdit HeavyReplace = specific.Edit().AddKeyword($"{Surface}SurfaceHeavy");
+            // HeavyReplace.Add((inventory/specific).Edit().AddKeyword([$"{Surface}SurfaceHeavy","Middle"]));
+            // HeavyReplace.Add((inventory/specific).Select("Platform").Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(["Plastic",$"{Surface}SurfaceHeavy"]));
+            // //TODO some more blocks not yet handled
+            // HeavyReplace.Align();
+            // Inventory replaced = HeavyReplace.getOriginal(); //blocks which will be replaced by Heavy later
 
-            // 2. place Pillars on blocks which will be replaced by Heavy and were not air
-            KeywordEdit Pillar = replaced.Edit().RemoveKeyword([""]); //TODO align to pillars
+            // // 2. place Pillars on blocks which will be replaced by Heavy and were not air
+            // KeywordEdit Pillar = replaced.Edit().RemoveKeyword([""]); //TODO align to pillars
 
-            Pillar.PlaceRelative(map,blockCondition: block => !block.Bit21); //place Pillars for blocks which were not in AirMode
-            map.PlaceStagedBlocks();
+            // Pillar.PlaceRelative(inventory, map,blockCondition: block => !block.Bit21); //place Pillars for blocks which were not in AirMode
+            // map.PlaceStagedBlocks();
 
-            // 3. replace blocks
-            HeavyReplace.Replace(map);
-            specific.Edit().AddKeyword([$"{Surface}Surface"]).Replace(map);
-            map.stagedBlocks.ForEach(x => x.IsAir = false);
-            map.PlaceStagedBlocks(false);
+            // // 3. replace blocks
+            // HeavyReplace.Replace(inventory, map);
+            // specific.Edit().AddKeyword([$"{Surface}Surface"]).Replace(inventory, map);
+            // map.stagedBlocks.ForEach(x => x.IsAir = false);
+            // map.PlaceStagedBlocks(false);
         }
 
         if (sceneryAlteration != null) {
@@ -88,9 +88,9 @@ public class Magnet : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> additionalArticles => [new LightSurface(new MagnetSurface())];
-    public override void Run(Map map){
-        inventory.Edit().AddKeyword("MagnetSurface").Replace(map);
+    // public override List<CustomBlockAlteration> customBlockAlts => [new LightSurface(new MagnetSurface())];
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Edit().AddKeyword("MagnetSurface").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -103,31 +103,31 @@ public class Penalty : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         Inventory Platform = inventory.Select("Platform");
-        Platform.Any(["Ice","Dirt"]).Edit().RemoveKeyword("Platform").AddKeyword("DecoPlatform").Replace(map);
-        Platform.Any(["Grass","Tech"]).Edit().RemoveKeyword(["Platform","Grass","Tech"]).AddKeyword("DecoPlatform").Replace(map);
+        Platform.Any(["Ice","Dirt"]).Edit().RemoveKeyword("Platform").AddKeyword("DecoPlatform").Replace(inventory, map);
+        Platform.Any(["Grass","Tech"]).Edit().RemoveKeyword(["Platform","Grass","Tech"]).AddKeyword("DecoPlatform").Replace(inventory, map);
         Inventory notCurve2 = inventory.Not("Curve2");
         Inventory Slope2 = notCurve2.Select("Slope2");
         Inventory notSlope2 = notCurve2.Not("Slope2");
         List<string> removeKeywords = ["EndLargeRight", "EndLargeLeft", "EndRight", "EndLeft", "Straight", "Straight", "Left", "Right", "Down", "Up", "Curve1", "In", "Out"];
-        Slope2.Select("OpenTechZone").Edit().RemoveKeyword(["OpenTechZone",..removeKeywords]).AddKeyword("DecoPlatform").Replace(map);
-        Slope2.Select("OpenGrassZone").Edit().RemoveKeyword(["OpenGrassZone",..removeKeywords]).AddKeyword("DecoPlatform").Replace(map);
-        Slope2.Select("OpenDirtZone").Edit().RemoveKeyword(["OpenDirtZone",..removeKeywords]).AddKeyword(["DecoPlatform", "Dirt"]).Replace(map);
-        Slope2.Select("OpenIceZone").Edit().RemoveKeyword(["OpenIceZone",..removeKeywords]).AddKeyword(["DecoPlatform", "Ice"]).Replace(map);
-        Slope2.Select("OpenTechZone").Edit().RemoveKeyword(["OpenTechZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight"]).Replace(map);
-        Slope2.Select("OpenGrassZone").Edit().RemoveKeyword(["OpenGrassZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight"]).Replace(map);
-        Slope2.Select("OpenDirtZone").Edit().RemoveKeyword(["OpenDirtZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight", "Dirt"]).Replace(map);
-        Slope2.Select("OpenIceZone").Edit().RemoveKeyword(["OpenIceZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight", "Ice"]).Replace(map);
-        notSlope2.Select("OpenTechZone").Edit().RemoveKeyword(["OpenTechZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base"]).Replace(map);
-        notSlope2.Select("OpenGrassZone").Edit().RemoveKeyword(["OpenGrassZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base"]).Replace(map);
-        notSlope2.Select("OpenDirtZone").Edit().RemoveKeyword(["OpenDirtZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base", "Dirt"]).Replace(map);
-        notSlope2.Select("OpenIceZone").Edit().RemoveKeyword(["OpenIceZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base", "Ice"]).Replace(map);
+        Slope2.Select("OpenTechZone").Edit().RemoveKeyword(["OpenTechZone",..removeKeywords]).AddKeyword("DecoPlatform").Replace(inventory, map);
+        Slope2.Select("OpenGrassZone").Edit().RemoveKeyword(["OpenGrassZone",..removeKeywords]).AddKeyword("DecoPlatform").Replace(inventory, map);
+        Slope2.Select("OpenDirtZone").Edit().RemoveKeyword(["OpenDirtZone",..removeKeywords]).AddKeyword(["DecoPlatform", "Dirt"]).Replace(inventory, map);
+        Slope2.Select("OpenIceZone").Edit().RemoveKeyword(["OpenIceZone",..removeKeywords]).AddKeyword(["DecoPlatform", "Ice"]).Replace(inventory, map);
+        Slope2.Select("OpenTechZone").Edit().RemoveKeyword(["OpenTechZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight"]).Replace(inventory, map);
+        Slope2.Select("OpenGrassZone").Edit().RemoveKeyword(["OpenGrassZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight"]).Replace(inventory, map);
+        Slope2.Select("OpenDirtZone").Edit().RemoveKeyword(["OpenDirtZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight", "Dirt"]).Replace(inventory, map);
+        Slope2.Select("OpenIceZone").Edit().RemoveKeyword(["OpenIceZone",..removeKeywords]).AddKeyword(["DecoPlatform","Straight", "Ice"]).Replace(inventory, map);
+        notSlope2.Select("OpenTechZone").Edit().RemoveKeyword(["OpenTechZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base"]).Replace(inventory, map);
+        notSlope2.Select("OpenGrassZone").Edit().RemoveKeyword(["OpenGrassZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base"]).Replace(inventory, map);
+        notSlope2.Select("OpenDirtZone").Edit().RemoveKeyword(["OpenDirtZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base", "Dirt"]).Replace(inventory, map);
+        notSlope2.Select("OpenIceZone").Edit().RemoveKeyword(["OpenIceZone",..removeKeywords]).AddKeyword(["DecoPlatform","Base", "Ice"]).Replace(inventory, map);
         Inventory notCheckpoints = notCurve2.Select("!Checkpoint");
-        notCheckpoints.Select("OpenTechRoad").Edit().RemoveKeyword(["OpenTechRoad","Curve1"]).AddKeyword(["DecoPlatform"]).Replace(map);
-        notCheckpoints.Select("OpenGrassRoad").Edit().RemoveKeyword(["OpenGrassRoad","Curve1"]).AddKeyword(["DecoPlatform"]).Replace(map);
-        notCheckpoints.Select("OpenDirtRoad").Edit().RemoveKeyword(["OpenDirtRoad","Curve1"]).AddKeyword(["DecoPlatform", "Dirt"]).Replace(map);
-        notCheckpoints.Select("OpenIceRoad").Edit().RemoveKeyword(["OpenIceRoad","Curve1"]).AddKeyword(["DecoPlatform", "Ice"]).Replace(map);
+        notCheckpoints.Select("OpenTechRoad").Edit().RemoveKeyword(["OpenTechRoad","Curve1"]).AddKeyword(["DecoPlatform"]).Replace(inventory, map);
+        notCheckpoints.Select("OpenGrassRoad").Edit().RemoveKeyword(["OpenGrassRoad","Curve1"]).AddKeyword(["DecoPlatform"]).Replace(inventory, map);
+        notCheckpoints.Select("OpenDirtRoad").Edit().RemoveKeyword(["OpenDirtRoad","Curve1"]).AddKeyword(["DecoPlatform", "Dirt"]).Replace(inventory, map);
+        notCheckpoints.Select("OpenIceRoad").Edit().RemoveKeyword(["OpenIceRoad","Curve1"]).AddKeyword(["DecoPlatform", "Ice"]).Replace(inventory, map);
         
         map.PlaceStagedBlocks();
     }
@@ -139,9 +139,9 @@ public class Plastic : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> additionalArticles => [new LightSurface(new PlasticSurface())];
-    public override void Run(Map map){
-        inventory.Not(["Plastic","OpenPlasticRoad","OpenPlasticZone","RoadPlastic"]).Edit().AddKeyword("PlasticSurface").Replace(map);
+    // public override List<InventoryChange> customBlockAlts => [new LightSurface(new PlasticSurface())];
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Not(["Plastic","OpenPlasticRoad","OpenPlasticZone","RoadPlastic"]).Edit().AddKeyword("PlasticSurface").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -152,9 +152,9 @@ public class Road : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> additionalArticles => [new HeavySurface(new TechSurface())];
-    public override void Run(Map map){
-        inventory.Not(["Tech","OpenTechRoad","OpenTechZone","RoadTech"]).Edit().AddKeyword("TechSurface").Replace(map);
+    // public override List<InventoryChange> customBlockAlts => [new HeavySurface(new TechSurface())];
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Not(["Tech","OpenTechRoad","OpenTechZone","RoadTech"]).Edit().AddKeyword("TechSurface").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -165,11 +165,11 @@ public class Wood : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     public override List<Alteration> AlterationsBefore => [new AirMode()];
-    public override List<InventoryChange> additionalArticles => [new HeavySurface(new WoodSurface(),false)];
-    public override void Run(Map map){
-        inventory.Edit().AddKeyword("WoodSurfaceHeavy").Replace(map);
-        inventory.Edit().AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(map);
-        inventory.Select("Platform").Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(map);
+    // public override List<InventoryChange> customBlockAlts => [new HeavySurface(new WoodSurface(),false)];
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Edit().AddKeyword("WoodSurfaceHeavy").Replace(inventory, map);
+        inventory.Edit().AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(inventory, map);
+        inventory.Select("Platform").Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(inventory, map);
         map.PlaceStagedBlocks(false);
     }
 }
@@ -180,8 +180,8 @@ public class Bobsleigh : Alteration { //half manual
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override void Run(Map map){
-        inventory.Any(["RoadBump","RoadDirt","RoadTech"]).Edit().RemoveKeyword(["RoadBump","RoadDirt","RoadTech"]).AddKeyword("RoadIce").Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Any(["RoadBump","RoadDirt","RoadTech"]).Edit().RemoveKeyword(["RoadBump","RoadDirt","RoadTech"]).AddKeyword("RoadIce").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -194,9 +194,9 @@ public class Sausage : Alteration { //half manual
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         List<string> roadKeywords = ["RoadIce","RoadDirt","RoadTech"];
-        inventory.Any(roadKeywords).Edit().RemoveKeyword(roadKeywords).AddKeyword("RoadBump").Replace(map);
+        inventory.Any(roadKeywords).Edit().RemoveKeyword(roadKeywords).AddKeyword("RoadBump").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -209,12 +209,12 @@ public class Surfaceless: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override void Run(Map map){    
+    protected override void Run(Inventory inventory, Map map){    
         Inventory Blocks = inventory.Select(BlockType.Block);
         map.PlaceRelative(Blocks.Select("MapStart"),inventory.GetArticle("GateStartCenter32m"));
         map.PlaceRelative(Blocks.Select("Checkpoint"),inventory.GetArticle("GateCheckpointCenter32m"));
         map.PlaceRelative(Blocks.Select("Finish"),inventory.GetArticle("GateFinishCenter32m"));
-        inventory.Select(BlockType.Item).Select(["MapStart","Finish","Checkpoint"]).Edit().PlaceRelative(map);
+        inventory.Select(BlockType.Item).Select(["MapStart","Finish","Checkpoint"]).Edit().PlaceRelative(inventory, map);
         map.Delete(inventory/inventory.Select(BlockType.Pillar));
         map.PlaceStagedBlocks();
     }
@@ -228,9 +228,9 @@ public class RouteOnly: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new RouteOnlyBlock())];
-    public override void Run(Map map){
-        inventory.Edit().AddKeyword("RouteOnlyBlock").Replace(map);
+    // public override List<InventoryChange> customBlockAlts => [new CustomBlockSet(new RouteOnlyBlock())];
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Edit().AddKeyword("RouteOnlyBlock").Replace(inventory, map);
         map.Delete(inventory/inventory.Select(BlockType.Item).Any(["MapStart","Finish","Checkpoint"]));
         map.PlaceStagedBlocks();
     }

@@ -3,6 +3,10 @@ class CustomBlockFolder(string subFolder) : ArticleProvider
     public readonly string folder = Path.Combine(AlterationConfig.CustomBlocksFolder, subFolder);
     protected override List<Article> GenerateArticles()
     {
+        if (!Directory.Exists(folder))
+        {
+            return [];
+        }
         List<Article> articles = [];
         articles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(x.Replace(folder, ""), BlockType.CustomBlock, x)));

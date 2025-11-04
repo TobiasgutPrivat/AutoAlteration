@@ -1,3 +1,4 @@
+using System.Reflection;
 using GBX.NET;
 using GBX.NET.LZO;
 using GBX.NET.ZLib;
@@ -13,7 +14,7 @@ public class AlterationConfig {
     public static string CacheFolder = "";
     public static List<string> Keywords = [];
     public static List<string> ToKeywords = [];
-    public static List<string> CustomBlockSets = [];
+    public static List<string> CustomBlockAlts = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CustomBlockAlteration))).Select(t => t.Name).ToList();
     internal static readonly VanillaArticleProvider VanillaArticles = new();
     public static int mapCount = 0;
 

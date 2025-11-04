@@ -62,7 +62,7 @@ public class Block {
         Skin = block.Skin;
         IsAir = block.Bit21;
         WaypointSpecialProperty = block.WaypointSpecialProperty;
-        position = GetBlockPosition(block, freeBlockHeightOffset);
+        position = GetBlockPosition(block, fromArticle, freeBlockHeightOffset);
 
         if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
             article.DefaultRotation?.Apply(position,article);
@@ -77,26 +77,17 @@ public class Block {
         article.MoveChain.Subtract(position,article); // specific like for CPGate-Position
     }
 
-    public static Position GetBlockPosition(CGameCtnBlock block, int freeBlockHeightOffset) {
+    public static Position GetBlockPosition(CGameCtnBlock block, Article article, int freeBlockHeightOffset) {
         if (block.IsFree){
             return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
         } else {
             Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - freeBlockHeightOffset ,block.Coord.Z * 32));
-            position.AddPosition(GetDirectionOffset(block));
+            position.AddPosition(GetDirectionOffset(block,article));
             return position;
         }
     }
 
-    public static Position GetDirectionOffset(CGameCtnBlock block) {
-        Article article;
-        try
-        {
-            article = Alteration.inventory.GetArticle(block.BlockModel.Id.Replace("_CustomBlock", ""));
-        }
-        catch
-        {
-            return Position.Zero;
-        }
+    public static Position GetDirectionOffset(CGameCtnBlock block, Article article) {
         return block.Direction switch
         {
             Direction.North => new((0, 0, 0), Vec3.Zero),
@@ -139,7 +130,7 @@ public class Block {
                 default:
                     throw new Exception("Invalid direction");
             }
-            Vec3 offset = -GetDirectionOffset(block).coords;
+            Vec3 offset = -GetDirectionOffset(block,new Inventory(AlterationConfig.VanillaArticles.GetArticles()).GetArticle(name)).coords;
 
             block.Coord = new Int3(
                 (int)(position.coords.X + offset.X)  / 32, 

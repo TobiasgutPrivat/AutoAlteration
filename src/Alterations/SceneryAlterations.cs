@@ -8,19 +8,19 @@ public class SnowScenery : Alteration
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override void Run(Map map)
+    protected override void Run(Inventory inventory, Map map)
     {
         // Scenery blocks: 
-        inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Dirt"]).AddKeyword("Ice").Replace(map);
+        inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Dirt"]).AddKeyword("Ice").Replace(inventory, map);
         // Actual blocks: 
-        inventory.Any(["PenaltyDirt","Penalty"]).Edit().RemoveKeyword(["PenaltyDirt","Penalty"]).AddKeyword("PenaltyIce").Replace(map);
+        inventory.Any(["PenaltyDirt","Penalty"]).Edit().RemoveKeyword(["PenaltyDirt","Penalty"]).AddKeyword("PenaltyIce").Replace(inventory, map);
         
         Inventory WaterWall = inventory.Select("Water").Select("Wall");
-        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Ice").Replace(map);
+        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Ice").Replace(inventory, map);
         
         // Open Road/Zone
-        // inventory.Select("OpenDirtRoad|OpenTechRoad").RemoveKeyword(["OpenDirtRoad","OpenTechRoad"]).AddKeyword("OpenIceRoad").Replace(map);
-        // inventory.Select("OpenDirtZone|OpenTechZone").RemoveKeyword(["OpenDirtZone","OpenTechZone"]).AddKeyword("OpenIceZone").Replace(map);
+        // inventory.Select("OpenDirtRoad|OpenTechRoad").RemoveKeyword(["OpenDirtRoad","OpenTechRoad"]).AddKeyword("OpenIceRoad").Replace(inventory, map);
+        // inventory.Select("OpenDirtZone|OpenTechZone").RemoveKeyword(["OpenDirtZone","OpenTechZone"]).AddKeyword("OpenIceZone").Replace(inventory, map);
         // Trees
 
         map.Replace(inventory.GetArticles([ "SpringTreeTall", "FallTreeTall", "PalmTreeMedium", "PalmTreeDirtMedium" ]), inventory.GetArticle("FrozenTreeTall"));
@@ -54,19 +54,19 @@ public class SandScenery : Alteration
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override void Run(Map map)
+    protected override void Run(Inventory inventory, Map map)
     {
         // Scenery blocks: 
-        inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Ice"]).AddKeyword("Dirt").Replace(map);
+        inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Ice"]).AddKeyword("Dirt").Replace(inventory, map);
         // Actual blocks: 
-        inventory.Any(["PenaltyIce","Penalty"]).Edit().RemoveKeyword(["PenaltyIce","Penalty"]).AddKeyword("PenaltyDirt").Replace(map);
+        inventory.Any(["PenaltyIce","Penalty"]).Edit().RemoveKeyword(["PenaltyIce","Penalty"]).AddKeyword("PenaltyDirt").Replace(inventory, map);
         
         Inventory WaterWall = inventory.Select("Water").Select("Wall");
-        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Dirt").Replace(map);
+        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Dirt").Replace(inventory, map);
         
         // Open Road/Zone
-        // inventory.Select("OpenIceRoad|OpenTechRoad").RemoveKeyword(["OpenIceRoad","OpenTechRoad"]).AddKeyword("OpenDirtRoad").Replace(map);
-        // inventory.Select("OpenIceZone|OpenTechZone").RemoveKeyword(["OpenIceZone","OpenTechZone"]).AddKeyword("OpenDirtZone").Replace(map);
+        // inventory.Select("OpenIceRoad|OpenTechRoad").RemoveKeyword(["OpenIceRoad","OpenTechRoad"]).AddKeyword("OpenDirtRoad").Replace(inventory, map);
+        // inventory.Select("OpenIceZone|OpenTechZone").RemoveKeyword(["OpenIceZone","OpenTechZone"]).AddKeyword("OpenDirtZone").Replace(inventory, map);
         
         // Trees
         map.Replace(inventory.GetArticles([ "SpringTreeTall" ]), inventory.GetArticle("FallTreeTall"));
@@ -107,20 +107,20 @@ public class GrassScenery : Alteration
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override void Run(Map map)
+    protected override void Run(Inventory inventory, Map map)
     {
         // Scenery blocks: 
         Inventory DecoWater = inventory.Any(["Deco", "Water", "DecoWall", "DecoPlatform"]);
-        DecoWater.Edit().RemoveKeyword(["Dirt","Ice"]).Replace(map);
+        DecoWater.Edit().RemoveKeyword(["Dirt","Ice"]).Replace(inventory, map);
         map.PlaceStagedBlocks();
-        DecoWater.Edit().AddKeyword("Grass").Replace(map);
+        DecoWater.Edit().AddKeyword("Grass").Replace(inventory, map);
         map.PlaceStagedBlocks();
 
         // Actual blocks: 
-        inventory.Any(["PenaltyDirt","PenaltyIce"]).Edit().RemoveKeyword(["PenaltyDirt","PenaltyIce"]).Replace(map);
+        inventory.Any(["PenaltyDirt","PenaltyIce"]).Edit().RemoveKeyword(["PenaltyDirt","PenaltyIce"]).Replace(inventory, map);
 
         Inventory WaterWall = inventory.Select("Water").Select("Wall");
-        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Grass").Replace(map);
+        WaterWall.Edit().RemoveKeyword([ "Dirt", "Ice", "Wood" ]).AddKeyword("Grass").Replace(inventory, map);
 
         // Trees
         map.Replace(inventory.GetArticles([ "FirSnowTall" ]), inventory.GetArticle("FirTall"));

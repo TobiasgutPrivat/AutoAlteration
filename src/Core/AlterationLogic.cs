@@ -2,66 +2,66 @@ using GBX.NET.Engines.Plug;
 
 public class AlterationLogic {
     private static List<Alteration> ?lastAlterations;
-    public static void Alter(List<Alteration> alterations, Map map) {
-        //cleanup
-        if (Directory.Exists(Path.Join(AlterationConfig.CustomBlocksFolder,"Temp"))){
-            Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder,"Temp"),true);
-        }
-        if (Directory.Exists(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"))){
-            Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"),true);
-        }
-        Alteration.inventory = Alteration.inventory.Select(a => !a.MapSpecific); //remove map specific articles from inventory
+    // public static void Alter(List<Alteration> alterations, Map map) {
+    //     //cleanup
+    //     if (Directory.Exists(Path.Join(AlterationConfig.CustomBlocksFolder,"Temp"))){
+    //         Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder,"Temp"),true);
+    //     }
+    //     if (Directory.Exists(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"))){
+    //         Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder,"Exports"),true);
+    //     }
+    //     Alteration.inventory = Alteration.inventory.Select(a => !a.MapSpecific); //remove map specific articles from inventory
 
-        //create inventory for Alteration
-        if (lastAlterations == null || alterations.Any(a => !lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
-            // needs Inventory recreation
-            Alteration.CreateInventory(); //Resets Inventory to Vanilla
-            foreach (Alteration alteration in alterations) {
-                alteration.additionalArticles.ForEach(change => {
-                    (change as CustomBlockSet)?.GetAdditionalKeywords().ForEach(keyword => {
-                        if (!AlterationConfig.CustomBlockSets.Contains(keyword)) {
-                            AlterationConfig.CustomBlockSets.Add(keyword);
-                            AlterationConfig.Keywords.Add(keyword);
-                        }
-                    });
-                    change.ChangeInventory(Alteration.inventory);
-                });
-            }
+    //     //create inventory for Alteration
+    //     if (lastAlterations == null || alterations.Any(a => !lastAlterations.Select(lAs => lAs.GetType()).Contains(a.GetType())) || (alterations.Count != lastAlterations.Count)) {
+    //         // needs Inventory recreation
+    //         Alteration.CreateInventory(); //Resets Inventory to Vanilla
+    //         foreach (Alteration alteration in alterations) {
+    //             alteration.customBlockAlts.ForEach(change => {
+    //                 (change as CustomBlockSet)?.GetAdditionalKeywords().ForEach(keyword => {
+    //                     if (!AlterationConfig.CustomBlockSets.Contains(keyword)) {
+    //                         AlterationConfig.CustomBlockSets.Add(keyword);
+    //                         AlterationConfig.Keywords.Add(keyword);
+    //                     }
+    //                 });
+    //                 change.ChangeInventory(Alteration.inventory);
+    //             });
+    //         }
 
-            if (AlterationConfig.devMode){ //logging
-                Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
-            }
-        }
+    //         if (AlterationConfig.devMode){ //logging
+    //             Alteration.inventory.Export(string.Join("",alterations.Select(x => x.GetType().Name)));
+    //         }
+    //     }
 
-        //Map specific custom blocks
-        if (map.embeddedBlocks.Count != 0){
-            Alteration.inventory.Union(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)));
-            Alteration.inventory.cachedInventories.Clear();
-            if (AlterationConfig.devMode)
-            { //logging
-                Alteration.inventory.Export("WithMapBlocks");
-            }
-        }
+    //     //Map specific custom blocks
+    //     if (map.embeddedBlocks.Count != 0){
+    //         Alteration.inventory.Union(map.embeddedBlocks.Select(x => new Article(x.Key, x.Value,"",true)));
+    //         Alteration.inventory.cachedInventories.Clear();
+    //         if (AlterationConfig.devMode)
+    //         { //logging
+    //             Alteration.inventory.Export("WithMapBlocks");
+    //         }
+    //     }
 
-        //Generate Map specific custom blocks sets
-        alterations
-            .SelectMany(alteration => alteration.additionalArticles)
-            .Where(change => change is CustomBlockSet)
-            .Cast<CustomBlockSet>().ToList().ForEach(
-                map.GenerateCustomBlocks); //includes updating inventory
+    //     //Generate Map specific custom blocks sets
+    //     alterations
+    //         .SelectMany(alteration => alteration.customBlockAlts)
+    //         .Where(change => change is CustomBlockSet)
+    //         .Cast<CustomBlockSet>().ToList().ForEach(
+    //             map.GenerateCustomBlocks); //includes updating inventory
                 
-        if (AlterationConfig.devMode){ //logging
-            Alteration.inventory.Export("WithMapBlocks");
-        }
+    //     if (AlterationConfig.devMode){ //logging
+    //         Alteration.inventory.Export("WithMapBlocks");
+    //     }
 
-        //alteration
-        foreach (Alteration alteration in alterations) {
-            alteration.Run(map);
-        }
+    //     //alteration
+    //     foreach (Alteration alteration in alterations) {
+    //         alteration.Run(map);
+    //     }
 
-        lastAlterations = alterations;
-        mapCount++;
-    }
+    //     lastAlterations = alterations;
+    //     mapCount++;
+    // }
     
     public static bool Alter(List<CustomBlockAlteration> alterations, CustomBlock customBlock) {
         bool changed = false;
@@ -70,7 +70,7 @@ public class AlterationLogic {
             customBlock.MeshCrystals.ForEach(x => changed = AlterMeshCrystal(alteration, customBlock, x) || changed);
             customBlock.Models.ForEach(x => changed = alteration.AlterMesh(customBlock, x) || changed);
         }
-        mapCount++;
+        AlterationConfig.mapCount++;
         return changed;
     }
 

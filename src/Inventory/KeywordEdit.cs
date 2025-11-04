@@ -52,8 +52,8 @@ public class KeywordEdit { //maybe call Alignement
     }
     #endregion
 
-    public void PlaceRelative(Map map,MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
-        Align();
+    public void PlaceRelative(Inventory inventory, Map map,MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
+        Align(inventory);
         articles.ToList().ForEach( a => {
             if (a.Value != null) {
                 map.PlaceRelative(a.Key, a.Value, moveChain, blockCondition);
@@ -61,8 +61,8 @@ public class KeywordEdit { //maybe call Alignement
         });
     }
 
-    public void Replace(Map map,MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
-        Align();
+    public void Replace(Inventory inventory, Map map,MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
+        Align(inventory);
         articles.ToList().ForEach( a => {
             if (a.Value != null) {
                 map.Replace(a.Key, a.Value, moveChain, blockCondition);
@@ -70,21 +70,21 @@ public class KeywordEdit { //maybe call Alignement
         });
     }
 
-    public void ReplaceWithRandom(Map map,List<string> addKeywords,MoveChain ?moveChain = null){
+    public void ReplaceWithRandom(Inventory inventory, Map map,List<string> addKeywords,MoveChain ?moveChain = null){
         articles.Keys.ToList().ForEach( a => {
-            map.ReplaceWithRandom(a, Alteration.inventory.AlignMultiple(a, addKeywords), moveChain);
+            map.ReplaceWithRandom(a, inventory.AlignMultiple(a, addKeywords), moveChain);
         });
     }
 
-    public void PlaceRelativeWithRandom(Map map,List<string> addKeywords,MoveChain ?moveChain = null){
+    public void PlaceRelativeWithRandom(Inventory inventory, Map map,List<string> addKeywords,MoveChain ?moveChain = null){
         articles.Keys.ToList().ForEach( a => {
-            map.PlaceRelativeWithRandom(a, Alteration.inventory.AlignMultiple(a, addKeywords), moveChain);
+            map.PlaceRelativeWithRandom(a, inventory.AlignMultiple(a, addKeywords), moveChain);
         });
     }
 
-    public KeywordEdit Align() {
+    public KeywordEdit Align(Inventory inventory) {
         articles.ToList().ForEach( a => {
-            articles[a.Key] = Alteration.inventory.AlignArticle(a.Key);
+            articles[a.Key] = inventory.AlignArticle(a.Key);
         });
         //only keep aligned articles
         articles = articles.Where(a => a.Value != null).ToDictionary(a => a.Key, a => a.Value);
@@ -99,8 +99,8 @@ public class KeywordEdit { //maybe call Alignement
         return new Inventory(articles.Values.Where(a => a != null).ToList() as List<Article>);
     }
 
-    public Inventory getOriginal() {
-        return new Inventory(articles.Keys.Select(a => Alteration.inventory.GetArticle(a.Name)).ToList());
+    public Inventory getOriginal(Inventory inventory) {
+        return new Inventory(articles.Keys.Select(a => inventory.GetArticle(a.Name)).ToList());
     }
 
     public KeywordEdit Add(KeywordEdit other) {

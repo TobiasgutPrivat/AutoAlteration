@@ -116,22 +116,6 @@ public class Map
     });
     return;
   }
-
-  public void GenerateCustomBlocks(CustomBlockSet customBlockAlteration){
-    string TempFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Temp");
-    string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetSetName());
-    string TempExportsFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Exports");
-    if (!Directory.Exists(TempFolder)) { 
-      Directory.CreateDirectory(Path.Join(TempFolder, customBlockAlteration.GetSetName() ,"\\Items")); 
-      Directory.CreateDirectory(Path.Join(TempFolder, customBlockAlteration.GetSetName() ,"\\Blocks")); 
-    }
-    if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
-    if (!Directory.Exists(TempExportsFolder)) { Directory.CreateDirectory(TempExportsFolder); }
-    ExtractEmbeddedBlocks(TempExportsFolder);
-    AutoAlteration.AlterAll(customBlockAlteration.customBlockAlteration,TempExportsFolder,CustomFolder,customBlockAlteration.GetSetName());
-    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetSetName() + "\\Items").ChangeInventory(Alteration.inventory,true);
-    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetSetName() + "\\Blocks").ChangeInventory(Alteration.inventory,true);
-  }
   #endregion
 
   #region actions
@@ -254,14 +238,14 @@ public class Map
     return new Replay("somePath");
   }
 
-  public void StageAll(MoveChain ?moveChain = null){
+  public void StageAll(Inventory inventory, MoveChain ?moveChain = null){
     stagedBlocks.AddRange(map.Blocks.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
+      Article article = inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
       return new Block(x,article,article,FreeBlockHeightOffset,moveChain);
     }));
     map.Blocks = [];
     stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id);
+      Article article = inventory.GetArticle(x.ItemModel.Id);
       return new Block(x, article, article, moveChain);
     }));
     map.AnchoredObjects = [];

@@ -8,35 +8,35 @@ public class AirMode: Alteration {
 
     public List<string> roads = ["RoadTech", "RoadDirt", "RoadIce", "RoadBump"];
 
-    public override void Run(Map map)
+    protected override void Run(Inventory inventory, Map map)
     {
-        map.StageAll();
+        map.StageAll(inventory);
         List<Block> airBlocks = map.stagedBlocks.Where(x => x.IsAir).ToList();
         map.stagedBlocks = map.stagedBlocks.Where(x => !x.IsAir).ToList();
         map.PlaceStagedBlocks(false); //Place Air Blocks to modify
 
         // Platforms
         Inventory tiltedBlocks = inventory.Select(BlockType.Block).Select(x => x.Height > 1);
-        tiltedBlocks.Any(roads).Edit().RemoveKeyword(roads).AddKeyword("TrackWall").PlaceRelative(map);
+        tiltedBlocks.Any(roads).Edit().RemoveKeyword(roads).AddKeyword("TrackWall").PlaceRelative(inventory, map);
 
         Inventory Platforms = tiltedBlocks.Any(["DecoPlatform","Platform"]);
         Inventory notGrassPillar = Platforms.Select(["Dirt","Ice","Plastic"]);
         List<string> removeKeywords = ["DecoPlatform","Platform","Plastic","Grass","Tech","DecoCliff","DecoHill","To","X2"];
-        notGrassPillar.Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall"]).PlaceRelative(map);
-        (Platforms/notGrassPillar).Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map); //Deco-Grass is missing Keyword Grass
+        notGrassPillar.Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall"]).PlaceRelative(inventory, map);
+        (Platforms/notGrassPillar).Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(inventory, map); //Deco-Grass is missing Keyword Grass
 
         // DecoHills
         Inventory DecoHills = tiltedBlocks.Select("DecoHill");
         Inventory notGrassHills = Platforms.Any(["Dirt","Ice"]);
 
-        notGrassHills.Edit().RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(map,new RotateMid(new Vec3(-PI/2,0,0)));
-        (DecoHills/notGrassHills).Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(map,new RotateMid(new Vec3(-PI/2,0,0)));
+        notGrassHills.Edit().RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(inventory, map,new RotateMid(new Vec3(-PI/2,0,0)));
+        (DecoHills/notGrassHills).Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(inventory, map,new RotateMid(new Vec3(-PI/2,0,0)));
 
-        // map.StageAll(); // only set air mode if pillar could be set accordingly, can be changed if pillars done completely
+        // map.StageAll(inventory); // only set air mode if pillar could be set accordingly, can be changed if pillars done completely
         map.stagedBlocks.ForEach(x => x.IsAir = true);
         map.stagedBlocks.AddRange(airBlocks);
         map.PlaceStagedBlocks(false);
-        map.StageAll();
+        map.StageAll(inventory);
         map.stagedBlocks.ForEach(x => x.IsGround = false);
         map.PlaceStagedBlocks();
     }
@@ -55,14 +55,14 @@ public class AntiBooster : Alteration
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map)
+    protected override void Run(Inventory inventory, Map map)
     {
         Inventory boosters = inventory.Any(["Boost","Boost2","Turbo","Turbo2","TurboRoulette"]);
         Inventory tiltedBoosters = boosters.Any(["Slope","Slope2","Tilt","Tilt2"]);
-        tiltedBoosters.Select("Up").Edit().RemoveKeyword("Up").AddKeyword("Down").Replace(map);
-        tiltedBoosters.Select("Down").Edit().RemoveKeyword("Down").AddKeyword("Up").Replace(map);
-        tiltedBoosters.Select("Left").Edit().RemoveKeyword("Left").AddKeyword("Right").Replace(map);
-        tiltedBoosters.Select("Right").Edit().RemoveKeyword("Right").AddKeyword("Left").Replace(map); ;
+        tiltedBoosters.Select("Up").Edit().RemoveKeyword("Up").AddKeyword("Down").Replace(inventory, map);
+        tiltedBoosters.Select("Down").Edit().RemoveKeyword("Down").AddKeyword("Up").Replace(inventory, map);
+        tiltedBoosters.Select("Left").Edit().RemoveKeyword("Left").AddKeyword("Right").Replace(inventory, map);
+        tiltedBoosters.Select("Right").Edit().RemoveKeyword("Right").AddKeyword("Left").Replace(inventory, map); ;
         map.PlaceStagedBlocks();
         map.Move(boosters, new RotateMid(PI, 0, 0));
         map.PlaceStagedBlocks();
@@ -77,15 +77,15 @@ public class Boosterless: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Delete(inventory.Select(BlockType.Item).Any(["Boost","Boost2","Turbo","Turbo2","TurboRoulette"]));
         Inventory blocks = inventory.Select(BlockType.Block);
         map.Delete(blocks);
-        blocks.Select("Boost").Edit().RemoveKeyword("Boost").Replace(map);
-        blocks.Select("Boost2").Edit().RemoveKeyword("Boost2").Replace(map);
-        blocks.Select("Turbo").Edit().RemoveKeyword("Turbo").Replace(map);
-        blocks.Select("Turbo2").Edit().RemoveKeyword("Turbo2").Replace(map);
-        blocks.Select("TurboRoulette").Edit().RemoveKeyword("TurboRoulette").Replace(map);
+        blocks.Select("Boost").Edit().RemoveKeyword("Boost").Replace(inventory, map);
+        blocks.Select("Boost2").Edit().RemoveKeyword("Boost2").Replace(inventory, map);
+        blocks.Select("Turbo").Edit().RemoveKeyword("Turbo").Replace(inventory, map);
+        blocks.Select("Turbo2").Edit().RemoveKeyword("Turbo2").Replace(inventory, map);
+        blocks.Select("TurboRoulette").Edit().RemoveKeyword("TurboRoulette").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -98,10 +98,10 @@ public class Broken: CPEffect {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         inventory.Any(EffectUtils.AllEffects).Edit()
             .RemoveKeyword([.. EffectUtils.AllEffects,"Right","Left","Down","Up"])
-            .AddKeyword("NoEngine").Replace(map);
+            .AddKeyword("NoEngine").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -116,7 +116,7 @@ public class Checkpointnt: CPEffect { //only blocks Checkpoints
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         float slope = 0.235f;
         Inventory triggers = inventory.Any(["CheckpointTrigger","MultilapTrigger"]).Not("Ring");
         Article Pillar = inventory.GetArticle("ObstaclePillar2m");
@@ -148,13 +148,13 @@ public class CPBoost : Alteration{
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Turbo").Replace(map);
-        inventory.Select(BlockType.Block).Select("Turbo").Edit().RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(map);
-        inventory.Select(BlockType.Block).Select("Turbo2").Edit().RemoveKeyword("Turbo2").AddKeyword("Checkpoint").Replace(map);
-        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Right","Left","Center","Checkpoint","v2"]).AddKeyword("Turbo").Replace(map);
-        inventory.Select(BlockType.Item).Select("Turbo").Edit().AddKeyword("Center").RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(map);
-        inventory.Select(BlockType.Item).Select("Turbo2").Edit().AddKeyword("Center").RemoveKeyword("Turbo2").AddKeyword("Checkpoint").Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Turbo").Replace(inventory, map);
+        inventory.Select(BlockType.Block).Select("Turbo").Edit().RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(inventory, map);
+        inventory.Select(BlockType.Block).Select("Turbo2").Edit().RemoveKeyword("Turbo2").AddKeyword("Checkpoint").Replace(inventory, map);
+        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Right","Left","Center","Checkpoint","v2"]).AddKeyword("Turbo").Replace(inventory, map);
+        inventory.Select(BlockType.Item).Select("Turbo").Edit().AddKeyword("Center").RemoveKeyword("Turbo").AddKeyword("Checkpoint").Replace(inventory, map);
+        inventory.Select(BlockType.Item).Select("Turbo2").Edit().AddKeyword("Center").RemoveKeyword("Turbo2").AddKeyword("Checkpoint").Replace(inventory, map);
         map.Replace(inventory.GetArticle("GateSpecial4mTurbo"),inventory.GetArticle("GateCheckpointCenter8mv2"),new Offset(2,0,0));//untested
         map.PlaceStagedBlocks();
     }
@@ -168,8 +168,8 @@ public class CPFull : Alteration{
     public override bool LikeAN => false;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(BlockType.Block).Edit().AddKeyword("Checkpoint").Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Edit().AddKeyword("Checkpoint").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -180,7 +180,7 @@ public class CPLess : Alteration{
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Delete(inventory.Select("Checkpoint"),true);
     }
 }
@@ -191,7 +191,7 @@ public class CPLink : Alteration{
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.map.Blocks.ToList().ForEach(x => {
             if (x.BlockModel.Id.Contains("Checkpoint")){
                 x.WaypointSpecialProperty.Order = 1;
@@ -213,7 +213,7 @@ public class CPsRotated : Alteration{
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Move(inventory.Select("Checkpoint"),new RotateMid(PI*0.5f,0,0));
         map.PlaceStagedBlocks();
     }
@@ -227,10 +227,10 @@ public class Earthquake : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map)
+    protected override void Run(Inventory inventory, Map map)
     {
         Vec3 offset = new(1000000, 500000, 1000000);
-        map.StageAll();
+        map.StageAll(inventory);
         map.stagedBlocks.ForEach(x => x.position.coords += offset);
         map.PlaceStagedBlocks(false);
         map.map.ThumbnailPosition += offset;
@@ -244,9 +244,9 @@ public class Fast: Alteration { //TODO Wall and tilted platform (check Inventory
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Turbo2").Replace(map);
-        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Turbo2").Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Turbo2").Replace(inventory, map);
+        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Turbo2").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -257,10 +257,10 @@ public class Flipped: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         //Dimensions normal Stadium
         // from (1,9,1) to (48,38,48)
-        map.StageAll(new RotateCenter(0,PI,0));
+        map.StageAll(inventory, new RotateCenter(0,PI,0));
         map.PlaceStagedBlocks();
         new CPEffect("Boost",new RotateMid(PI,0,0),true, true).Run(map);
     }
@@ -272,9 +272,9 @@ public class Holes : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(BlockType.Block).Edit().AddKeyword("Hole").Replace(map);
-        inventory.Select(BlockType.Block).Edit().AddKeyword(["Hole","With","24m"]).Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Edit().AddKeyword("Hole").Replace(inventory, map);
+        inventory.Select(BlockType.Block).Edit().AddKeyword(["Hole","With","24m"]).Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -290,10 +290,10 @@ public class Mirrored: CPEffect {//TODO Prototype
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         //Dimensions normal Stadium
         // from (1,9,1) to (48,38,48)
-        map.StageAll();
+        map.StageAll(inventory);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(1536-x.position.coords.X, x.position.coords.Y, x.position.coords.Z));
         map.stagedBlocks.ForEach(x => x.position.pitchYawRoll = new Vec3(x.position.pitchYawRoll.X, -x.position.pitchYawRoll.Y, -x.position.pitchYawRoll.Z)); //inverting yaw
         // Move back by Width of Block (Simulate Coords of block beeing at other Corner)
@@ -308,7 +308,7 @@ public class NoItems: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Delete(inventory.Select(BlockType.Item).Not(["MapStart","Finish"]));
         map.PlaceStagedBlocks();
     }
@@ -322,11 +322,11 @@ public class RandomBlocks : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         Random rand = new();
         Inventory normals = (inventory/inventory.Select(BlockType.Pillar)) & inventory.Not(["MapStart","Finish","Checkpoint","Multilap"]);
-        normals.Edit().PlaceRelative(map);
-        normals.Edit().PlaceRelative(map);
+        normals.Edit().PlaceRelative(inventory, map);
+        normals.Edit().PlaceRelative(inventory, map);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(rand.Next() % 1536, rand.Next() % 240, rand.Next() % 1536));
         map.PlaceStagedBlocks();
     }
@@ -338,7 +338,7 @@ public class RingCP : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         Article GateCheckpoint = inventory.GetArticle("GateCheckpoint");
         map.PlaceRelative(inventory.Select(BlockType.Item).Select("Checkpoint"),GateCheckpoint,new Offset(-16,-12,-16));
         map.PlaceRelative(inventory.Select(BlockType.Block).Select("CheckpointTrigger"),GateCheckpoint,new Offset(0,-12,0));
@@ -357,7 +357,7 @@ public class SpeedLimit: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Delete(inventory.Any(["Boost","Boost2","Turbo","Turbo2","TurboRoulette"]),true);
     }
 }
@@ -368,8 +368,8 @@ public class StartOneDown: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select("MapStart").Edit().PlaceRelative(map,new Offset(0,-8,0));
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select("MapStart").Edit().PlaceRelative(inventory, map,new Offset(0,-8,0));
         map.Delete(inventory.Select("MapStart"),true);
         map.PlaceStagedBlocks();
     }
@@ -382,11 +382,11 @@ public class SuperSized : Alteration{
     public override bool Complete => false;
 
     private float factor = 2;
-    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new SupersizedBlock(factor))];
+    internal override List<CustomBlockAlteration> customBlockAlts => [new SupersizedBlock(factor)];
     public SuperSized(){}
     public SuperSized(float factor) => this.factor = factor;
-    public override void Run(Map map){
-        inventory.Edit().AddKeyword("SupersizedBlock").Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Edit().AddKeyword("SupersizedBlock").Replace(inventory, map);
         map.Delete(inventory);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3((x.position.coords.X - (32 * 24)) * factor, x.position.coords.Y * factor + 500, (x.position.coords.Z - (32 * 24)) * factor));
         map.PlaceStagedBlocks();
@@ -399,9 +399,9 @@ public class STTF : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Delete(inventory.Select("Checkpoint").Any(["Ring","Gate"]));
-        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").Replace(map);
+        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -418,12 +418,12 @@ public class Tilted: Alteration {
     
     public Tilted() { }
     
-    public override void Run(Map map)
+    protected override void Run(Inventory inventory, Map map)
     {
         //TODO add grass blocks at the bottom of stadium
         Random rand = new();
         Vec3 angle = new Vec3(rand.Next() % 1000f / 200f, (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f), (rand.Next() % 2 == 0 ? 1 : -1) * (rand.Next() % 100f / 500f + 0.2f));
-        map.StageAll(new RotateCenter(angle));
+        map.StageAll(inventory, new RotateCenter(angle));
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 300, x.position.coords.Z));
         map.PlaceStagedBlocks();
 
@@ -440,9 +440,9 @@ public class Yeet: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map);
-        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(inventory, map);
+        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -453,9 +453,9 @@ public class YeetDown: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map,new RotateMid(PI,0,0));
-        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map,new RotateMid(PI,0,0));
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(inventory, map,new RotateMid(PI,0,0));
+        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(inventory, map,new RotateMid(PI,0,0));
         map.PlaceStagedBlocks();
     }
 }
@@ -466,11 +466,11 @@ public class YeetMaxUp: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(map);
-        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Boost2").Replace(inventory, map);
+        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Boost2").Replace(inventory, map);
         map.PlaceStagedBlocks();
-        inventory.Select("Finish").Edit().Replace(map);
+        inventory.Select("Finish").Edit().Replace(inventory, map);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, 240, x.position.coords.Z));
         map.PlaceStagedBlocks();
     }
@@ -483,9 +483,9 @@ public class RandomHoles: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         Random rand = new();
-        (inventory/inventory.Any(["MapStart","Finish","Multilap"])).Edit().Replace(map);
+        (inventory/inventory.Any(["MapStart","Finish","Multilap"])).Edit().Replace(inventory, map);
         map.stagedBlocks = map.stagedBlocks.Where(x => !(rand.Next() % 10 == 0)).ToList();
         map.PlaceStagedBlocks();
     }
@@ -497,9 +497,9 @@ public class YepTree: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> additionalArticles => [new CustomBlockFolder("YepTree")];
+    internal override List<CustomBlockFolder> customBlockFolders => [new CustomBlockFolder("YepTree")];
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         Article YepTree = inventory.GetArticle("YepTree-TreeCheckpointTrigger");
         map.PlaceRelative(inventory.Any(["Tree","Cactus","Fir","Palm","Cypress","Spring","Summer","Winter","Fall"]),YepTree);
         map.PlaceStagedBlocks();
@@ -512,7 +512,7 @@ public class Rotated: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Move(inventory.Select(BlockType.Block),new RotateMid(PI,0,0));
         map.PlaceStagedBlocks();
     }
@@ -524,9 +524,9 @@ public class Mini : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new MiniBlock())];
-    public override void Run(Map map){
-        inventory.Edit().AddKeyword("MiniBlock").Replace(map);
+    internal override List<CustomBlockAlteration> customBlockAlts => [new MiniBlock()];
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Edit().AddKeyword("MiniBlock").Replace(inventory, map);
         map.Delete(inventory);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X / 2, x.position.coords.Y / 2 + 4, x.position.coords.Z / 2));//4 is offset for normal stadium
         map.PlaceStagedBlocks();
@@ -539,10 +539,10 @@ public class Invisible : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new InvisibleBlock())];
-    public override void Run(Map map){
+    internal override List<CustomBlockAlteration> customBlockAlts => [new InvisibleBlock()];
+    protected override void Run(Inventory inventory, Map map){
         Inventory nonGameplay = inventory.Not(["MapStart", "Finish", "Checkpoint", "Gameplay"]);
-        nonGameplay.Edit().AddKeyword("InvisibleBlock").Replace(map);
+        nonGameplay.Edit().AddKeyword("InvisibleBlock").Replace(inventory, map);
         map.Delete(nonGameplay);
         map.PlaceStagedBlocks();
     }
@@ -554,8 +554,8 @@ public class Gaps : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        map.StageAll();
+    protected override void Run(Inventory inventory, Map map){
+        map.StageAll(inventory);
         map.stagedBlocks.ForEach(x => 
             x.position.coords = new Vec3(x.position.coords.X * 17/16, x.position.coords.Y * 17/16, x.position.coords.Z * 17/16)
         );
