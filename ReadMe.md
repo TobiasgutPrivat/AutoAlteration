@@ -407,7 +407,7 @@ From Map file to altered Map file (AutoAlteration.AlterFile)
   - Free:
 
     - block.AbsolutePositionInMap: defines position as coordinates,
-    - block.PitchYawRoll: defines rotation as Vector (X=Yaw, Y=Pitch, Z=Roll)
+    - block.YawPitchRoll: defines rotation as Vector (X=Yaw, Y=Pitch, Z=Roll)
 
       application order: 1. Yaw, 2. Roll, 3. Pitch
 
@@ -424,7 +424,7 @@ From Map file to altered Map file (AutoAlteration.AlterFile)
 - Author: here fixed to Nadeo
 - item.AbsolutePositionInMap: defines position as coordinates,
 
-  - item.PitchYawRoll: defines rotation as Vector (X=Yaw, Y=Pitch, Z=Roll)
+  - item.YawPitchRoll: defines rotation as Vector (X=Yaw, Y=Pitch, Z=Roll)
 
     application order: 1. Yaw, 2. Roll, 3. Pitch
 

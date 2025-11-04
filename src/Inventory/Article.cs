@@ -2,7 +2,7 @@ using GBX.NET;
 
 public class Article {
     public string Name = "";
-    public MoveChain MoveChain = new();
+    public MoveChain MoveChain = []; //Move to come from the Models Coords to the semanticly intended Coords
     public BlockType Type;
     public List<string> Keywords = [];
     public List<string> ToShapes = [];
@@ -21,7 +21,7 @@ public class Article {
         Type = type;
         Keywords = keywords;
         ToShapes = toShape ?? [];
-        MoveChain = moveChain ?? new MoveChain();
+        MoveChain = moveChain ?? [];
         Length = length;
         Width = width;
     }

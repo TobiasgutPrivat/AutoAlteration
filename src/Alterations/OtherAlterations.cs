@@ -295,7 +295,7 @@ public class Mirrored: CPEffect {//TODO Prototype
         // from (1,9,1) to (48,38,48)
         map.StageAll(inventory);
         map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(1536-x.position.coords.X, x.position.coords.Y, x.position.coords.Z));
-        map.stagedBlocks.ForEach(x => x.position.pitchYawRoll = new Vec3(x.position.pitchYawRoll.X, -x.position.pitchYawRoll.Y, -x.position.pitchYawRoll.Z)); //inverting yaw
+        map.stagedBlocks.ForEach(x => x.position.YawPitchRoll = new Vec3(x.position.YawPitchRoll.X, -x.position.YawPitchRoll.Y, -x.position.YawPitchRoll.Z)); //inverting yaw
         // Move back by Width of Block (Simulate Coords of block beeing at other Corner)
         //Switch all right and left
         map.PlaceStagedBlocks();
@@ -430,7 +430,7 @@ public class Tilted: Alteration {
         Position thumbNailPos = new Position(map.map.ThumbnailPosition, map.map.ThumbnailPitchYawRoll);
         new RotateCenter(angle).Apply(thumbNailPos, new Article());
         map.map.ThumbnailPosition = new Vec3(thumbNailPos.coords.X, thumbNailPos.coords.Y + 300, thumbNailPos.coords.Z);
-        map.map.ThumbnailPitchYawRoll = thumbNailPos.pitchYawRoll;
+        map.map.ThumbnailPitchYawRoll = thumbNailPos.YawPitchRoll;
     }
 }
 

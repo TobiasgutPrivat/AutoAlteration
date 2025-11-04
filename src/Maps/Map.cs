@@ -10,14 +10,14 @@ public class Map
   public Dictionary<string,BlockType> embeddedBlocks = []; //Format: "Blocks/SomeFolder/BlockName.Block.Gbx" -> "SomeFolder\\BlockName" (like name in Inventory)
   public int FreeBlockHeightOffset = 0;
 
-  private Replay WRReplay;
+  private Replay? WRReplay;
 
   #region loading
   public Map(string mapPath)
   { 
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
-    map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
+    map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4; //TODO test if causes crashes
     FreeBlockHeightOffset = map.DecoBaseHeightOffset*8;
     map.Comments += "\nAltered using AutoAlteration";
     
@@ -27,7 +27,7 @@ public class Map
   public void Save(string path)
   { 
     NewMapUid();
-    RemoveAuthor();
+    RemoveAuthor(); //TODO test if causes crashes
     map.RemovePassword();
     if (!Directory.Exists(Path.GetDirectoryName(path)))
       {
@@ -123,23 +123,39 @@ public class Map
     if (newInventory.Count == 0) return;
     Random rand = new();
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock.Name)){
-      stagedBlocks.Add(new Block(ctnBlock,atBlock,newInventory.ToList()[rand.Next(newInventory.Count)],FreeBlockHeightOffset,moveChain));
+      Block block = new Block(ctnBlock, atBlock, FreeBlockHeightOffset);
+      block.Move(moveChain);
+      block.SetArticle(newInventory.ToList()[rand.Next(newInventory.Count)]);
+      stagedBlocks.Add(block);
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock.Name)){
-      stagedBlocks.Add(new Block(ctnItem,atBlock,newInventory.ToList()[rand.Next(newInventory.Count)],moveChain));
+      Block block = new Block(ctnItem, atBlock);
+      block.Move(moveChain);
+      block.SetArticle(newInventory.ToList()[rand.Next(newInventory.Count)]);
+      stagedBlocks.Add(block);
     }
   }
 
   public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
     string ArticleName = atArticle.Name;
     if (atArticle.Type == BlockType.CustomBlock) ArticleName += "_CustomBlock";
-    ArticleName = ArticleName.Replace("/","\\");
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){
+    ArticleName = ArticleName.Replace("/", "\\");
+    
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName))
+    {
       if (blockCondition != null && !blockCondition(ctnBlock)) continue;
-      stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,FreeBlockHeightOffset,moveChain));
+      Block block = new Block(ctnBlock, atArticle, FreeBlockHeightOffset);
+      block.Move(moveChain);
+      block.SetArticle(newArticle);
+      stagedBlocks.Add(block);
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName)){
-      stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,moveChain));
+
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName))
+    {
+      Block block = new Block(ctnItem, atArticle);
+      block.Move(moveChain);
+      block.SetArticle(newArticle);
+      stagedBlocks.Add(block);
     }
   }
 
@@ -207,27 +223,23 @@ public class Map
 
   private void PlaceBlock(Block block, bool revertFreeBlock){
     block.name = block.name.TrimStart('\\');
-    string orgName = block.name;
 
     switch (block.blockType){
-        case BlockType.CustomBlock:
-          if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-            EmbedBlock("Blocks/" + block.name,block.Path);
-            embeddedBlocks.Add(block.name, block.blockType);
-          }
-          block.name += "_CustomBlock";
-          break;
-        case BlockType.CustomItem:
-          if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-            EmbedBlock("Items/" + block.name,block.Path);
-            embeddedBlocks.Add(block.name, block.blockType);
-          }
-          break;
-      }
+      case BlockType.CustomBlock:
+        if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
+          EmbedBlock("Blocks/" + block.name,block.article.Path);
+          embeddedBlocks.Add(block.name, block.blockType);
+        }
+        break;
+      case BlockType.CustomItem:
+        if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
+          EmbedBlock("Items/" + block.name,block.article.Path);
+          embeddedBlocks.Add(block.name, block.blockType);
+        }
+        break;
+    }
 
     block.PlaceInMap(map, revertFreeBlock);
-
-    block.name = orgName;
   }
   #endregion
 
@@ -241,12 +253,16 @@ public class Map
   public void StageAll(Inventory inventory, MoveChain ?moveChain = null){
     stagedBlocks.AddRange(map.Blocks.Select(x => {
       Article article = inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
-      return new Block(x,article,article,FreeBlockHeightOffset,moveChain);
+      Block block = new Block(x, article, FreeBlockHeightOffset);
+      block.Move(moveChain);
+      return block;
     }));
     map.Blocks = [];
     stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
       Article article = inventory.GetArticle(x.ItemModel.Id);
-      return new Block(x, article, article, moveChain);
+      Block block = new Block(x, article);
+      block.Move(moveChain);
+      return block;
     }));
     map.AnchoredObjects = [];
   }

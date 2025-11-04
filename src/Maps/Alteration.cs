@@ -38,7 +38,7 @@ public abstract class Alteration {
         {
             inventory |= [.. map.embeddedBlocks.Select(x => new Article(x.Key, x.Value, ""))];
             string TempFolder = Path.Join(Path.GetTempPath(), "AutoAlteration");
-            string ExportFolder = Path.Join(Path.GetTempPath(), "Exports");
+            string ExportFolder = Path.Join(TempFolder, "Exports");
             map.ExtractEmbeddedBlocks(ExportFolder);
             foreach (CustomBlockAlteration customBlockAlteration in customBlockAlts)
             {
@@ -61,8 +61,8 @@ public abstract class Alteration {
         //cleanup
         if (map.embeddedBlocks.Count != 0)
         {
-            Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder, "Temp"), true);
-            Directory.Delete(Path.Join(AlterationConfig.CustomBlocksFolder, "Exports"), true);
+            string TempFolder = Path.Join(Path.GetTempPath(), "AutoAlteration");
+            Directory.Delete(TempFolder, true);
         }
 
     }
