@@ -5,7 +5,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null,
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override List<InventoryChange> InventoryChanges => light ? [new LightSurface(SurfaceAlt)] : [new HeavySurface(SurfaceAlt)];
+    public override List<InventoryChange> additionalArticles => light ? [new LightSurface(SurfaceAlt)] : [new HeavySurface(SurfaceAlt)];
     public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
 
     public override void Run(Map map) {
@@ -88,7 +88,7 @@ public class Magnet : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> InventoryChanges => [new LightSurface(new MagnetSurface())];
+    public override List<InventoryChange> additionalArticles => [new LightSurface(new MagnetSurface())];
     public override void Run(Map map){
         inventory.Edit().AddKeyword("MagnetSurface").Replace(map);
         map.PlaceStagedBlocks();
@@ -139,7 +139,7 @@ public class Plastic : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> InventoryChanges => [new LightSurface(new PlasticSurface())];
+    public override List<InventoryChange> additionalArticles => [new LightSurface(new PlasticSurface())];
     public override void Run(Map map){
         inventory.Not(["Plastic","OpenPlasticRoad","OpenPlasticZone","RoadPlastic"]).Edit().AddKeyword("PlasticSurface").Replace(map);
         map.PlaceStagedBlocks();
@@ -152,7 +152,7 @@ public class Road : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new TechSurface())];
+    public override List<InventoryChange> additionalArticles => [new HeavySurface(new TechSurface())];
     public override void Run(Map map){
         inventory.Not(["Tech","OpenTechRoad","OpenTechZone","RoadTech"]).Edit().AddKeyword("TechSurface").Replace(map);
         map.PlaceStagedBlocks();
@@ -165,7 +165,7 @@ public class Wood : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     public override List<Alteration> AlterationsBefore => [new AirMode()];
-    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface(),false)];
+    public override List<InventoryChange> additionalArticles => [new HeavySurface(new WoodSurface(),false)];
     public override void Run(Map map){
         inventory.Edit().AddKeyword("WoodSurfaceHeavy").Replace(map);
         inventory.Edit().AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(map);
@@ -228,7 +228,7 @@ public class RouteOnly: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new RouteOnlyBlock())];
+    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new RouteOnlyBlock())];
     public override void Run(Map map){
         inventory.Edit().AddKeyword("RouteOnlyBlock").Replace(map);
         map.Delete(inventory/inventory.Select(BlockType.Item).Any(["MapStart","Finish","Checkpoint"]));

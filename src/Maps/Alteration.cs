@@ -1,5 +1,37 @@
 public abstract class Alteration {
-    public abstract void Run(Map map);
+    protected abstract void Run(Inventory inventory, Map map);
+    public void Run(Map map)
+    {
+        foreach (Alteration alteration in AlterationsBefore)
+        {
+            alteration.Run(map);
+        }
+        Inventory inventory = [.. AlterationConfig.VanillaArticles.GetArticles()];
+        foreach (ArticleProvider articleProvider in additionalArticles)
+        {
+            AlterationConfig.Keywords.AddRange(articleProvider.GetAdditionalKeywords());
+            inventory &= [.. articleProvider.GetArticles()];
+        }
+        //logging
+        if (AlterationConfig.devMode)
+        {
+            inventory.Export(GetType().Name);
+        }
+
+        //Map specific custom blocks
+        if (map.embeddedBlocks.Count != 0)
+        {
+            inventory &= [.. map.embeddedBlocks.Select(x => new Article(x.Key, x.Value, ""))];
+            //logging
+            if (AlterationConfig.devMode)
+            {
+                inventory.Export(GetType().Name + "WithEmbedded");
+            }
+        }
+        //TODO customblocksets on embedded
+        Run(inventory, map);
+        AlterationConfig.mapCount++;
+    }
 
     public virtual string Description => "No description given"; // Alteration Description
     public virtual bool Published => false; // Alteration is published in Auto Alteration -> determines if shown in UI-App
@@ -8,18 +40,10 @@ public abstract class Alteration {
 
 
     // Changes which get applied on base inventory before the Alteration is executed
-    public virtual List<InventoryChange> InventoryChanges { get; } = [];
+    internal virtual List<ArticleProvider> additionalArticles { get; } = [];
 
     public virtual List<Alteration> AlterationsBefore { get; } = [];// applied in AlterFile()
 
-    public static Inventory inventory = [];
-
     public const float PI = (float)Math.PI;
     
-    public static void CreateInventory() {
-        inventory = new(VanillaArticleProvider.GetArticles()); //Clear inventory when regenerating
-        if (AlterationConfig.devMode){
-            inventory.Export("Vanilla");
-        }
-    }
 }

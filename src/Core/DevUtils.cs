@@ -123,7 +123,7 @@ class CustomBlockAirTest : Alteration {
     // 1000 bad for all
     // 1000000 good for all if air-mode false, (only known exception: RoadTechTiltTransition2Up1LeftChicane)
     // last digit doesn't really matter
-    public override List<InventoryChange> InventoryChanges => [new HeavySurface(new WoodSurface())];
+    public override List<InventoryChange> additionalArticles => [new HeavySurface(new WoodSurface())];
     public override void Run(Map map)
     {
         Inventory platform = inventory.Select("Platform");
@@ -170,7 +170,7 @@ class NothingBlock : CustomBlockAlteration {
 }
 
 class EmbedTest : Alteration {
-    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new NothingBlock())];
+    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new NothingBlock())];
     public override void Run(Map map){
         Inventory specific = inventory.Select(article => article.MapSpecific);
         // (!specific).Select("Platform").RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","NothingBlockHeavy"]).Replace(map);

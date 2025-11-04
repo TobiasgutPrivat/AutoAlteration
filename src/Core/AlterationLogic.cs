@@ -1,7 +1,6 @@
 using GBX.NET.Engines.Plug;
 
 public class AlterationLogic {
-    public static int mapCount = 0;
     private static List<Alteration> ?lastAlterations;
     public static void Alter(List<Alteration> alterations, Map map) {
         //cleanup
@@ -18,7 +17,7 @@ public class AlterationLogic {
             // needs Inventory recreation
             Alteration.CreateInventory(); //Resets Inventory to Vanilla
             foreach (Alteration alteration in alterations) {
-                alteration.InventoryChanges.ForEach(change => {
+                alteration.additionalArticles.ForEach(change => {
                     (change as CustomBlockSet)?.GetAdditionalKeywords().ForEach(keyword => {
                         if (!AlterationConfig.CustomBlockSets.Contains(keyword)) {
                             AlterationConfig.CustomBlockSets.Add(keyword);
@@ -46,7 +45,7 @@ public class AlterationLogic {
 
         //Generate Map specific custom blocks sets
         alterations
-            .SelectMany(alteration => alteration.InventoryChanges)
+            .SelectMany(alteration => alteration.additionalArticles)
             .Where(change => change is CustomBlockSet)
             .Cast<CustomBlockSet>().ToList().ForEach(
                 map.GenerateCustomBlocks); //includes updating inventory

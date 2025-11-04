@@ -1,20 +1,15 @@
+using System.IO.Pipes;
 using GBX.NET;
 using Newtonsoft.Json;
 
 /// <summary>
 /// Provides vanilla articles based on json data files.
 /// </summary>
-class VanillaArticleProvider
+class VanillaArticleProvider : ArticleProvider
 {
-    private static List<Article>? articles = null;
     private static readonly float PI = (float)Math.PI;
-    public static List<Article> GetArticles()
-    {
-        articles ??= GenerateArticles();
-        return articles;
-    }
-
-    private static List<Article> GenerateArticles()
+    
+    protected override List<Article> GenerateArticles()
     {
         string BlockJson = File.ReadAllText(AlterationConfig.BlockDataPath);
         string ItemJson = File.ReadAllText(AlterationConfig.ItemDataPath);

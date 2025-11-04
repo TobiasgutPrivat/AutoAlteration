@@ -382,7 +382,7 @@ public class SuperSized : Alteration{
     public override bool Complete => false;
 
     private float factor = 2;
-    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new SupersizedBlock(factor))];
+    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new SupersizedBlock(factor))];
     public SuperSized(){}
     public SuperSized(float factor) => this.factor = factor;
     public override void Run(Map map){
@@ -497,7 +497,7 @@ public class YepTree: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override List<InventoryChange> InventoryChanges => [new CustomBlockFolder("YepTree")];
+    public override List<InventoryChange> additionalArticles => [new CustomBlockFolder("YepTree")];
 
     public override void Run(Map map){
         Article YepTree = inventory.GetArticle("YepTree-TreeCheckpointTrigger");
@@ -524,7 +524,7 @@ public class Mini : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new MiniBlock())];
+    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new MiniBlock())];
     public override void Run(Map map){
         inventory.Edit().AddKeyword("MiniBlock").Replace(map);
         map.Delete(inventory);
@@ -539,7 +539,7 @@ public class Invisible : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override List<InventoryChange> InventoryChanges => [new CustomBlockSet(new InvisibleBlock())];
+    public override List<InventoryChange> additionalArticles => [new CustomBlockSet(new InvisibleBlock())];
     public override void Run(Map map){
         Inventory nonGameplay = inventory.Not(["MapStart", "Finish", "Checkpoint", "Gameplay"]);
         nonGameplay.Edit().AddKeyword("InvisibleBlock").Replace(map);
