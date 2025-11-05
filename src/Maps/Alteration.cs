@@ -62,7 +62,10 @@ public abstract class Alteration {
         if (map.embeddedBlocks.Count != 0)
         {
             string TempFolder = Path.Join(Path.GetTempPath(), "AutoAlteration");
-            Directory.Delete(TempFolder, true);
+            if (Directory.Exists(TempFolder))
+            {
+                Directory.Delete(TempFolder, true);
+            }
         }
 
     }

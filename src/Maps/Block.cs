@@ -124,7 +124,7 @@ public class Block
 
     private void PlaceBlockInMap(CGameCtnChallenge map, bool revertFreeBlock)
     {
-        CGameCtnBlock block = map.PlaceBlock(blockType == BlockType.CustomBlock ? name : name + "_CustomBlock", new(0, 0, 0), Direction.North);
+        CGameCtnBlock block = map.PlaceBlock(blockType == BlockType.CustomBlock ? name + "_CustomBlock" : name, new(0, 0, 0), Direction.North);
         float yaw = (float)Math.Round(position.YawPitchRoll.X / (Alteration.PI / 2), 5);
         if (!IsFree && revertFreeBlock
             && position.coords.X % 32 == 0 && position.coords.Y % 8 == 0 && position.coords.Z % 32 == 0

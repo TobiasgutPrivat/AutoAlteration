@@ -1,3 +1,4 @@
+using System.IO.Pipes;
 using System.Reflection;
 
 public class AutoAlteration {
@@ -56,7 +57,7 @@ public class AutoAlteration {
             Console.WriteLine("Load Error " + sourceFile);
             return;
         }
-        if (AlterationLogic.Alter(alterations, customBlock) || !skipUnchanged){ //Skip unchanged in back to avoid skipping alteration
+        if (alterations.Select(x => x.Run(customBlock)).Any(x => x) || !skipUnchanged){ //Skip unchanged in back to avoid skipping alteration
             customBlock.Name += Name;
             customBlock.customBlock.Name = customBlock.Name;
             customBlock.Save(destinationFile);

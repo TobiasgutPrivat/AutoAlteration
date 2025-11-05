@@ -6,6 +6,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null,
     public override bool Complete => false;
 
     internal override List<CustomBlockAlteration> customBlockAlts => [SurfaceAlt];
+    // public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [new AirMode(), sceneryAlteration] : [new AirMode(), ];
     public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
 
     protected override void Run(Inventory inventory, Map map) {
@@ -19,36 +20,13 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null,
             inventory.Any(["OpenTechRoad", "OpenDirtRoad", "OpenGrassRoad", "OpenIceRoad"]).Edit().RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword($"Open{Surface}Road").Replace(inventory, map);
             inventory.Any(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).Edit().RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword($"Open{Surface}Zone").Replace(inventory, map);
             map.PlaceStagedBlocks();
-            (inventory/Platform).Not([$"Platform",$"{Surface}",$"Open{Surface}Road",$"Open{Surface}Zone"]).Edit().AddKeyword($"{Surface}SurfaceLight").PlaceRelative(inventory, map);
-            map.stagedBlocks.ForEach(x => x.IsAir = false);
+            (inventory/Platform).Not([$"{Surface}",$"Open{Surface}Road",$"Open{Surface}Zone"]).Edit().AddKeyword($"{Surface}Surface").PlaceRelative(inventory, map);
+            // map.stagedBlocks.ForEach(x => x.IsAir = false);
             map.PlaceStagedBlocks(false);
         } else {
-            // //TODO get full block set
-            // Inventory specific = inventory.Select(article => article.MapSpecific); //handle mapSpecifics seperately
-
-            // 1. find blocks which should be replaced by Heavy
-            // KeywordEdit HeavyReplace = specific.Edit().AddKeyword($"{Surface}SurfaceHeavy");
-            // HeavyReplace.Add((inventory/specific).Edit().AddKeyword([$"{Surface}SurfaceHeavy","Middle"]));
-            // HeavyReplace.Add((inventory/specific).Select("Platform").Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(["Plastic",$"{Surface}SurfaceHeavy"]));
-            // //TODO some more blocks not yet handled
-            // HeavyReplace.Align();
-            // Inventory replaced = HeavyReplace.getOriginal(); //blocks which will be replaced by Heavy later
-
-            // // 2. place Pillars on blocks which will be replaced by Heavy and were not air
-            // KeywordEdit Pillar = replaced.Edit().RemoveKeyword([""]); //TODO align to pillars
-
-            // Pillar.PlaceRelative(inventory, map,blockCondition: block => !block.Bit21); //place Pillars for blocks which were not in AirMode
-            // map.PlaceStagedBlocks();
-
-            // // 3. replace blocks
-            // HeavyReplace.Replace(inventory, map);
-            // specific.Edit().AddKeyword([$"{Surface}Surface"]).Replace(inventory, map);
-            // map.stagedBlocks.ForEach(x => x.IsAir = false);
-            // map.PlaceStagedBlocks(false);
-        }
-
-        if (sceneryAlteration != null) {
-            sceneryAlteration.Run(map);
+            inventory.Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
+            // inventory.Edit().AddKeyword([$"{Surface}Surface","Middle"]));
+            map.PlaceStagedBlocks(false);
         }
     }
 }
@@ -82,17 +60,14 @@ public class Ice : Surface {
     public Ice() : base(new IceSurface(), "Ice", true) { }
 }
 
-public class Magnet : Alteration {
+public class Magnet : Surface
+{
     public override string Description => "replaces all drivable surfaces with Magnet";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    
-    // public override List<CustomBlockAlteration> customBlockAlts => [new LightSurface(new MagnetSurface())];
-    protected override void Run(Inventory inventory, Map map){
-        inventory.Edit().AddKeyword("MagnetSurface").Replace(inventory, map);
-        map.PlaceStagedBlocks();
-    }
+
+    public Magnet() : base(new MagnetSurface(), "Magnet", false) { }
 }
 
 //mixed manual
@@ -133,45 +108,32 @@ public class Penalty : Alteration {
     }
 }
 
-public class Plastic : Alteration {
+public class Plastic : Surface {
     public override string Description => "replaces all drivable surfaces with Plastic";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    // public override List<InventoryChange> customBlockAlts => [new LightSurface(new PlasticSurface())];
-    protected override void Run(Inventory inventory, Map map){
-        inventory.Not(["Plastic","OpenPlasticRoad","OpenPlasticZone","RoadPlastic"]).Edit().AddKeyword("PlasticSurface").Replace(inventory, map);
-        map.PlaceStagedBlocks();
-    }
+    public Plastic() : base(new PlasticSurface(), "Plastic", true) { }
+
 }
 
-public class Road : Alteration {
+public class Road : Surface {
     public override string Description => "replaces all drivable surfaces with Tech";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    
-    // public override List<InventoryChange> customBlockAlts => [new HeavySurface(new TechSurface())];
-    protected override void Run(Inventory inventory, Map map){
-        inventory.Not(["Tech","OpenTechRoad","OpenTechZone","RoadTech"]).Edit().AddKeyword("TechSurface").Replace(inventory, map);
-        map.PlaceStagedBlocks();
-    }
+
+    public Road() : base(new TechSurface(), "Tech", true) { }
 }
 
-public class Wood : Alteration {
+public class Wood : Surface {
     public override string Description => "replaces all drivable surfaces with Wood";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    public override List<Alteration> AlterationsBefore => [new AirMode()];
-    // public override List<InventoryChange> customBlockAlts => [new HeavySurface(new WoodSurface(),false)];
-    protected override void Run(Inventory inventory, Map map){
-        inventory.Edit().AddKeyword("WoodSurfaceHeavy").Replace(inventory, map);
-        inventory.Edit().AddKeyword(["WoodSurfaceHeavy","Middle"]).Replace(inventory, map);
-        inventory.Select("Platform").Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(inventory, map);
-        map.PlaceStagedBlocks(false);
-    }
+    public Wood() : base(new WoodSurface(), "Wood", false) { }
+
 }
 
 public class Bobsleigh : Alteration { //half manual
