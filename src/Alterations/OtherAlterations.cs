@@ -1,4 +1,7 @@
 using GBX.NET;
+using GBX.NET.Engines.Game;
+using GBX.NET.Engines.Plug;
+using GBX.NET.Engines.Scene;
 
 public class AirMode: Alteration {
     public override string Description => "Turn all Blocks to Air-Mode, should not change anything";
@@ -477,15 +480,36 @@ public class YeetMaxUp: Alteration {
 }
 
 //New ------------------------------------------------------------------------------
-public class RandomHoles: Alteration {
+public class WRTrace : Alteration {
+    public override string Description => "places pillars along the Path of the WR";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+    
+    protected override void Run(Inventory inventory, Map map){
+        CGameCtnGhost? ghost = map.GetWRGhost();
+        if (ghost == null) return;
+        CPlugEntRecordData.EntRecordListElem? entry = ghost.RecordData?.EntList.First();
+        List<Position> positions = entry?.Samples.Where(sample => sample is CSceneVehicleVis.EntRecordDelta).Cast<CSceneVehicleVis.EntRecordDelta>()
+            .Select(sample => new Position(sample.Position, new Vec3(sample.PitchYawRoll.Y, sample.PitchYawRoll.X, sample.PitchYawRoll.Z))).ToList() ?? [];
+        foreach (Position position in positions)
+        {
+            CGameCtnAnchoredObject item = map.map.PlaceAnchoredObject(new Ident("ObstaclePillar2m", new Id(26), "Nadeo"), position.coords, position.YawPitchRoll);
+        }
+    }
+}
+
+public class RandomHoles : Alteration
+{
     public override string Description => "Removes 10% of all Blocks";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    protected override void Run(Inventory inventory, Map map){
+    protected override void Run(Inventory inventory, Map map)
+    {
         Random rand = new();
-        (inventory/inventory.Any(["MapStart","Finish","Multilap"])).Edit().Replace(inventory, map);
+        (inventory / inventory.Any(["MapStart", "Finish", "Multilap"])).Edit().Replace(inventory, map);
         map.stagedBlocks = map.stagedBlocks.Where(x => !(rand.Next() % 10 == 0)).ToList();
         map.PlaceStagedBlocks();
     }

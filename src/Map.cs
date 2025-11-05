@@ -1,5 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
+using ManiaAPI.NadeoAPI;
 using System.IO.Compression;
 
 public class Map
@@ -10,7 +11,7 @@ public class Map
   public Dictionary<string,BlockType> embeddedBlocks = []; //Format: "Blocks/SomeFolder/BlockName.Block.Gbx" -> "SomeFolder\\BlockName" (like name in Inventory)
   public int FreeBlockHeightOffset = 0;
 
-  private Replay? WRReplay;
+  private CGameCtnGhost? WRGhost;
 
   #region loading
   public Map(string mapPath)
@@ -243,11 +244,46 @@ public class Map
   }
   #endregion
 
-  public Replay GetWRReplay(){
-    //AR
-    //download the replay
+  public CGameCtnGhost? GetWRGhost(){
+    if (WRGhost != null) return WRGhost;
+    // authorize
+    NadeoLiveServices nls = new();
+    nls.AuthorizeAsync("AutoAlteration", "D),i8Fo_=/O9a*YU", AuthorizationMethod.DedicatedServer).GetAwaiter().GetResult();
+    NadeoServices ns = new();
+    ns.AuthorizeAsync("AutoAlteration", "D),i8Fo_=/O9a*YU", AuthorizationMethod.DedicatedServer).GetAwaiter().GetResult();
 
-    return new Replay("somePath");
+    //Get map info
+    string mapUid = map.MapInfo.Id;
+    MapInfoLive mapInfo = nls.GetMapInfoAsync(mapUid).GetAwaiter().GetResult();
+    Guid mapId = mapInfo.MapId;
+    // get wr
+    TopLeaderboardCollection leaderboard = nls.GetTopLeaderboardAsync(mapUid, 1).GetAwaiter().GetResult();
+    if (leaderboard.Tops.Count == 0 || leaderboard.Tops.First().Top.Count == 0)
+    {
+      Console.WriteLine($"Map has no WR data");
+      return null;
+    }
+    else
+    {
+      Record wr = leaderboard.Tops.First().Top.First();
+      //Download Replay
+      MapRecord wrRec = ns.GetMapRecordsAsync([wr.AccountId], mapId).GetAwaiter().GetResult().First();
+      string downloadURL = wrRec.Url;
+      using var httpClient = new HttpClient();
+      using var response = httpClient.GetAsync(downloadURL).GetAwaiter().GetResult();
+      response.EnsureSuccessStatusCode();
+      string replayPath = Path.Combine(Path.GetTempPath(), $"wr{mapId}.gbx.replay");
+      using var stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+      using var replayfs = new FileStream(replayPath, FileMode.Create);
+      stream.CopyToAsync(replayfs).GetAwaiter().GetResult();
+      replayfs.Close();
+      //Load Replay
+      Gbx<CGameCtnGhost> replayGbx = Gbx.Parse<CGameCtnGhost>(replayPath); ;
+      WRGhost = replayGbx.Node;
+      //clear
+      File.Delete(replayPath);
+    }
+    return WRGhost;
   }
 
   public void StageAll(Inventory inventory, MoveChain ?moveChain = null){

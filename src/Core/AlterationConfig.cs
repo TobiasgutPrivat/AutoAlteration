@@ -20,7 +20,7 @@ public class AlterationConfig {
 
     public static void Load() {
         Gbx.LZO = new MiniLZO();
-        // Gbx.ZLib = new ZLib();
+        Gbx.ZLib = new ZLib();
         if (devMode) {
             DataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data");
         }else {
