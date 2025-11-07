@@ -9,6 +9,21 @@ using GBX.NET.ZLib;
 using Newtonsoft.Json;
 
 class DevUtils{
+    public static void transferMapUids(string sourceFolder, string destinationFolder) {
+        List<string> sourcefiles = Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly).ToList();
+        List<string> destinationFiles = Directory.GetFiles(destinationFolder, "*.map.gbx", SearchOption.TopDirectoryOnly).ToList();
+        foreach (string sourceFile in sourcefiles) {
+            string? match = destinationFiles.Find(file => Path.GetFileNameWithoutExtension(file) == Path.GetFileNameWithoutExtension(sourceFile));
+            if (match != null) {
+                Map sourceMap = new Map(sourceFile);
+                Map destinationMap = new Map(match);
+                destinationMap.map.MapUid = sourceMap.map.MapUid;
+                // destinationMap.map.MapInfo.Id = sourceMap.map.MapInfo.Id;
+                destinationMap.Save(match);
+            }
+        }
+    }
+
     public static void ResaveBlock(string BlockPath) {
         Gbx.LZO = new MiniLZO();
         Gbx.ZLib = new ZLib();
