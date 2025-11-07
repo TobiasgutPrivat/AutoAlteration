@@ -1,3 +1,4 @@
+using System.IO.Pipes;
 using System.Reflection;
 
 public class AutoAlteration {
@@ -39,17 +40,11 @@ public class AutoAlteration {
     
     public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
         Map map = new Map(sourceFile);
-        List<Alteration>? allAlterations = [];
         foreach (Alteration alteration in alterations)
         {
-            if (alteration.AlterationsBefore != null)
-            {
-                allAlterations.AddRange(alteration.AlterationsBefore);
-            }
-            allAlterations.Add(alteration);
+            alteration.Run(map);
         }
-        AlterationLogic.Alter(allAlterations, map);
-        map.map.MapName = map.map.MapName + " " + Name;
+        map.map.MapName = Name is not null ? map.map.MapName + " " + Name : map.map.MapName;
         map.Save(destinationFile);
         Console.WriteLine(destinationFile);
     }
@@ -62,7 +57,7 @@ public class AutoAlteration {
             Console.WriteLine("Load Error " + sourceFile);
             return;
         }
-        if (AlterationLogic.Alter(alterations, customBlock) || !skipUnchanged){ //Skip unchanged in back to avoid skipping alteration
+        if (alterations.Select(x => x.Run(customBlock)).Any(x => x) || !skipUnchanged){ //Skip unchanged in back to avoid skipping alteration
             customBlock.Name += Name;
             customBlock.customBlock.Name = customBlock.Name;
             customBlock.Save(destinationFile);

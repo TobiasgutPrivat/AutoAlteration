@@ -11,7 +11,12 @@ public enum BlockType
     Pillar
 }
 
-public class Block {
+// Design decision:
+// No Inheriting classes of Block to allow conversion between diffrent types of blocks
+
+public class Block
+{
+    public Article article;
     public BlockType blockType;
     public string name;
     public Position position = Position.Zero;
@@ -32,10 +37,21 @@ public class Block {
     public string? AnchorTreeId;
     // public int BlockFlags; //not needed, causes issue with placing
     public short ItemFlags; //Stores relevant placement info
-    public string Path = "";
 
-    public void PlaceInMap(CGameCtnChallenge map, bool revertFreeBlock){
-        switch (blockType){
+    public void SetArticle(Article article)
+    {
+        this.article = article;
+        name = article.Name;
+        blockType = article.Type;
+        article.MoveChain.Subtract(position, article);
+    }
+
+    public void Move(MoveChain? moveChain) => moveChain?.Apply(position, article);
+
+    public void PlaceInMap(CGameCtnChallenge map, bool revertFreeBlock)
+    {
+        switch (blockType)
+        {
             case BlockType.Block:
             case BlockType.CustomBlock:
             case BlockType.Pillar:
@@ -49,8 +65,7 @@ public class Block {
     }
 
     #region Blocks
-        
-    public Block(CGameCtnBlock block,Article fromArticle,  Article article, int freeBlockHeightOffset, MoveChain ?moveChain)
+    public Block(CGameCtnBlock block, Article article, int freeBlockHeightOffset)
     {
         color = block.Color;
         IsFree = block.IsFree;
@@ -62,41 +77,36 @@ public class Block {
         Skin = block.Skin;
         IsAir = block.Bit21;
         WaypointSpecialProperty = block.WaypointSpecialProperty;
-        position = GetBlockPosition(block, freeBlockHeightOffset);
+        position = GetBlockPosition(block, article, freeBlockHeightOffset);
 
-        if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
-            article.DefaultRotation?.Apply(position,article);
-        };
+        if (block.Author is null || !block.Author.Contains("AutoAltTag"))
+        {
+            article.DefaultRotation?.Apply(position, article);
+        }
 
+        this.article = article;
         name = article.Name;
         blockType = article.Type;
-        Path = article.Path;
-        
-        fromArticle.MoveChain.Apply(position,article); // specific like for CPGate-Position
-        moveChain?.Apply(position,article); // the Altering moves
-        article.MoveChain.Subtract(position,article); // specific like for CPGate-Position
+        article.MoveChain.Apply(position, article);
     }
 
-    public static Position GetBlockPosition(CGameCtnBlock block, int freeBlockHeightOffset) {
-        if (block.IsFree){
-            return new Position(block.AbsolutePositionInMap,block.PitchYawRoll);
-        } else {
-            Position position = new Position(new Vec3(block.Coord.X * 32,block.Coord.Y * 8 - freeBlockHeightOffset ,block.Coord.Z * 32));
-            position.AddPosition(GetDirectionOffset(block));
+
+    public static Position GetBlockPosition(CGameCtnBlock block, Article article, int freeBlockHeightOffset)
+    {
+        if (block.IsFree)
+        {
+            return new Position(block.AbsolutePositionInMap, block.YawPitchRoll);
+        }
+        else
+        {
+            Position position = new Position(new Vec3(block.Coord.X * 32, block.Coord.Y * 8 - freeBlockHeightOffset, block.Coord.Z * 32));
+            position.AddPosition(GetDirectionOffset(block, article));
             return position;
         }
     }
 
-    public static Position GetDirectionOffset(CGameCtnBlock block) {
-        Article article;
-        try
-        {
-            article = Alteration.inventory.GetArticle(block.BlockModel.Id.Replace("_CustomBlock", ""));
-        }
-        catch
-        {
-            return Position.Zero;
-        }
+    public static Position GetDirectionOffset(CGameCtnBlock block, Article article)
+    {
         return block.Direction switch
         {
             Direction.North => new((0, 0, 0), Vec3.Zero),
@@ -107,20 +117,24 @@ public class Block {
         };
     }
 
-    public static Position GetDefaultRotationOffset(CGameCtnBlock block) {
+    public static Position GetDefaultRotationOffset(CGameCtnBlock block)
+    {
         return new Position(Vec3.Zero, Vec3.Zero);//TODO
     }
 
-    private void PlaceBlockInMap(CGameCtnChallenge map, bool revertFreeBlock) {
-        CGameCtnBlock block = map.PlaceBlock(name,new(0,0,0),Direction.North);
-        float yaw = (float)Math.Round(position.pitchYawRoll.X / (Alteration.PI/2),5);
-        if (!IsFree && revertFreeBlock 
+    private void PlaceBlockInMap(CGameCtnChallenge map, bool revertFreeBlock)
+    {
+        CGameCtnBlock block = map.PlaceBlock(blockType == BlockType.CustomBlock ? name + "_CustomBlock" : name, new(0, 0, 0), Direction.North);
+        float yaw = (float)Math.Round(position.YawPitchRoll.X / (Alteration.PI / 2), 5);
+        if (!IsFree && revertFreeBlock
             && position.coords.X % 32 == 0 && position.coords.Y % 8 == 0 && position.coords.Z % 32 == 0
-            && position.pitchYawRoll.Y == 0 && position.pitchYawRoll.Z == 0
-            && yaw % 1 == 0 
-            ) {
+            && position.YawPitchRoll.Y == 0 && position.YawPitchRoll.Z == 0
+            && yaw % 1 == 0
+            )
+        {
             block.IsFree = false;
-            switch (yaw) {
+            switch (yaw)
+            {
                 case 0:
                     block.Direction = Direction.North;
                     break;
@@ -139,18 +153,20 @@ public class Block {
                 default:
                     throw new Exception("Invalid direction");
             }
-            Vec3 offset = -GetDirectionOffset(block).coords;
+            Vec3 offset = -GetDirectionOffset(block, article).coords;
 
             block.Coord = new Int3(
-                (int)(position.coords.X + offset.X)  / 32, 
-                (int)(position.coords.Y + offset.Y + map.DecoBaseHeightOffset*8) / 8 , 
-                (int)(position.coords.Z + offset.Z)/ 32
+                (int)(position.coords.X + offset.X) / 32,
+                (int)(position.coords.Y + offset.Y + map.DecoBaseHeightOffset * 8) / 8,
+                (int)(position.coords.Z + offset.Z) / 32
                 );
             block.IsGhost = IsGhost;
-        } else {
+        }
+        else
+        {
             block.IsFree = true;
             block.AbsolutePositionInMap = position.coords;
-            block.PitchYawRoll = position.pitchYawRoll;
+            block.YawPitchRoll = position.YawPitchRoll;
             block.Coord = new Int3((int)block.AbsolutePositionInMap.Value.X / 32, (int)block.AbsolutePositionInMap.Value.Y / 8, (int)block.AbsolutePositionInMap.Value.Z / 32);
         }
 
@@ -160,7 +176,8 @@ public class Block {
         block.Color = color;
         block.Skin = Skin;
         block.Bit21 = IsAir;
-        if(block.Author is null || !block.Author.Contains("AutoAltTag")) {
+        if (block.Author is null || !block.Author.Contains("AutoAltTag"))
+        {
             block.Author += "AutoAltTag";
         }
         // block.Flags = BlockFlags;
@@ -169,11 +186,9 @@ public class Block {
     #endregion
 
     #region Items
-    
-    public Block(CGameCtnAnchoredObject item,Article fromArticle, Article article,MoveChain ?moveChain){
-        blockType = BlockType.Item;
-        name = item.ItemModel.Id;
 
+    public Block(CGameCtnAnchoredObject item, Article article)
+    {
         // SnappedOnBlock = item.SnappedOnBlock;
         // SnappedOnItem = item.SnappedOnItem;
         // PlacedOnItem = item.PlacedOnItem;
@@ -184,20 +199,18 @@ public class Block {
         color = item.Color;
         ItemFlags = item.Flags;
 
-        position = new Position(item.AbsolutePositionInMap,item.PitchYawRoll);
+        position = new Position(item.AbsolutePositionInMap, item.YawPitchRoll);
         position.Move(item.PivotPosition); // PivotPosition is Offset which comes from snapping
 
+        this.article = article;
         name = article.Name;
         blockType = article.Type;
-        Path = article.Path;
-
-        fromArticle.MoveChain.Apply(position,article);
-        moveChain?.Apply(position,article);
-        article.MoveChain.Subtract(position,article);
+        article.MoveChain.Apply(position, article);
     }
 
-    private void PlaceItemInMap(CGameCtnChallenge map){
-        CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(name, new Id(26), "Nadeo"),position.coords,position.pitchYawRoll);
+    private void PlaceItemInMap(CGameCtnChallenge map)
+    {
+        CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(name, new Id(26), "Nadeo"), position.coords, position.YawPitchRoll);
         // item.SnappedOnItem = SnappedOnItem;
         // item.SnappedOnBlock = SnappedOnBlock;
         // item.PlacedOnItem = PlacedOnItem;

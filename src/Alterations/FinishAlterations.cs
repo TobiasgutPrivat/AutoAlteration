@@ -4,7 +4,7 @@ public class MoveFinish(MoveChain move): Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
+    protected override void Run(Inventory inventory, Map map){
         map.Move(inventory.Any(["Finish","Multilap"]), move);
         map.PlaceStagedBlocks();
     }
@@ -59,8 +59,8 @@ public class Inclined : Alteration {
     public override bool LikeAN => false;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select(["MapStart","Multilap","Finish"]).Edit().PlaceRelative(map,new Rotate(0,0.2f*PI,0));
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(["MapStart","Multilap","Finish"]).Edit().PlaceRelative(inventory, map,new Rotate(0,0.2f*PI,0));
         map.Delete(inventory.Select("MapStart"),true);
         map.PlaceStagedBlocks();
     }
@@ -88,9 +88,9 @@ public class ThereAndBack : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Map map){
-        inventory.Select("Finish").Edit().RemoveKeyword("Finish").AddKeyword("Checkpoint").Replace(map);//TODO (Custom)blocks (No removekeyword)
-        inventory.Select("MapStart").Edit().RemoveKeyword("MapStart").AddKeyword("Multilap").Replace(map);//TODO (Custom)blocks
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select("Finish").Edit().RemoveKeyword("Finish").AddKeyword("Checkpoint").Replace(inventory, map);//TODO (Custom)blocks (No removekeyword)
+        inventory.Select("MapStart").Edit().RemoveKeyword("MapStart").AddKeyword("Multilap").Replace(inventory, map);//TODO (Custom)blocks
         map.map.IsLapRace = true;
         map.map.NbLaps = 1;
         map.PlaceStagedBlocks();

@@ -2,7 +2,7 @@ using GBX.NET;
 
 public class Article {
     public string Name = "";
-    public MoveChain MoveChain = new();
+    public MoveChain MoveChain = []; //Move to come from the Models Coords to the semanticly intended Coords
     public BlockType Type;
     public List<string> Keywords = [];
     public List<string> ToShapes = [];
@@ -11,7 +11,6 @@ public class Article {
     public int Height = 1;
     public string Path = "";
     // public bool DefaultRotation;
-    public bool MapSpecific = false;
     public Move? DefaultRotation;
 
     public Article() { }
@@ -22,7 +21,7 @@ public class Article {
         Type = type;
         Keywords = keywords;
         ToShapes = toShape ?? [];
-        MoveChain = moveChain ?? new MoveChain();
+        MoveChain = moveChain ?? [];
         Length = length;
         Width = width;
     }
@@ -36,23 +35,21 @@ public class Article {
         this.Height = Height;
     }
 
-    public Article(string name,BlockType type, string Path, bool mapSpecific = false){
+    public Article(string name,BlockType type, string Path){
         Name = name;
         this.Path = Path;
         LoadKeywords();
         Type = type;
         string vanillaName = Name;
 
-        // for customblocksets get size from unaltered version
-        AlterationConfig.CustomBlockSets.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
-        List<Article> vanillaVersion = Alteration.inventory.Where(a => a.Name == vanillaName).ToList(); 
-        if (vanillaVersion.Count > 0) { 
-            Width = vanillaVersion.First().Width;
-            Length = vanillaVersion.First().Length;
-            Height = vanillaVersion.First().Height;
-        }
-
-        MapSpecific = mapSpecific;
+        // for customblocksets get size from unaltered version //TODO
+        // AlterationConfig.CustomBlockAlts.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
+        // List<Article> vanillaVersion = Alteration.inventory.Where(a => a.Name == vanillaName).ToList(); 
+        // if (vanillaVersion.Count > 0) { 
+        //     Width = vanillaVersion.First().Width;
+        //     Length = vanillaVersion.First().Length;
+        //     Height = vanillaVersion.First().Height;
+        // }
     }
 
     public Article CloneArticle() =>
@@ -107,7 +104,7 @@ public class Article {
         }
 
         //CustomblockSets, could have issues if set is part of toKeywords
-        SplitByKeywords(nameSplits, AlterationConfig.CustomBlockSets, Keywords);
+        SplitByKeywords(nameSplits, AlterationConfig.CustomBlockAlts, Keywords);
         
         //Keywords
         SplitByKeywords(nameSplits, AlterationConfig.Keywords, Keywords);

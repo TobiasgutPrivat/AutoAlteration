@@ -1,5 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
+using ManiaAPI.NadeoAPI;
 using System.IO.Compression;
 
 public class Map
@@ -10,14 +11,14 @@ public class Map
   public Dictionary<string,BlockType> embeddedBlocks = []; //Format: "Blocks/SomeFolder/BlockName.Block.Gbx" -> "SomeFolder\\BlockName" (like name in Inventory)
   public int FreeBlockHeightOffset = 0;
 
-  private Replay WRReplay;
+  private CGameCtnGhost? WRGhost;
 
   #region loading
   public Map(string mapPath)
   { 
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
-    map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
+    map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4; //TODO test if causes crashes
     FreeBlockHeightOffset = map.DecoBaseHeightOffset*8;
     map.Comments += "\nAltered using AutoAlteration";
     
@@ -27,7 +28,7 @@ public class Map
   public void Save(string path)
   { 
     NewMapUid();
-    RemoveAuthor();
+    RemoveAuthor(); //TODO test if causes crashes
     map.RemovePassword();
     if (!Directory.Exists(Path.GetDirectoryName(path)))
       {
@@ -116,22 +117,6 @@ public class Map
     });
     return;
   }
-
-  public void GenerateCustomBlocks(CustomBlockSet customBlockAlteration){
-    string TempFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Temp");
-    string CustomFolder = Path.Join(TempFolder,customBlockAlteration.GetSetName());
-    string TempExportsFolder = Path.Join(AlterationConfig.CustomBlocksFolder,"Exports");
-    if (!Directory.Exists(TempFolder)) { 
-      Directory.CreateDirectory(Path.Join(TempFolder, customBlockAlteration.GetSetName() ,"\\Items")); 
-      Directory.CreateDirectory(Path.Join(TempFolder, customBlockAlteration.GetSetName() ,"\\Blocks")); 
-    }
-    if (!Directory.Exists(CustomFolder)) { Directory.CreateDirectory(CustomFolder); }
-    if (!Directory.Exists(TempExportsFolder)) { Directory.CreateDirectory(TempExportsFolder); }
-    ExtractEmbeddedBlocks(TempExportsFolder);
-    AutoAlteration.AlterAll(customBlockAlteration.customBlockAlteration,TempExportsFolder,CustomFolder,customBlockAlteration.GetSetName());
-    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetSetName() + "\\Items").ChangeInventory(Alteration.inventory,true);
-    new CustomBlockFolder("Temp\\" + customBlockAlteration.GetSetName() + "\\Blocks").ChangeInventory(Alteration.inventory,true);
-  }
   #endregion
 
   #region actions
@@ -139,23 +124,39 @@ public class Map
     if (newInventory.Count == 0) return;
     Random rand = new();
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock.Name)){
-      stagedBlocks.Add(new Block(ctnBlock,atBlock,newInventory.ToList()[rand.Next(newInventory.Count)],FreeBlockHeightOffset,moveChain));
+      Block block = new Block(ctnBlock, atBlock, FreeBlockHeightOffset);
+      block.Move(moveChain);
+      block.SetArticle(newInventory.ToList()[rand.Next(newInventory.Count)]);
+      stagedBlocks.Add(block);
     }
     foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == atBlock.Name)){
-      stagedBlocks.Add(new Block(ctnItem,atBlock,newInventory.ToList()[rand.Next(newInventory.Count)],moveChain));
+      Block block = new Block(ctnItem, atBlock);
+      block.Move(moveChain);
+      block.SetArticle(newInventory.ToList()[rand.Next(newInventory.Count)]);
+      stagedBlocks.Add(block);
     }
   }
 
   public void PlaceRelative(Article atArticle, Article newArticle, MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
     string ArticleName = atArticle.Name;
     if (atArticle.Type == BlockType.CustomBlock) ArticleName += "_CustomBlock";
-    ArticleName = ArticleName.Replace("/","\\");
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName)){
+    ArticleName = ArticleName.Replace("/", "\\");
+    
+    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName))
+    {
       if (blockCondition != null && !blockCondition(ctnBlock)) continue;
-      stagedBlocks.Add(new Block(ctnBlock,atArticle,newArticle,FreeBlockHeightOffset,moveChain));
+      Block block = new Block(ctnBlock, atArticle, FreeBlockHeightOffset);
+      block.Move(moveChain);
+      block.SetArticle(newArticle);
+      stagedBlocks.Add(block);
     }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName)){
-      stagedBlocks.Add(new Block(ctnItem,atArticle,newArticle,moveChain));
+
+    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id == ArticleName))
+    {
+      Block block = new Block(ctnItem, atArticle);
+      block.Move(moveChain);
+      block.SetArticle(newArticle);
+      stagedBlocks.Add(block);
     }
   }
 
@@ -223,46 +224,81 @@ public class Map
 
   private void PlaceBlock(Block block, bool revertFreeBlock){
     block.name = block.name.TrimStart('\\');
-    string orgName = block.name;
 
     switch (block.blockType){
-        case BlockType.CustomBlock:
-          if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-            EmbedBlock("Blocks/" + block.name,block.Path);
-            embeddedBlocks.Add(block.name, block.blockType);
-          }
-          block.name += "_CustomBlock";
-          break;
-        case BlockType.CustomItem:
-          if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-            EmbedBlock("Items/" + block.name,block.Path);
-            embeddedBlocks.Add(block.name, block.blockType);
-          }
-          break;
-      }
+      case BlockType.CustomBlock:
+        if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
+          EmbedBlock("Blocks/" + block.name,block.article.Path);
+          embeddedBlocks.Add(block.name, block.blockType);
+        }
+        break;
+      case BlockType.CustomItem:
+        if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
+          EmbedBlock("Items/" + block.name,block.article.Path);
+          embeddedBlocks.Add(block.name, block.blockType);
+        }
+        break;
+    }
 
     block.PlaceInMap(map, revertFreeBlock);
-
-    block.name = orgName;
   }
   #endregion
 
-  public Replay GetWRReplay(){
-    //AR
-    //download the replay
+  public CGameCtnGhost? GetWRGhost(){
+    if (WRGhost != null) return WRGhost;
+    // authorize
+    NadeoLiveServices nls = new();
+    nls.AuthorizeAsync("AutoAlteration", "D),i8Fo_=/O9a*YU", AuthorizationMethod.DedicatedServer).GetAwaiter().GetResult();
+    NadeoServices ns = new();
+    ns.AuthorizeAsync("AutoAlteration", "D),i8Fo_=/O9a*YU", AuthorizationMethod.DedicatedServer).GetAwaiter().GetResult();
 
-    return new Replay("somePath");
+    //Get map info
+    string mapUid = map.MapInfo.Id;
+    MapInfoLive mapInfo = nls.GetMapInfoAsync(mapUid).GetAwaiter().GetResult();
+    Guid mapId = mapInfo.MapId;
+    // get wr
+    TopLeaderboardCollection leaderboard = nls.GetTopLeaderboardAsync(mapUid, 1).GetAwaiter().GetResult();
+    if (leaderboard.Tops.Count == 0 || leaderboard.Tops.First().Top.Count == 0)
+    {
+      Console.WriteLine($"Map has no WR data");
+      return null;
+    }
+    else
+    {
+      Record wr = leaderboard.Tops.First().Top.First();
+      //Download Replay
+      MapRecord wrRec = ns.GetMapRecordsAsync([wr.AccountId], mapId).GetAwaiter().GetResult().First();
+      string downloadURL = wrRec.Url;
+      using var httpClient = new HttpClient();
+      using var response = httpClient.GetAsync(downloadURL).GetAwaiter().GetResult();
+      response.EnsureSuccessStatusCode();
+      string replayPath = Path.Combine(Path.GetTempPath(), $"wr{mapId}.gbx.replay");
+      using var stream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult();
+      using var replayfs = new FileStream(replayPath, FileMode.Create);
+      stream.CopyToAsync(replayfs).GetAwaiter().GetResult();
+      replayfs.Close();
+      //Load Replay
+      Gbx<CGameCtnGhost> replayGbx = Gbx.Parse<CGameCtnGhost>(replayPath); ;
+      WRGhost = replayGbx.Node;
+      //clear
+      File.Delete(replayPath);
+    }
+    return WRGhost;
   }
 
-  public void StageAll(MoveChain ?moveChain = null){
+  public void StageAll(Inventory inventory, MoveChain ?moveChain = null){
     stagedBlocks.AddRange(map.Blocks.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
-      return new Block(x,article,article,FreeBlockHeightOffset,moveChain);
+      Article article = inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
+      Block block = new Block(x, article, FreeBlockHeightOffset);
+      block.Move(moveChain);
+      return block;
     }));
     map.Blocks = [];
     stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
-      Article article = Alteration.inventory.GetArticle(x.ItemModel.Id);
-      return new Block(x, article, article, moveChain);
+      Article article = inventory.GetArticle(x.ItemModel.Id);
+      Block block = new Block(x, article);
+      block.Move(moveChain);
+      return block;
     }));
     map.AnchoredObjects = [];
   }

@@ -212,11 +212,11 @@ class VanillaArticleProvider : ArticleProvider
     private static void NormalizeCheckpoint(Inventory inventory)
     {
         // TODO check if wanted, could cause issues with custom block set aligning
-        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Straight").Align().getAligned()
+        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Straight").Align(inventory).getAligned()
             .ToList().ForEach(a => a.Keywords.Remove("Straight"));
-        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align().getAligned()
+        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align(inventory).getAligned()
             .ToList().ForEach(a => a.Keywords.Remove("StraightX2"));
-        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Base").Align().getAligned()
+        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Base").Align(inventory).getAligned()
             .ToList().ForEach(a => a.Keywords.Remove("Base"));
     }
 
@@ -227,7 +227,7 @@ class VanillaArticleProvider : ArticleProvider
             .ForEach(a => a.Keywords.Remove("Special"));
         (inventory.Select("Start") / inventory.Any(["Slope2", "Loop", "DiagRight", "DiagLeft", "Slope", "Inflatable"])).ToList()
             .ForEach(a => { a.Keywords.Remove("Start"); a.Keywords.Add("MapStart"); });
-        inventory.Select("v2").Edit().RemoveKeyword("v2").Align().getAligned().ToList()
+        inventory.Select("v2").Edit().RemoveKeyword("v2").Align(inventory).getAligned().ToList()
             .ForEach(a => inventory.Remove(a));
         inventory.Select("v2").ToList().ForEach(a => a.Keywords.Remove("v2"));
         inventory.Select("Oriented").ToList().ForEach(a => a.Keywords.Remove("Oriented"));

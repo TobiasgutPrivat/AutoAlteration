@@ -4,14 +4,14 @@ public class ChangeEnvironment(string GamePlay): Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Map map){
-        inventory.Select("Gameplay").Edit().RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword(GamePlay).Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select("Gameplay").Edit().RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword(GamePlay).Replace(inventory, map);
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateGameplay" + GamePlay);
         map.PlaceRelative(start.Not("Water").Not("RoadIce"), GateSpecial,[new Offset(0,-16,0)]);
         map.PlaceRelative(start.Select("RoadIce"), GateSpecial,[new Offset(0,-8,0)]);
         map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial,[new Offset(0,-16,-2)]);
-        inventory.Select(["MapStart","Gate"]).Edit().AddKeyword("Gameplay").AddKeyword(GamePlay).RemoveKeyword(["MapStart", "Left", "Right", "Center", "v2"]).PlaceRelative(map,[new Offset(0,0,-10)]);
+        inventory.Select(["MapStart","Gate"]).Edit().AddKeyword("Gameplay").AddKeyword(GamePlay).RemoveKeyword(["MapStart", "Left", "Right", "Center", "v2"]).PlaceRelative(inventory, map,[new Offset(0,0,-10)]);
         map.PlaceStagedBlocks();
         map.Delete(inventory.Select("Gameplay").Not(GamePlay));
     }
@@ -41,8 +41,8 @@ public class ChangeSnowCarswitch(string GamePlay): Alteration {
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    public override void Run(Map map){
-        inventory.Select(["Gameplay","Snow"]).Edit().RemoveKeyword("Snow").AddKeyword(GamePlay).Replace(map);
+    protected override void Run(Inventory inventory, Map map){
+        inventory.Select(["Gameplay","Snow"]).Edit().RemoveKeyword("Snow").AddKeyword(GamePlay).Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }

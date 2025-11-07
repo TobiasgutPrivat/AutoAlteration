@@ -66,9 +66,9 @@ public class RotateCenter: Move{
     }
     public override void Apply(Position position, Article article){
         Vec3 Offset = new(768 - position.coords.X, 120 - position.coords.Y, 768 - position.coords.Z);
-        Vec3 rotation = position.pitchYawRoll;
+        Vec3 rotation = position.YawPitchRoll;
         // position.Rotate(-rotation);
-        position.pitchYawRoll = new Vec3(0, 0, 0);//not really clean solution
+        position.YawPitchRoll = new Vec3(0, 0, 0);//not really clean solution
         position.Move(Offset);
         position.Rotate(vector);
         position.Move(-Offset);

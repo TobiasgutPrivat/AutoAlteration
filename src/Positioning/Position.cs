@@ -4,29 +4,29 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 public class Position {
     public Vec3 coords;
-    public Vec3 pitchYawRoll;
+    public Vec3 YawPitchRoll;
     public static Position Zero = new (Vec3.Zero,Vec3.Zero);
 
     public Position( Vec3 ?coords){
         this.coords = coords ?? Vec3.Zero;
-        this.pitchYawRoll = Vec3.Zero;
+        this.YawPitchRoll = Vec3.Zero;
     }
 
-    public Position(Vec3 ?coords, Vec3 ?pitchYawRoll){
+    public Position(Vec3 ?coords, Vec3 ?YawPitchRoll){
         this.coords = coords ?? Vec3.Zero;
-        this.pitchYawRoll = pitchYawRoll ?? Vec3.Zero;
+        this.YawPitchRoll = YawPitchRoll ?? Vec3.Zero;
     }
 
     public Position AddPosition(Position position){
         Move(position.coords);
-        Rotate(position.pitchYawRoll);
+        Rotate(position.YawPitchRoll);
         return this;
     }
     
     public void Move(Vec3 offset){
-        double Yaw = pitchYawRoll.X;
-        double Roll = pitchYawRoll.Z;
-        double Pitch = pitchYawRoll.Y;
+        double Yaw = YawPitchRoll.X;
+        double Roll = YawPitchRoll.Z;
+        double Pitch = YawPitchRoll.Y;
 
         double x = offset.X;//west
         double y = offset.Y;//up
@@ -52,12 +52,12 @@ public class Position {
 
     public void Rotate(Vec3 rotation) {
         //Trackmania does like ZXY in https://dugas.ch/transform_viewer/index.html
-        Matrix<double> rotationMatrix = CreateZXYMatrix(pitchYawRoll);
+        Matrix<double> rotationMatrix = CreateZXYMatrix(YawPitchRoll);
         Matrix<double> byrotationMatrix = CreateZXYMatrix(rotation);
                   
         rotationMatrix *= byrotationMatrix;
 
-        pitchYawRoll = GetEulerZXY(rotationMatrix);
+        YawPitchRoll = GetEulerZXY(rotationMatrix);
     }
 
     private static Vec3 GetEulerZXY(Matrix<double> rotationMatrix) {
