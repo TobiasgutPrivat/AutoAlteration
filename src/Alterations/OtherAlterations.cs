@@ -264,6 +264,25 @@ public class Flipped: Alteration {
         //Dimensions normal Stadium
         // from (1,9,1) to (48,38,48)
         map.StageAll(inventory, new RotateCenter(0,PI,0));
+        // Move up by 8*8 units to compesate for block height, this prevents some clipping through the ground
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 64, x.position.coords.Z));
+        map.PlaceStagedBlocks();
+        new CPEffect("Boost2",new RotateMid(PI,0,0),true, true).Run(map);
+    }
+}
+
+public class FlippedYellowReactorDown: Alteration {
+    public override string Description => "Flips the whole map on its head";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
+    protected override void Run(Inventory inventory, Map map){
+        //Dimensions normal Stadium
+        // from (1,9,1) to (48,38,48)
+        map.StageAll(inventory, new RotateCenter(0,PI,0));
+        // Move up by 8*8 units to compesate for block height, this prevents some clipping through the ground
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X, x.position.coords.Y + 64, x.position.coords.Z));
         map.PlaceStagedBlocks();
         new CPEffect("Boost",new RotateMid(PI,0,0),true, true).Run(map);
     }
