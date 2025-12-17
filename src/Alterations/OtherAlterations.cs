@@ -504,16 +504,29 @@ public class WRTrace : Alteration {
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
+
+    internal override List<CustomBlockFolder> customBlockFolders { get; } = [new CustomBlockFolder("Cars\\")];
     
     protected override void Run(Inventory inventory, Map map){
-        CGameCtnGhost? ghost = map.GetWRGhost();
-        if (ghost == null) return;
-        CPlugEntRecordData.EntRecordListElem? entry = ghost.RecordData?.EntList.First();
-        List<Position> positions = entry?.Samples.Where(sample => sample is CSceneVehicleVis.EntRecordDelta).Cast<CSceneVehicleVis.EntRecordDelta>()
-            .Select(sample => new Position(sample.Position, new Vec3(sample.PitchYawRoll.Y, sample.PitchYawRoll.X, sample.PitchYawRoll.Z))).ToList() ?? [];
-        foreach (Position position in positions)
+        Replay? replay = map.GetWRReplay();
+        if (replay == null || replay.Positions == null || replay.Positions.Count == 0){
+            return;
+        }
+        // List<CPlugEntRecordData.EntRecordListElem>? entries = ghost.RecordData?.EntList
+        //     .Where(x => x.Samples.Count > 20 && x.Samples.First() is CSceneVehicleVis.EntRecordDelta).ToList(); //20 is an aproximate to not select incomplete entries
+        // List<Position> positions = entries?.SelectMany(entry => entry.Samples.Where(sample => sample is CSceneVehicleVis.EntRecordDelta).Cast<CSceneVehicleVis.EntRecordDelta>())
+        //     .Select(sample => new Position(sample.Position, new Vec3(sample.PitchYawRoll.Y, sample.PitchYawRoll.X, sample.PitchYawRoll.Z))).ToList() ?? [];
+        // List<CPlugEntRecordData.EntRecordDelta> samples = entry?.Samples.Where(sample => sample is CPlugEntRecordData.EntRecordDelta).Cast<CPlugEntRecordData.EntRecordDelta>().ToList() ?? [];
+        Article stadiumCar = inventory.GetArticle("StadiumCar.Item.Gbx");
+        if (map.embeddedBlocks.All(x => x.Key != stadiumCar.Name))
         {
-            CGameCtnAnchoredObject item = map.map.PlaceAnchoredObject(new Ident("ObstaclePillar2m", new Id(26), "Nadeo"), position.coords, position.YawPitchRoll);
+            map.EmbedBlock(stadiumCar.Name, stadiumCar.Path);
+        }
+        for (int i = 22; i < replay.Positions.Count; i += 2)
+        {
+            if (i >= replay.Positions.Count) break;
+            Position position = replay.Positions[i];
+            CGameCtnAnchoredObject item = map.map.PlaceAnchoredObject(new Ident("StadiumCar.Item.Gbx", new Id(26), "Nadeo"), position.coords, position.YawPitchRoll);
         }
     }
 }
@@ -540,7 +553,7 @@ public class YepTree: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    internal override List<CustomBlockFolder> customBlockFolders => [new CustomBlockFolder("YepTree")];
+    internal override List<CustomBlockFolder> customBlockFolders => [new CustomBlockFolder("YepTree\\")];
 
     protected override void Run(Inventory inventory, Map map){
         Article YepTree = inventory.GetArticle("YepTree-TreeCheckpointTrigger");

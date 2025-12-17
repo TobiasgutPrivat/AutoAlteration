@@ -27,6 +27,11 @@ public abstract class Alteration {
             AlterationConfig.Keywords.AddRange(customBlockSet.GetAdditionalKeywords());
             inventory |= [.. customBlockSet.GetArticles()];
         }
+        foreach (CustomBlockFolder folder in customBlockFolders)
+        {
+            AlterationConfig.Keywords.AddRange(folder.GetAdditionalKeywords());
+            inventory |= [.. folder.GetArticles()];
+        }
         //logging
         if (AlterationConfig.devMode)
         {

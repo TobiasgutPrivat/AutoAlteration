@@ -46,10 +46,9 @@ public class Replay
             //clear
             File.Delete(replayPath);
         }
-        
-        CPlugEntRecordData.EntRecordListElem? entry = WRGhost?.RecordData?.EntList.First();
-        Positions = entry?.Samples.Where(sample => sample is CSceneVehicleVis.EntRecordDelta).Cast<CSceneVehicleVis.EntRecordDelta>()
+        List<CPlugEntRecordData.EntRecordListElem>? entries = WRGhost?.RecordData?.EntList
+            .Where(x => x.Samples.Count > 20 && x.Samples.First() is CSceneVehicleVis.EntRecordDelta).ToList(); //20 is an aproximate to not select incomplete entries
+        Positions = entries?.SelectMany(entry => entry.Samples.Where(sample => sample is CSceneVehicleVis.EntRecordDelta).Cast<CSceneVehicleVis.EntRecordDelta>())
             .Select(sample => new Position(sample.Position, new Vec3(sample.PitchYawRoll.Y, sample.PitchYawRoll.X, sample.PitchYawRoll.Z))).ToList() ?? [];
-
     }
 }

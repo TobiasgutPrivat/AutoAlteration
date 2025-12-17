@@ -91,7 +91,8 @@ public class Map
           } else if (blockPos != -1) {
             name = name.Substring(blockPos + 7);
           } else {
-            throw new Exception("Embedded Block without Items\\ or Blocks\\ in the name");
+            //TODO check if this is correct
+            // throw new Exception("Embedded Block without Items\\ or Blocks\\ in the name");
           }
           return (name, type);
         })

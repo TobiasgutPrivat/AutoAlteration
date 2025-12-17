@@ -6,6 +6,7 @@ using GBX.NET.Engines.GameData;
 using GBX.NET.Engines.Plug;
 using GBX.NET.LZO;
 using GBX.NET.ZLib;
+using ManiaAPI.NadeoAPI;
 using Newtonsoft.Json;
 
 class DevUtils{
@@ -115,6 +116,18 @@ class DevUtils{
 
     public static void generateLightSurfaceBlocks() {
         AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Join(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Join(AlterationConfig.CustomBlocksFolder, "LightSurface"), "");
+    }
+
+    public static void renameMaps(string folder,string remove,string add) {
+        List<string> sourcefiles = Directory.GetFiles(folder, "*.map.gbx", SearchOption.TopDirectoryOnly).ToList();
+        foreach (string sourceFile in sourcefiles) {
+            Map map = new Map(sourceFile);
+            string name = map.map.MapName;
+            name = name.Replace(remove, add);
+            map.map.MapName = name;
+            map.Save(sourceFile.Replace(remove, add));
+        }
+        
     }
 }
 
