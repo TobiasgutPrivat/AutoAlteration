@@ -236,8 +236,8 @@ class VanillaArticleProvider : ArticleProvider
 
         
         Inventory DecoWall = inventory.Select("DecoWall");
-        DecoWall.Select("LoopEnd&!Center&!Side").ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
-        DecoWall.Select("Arch&Slope2&(UTop|End)").ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
-        DecoWall.Select("Arch&Slope2&Straight").ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(-PI*0.5f,0,0)));
+        DecoWall.Select("LoopEnd").Not(["Center","Side"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
+        DecoWall.Select(["Arch","Slope2"]).Any(["UTop","End"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
+        DecoWall.Select(["Arch","Slope2","Straight"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(-PI*0.5f,0,0)));
     }
 }

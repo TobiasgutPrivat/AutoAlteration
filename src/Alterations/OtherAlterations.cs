@@ -1,7 +1,5 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
-using GBX.NET.Engines.Plug;
-using GBX.NET.Engines.Scene;
 
 public class AirMode: Alteration {
     public override string Description => "Turn all Blocks to Air-Mode, should not change anything";
