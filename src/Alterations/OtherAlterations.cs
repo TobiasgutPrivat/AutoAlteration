@@ -29,9 +29,12 @@ public class AirMode: Alteration {
         // DecoHills
         Inventory DecoHills = tiltedBlocks.Select("DecoHill");
         Inventory notGrassHills = Platforms.Any(["Dirt","Ice"]);
-
-        notGrassHills.Edit().RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(inventory, map,new RotateMid(new Vec3(-PI/2,0,0)));
-        (DecoHills/notGrassHills).Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(inventory, map,new RotateMid(new Vec3(-PI/2,0,0)));
+        Inventory Curves = DecoHills.SelectWord("Curve");
+        RotateMid rotate90 = new(new Vec3(-PI/2,0,0));
+        (notGrassHills&Curves).Edit().RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(inventory, map);
+        (DecoHills&Curves/notGrassHills).Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(inventory, map);
+        (notGrassHills/Curves).Edit().RemoveKeyword(removeKeywords).AddKeyword("DecoWall").PlaceRelative(inventory, map, rotate90);
+        (DecoHills/Curves/notGrassHills).Edit().RemoveKeyword(removeKeywords).AddKeyword(["DecoWall","Grass"]).PlaceRelative(inventory, map, rotate90);
 
         // map.StageAll(inventory); // only set air mode if pillar could be set accordingly, can be changed if pillars done completely
         map.stagedBlocks.ForEach(x => x.IsAir = true);

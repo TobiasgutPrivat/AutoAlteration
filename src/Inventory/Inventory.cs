@@ -15,6 +15,9 @@ public class Inventory : HashSet<Article> { // represents all available articles
 
     public Inventory Select(string keyword) =>
         [.. this.Where(a => a.Keywords.Contains(keyword))];
+        
+    public Inventory SelectWord(string word) =>
+        [.. this.Where(a => a.Name.Contains(word))];
 
     public Inventory Select(List<string> keywords) =>
         [.. this.Where(a => keywords.All(k => a.Keywords.Contains(k)))];
