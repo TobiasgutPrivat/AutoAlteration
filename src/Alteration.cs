@@ -9,7 +9,7 @@ public abstract class Alteration {
     internal virtual List<CustomBlockAlteration> customBlockAlts { get; } = [];
     internal virtual List<CustomBlockFolder> customBlockFolders { get; } = [];
 
-    public virtual List<Alteration> AlterationsBefore { get; } = [];// applied in AlterFile()
+    public virtual List<Alteration> AlterationsBefore { get; } = [];
 
     public const float PI = (float)Math.PI;
     

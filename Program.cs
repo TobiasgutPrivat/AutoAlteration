@@ -6,8 +6,7 @@ AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 //TODO test edited Alterations
-// new AlterationScript("Campaign.json").RunConfig();
-DevUtils.renameMaps("C:/Users/tobia/Documents/Trackmania/Maps/Altered Nadeo/2WRTrace","WRTrace ","2WRTrace");
+new AlterationScript("Campaign.json").RunConfig();
 
 // direct Alteration
 // string from = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBase.Block.Gbx";

@@ -29,21 +29,21 @@ class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : ArticleProvi
         Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
         if (!Directory.Exists(GetFolder()))
         {
-            Directory.CreateDirectory(GetFolder() + "Temp");//Temp in case something goes wrong
+            Directory.CreateDirectory(GetFolder() + "Temp");//Tempfolder used in case something goes wrong
         }
         AutoAlteration.AlterAll(customBlockAlteration, GetOrigin(), GetFolder() + "Temp", GetSetName());
         Directory.Move(GetFolder() + "Temp", GetFolder());
     }
 }
 
-class LightSurface(CustomBlockAlteration customBlockAlteration) : CustomBlockSet(customBlockAlteration) {
-    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.GetType().Name]; }
-    public override string GetSetName() { return customBlockAlteration.GetType().Name + "Light"; }
-    public override string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "LightSurface"); }
-}
+// class LightSurface(CustomBlockAlteration customBlockAlteration) : CustomBlockSet(customBlockAlteration) {
+//     public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.GetType().Name]; }
+//     public override string GetSetName() { return customBlockAlteration.GetType().Name + "Light"; }
+//     public override string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "LightSurface"); }
+// }
 
-class HeavySurface(CustomBlockAlteration customBlockAlteration) : CustomBlockSet(customBlockAlteration) {
-    public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.GetType().Name]; }
-    public override string GetSetName() { return customBlockAlteration.GetType().Name + "Heavy"; }
-    public override string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"); }
-}
+// class HeavySurface(CustomBlockAlteration customBlockAlteration) : CustomBlockSet(customBlockAlteration) {
+//     public override List<string> GetAdditionalKeywords() { return [GetSetName(), customBlockAlteration.GetType().Name]; }
+//     public override string GetSetName() { return customBlockAlteration.GetType().Name + "Heavy"; }
+//     public override string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"); }
+// }

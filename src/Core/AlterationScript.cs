@@ -12,6 +12,9 @@ public class AlterationScript {
         if (!filePath.Contains(':')){
             filePath = Path.Combine(AlterationConfig.ApplicationDataFolder,"scripts", filePath);
         }
+        if (!File.Exists(filePath)){
+            throw new Exception("Alteration Script " + filePath + " not found");
+        }
         foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
         {
             RunAlteration(

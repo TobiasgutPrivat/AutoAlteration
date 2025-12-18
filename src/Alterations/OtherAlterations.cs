@@ -500,10 +500,10 @@ public class YeetMaxUp: Alteration {
 
 //New ------------------------------------------------------------------------------
 public class WRTrace : Alteration {
-    public override string Description => "places pillars along the Path of the WR";
-    public override bool Published => false;
+    public override string Description => "places stadiumcars along the Path of the WR";
+    public override bool Published => true;
     public override bool LikeAN => true;
-    public override bool Complete => false;
+    public override bool Complete => true; //could add alt cars, and maybe other car skin
 
     internal override List<CustomBlockFolder> customBlockFolders { get; } = [new CustomBlockFolder("Cars\\")];
     

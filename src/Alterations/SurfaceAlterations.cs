@@ -1,4 +1,4 @@
-public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null, bool light = false,Alteration? sceneryAlteration = null) : Alteration {
+public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool light = false,Alteration? sceneryAlteration = null) : Alteration {
     // light and Heavy SurfaceAlterations base blocks from HeavyWood (in CustomBlocks/HeavySurface/)
     public override string Description => "replaces all drivable surfaces with " + Surface;
     public override bool Published => false;
@@ -6,16 +6,16 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string? Surface = null,
     public override bool Complete => false;
 
     internal override List<CustomBlockAlteration> customBlockAlts => [SurfaceAlt];
-    // public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [new AirMode(), sceneryAlteration] : [new AirMode(), ];
+    public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [new AirMode(), sceneryAlteration] : [new AirMode(), ];
     public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
 
     protected override void Run(Inventory inventory, Map map) {
         if (light) {
-            if (Surface == null || !VanillaSurfaces.Contains(Surface)) {
+            if (!VanillaSurfaces.Contains(Surface)) {
                 throw new Exception("Light SurfaceAlterations requires a VanillaSurface type to be specified.");
             }
             //working apart from light CP/Start still noted as CP/Start
-            Inventory Platform = inventory.Select("Platform").Any(["Grass","Dirt","Plastic","Ice","Tech"]);
+            Inventory Platform = inventory.Select("Platform").Any(VanillaSurfaces);
             Platform.Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(Surface).Replace(inventory, map);
             inventory.Any(["OpenTechRoad", "OpenDirtRoad", "OpenGrassRoad", "OpenIceRoad"]).Edit().RemoveKeyword(["OpenTechRoad","OpenDirtRoad","OpenGrassRoad","OpenIceRoad"]).AddKeyword($"Open{Surface}Road").Replace(inventory, map);
             inventory.Any(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).Edit().RemoveKeyword(["OpenTechZone","OpenDirtZone","OpenGrassZone","OpenIceZone"]).AddKeyword($"Open{Surface}Zone").Replace(inventory, map);
@@ -132,7 +132,7 @@ public class Wood : Surface {
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    public Wood() : base(new WoodSurface(), "Wood", false) { }
+    public Wood() : base(new WoodSurface(), "Wood") { }
 
 }
 
