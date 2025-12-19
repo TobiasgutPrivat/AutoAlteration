@@ -1,5 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
+using GBX.NET.Engines.GameData;
 
 public class AirMode: Alteration {
     public override string Description => "Turn all Blocks to Air-Mode, should not change anything";
@@ -196,14 +197,16 @@ public class CPLink : Alteration{
     public override bool Complete => true;
 
     protected override void Run(Inventory inventory, Map map){
-        map.map.Blocks.ToList().ForEach(x => {
+        map.map.Blocks?.ToList().ForEach(x => {
             if (x.BlockModel.Id.Contains("Checkpoint")){
+                x.WaypointSpecialProperty ??= new ();
                 x.WaypointSpecialProperty.Order = 1;
                 x.WaypointSpecialProperty.Tag = "LinkedCheckpoint";
            }
         });
-        map.map.AnchoredObjects.ToList().ForEach(x => {
+        map.map.AnchoredObjects?.ToList().ForEach(x => {
             if (x.ItemModel.Id.Contains("Checkpoint")){
+                x.WaypointSpecialProperty ??= new ();
                 x.WaypointSpecialProperty.Order = 1;
                 x.WaypointSpecialProperty.Tag = "LinkedCheckpoint";
            }

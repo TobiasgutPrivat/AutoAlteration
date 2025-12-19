@@ -37,7 +37,6 @@ class VanillaArticleProvider : ArticleProvider
         Dictionary<string, Article> articleDict = [];
         foreach (var item in jsonArray)
         {
-            BlockType blockType = BlockType.Block;
             switch ((string)item.type)
             {
                 case "block":

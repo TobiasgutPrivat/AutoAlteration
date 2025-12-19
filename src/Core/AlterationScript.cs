@@ -18,12 +18,12 @@ public class AlterationScript {
         foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
         {
             RunAlteration(
-                (AlterType)Enum.Parse(typeof(AlterType), item.GetProperty("Type").GetString()),
-                item.GetProperty("Source").GetString(),
-                item.GetProperty("Destination").GetString(),
-                item.GetProperty("Name").GetString(),
+                (AlterType)Enum.Parse(typeof(AlterType), item.GetProperty("Type").GetString() ?? "File"),
+                item.GetProperty("Source").GetString() ?? throw new Exception("Source not found"),
+                item.GetProperty("Destination").GetString() ?? throw new Exception("Destination not found"),
+                item.GetProperty("Name").GetString() ?? "",
                 item.GetProperty("Alterations").EnumerateArray().Select(x => 
-                    GetAlteration(x.GetString())
+                    GetAlteration(x.GetString() ?? throw new Exception("Alteration not a string"))
                     ).ToList()
             );
         }
@@ -32,10 +32,10 @@ public class AlterationScript {
     private Alteration GetAlteration(string name){
         List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
         List<Type> alterations = types.Where(t => t.Name == name).ToList();
-        if (alterations.Count == 0){
-            throw new Exception("Alteration " + name + " not found");
+        if (alterations.Count > 0){
+            return (Alteration) (Activator.CreateInstance(alterations.First())?? throw new Exception("Alteration couldnt be instantiated"));
         }
-        return (Alteration) Activator.CreateInstance(alterations.First());
+        throw new Exception("Alteration " + name + " not found");
     }
 
     public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)

@@ -49,7 +49,7 @@ public class AlterationConfig {
 
     private static List<string> LoadKeywordsFile(string path){
         if (!File.Exists(path)){
-            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new Exception("Invalid Path"));
             File.Create(path).Close();
         }
         return File.ReadAllLines(path).ToList();

@@ -68,10 +68,11 @@ public class AutoAlteration {
     }
 
     private static string GetNewCustomBlockName(string path, string name){
+        string folder = Path.GetDirectoryName(path) ?? throw new Exception("Invalid Path");
         if (path.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
-            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileName(path)[..^9] + name + path[^9..]);
+            return Path.Combine(folder, Path.GetFileName(path)[..^9] + name + path[^9..]);
         } else if (path.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase)){
-            return Path.Combine(Path.GetDirectoryName(path), Path.GetFileName(path)[..^10] + name + path[^10..]);
+            return Path.Combine(folder, Path.GetFileName(path)[..^10] + name + path[^10..]);
         } else {
             Console.WriteLine("Invalid Filetype");
             return "";

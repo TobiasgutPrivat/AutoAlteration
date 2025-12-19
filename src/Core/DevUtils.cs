@@ -41,14 +41,6 @@ class DevUtils{
         File.WriteAllText(Path.Combine(AlterationConfig.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
     }
 
-    public static void StringToName(string projectFolder) {
-        string json = File.ReadAllText(projectFolder + "data/Vanilla/Items.json");
-        SList<string> lines = JsonConvert.DeserializeObject<SList<string>>(json);
-        SList<string> articles = lines.Select(line => line.Split('/')[^1].Trim()).ToList();
-        json = JsonConvert.SerializeObject(articles);
-        File.WriteAllText(projectFolder + "data/Vanilla/ItemNames.json", json);
-    }
-
     public static void NonColidableFix() {
         foreach (string file in Directory.GetFiles(Path.Join(AlterationConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
         {
@@ -82,8 +74,8 @@ class DevUtils{
 
         Assembly assembly = Assembly.GetExecutingAssembly();
         List<Type> types = assembly.GetTypes().ToList();
-        List<Alteration> alterations = types.Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration))).Select(t => Activator.CreateInstance(t) as Alteration).Where(a => a.Published).ToList();
-        Dictionary<string, List<string>> CategoryTexts = new();
+        List<Alteration> alterations = types.Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration))).Select(t => Activator.CreateInstance(t) as Alteration ?? throw new Exception("Alteration couldnt be instantiated")).Where(a => a.Published).ToList();
+        Dictionary<string, List<string>> CategoryTexts = [];
         foreach (Alteration alteration in alterations)
         {
             string? category = null;
@@ -132,7 +124,7 @@ class DevUtils{
 }
 
 class CustomBlockAirTest : Alteration {
-    int id = 1000000; 
+    // int id = 1000000; 
     //known options: 1000, 1000000, 1001000, 1002000
     // 100100 is good for most to have correct model, (Exception ex. dirtroad curve2)
     // 1002001 bad for all, 

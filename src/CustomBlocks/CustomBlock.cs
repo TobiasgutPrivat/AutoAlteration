@@ -50,7 +50,7 @@ public class CustomBlock
   { 
     if (!Directory.Exists(Path.GetDirectoryName(path)))
       {
-        Directory.CreateDirectory(Path.GetDirectoryName(path));
+        Directory.CreateDirectory(Path.GetDirectoryName(path) ?? throw new Exception("Invalid Path"));
       }
     customBlock.Save(path);
   }

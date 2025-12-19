@@ -10,7 +10,9 @@ public class CustomSurfaceAlteration(string Surface, string RoadSurface, CPlugSu
         List<CPlugCrystal.Face> facesToModify = [];
         string SurfaceToUse = customBlock.Name.Contains("Road") && !customBlock.Name.Contains("Open") ? RoadSurface : Surface;
         foreach (CPlugCrystal.GeometryLayer layer in customBlock.MeshCrystals.SelectMany(x => x.Layers).Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).Cast<CPlugCrystal.GeometryLayer>()) {
-            facesToModify.AddRange(layer.Crystal.Faces.ToList().Where(x => GetMaterialLink(x) != SurfaceToUse && DrivableMaterials.Contains(GetMaterialLink(x))));
+            if (layer.Crystal is not null) {
+                facesToModify.AddRange(layer.Crystal.Faces.ToList().Where(x => GetMaterialLink(x) != SurfaceToUse && DrivableMaterials.Contains(GetMaterialLink(x))));
+            }
         }
         facesToModify?.ForEach(x =>
         {

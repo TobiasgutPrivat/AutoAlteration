@@ -1,5 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
+using GBX.NET.Serialization.Chunking;
 using ManiaAPI.NadeoAPI;
 using System.IO.Compression;
 
@@ -18,7 +19,7 @@ public class Map
   { 
     gbx = Gbx.Parse<CGameCtnChallenge>(mapPath);
     map = gbx.Node;
-    map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4; //TODO test if causes crashes
+    map.Chunks.Get<CGameCtnChallenge.Chunk03043040>().Version = 4;
     FreeBlockHeightOffset = map.DecoBaseHeightOffset*8;
     map.Comments += "\nAltered using AutoAlteration";
     
@@ -30,10 +31,11 @@ public class Map
     NewMapUid();
     RemoveAuthor(); //TODO test if causes crashes
     map.RemovePassword();
-    if (!Directory.Exists(Path.GetDirectoryName(path)))
-      {
-        Directory.CreateDirectory(Path.GetDirectoryName(path));
-      }
+    string folder = Path.GetDirectoryName(path) ?? throw new Exception("Invalid Path");
+    if (!Directory.Exists(folder))
+    {
+      Directory.CreateDirectory(folder);
+    }
     gbx.Save(path);
   }
 
@@ -44,7 +46,7 @@ public class Map
     map.BronzeTime = TmEssentials.TimeInt32.MaxValue;
     map.AuthorScore = 0;
     map.AuthorExtraInfo = null;
-    map.AuthorLogin = null;
+    map.AuthorLogin = "";
     map.AuthorNickname = null;
     map.AuthorVersion = 0;
     map.AuthorZone = null;
@@ -113,7 +115,7 @@ public class Map
     zipArchive.Entries.ToList().ForEach(x => {
       string name = x.FullName.Split("Blocks\\").Last().Split("Items\\").Last().Split("Blocks/").Last().Split("Items/").Last();
       string filePath = path + "\\" + name; // Extract with Folderstructure (FullName)
-      Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+      Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new Exception("Invalid Path"));
       x.ExtractToFile(filePath, true);
     });
     return;
@@ -190,12 +192,12 @@ public class Map
     string ArticleName = Block.Name;
     if (Block.Type == BlockType.CustomBlock) ArticleName = Block.Name + "_CustomBlock";
     ArticleName = ArticleName.Replace("/","\\");
-    List<CGameCtnBlock> deleted = map.Blocks.Where(block => block.BlockModel.Id == ArticleName).ToList();
-    map.Blocks = map.Blocks.Where(block => block.BlockModel.Id != ArticleName).ToList();
+    List<CGameCtnBlock> deleted = map.Blocks?.Where(block => block.BlockModel.Id == ArticleName).ToList() ?? [];
+    map.Blocks = map.Blocks?.Where(block => block.BlockModel.Id != ArticleName).ToList();
     if (includePillars){
       deleted.ForEach(x => {
         if (!x.IsFree && !x.IsGround){
-          map.Blocks = map.Blocks.Where(block => 
+          map.Blocks = map.Blocks?.Where(block => 
             !(block.BlockModel.Id.Contains("Pillar") &&
               block.Coord.X == x.Coord.X &&
               block.Coord.Z == x.Coord.Z &&
@@ -206,7 +208,7 @@ public class Map
       });
     };
 
-    map.AnchoredObjects = map.AnchoredObjects.Where(block => block.ItemModel.Id != ArticleName).ToList();
+    map.AnchoredObjects = map.AnchoredObjects?.Where(block => block.ItemModel.Id != ArticleName).ToList();
   }
   public void Delete(Inventory inventory, bool includePillars = false){
     foreach(var block in inventory){
@@ -252,19 +254,19 @@ public class Map
   }
 
   public void StageAll(Inventory inventory, MoveChain ?moveChain = null){
-    stagedBlocks.AddRange(map.Blocks.Select(x => {
+    stagedBlocks.AddRange(map.Blocks?.Select(x => {
       Article article = inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
       Block block = new Block(x, article, FreeBlockHeightOffset);
       block.Move(moveChain);
       return block;
-    }));
+    }) ?? []);
     map.Blocks = [];
-    stagedBlocks.AddRange(map.AnchoredObjects.Select(x => {
+    stagedBlocks.AddRange(map.AnchoredObjects?.Select(x => {
       Article article = inventory.GetArticle(x.ItemModel.Id);
       Block block = new Block(x, article);
       block.Move(moveChain);
       return block;
-    }));
+    }) ?? []);
     map.AnchoredObjects = [];
   }
 

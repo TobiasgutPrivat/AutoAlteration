@@ -1,7 +1,6 @@
 abstract class ArticleProvider
 {
     private List<Article>? articles = null;
-    private readonly float PI = (float)Math.PI;
     public List<Article> GetArticles()
     {
         articles ??= GenerateArticles();

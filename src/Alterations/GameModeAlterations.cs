@@ -1,3 +1,5 @@
+using GBX.NET.Engines.Game;
+
 public class GameMode(string mode) : Alteration {
     public override string Description => $"sets Map to {mode}Mode";
     public override bool Published => true;
@@ -6,6 +8,7 @@ public class GameMode(string mode) : Alteration {
 
     protected override void Run(Inventory inventory, Map map) {
         map.map.MapType = "TrackMania\\" + mode;
+        map.map.ChallengeParameters ??= new ();
         map.map.ChallengeParameters.MapType = "TrackMania\\" + mode;
     }
 }
