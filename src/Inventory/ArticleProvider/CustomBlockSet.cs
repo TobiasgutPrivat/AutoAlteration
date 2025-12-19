@@ -1,3 +1,4 @@
+// Variations of Vanilla Block Set
 class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : ArticleProvider
 {
     public readonly CustomBlockAlteration customBlockAlteration = customBlockAlteration;
@@ -20,7 +21,7 @@ class CustomBlockSet(CustomBlockAlteration customBlockAlteration) : ArticleProvi
 
         articles.AddRange(Directory.GetFiles(GetFolder(), "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(Path.GetFileName(x), BlockType.CustomItem, x)));
-
+        VanillaArticleProvider.DefaultInventoryChanges([.. articles]);
         return articles;
     }
 

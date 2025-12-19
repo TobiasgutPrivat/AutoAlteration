@@ -210,7 +210,6 @@ class VanillaArticleProvider : ArticleProvider
     
     private static void NormalizeCheckpoint(Inventory inventory)
     {
-        // TODO check if wanted, could cause issues with custom block set aligning
         inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Straight").Align(inventory).getAligned()
             .ToList().ForEach(a => a.Keywords.Remove("Straight"));
         inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align(inventory).getAligned()
@@ -219,7 +218,9 @@ class VanillaArticleProvider : ArticleProvider
             .ToList().ForEach(a => a.Keywords.Remove("Base"));
     }
 
-    public static void DefaultInventoryChanges(Inventory inventory){ //Some modifications for better Keyword indexing
+    public static void DefaultInventoryChanges(Inventory inventory){
+        //Some modifications for better Keyword indexing
+        // Danger: does change naming of Articles, can cause compatibility issues and confusion
         inventory.Select(BlockType.Block).Select("Gate").ToList()
             .ForEach(a => {a.Keywords.Remove("Gate"); a.Keywords.Add("Ring");});
         inventory.Select("Special").ToList()
@@ -232,11 +233,11 @@ class VanillaArticleProvider : ArticleProvider
         inventory.Select("Oriented").ToList().ForEach(a => a.Keywords.Remove("Oriented"));
         inventory.Select("Grasss").ToList()
             .ForEach(a => {a.Keywords.Remove("Grasss");a.Keywords.Add("Grass"); });
-
         
         Inventory DecoWall = inventory.Select("DecoWall");
         DecoWall.Select("LoopEnd").Not(["Center","Side"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
         DecoWall.Select(["Arch","Slope2"]).Any(["UTop","End"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
         DecoWall.Select(["Arch","Slope2","Straight"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(-PI*0.5f,0,0)));
+        NormalizeCheckpoint(inventory);
     }
 }

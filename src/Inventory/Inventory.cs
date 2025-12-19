@@ -91,9 +91,10 @@ public class Inventory : HashSet<Article> { // represents all available articles
     }
 
     #region Development
-    public void Export(string Name) {
+    public Inventory Export(string Name) {
         Directory.CreateDirectory(Path.Combine(AlterationConfig.devPath, "Inventory"));
         File.WriteAllText(Path.Combine(AlterationConfig.devPath, "Inventory", "Inventory" + Name + ".json"), JsonConvert.SerializeObject(this, Formatting.Indented));
+        return this;
     }
     
     public Inventory Print() {

@@ -6,7 +6,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
     public override bool Complete => false;
 
     internal override List<CustomBlockAlteration> customBlockAlts => [SurfaceAlt];
-    public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [new AirMode(), sceneryAlteration] : [new AirMode(), ];
+    public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [sceneryAlteration] : [];
     public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
 
     protected override void Run(Inventory inventory, Map map) {

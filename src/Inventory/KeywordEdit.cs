@@ -1,4 +1,5 @@
 using GBX.NET.Engines.Game;
+using Newtonsoft.Json;
 
 public class KeywordEdit { //maybe call Alignement
     public Dictionary<Article,Article?> articles = []; //Keys: cloned articles, Values: aligned articles (from org inventory)
@@ -119,6 +120,13 @@ public class KeywordEdit { //maybe call Alignement
         return new KeywordEdit(newEdit);
     }
 
+    public KeywordEdit Export(string Name) {
+        List<Tuple<Article,Article?>> articles = this.articles.Select(a => new Tuple<Article,Article?>(a.Key,a.Value)).ToList();
+        Directory.CreateDirectory(Path.Combine(AlterationConfig.devPath, "Keywordedit"));
+        File.WriteAllText(Path.Combine(AlterationConfig.devPath, "Keywordedit", "Keywordedit" + Name + ".json"), JsonConvert.SerializeObject(articles, Formatting.Indented));
+        return this;
+    }
+    
     public KeywordEdit Print() {
         articles.ToList().ForEach(article => {
             Console.WriteLine(article.Key.Name + ": " + article.Key.KeywordString() + 

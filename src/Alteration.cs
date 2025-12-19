@@ -4,12 +4,9 @@ public abstract class Alteration {
     public virtual bool LikeAN => false; // made in the same way as in Altered Nadeo
     public virtual bool Complete => false; // alteration sometimes needs manual additions
 
-
-    // Changes which get applied on base inventory before the Alteration is executed
+    public virtual List<Alteration> AlterationsBefore { get; } = [];
     internal virtual List<CustomBlockAlteration> customBlockAlts { get; } = [];
     internal virtual List<CustomBlockFolder> customBlockFolders { get; } = [];
-
-    public virtual List<Alteration> AlterationsBefore { get; } = [];
 
     public const float PI = (float)Math.PI;
     
