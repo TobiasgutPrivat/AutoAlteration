@@ -9,4 +9,4 @@ def flattenFolderStructure(folder):
                 os.rename(os.path.abspath(path), os.path.abspath(new_path))
 
 if __name__ == "__main__":
-    flattenFolderStructure("C:/Users/tobia/GitProjekte/AutoAlteration/data/CustomBlocks/Vanilla")
+    flattenFolderStructure("C:/Users/tobia/GitProjekte/AutoAlteration/data/CustomBlocks/Nadeo")
