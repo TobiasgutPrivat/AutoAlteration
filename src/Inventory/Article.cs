@@ -40,9 +40,9 @@ public class Article {
         this.Path = Path;
         LoadKeywords();
         Type = type;
-        string vanillaName = Name;
 
         // for customblocksets get size from unaltered version //TODO
+        // string vanillaName = Name;
         // AlterationConfig.CustomBlockAlts.ToList().ForEach(k => vanillaName = vanillaName.Replace(k,""));
         // List<Article> vanillaVersion = Alteration.inventory.Where(a => a.Name == vanillaName).ToList(); 
         // if (vanillaVersion.Count > 0) { 

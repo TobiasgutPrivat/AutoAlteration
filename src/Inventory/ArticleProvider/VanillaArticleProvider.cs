@@ -1,11 +1,10 @@
-using System.IO.Pipes;
 using GBX.NET;
 using Newtonsoft.Json;
 
 /// <summary>
 /// Provides vanilla articles based on json data files.
 /// </summary>
-class VanillaArticleProvider : ArticleProvider
+class VanillaArticleProvider() : ArticleProvider("Vanilla")
 {
     private static readonly float PI = (float)Math.PI;
     
@@ -61,10 +60,7 @@ class VanillaArticleProvider : ArticleProvider
         Inventory inventory = [.. articles];
         articles.AddRange(CreateCheckpointTriggers(inventory));
         articles.AddRange(CreateNonCPBlocks());
-        inventory = [.. articles];
-        NormalizeCheckpoint(inventory);//maybe earlier
-        DefaultInventoryChanges(inventory);
-        return [.. inventory];
+        return articles;
     }
 
     private static string ItemDataCorrections(string json)
@@ -208,17 +204,7 @@ class VanillaArticleProvider : ArticleProvider
         return articles;
     }
     
-    private static void NormalizeCheckpoint(Inventory inventory)
-    {
-        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Straight").Align(inventory).getAligned()
-            .ToList().ForEach(a => a.Keywords.Remove("Straight"));
-        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align(inventory).getAligned()
-            .ToList().ForEach(a => a.Keywords.Remove("StraightX2"));
-        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Base").Align(inventory).getAligned()
-            .ToList().ForEach(a => a.Keywords.Remove("Base"));
-    }
-
-    public static void DefaultInventoryChanges(Inventory inventory){
+    protected override void InventoryChanges(Inventory inventory){
         //Some modifications for better Keyword indexing
         // Danger: does change naming of Articles, can cause compatibility issues and confusion
         inventory.Select(BlockType.Block).Select("Gate").ToList()
@@ -238,6 +224,13 @@ class VanillaArticleProvider : ArticleProvider
         DecoWall.Select("LoopEnd").Not(["Center","Side"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
         DecoWall.Select(["Arch","Slope2"]).Any(["UTop","End"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(PI*0.5f,0,0)));
         DecoWall.Select(["Arch","Slope2","Straight"]).ToList().ForEach(a => a.DefaultRotation = new RotateMid(new(-PI*0.5f,0,0)));
-        NormalizeCheckpoint(inventory);
+
+        // NormalizeCheckpoint
+        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Straight").Align(inventory).getAligned()
+            .ToList().ForEach(a => a.Keywords.Remove("Straight"));
+        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("StraightX2").Align(inventory).getAligned()
+            .ToList().ForEach(a => a.Keywords.Remove("StraightX2"));
+        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Base").Align(inventory).getAligned()
+            .ToList().ForEach(a => a.Keywords.Remove("Base"));
     }
 }

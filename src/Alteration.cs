@@ -6,7 +6,7 @@ public abstract class Alteration {
 
     public virtual List<Alteration> AlterationsBefore { get; } = [];
     internal virtual List<CustomBlockAlteration> customBlockAlts { get; } = [];
-    internal virtual List<CustomBlockFolder> customBlockFolders { get; } = [];
+    internal virtual List<ArticleProvider> articleProviders { get; } = [];
 
     public const float PI = (float)Math.PI;
     
@@ -17,44 +17,31 @@ public abstract class Alteration {
         {
             alteration.Run(map);
         }
-        Inventory inventory = [.. AlterationConfig.VanillaArticles.GetArticles()];
-        foreach (CustomBlockAlteration alteration in customBlockAlts)
+        Inventory inventory = [];
+        foreach (ArticleProvider provider in (List<ArticleProvider>)[AlterationConfig.VanillaArticles, .. articleProviders])
         {
-            CustomBlockSet customBlockSet = new CustomBlockSet(alteration);
-            AlterationConfig.Keywords.AddRange(customBlockSet.GetAdditionalKeywords());
-            inventory |= [.. customBlockSet.GetArticles()];
-        }
-        foreach (CustomBlockFolder folder in customBlockFolders)
-        {
-            AlterationConfig.Keywords.AddRange(folder.GetAdditionalKeywords());
-            inventory |= [.. folder.GetArticles()];
+            AlterationConfig.Keywords.AddRange(provider.GetAdditionalKeywords());
+            inventory |= [.. provider.GetArticles()];
+            foreach (CustomBlockAlteration alteration in customBlockAlts)
+            {
+                AlterationConfig.Keywords.Add(alteration.GetType().Name);
+                inventory |= [.. provider.GetAlteredArticles(alteration)];
+            }
         }
         //logging
-        if (AlterationConfig.devMode)
-        {
-            inventory.Export(GetType().Name);
-        }
+        if (AlterationConfig.devMode) inventory.Export(GetType().Name);
 
         //Map specific custom blocks
         if (map.embeddedBlocks.Count != 0)
         {
-            inventory |= [.. map.embeddedBlocks.Select(x => new Article(x.Key, x.Value, ""))];
-            string TempFolder = Path.Join(Path.GetTempPath(), "AutoAlteration");
-            string ExportFolder = Path.Join(TempFolder, "Exports");
-            map.ExtractEmbeddedBlocks(ExportFolder);
+            EmbeddedProvider embeddedProvider = new(map);
+            inventory |= [.. embeddedProvider.GetArticles()];
             foreach (CustomBlockAlteration customBlockAlteration in customBlockAlts)
             {
-                string setName = customBlockAlteration.GetType().Name; //TODO refactor customblockalterations with Names
-                string SetPath = Path.Join(TempFolder, setName);
-                AutoAlteration.AlterAll(customBlockAlteration,ExportFolder,Path.Join(TempFolder,setName),setName);
-                inventory |= [.. new CustomBlockFolder(TempFolder + setName + "\\Items").GetArticles()];
-                inventory |= [.. new CustomBlockFolder(TempFolder + setName + "\\Blocks").GetArticles()];
+                inventory |= [.. embeddedProvider.GetAlteredArticles(customBlockAlteration)];
             }
             //logging
-            if (AlterationConfig.devMode)
-            {
-                inventory.Export(GetType().Name + "WithEmbedded");
-            }
+            if (AlterationConfig.devMode) inventory.Export(GetType().Name + "WithEmbedded");
         }
         
         Run(inventory, map);

@@ -509,7 +509,7 @@ public class WRTrace : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true; //could add alt cars, and maybe other car skin
 
-    internal override List<CustomBlockFolder> customBlockFolders { get; } = [new CustomBlockFolder("Cars\\")];
+    internal override List<ArticleProvider> articleProviders { get; } = [new ArticleProvider("Cars\\")];
     
     protected override void Run(Inventory inventory, Map map){
         Replay? replay = map.GetWRReplay();
@@ -557,7 +557,7 @@ public class YepTree: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    internal override List<CustomBlockFolder> customBlockFolders => [new CustomBlockFolder("YepTree\\")];
+    internal override List<ArticleProvider> articleProviders => [new ArticleProvider("YepTree\\")];
 
     protected override void Run(Inventory inventory, Map map){
         Article YepTree = inventory.GetArticle("YepTree-TreeCheckpointTrigger");

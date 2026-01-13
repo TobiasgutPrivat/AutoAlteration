@@ -24,7 +24,11 @@ public class AlterationScript {
                 item.GetProperty("Name").GetString() ?? "",
                 item.GetProperty("Alterations").EnumerateArray().Select(x => 
                     GetAlteration(x.GetString() ?? throw new Exception("Alteration not a string"))
-                    ).ToList()
+                    ).ToList(),
+                item.TryGetProperty("CustomBlocks", out _) ? item.GetProperty("CustomBlocks").EnumerateArray().Select(x => 
+                    x.GetString() ?? throw new Exception("CustomBlocks not a string")
+                    ).ToList() 
+                    : new List<string>()
             );
         }
     }
@@ -38,7 +42,7 @@ public class AlterationScript {
         throw new Exception("Alteration " + name + " not found");
     }
 
-    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations)
+    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations, List<string> customBlockSets)
     {
         string warning = ValidateSource(type, source);
         if (warning != ""){
