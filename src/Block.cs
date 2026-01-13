@@ -167,7 +167,7 @@ public class Block
             block.IsFree = true;
             block.AbsolutePositionInMap = position.coords;
             block.YawPitchRoll = position.YawPitchRoll;
-            block.Coord = new Int3((int)block.AbsolutePositionInMap.Value.X / 32, (int)block.AbsolutePositionInMap.Value.Y / 8, (int)block.AbsolutePositionInMap.Value.Z / 32);
+            // block.Coord = new Int3((int)block.AbsolutePositionInMap.Value.X / 32, (int)block.AbsolutePositionInMap.Value.Y / 8, (int)block.AbsolutePositionInMap.Value.Z / 32);
         }
 
         block.WaypointSpecialProperty = WaypointSpecialProperty;

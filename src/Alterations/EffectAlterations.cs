@@ -41,6 +41,15 @@ public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool orien
         map.PlaceRelative(withWall.Select("Right"), GateSpecial32,[new Offset(-6,12,0), new Rotate(0,0,PI*0.5f), ..moveChain]);
         map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial,moveChain);
 
+        //Thread of Ariadne CP's
+        // Inventory stripeCPs = inventory.SelectWord("CP-stripe");
+        // Inventory X2stripeCPs = stripeCPs.SelectWord("-x2");
+        // Inventory X1stripeCPs = stripeCPs/X2stripeCPs;
+        // Inventory bankedL = stripeCPs.SelectWord("banked-L");
+        // Inventory bankedR = stripeCPs.SelectWord("banked-R");
+
+        // map.PlaceRelative(X1stripeCPs, GateSpecial32,[..moveChain]);
+
         map.PlaceStagedBlocks();
         if (includeStart) {
             new StartEffect(Effect,moveChain,oriented).Run(map);
