@@ -4,7 +4,10 @@ class ArticleProvider(string? subFolder = null)
     private List<Article>? articles = null;
     public List<Article> GetArticles()
     {
-        articles ??= GenerateArticles();
+        if (articles == null) {
+            articles = GenerateArticles();
+            InventoryChanges([.. articles]);
+        } 
         return articles;
     }
 
@@ -22,15 +25,16 @@ class ArticleProvider(string? subFolder = null)
             AutoAlteration.AlterAll(customBlockAlteration, GetOrigin(), folder + "Temp", Name);
             Directory.Move(folder + "Temp", folder);
         }
-        List<Article> articles = [];
+        List<Article> alteredArticles = [];
 
-        articles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
+        alteredArticles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(Path.GetFileName(x), BlockType.CustomBlock, x)));
 
-        articles.AddRange(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
+        alteredArticles.AddRange(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(Path.GetFileName(x), BlockType.CustomItem, x)));
-        InventoryChanges([.. articles]);
-        return articles;
+
+        InventoryChanges([.. alteredArticles]);
+        return alteredArticles;
     }
 
     protected virtual void InventoryChanges(Inventory inventory) { }

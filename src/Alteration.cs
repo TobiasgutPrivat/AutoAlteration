@@ -1,4 +1,5 @@
 public abstract class Alteration {
+    public virtual string Name => GetType().Name; // Alteration Name
     public virtual string Description => "No description given"; // Alteration Description
     public virtual bool Published => false; // Alteration is published in Auto Alteration -> determines if shown in UI-App
     public virtual bool LikeAN => false; // made in the same way as in Altered Nadeo
@@ -24,12 +25,12 @@ public abstract class Alteration {
             inventory |= [.. provider.GetArticles()];
             foreach (CustomBlockAlteration alteration in customBlockAlts)
             {
-                AlterationConfig.Keywords.Add(alteration.GetType().Name);
+                AlterationConfig.Keywords.Add(alteration.Name);
                 inventory |= [.. provider.GetAlteredArticles(alteration)];
             }
         }
         //logging
-        if (AlterationConfig.devMode) inventory.Export(GetType().Name);
+        if (AlterationConfig.devMode) inventory.Export(Name);
 
         //Map specific custom blocks
         if (map.embeddedBlocks.Count != 0)
@@ -41,7 +42,7 @@ public abstract class Alteration {
                 inventory |= [.. embeddedProvider.GetAlteredArticles(customBlockAlteration)];
             }
             //logging
-            if (AlterationConfig.devMode) inventory.Export(GetType().Name + "WithEmbedded");
+            if (AlterationConfig.devMode) inventory.Export(Name + "WithEmbedded");
         }
         
         Run(inventory, map);

@@ -8,8 +8,7 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
         if (Effect == "") throw new Exception("Not intended to be used without Effect");
         moveChain ??= [];
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
-        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") 
-            : inventory.GetArticle("GateSpecial" + Effect);
+        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") : inventory.GetArticle("GateSpecial" + Effect);
         Inventory startRoadIce = start.Select("RoadIce");
         Inventory startRoadBump = start.Select("RoadBump");
         map.PlaceRelative((start/startRoadBump/startRoadIce).Not("Water"), GateSpecial,[new Offset(0,-16,0),.. moveChain]);
@@ -27,8 +26,7 @@ public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool orien
     protected override void Run(Inventory inventory, Map map) {
         if (Effect == "") throw new Exception("Not intended to be used without Effect");
         moveChain ??= [];
-        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") 
-            : inventory.GetArticle("GateSpecial" + Effect);
+        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") : inventory.GetArticle("GateSpecial" + Effect);
         inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(inventory, map,moveChain);
 
         Inventory triggers = inventory.Select("CheckpointTrigger") | inventory.Select("MultilapTrigger)");
