@@ -26,23 +26,33 @@ public class AlterationScript {
                     GetAlteration(x.GetString() ?? throw new Exception("Alteration not a string"))
                     ).ToList(),
                 item.TryGetProperty("CustomBlocks", out _) ? item.GetProperty("CustomBlocks").EnumerateArray().Select(x => 
-                    x.GetString() ?? throw new Exception("CustomBlocks not a string")
+                    GetCustomBlockProvider(x.GetString() ?? throw new Exception("CustomBlocks not a string"))
                     ).ToList() 
-                    : new List<string>()
+                    : new List<ArticleProvider>()
             );
         }
     }
 
     private Alteration GetAlteration(string name){
         List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
-        List<Type> alterations = types.Where(t => t.Name == name).ToList();
+        List<Type> alterations = types.Where(t => t.Name == name && t.IsSubclassOf(typeof(Alteration))).ToList();
         if (alterations.Count > 0){
             return (Alteration) (Activator.CreateInstance(alterations.First())?? throw new Exception("Alteration couldnt be instantiated"));
         }
         throw new Exception("Alteration " + name + " not found");
     }
 
-    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations, List<string> customBlockSets)
+    private ArticleProvider GetCustomBlockProvider(string name){
+        List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
+        List<Type> providers = types.Where(t => t.Name == name && t.IsSubclassOf(typeof(ArticleProvider))).ToList();
+        if (providers.Count > 0){
+            return (ArticleProvider) (Activator.CreateInstance(providers.First())?? throw new Exception("CustomBlockProvider couldnt be instantiated"));
+        } else {
+            return new ArticleProvider(name); //Customblocks from named Folder
+        }
+    }
+
+    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations, List<ArticleProvider> customBlocks)
     {
         string warning = ValidateSource(type, source);
         if (warning != ""){
@@ -59,13 +69,13 @@ public class AlterationScript {
         Console.WriteLine(" " + string.Join("\n", alterations.Select(x => x.GetType().ToString())));
         switch (type){
             case AlterType.File: 
-                AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name);
+                AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name,customBlocks);
                 break;
             case AlterType.Folder:
-                AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name);
+                AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name,customBlocks);
                 break;
             case AlterType.FullFolder:
-                AutoAlteration.AlterAll(alterations.ToList(),source,destination,name);
+                AutoAlteration.AlterAll(alterations.ToList(),source,destination,name,customBlocks);
                 break;
         }
     }

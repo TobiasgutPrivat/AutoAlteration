@@ -2,10 +2,10 @@ using System.IO.Pipes;
 using System.Reflection;
 
 public class AutoAlteration {
-    public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
+    public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
             try {
-                AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name);
+                AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name,customBlocks);
             } catch (Exception ex) {
                 Console.WriteLine($"Error altering {mapFile}:");
                 Console.WriteLine(ex.Message);
@@ -23,11 +23,11 @@ public class AutoAlteration {
         }
     }
 
-    public static void AlterAll(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name) {
-        AlterFolder(alterations,sourceFolder,destinationFolder + " " + Name,Name);
+    public static void AlterAll(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null) {
+        AlterFolder(alterations,sourceFolder,destinationFolder + " " + Name,Name,customBlocks);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder + " " + Name, Path.GetFileName(Directory)),Name);
+            AlterAll(alterations,Directory,Path.Combine(destinationFolder + " " + Name, Path.GetFileName(Directory)),Name,customBlocks);
         }
     }
     public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {
@@ -38,11 +38,11 @@ public class AutoAlteration {
         }
     }
     
-    public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name) {
+    public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name, List<ArticleProvider>? customBlocks = null) {
         Map map = new Map(sourceFile);
         foreach (Alteration alteration in alterations)
         {
-            alteration.Run(map);
+            alteration.Run(map, customBlocks);
         }
         map.map.MapName = Name is not null ? map.map.MapName + " " + Name : map.map.MapName;
         map.Save(destinationFile);

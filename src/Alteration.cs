@@ -12,14 +12,14 @@ public abstract class Alteration {
     public const float PI = (float)Math.PI;
     
     protected abstract void Run(Inventory inventory, Map map);
-    public void Run(Map map)
+    public void Run(Map map, List<ArticleProvider>? customBlocks = null)
     {
         foreach (Alteration alteration in AlterationsBefore)
         {
             alteration.Run(map);
         }
         Inventory inventory = [];
-        foreach (ArticleProvider provider in (List<ArticleProvider>)[AlterationConfig.VanillaArticles, .. articleProviders])
+        foreach (ArticleProvider provider in (List<ArticleProvider>)[AlterationConfig.VanillaArticles, .. articleProviders, .. customBlocks ?? []])
         {
             AlterationConfig.Keywords.AddRange(provider.GetAdditionalKeywords());
             inventory |= [.. provider.GetArticles()];
@@ -29,8 +29,6 @@ public abstract class Alteration {
                 inventory |= [.. provider.GetAlteredArticles(alteration)];
             }
         }
-        //logging
-        if (AlterationConfig.devMode) inventory.Export(Name);
 
         //Map specific custom blocks
         if (map.embeddedBlocks.Count != 0)
@@ -41,10 +39,12 @@ public abstract class Alteration {
             {
                 inventory |= [.. embeddedProvider.GetAlteredArticles(customBlockAlteration)];
             }
-            //logging
-            if (AlterationConfig.devMode) inventory.Export(Name + "WithEmbedded");
         }
+
+        //logging
+        if (AlterationConfig.devMode) inventory.Export(Name);
         
+        //Run alteration
         Run(inventory, map);
         AlterationConfig.mapCount++;
             

@@ -15,7 +15,7 @@ public class Article {
 
     public Article() { }
 
-    public Article(string name, BlockType type, SList<string> keywords, SList<string>? toShape = null, MoveChain? moveChain = null, int length = 1, int width = 1)
+    public Article(string name, BlockType type, SList<string> keywords, SList<string>? toShape = null, MoveChain? moveChain = null, int length = 1, int width = 1, int height = 1)
     {
         Name = name;
         Type = type;
@@ -24,6 +24,7 @@ public class Article {
         MoveChain = moveChain ?? [];
         Length = length;
         Width = width;
+        Height = height;
     }
     
     public Article(int Height, int Width, int Length, BlockType Type, string Name){
@@ -53,7 +54,11 @@ public class Article {
     }
 
     public Article CloneArticle() =>
-        new(Name,Type,Keywords.ToList(),ToShapes.ToList(),[.. MoveChain],Length,Width);
+        new(Name,Type,Keywords.ToList(),ToShapes.ToList(),[.. MoveChain],Length,Width){
+            Height = Height,
+            Path = Path,
+            DefaultRotation = DefaultRotation
+        };
 
     public bool HasKeyword(string keyword) =>
         Keywords.Contains(keyword) || ToShapes.Contains(keyword);
@@ -63,12 +68,12 @@ public class Article {
             return false;
         }
         foreach (var keyword in Keywords) {
-            if (Keywords.Where(k => k == keyword).Count() != article.Keywords.Where(k => k == keyword).Count()) {
+            if (Keywords.Count(k => k == keyword) != article.Keywords.Count(k => k == keyword)) {
                 return false;
             }
         }
         foreach (var toShape in ToShapes) {
-            if (ToShapes.Where(k => k == toShape).Count() != article.ToShapes.Where(k => k == toShape).Count()) {
+            if (ToShapes.Count(k => k == toShape) != article.ToShapes.Count(k => k == toShape)) {
                 return false;
             }
         }
