@@ -1,3 +1,4 @@
+// base implementation designed to provide articles from a specific customblocks folder
 public class ArticleProvider(string? subFolder = null)
 {
     protected virtual string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, subFolder ?? ""); }
@@ -27,6 +28,7 @@ public class ArticleProvider(string? subFolder = null)
         return articles;
     }
 
+    // base implementation alters and returns Customblocks from origin folder
     public virtual List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration)
     {
         string Name = customBlockAlteration.GetType().Name;
@@ -41,7 +43,7 @@ public class ArticleProvider(string? subFolder = null)
             AutoAlteration.AlterAll(customBlockAlteration, GetOrigin(), folder + "Temp", Name);
             Directory.Move(folder + "Temp", folder);
         }
-        List<Article> alteredArticles = [];
+        Inventory alteredArticles = [];
 
         alteredArticles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(Path.GetFileName(x), BlockType.CustomBlock, x)));
@@ -49,10 +51,11 @@ public class ArticleProvider(string? subFolder = null)
         alteredArticles.AddRange(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(Path.GetFileName(x), BlockType.CustomItem, x)));
 
-        InventoryChanges([.. alteredArticles]);
-        return alteredArticles;
+        InventoryChanges(alteredArticles);
+        return alteredArticles.ToList();
     }
 
     protected virtual void InventoryChanges(Inventory inventory) { }
+    public virtual void EmbeddedChanges(Inventory inventory) { }
     public virtual List<string> GetAdditionalKeywords() { return []; }
 }

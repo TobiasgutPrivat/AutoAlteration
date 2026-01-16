@@ -36,6 +36,11 @@ public class Inventory : HashSet<Article> { // represents all available articles
     public static Inventory operator /(Inventory a, Inventory b) =>
         [.. a.Except(b)];
 
+    public void AddRange(IEnumerable<Article> articles) {
+        foreach (Article article in articles) {
+            this.Add(article);
+        }
+    }
 
     public Article GetArticle(string name) {
         if (name.Contains(':')) {

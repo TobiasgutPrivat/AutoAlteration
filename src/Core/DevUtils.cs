@@ -132,7 +132,7 @@ class CustomBlockAirTest : Alteration {
     // 1000000 good for all if air-mode false, (only known exception: RoadTechTiltTransition2Up1LeftChicane)
     // last digit doesn't really matter
     internal override List<CustomBlockAlteration> customBlockAlts => [new WoodSurface()];
-    protected override void Run(Inventory inventory, Map map)
+    public override void Run(Inventory inventory, Map map)
     {
         Inventory platform = inventory.Select("Platform");
         platform.Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(inventory,map,new Offset(new Vec3(0,100,0)));
@@ -152,7 +152,7 @@ class CustomBlockAirTest : Alteration {
 }
 
 class Replace : Alteration {
-    protected override void Run(Inventory inventory, Map map)
+    public override void Run(Inventory inventory, Map map)
     {
         map.StageAll(inventory);
         map.PlaceStagedBlocks();
@@ -160,7 +160,7 @@ class Replace : Alteration {
 }
 
 class Test : Alteration {
-    protected override void Run(Inventory inventory, Map map)
+    public override void Run(Inventory inventory, Map map)
     {
         inventory.Edit().Replace(inventory,map,new Offset(16,0,0));//Test if Rotation is before or after Move
         map.PlaceStagedBlocks();
@@ -168,7 +168,7 @@ class Test : Alteration {
 }
 
 class Nothing : Alteration {
-    protected override void Run(Inventory inventory, Map map)
+    public override void Run(Inventory inventory, Map map)
     {
     }
 }

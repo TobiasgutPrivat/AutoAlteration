@@ -84,7 +84,9 @@ public class Article {
     public void LoadKeywords() {
         //Path
         string[] splits = Name.Split(["/", "\\"],StringSplitOptions.RemoveEmptyEntries); // seperate Foldernames
+        if (splits[0].StartsWith("NC2_")) splits = splits[1..];//remove NC2_*
         splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
+
 
         //Name
         string name = splits.Last(); // the filename/blockname

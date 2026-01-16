@@ -9,7 +9,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
     public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [sceneryAlteration] : [];
     public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
 
-    protected override void Run(Inventory inventory, Map map) {
+    public override void Run(Inventory inventory, Map map) {
         if (light) {
             if (!VanillaSurfaces.Contains(Surface)) {
                 throw new Exception("Light SurfaceAlterations requires a VanillaSurface type to be specified.");
@@ -78,7 +78,7 @@ public class Penalty : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    protected override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map){
         Inventory Platform = inventory.Select("Platform");
         Platform.Any(["Ice","Dirt"]).Edit().RemoveKeyword("Platform").AddKeyword("DecoPlatform").Replace(inventory, map);
         Platform.Any(["Grass","Tech"]).Edit().RemoveKeyword(["Platform","Grass","Tech"]).AddKeyword("DecoPlatform").Replace(inventory, map);
@@ -142,7 +142,7 @@ public class Bobsleigh : Alteration { //half manual
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    protected override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map){
         inventory.Any(["RoadBump","RoadDirt","RoadTech"]).Edit().RemoveKeyword(["RoadBump","RoadDirt","RoadTech"]).AddKeyword("RoadIce").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
@@ -156,7 +156,7 @@ public class Sausage : Alteration { //half manual
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    protected override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map){
         List<string> roadKeywords = ["RoadIce","RoadDirt","RoadTech"];
         inventory.Any(roadKeywords).Edit().RemoveKeyword(roadKeywords).AddKeyword("RoadBump").Replace(inventory, map);
         map.PlaceStagedBlocks();
@@ -171,7 +171,7 @@ public class Surfaceless: Alteration {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    protected override void Run(Inventory inventory, Map map){    
+    public override void Run(Inventory inventory, Map map){    
         Inventory Blocks = inventory.Select(BlockType.Block);
         map.PlaceRelative(Blocks.Select("MapStart"),inventory.GetArticle("GateStartCenter32m"));
         map.PlaceRelative(Blocks.Select("Checkpoint"),inventory.GetArticle("GateCheckpointCenter32m"));
@@ -191,7 +191,7 @@ public class RouteOnly: Alteration {
     public override bool Complete => false;
     
     // public override List<InventoryChange> customBlockAlts => [new CustomBlockSet(new RouteOnlyBlock())];
-    protected override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map){
         inventory.Edit().AddKeyword("RouteOnlyBlock").Replace(inventory, map);
         map.Delete(inventory/inventory.Select(BlockType.Item).Any(["MapStart","Finish","Checkpoint"]));
         map.PlaceStagedBlocks();

@@ -4,7 +4,7 @@ public class ChangeEnvironment(string GamePlay): Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    protected override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map){
         inventory.Select("Gameplay").Edit().RemoveKeyword("Snow").RemoveKeyword("Desert").RemoveKeyword("Rally").RemoveKeyword("Stadium").AddKeyword(GamePlay).Replace(inventory, map);
         Inventory start = inventory.Select(BlockType.Block).Select("MapStart");
         Article GateSpecial = inventory.GetArticle("GateGameplay" + GamePlay);
@@ -41,7 +41,7 @@ public class ChangeSnowCarswitch(string GamePlay): Alteration {
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    protected override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map){
         inventory.Select(["Gameplay","Snow"]).Edit().RemoveKeyword("Snow").AddKeyword(GamePlay).Replace(inventory, map);
         map.PlaceStagedBlocks();
     }

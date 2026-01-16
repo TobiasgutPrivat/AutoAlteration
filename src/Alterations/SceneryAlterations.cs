@@ -8,7 +8,7 @@ public class SnowScenery : Alteration
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    protected override void Run(Inventory inventory, Map map)
+    public override void Run(Inventory inventory, Map map)
     {
         // Scenery blocks: 
         inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Dirt"]).AddKeyword("Ice").Replace(inventory, map);
@@ -54,7 +54,7 @@ public class SandScenery : Alteration
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    protected override void Run(Inventory inventory, Map map)
+    public override void Run(Inventory inventory, Map map)
     {
         // Scenery blocks: 
         inventory.Any(["Deco","Water","DecoWall","DecoPlatform"]).Edit().RemoveKeyword(["Grass","Ice"]).AddKeyword("Dirt").Replace(inventory, map);
@@ -107,7 +107,7 @@ public class GrassScenery : Alteration
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    protected override void Run(Inventory inventory, Map map)
+    public override void Run(Inventory inventory, Map map)
     {
         // Scenery blocks: 
         Inventory DecoWater = inventory.Any(["Deco", "Water", "DecoWall", "DecoPlatform"]);

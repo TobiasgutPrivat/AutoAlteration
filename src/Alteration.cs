@@ -7,11 +7,11 @@ public abstract class Alteration {
 
     public virtual List<Alteration> AlterationsBefore { get; } = [];
     internal virtual List<CustomBlockAlteration> customBlockAlts { get; } = [];
-    internal virtual List<ArticleProvider> articleProviders { get; } = [];
+    internal virtual List<ArticleProvider> customBlocks { get; } = [];
 
     public const float PI = (float)Math.PI;
     
-    protected abstract void Run(Inventory inventory, Map map);
+    public abstract void Run(Inventory inventory, Map map);
     public void Run(Map map, List<ArticleProvider>? customBlocks = null)
     {
         foreach (Alteration alteration in AlterationsBefore)
@@ -19,7 +19,8 @@ public abstract class Alteration {
             alteration.Run(map);
         }
         Inventory inventory = [];
-        foreach (ArticleProvider provider in (List<ArticleProvider>)[AlterationConfig.VanillaArticles, .. articleProviders, .. customBlocks ?? []])
+        List<ArticleProvider> articleProviders = [AlterationConfig.VanillaArticles, .. this.customBlocks, .. customBlocks ?? []];
+        foreach (ArticleProvider provider in articleProviders)
         {
             AlterationConfig.Keywords.AddRange(provider.GetAdditionalKeywords());
             inventory |= [.. provider.GetArticles()];
@@ -34,17 +35,23 @@ public abstract class Alteration {
         if (map.embeddedBlocks.Count != 0)
         {
             EmbeddedProvider embeddedProvider = new(map);
-            inventory |= [.. embeddedProvider.GetArticles()];
-            foreach (CustomBlockAlteration customBlockAlteration in customBlockAlts)
+            Inventory embeddedArticles = [.. embeddedProvider.GetArticles()];
+            // foreach (CustomBlockAlteration customBlockAlteration in customBlockAlts) //not yet working
+            // {
+            //     inventory |= [.. embeddedProvider.GetAlteredArticles(customBlockAlteration)];
+            // }
+            foreach (ArticleProvider articleProvider in articleProviders)
             {
-                inventory |= [.. embeddedProvider.GetAlteredArticles(customBlockAlteration)];
+                articleProvider.EmbeddedChanges(embeddedArticles);
             }
+            inventory |= embeddedArticles;
         }
 
         //logging
         if (AlterationConfig.devMode) inventory.Export(Name);
         
         //Run alteration
+        inventory.Export("temp");
         Run(inventory, map);
         AlterationConfig.mapCount++;
             

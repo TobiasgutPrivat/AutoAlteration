@@ -1,14 +1,10 @@
-using GBX.NET;
-
 class TMNFArticleProvider() : ArticleProvider("TMNF")
 {
-    protected override List<Article> GenerateArticles() 
-    {
-        // get Customblocks from TMNF Folder
-        List<Article> articles = base.GenerateArticles(); 
-        // Create Checkpoint Triggers
-        articles.AddRange(new Inventory(articles).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("CheckpointTrigger").SetChain([new Offset(0, 2, 0)]).getEdited());
+    protected override List<Article> GenerateArticles() { return []; }
 
-        return articles;
+    public override void EmbeddedChanges(Inventory inventory) 
+    {
+        // Create Checkpoint Triggers
+        inventory.AddRange(inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("CheckpointTrigger").SetChain([new Offset(16, 0, 16)]).getEdited());
     }
 }

@@ -6,7 +6,7 @@ public class GameMode(string mode) : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true; //untested
 
-    protected override void Run(Inventory inventory, Map map) {
+    public override void Run(Inventory inventory, Map map) {
         map.map.MapType = "TrackMania\\" + mode;
         map.map.ChallengeParameters ??= new ();
         map.map.ChallengeParameters.MapType = "TrackMania\\" + mode;
