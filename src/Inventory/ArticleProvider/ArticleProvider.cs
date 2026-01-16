@@ -1,7 +1,7 @@
 // base implementation designed to provide articles from a specific customblocks folder
 public class ArticleProvider(string? subFolder = null)
 {
-    protected virtual string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, subFolder ?? ""); }
+    protected virtual string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, subFolder!); }
     private List<Article>? articles = null;
     public List<Article> GetArticles() //TODO maybe merge with GetAlteredArticles?
     {
@@ -32,7 +32,7 @@ public class ArticleProvider(string? subFolder = null)
     public virtual List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration)
     {
         string Name = customBlockAlteration.GetType().Name;
-        string folder = Path.Combine(AlterationConfig.CacheFolder, Name);
+        string folder = Path.Combine(AlterationConfig.CacheFolder, subFolder! , Name);
         if (!Directory.Exists(folder))
         {
             Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
@@ -46,10 +46,10 @@ public class ArticleProvider(string? subFolder = null)
         Inventory alteredArticles = [];
 
         alteredArticles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
-            new Article(Path.GetFileName(x), BlockType.CustomBlock, x)));
+            new Article(x.Replace(folder + "\\", ""), BlockType.CustomBlock, x)));
 
         alteredArticles.AddRange(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
-            new Article(Path.GetFileName(x), BlockType.CustomItem, x)));
+            new Article(x.Replace(folder + "\\", ""), BlockType.CustomItem, x)));
 
         InventoryChanges(alteredArticles);
         return alteredArticles.ToList();

@@ -28,7 +28,7 @@ public class CustomBlock
     else if (blockPath.Contains(".Item.gbx", StringComparison.OrdinalIgnoreCase)){
       Type = BlockType.Item;
       if (customBlock.EntityModelEdition is not null){
-        CGameCommonItemEntityModelEdition Item = (CGameCommonItemEntityModelEdition)customBlock.EntityModelEdition;
+        CGameCommonItemEntityModelEdition Item = (CGameCommonItemEntityModelEdition)customBlock.EntityModelEdition; //TODO fix issue when of type plugprefab
         if (Item.MeshCrystal is not null){
           MeshCrystals.Add(Item.MeshCrystal);
         }
