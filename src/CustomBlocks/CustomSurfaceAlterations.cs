@@ -2,24 +2,27 @@ using GBX.NET.Engines.Plug;
 
 public class CustomSurfaceAlteration(string Surface, string RoadSurface, CPlugSurface.MaterialId SurfacePhysicId) : CustomBlockAlteration {
     public static List<string> DrivableMaterials = ["Stadium\\Media\\Material\\ThemeSnowRoad","Stadium\\Media\\Material\\ThemeSnowRoadBorder","Stadium\\Media\\Material\\PlatformTech","Stadium\\Media\\Modifier\\PlatformDirt\\PlatformTech","Stadium\\Media\\Modifier\\PlatformGrass\\PlatformTech","Stadium\\Media\\Modifier\\PlatformIce\\PlatformTech","Stadium\\Media\\Modifier\\PlatformPlastic\\PlatformTech","Stadium\\Media\\Material\\RoadBump","Stadium\\Media\\Material\\RoadTech","Stadium\\Media\\Material\\RoadDirt","Stadium\\Media\\Material\\RoadIce","Editors\\MeshEditorMedia\\Materials\\TechSuperMagnetic","Stadium\\Media\\Modifier\\PlatformDirt\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformGrass\\OpenTechBorders","Stadium\\Media\\Modifier\\PlatformIce\\OpenTechBorders","Stadium\\Media\\Material\\OpenTechBorders",
-    "Stadium\\Media\\Material_BlockCustom\\CustomConcrete","Stadium\\Media\\Material_BlockCustom\\CustomModOpaque","Stadium256\\Media\\Material_BlockCustom\\WarpGlass","Stadium256\\Media\\Material_BlockCustom\\WarpWall","Stadium256\\Media\\Material_BlockCustom\\WarpTechnic"]; //TMNF Surfaces
+    "Stadium\\Media\\Material_BlockCustom\\CustomConcrete","Stadium\\Media\\Material_BlockCustom\\CustomModOpaque","Editors\\MeshEditorMedia\\Materials\\Concrete"];//,"Stadium256\\Media\\Material_BlockCustom\\WarpGlass","Stadium256\\Media\\Material_BlockCustom\\WarpWall","Stadium256\\Media\\Material_BlockCustom\\WarpTechnic"]; //TMNF Surfaces
 
     public override bool Run(CustomBlock customBlock)
     {
         bool altered = false;
-        List<CPlugCrystal.Face> facesToModify = [];
         string SurfaceToUse = customBlock.Name.Contains("Road") && !customBlock.Name.Contains("Open") ? RoadSurface : Surface;
-        foreach (CPlugCrystal.GeometryLayer layer in customBlock.MeshCrystals.SelectMany(x => x.Layers).Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).Cast<CPlugCrystal.GeometryLayer>()) {
-            if (layer.Crystal is not null) {
-                facesToModify.AddRange(layer.Crystal.Faces.ToList().Where(x => GetMaterialLink(x) != SurfaceToUse && DrivableMaterials.Contains(GetMaterialLink(x))));
-            }
-        }
-        facesToModify?.ForEach(x =>
-        {
-            x.Material!.MaterialUserInst!.Link = SurfaceToUse;
-            x.Material.MaterialUserInst.SurfacePhysicId = SurfacePhysicId;
+        //TODO maybe replace Stadium\Media\Material\DecalSpecialTurbo with Stadium\Media\Modifier\Turbo\Decal
+        customBlock.MeshCrystals.SelectMany(x => x.Layers).Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).Cast<CPlugCrystal.GeometryLayer>().ToList().ForEach(x => {
+            x.Crystal?.Faces.ToList().ForEach(y => {
+                if (GetMaterialLink(y) != SurfaceToUse && DrivableMaterials.Contains(GetMaterialLink(y)))
+                {
+                    y.Material!.MaterialUserInst!.Link = SurfaceToUse;
+                    y.Material.MaterialUserInst.SurfacePhysicId = SurfacePhysicId;
+                    altered = true;
+                }
+                // if (GetMaterialLink(y) == "Stadium\\Media\\Material\\DecalSpecialTurbo") {
+                //     y.Material!.MaterialUserInst!.Link = "Stadium\\Media\\Modifier\\Turbo\\Decal";
+                //     altered = true;
+                // }
+            });
         });
-        altered |= facesToModify is not null && facesToModify.Count > 0;
 
         foreach (CPlugSolid2Model model in customBlock.Models) {
             if (model.CustomMaterials is null) return false;
