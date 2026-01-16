@@ -37,7 +37,7 @@ public class Dirt : Surface {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public Dirt() : base(new DirtSurface(), "Dirt", true, new SandScenery()) { }
+    public Dirt() : base(new DirtSurface(), "Dirt", false, new SandScenery()) { }
 }
 
 //TODO Fast-Magnet
@@ -49,7 +49,7 @@ public class Grass : Surface {
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    public Grass() : base(new GrassSurface(), "Grass", true, new GrassScenery()) { }
+    public Grass() : base(new GrassSurface(), "Grass", false, new GrassScenery()) { }
 }
 
 public class Ice : Surface {
@@ -57,7 +57,7 @@ public class Ice : Surface {
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    public Ice() : base(new IceSurface(), "Ice", true) { }
+    public Ice() : base(new IceSurface(), "Ice", false) { }
 }
 
 public class Magnet : Surface
@@ -114,7 +114,7 @@ public class Plastic : Surface {
     public override bool LikeAN => true;
     public override bool Complete => false;
     
-    public Plastic() : base(new PlasticSurface(), "Plastic", true) { }
+    public Plastic() : base(new PlasticSurface(), "Plastic", false) { }
 
 }
 
@@ -124,7 +124,7 @@ public class Road : Surface {
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public Road() : base(new TechSurface(), "Tech", true) { }
+    public Road() : base(new TechSurface(), "Tech", false) { }
 }
 
 public class Wood : Surface {
