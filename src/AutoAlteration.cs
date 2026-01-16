@@ -50,6 +50,11 @@ public class AutoAlteration {
     }
 
     public static void AlterFile(SList<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name, bool skipUnchanged = true) {
+        List<string> Corrupted = ["RoadTechCurve5.Block.Gbx","Crystal\\Classic\\MM\\Stadium\\RoadMain\\Hazards\\StadiumBump1\\Air_0_0.Item.Gbx"];
+        if (Corrupted.Any(x => sourceFile.EndsWith(x))) {
+            Console.WriteLine("Skipped Corrupted File " + sourceFile);
+            return;
+        }
         CustomBlock customBlock;
         try {
             customBlock = new CustomBlock(sourceFile);
