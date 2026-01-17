@@ -28,7 +28,8 @@ public class AlterationScript {
                 item.TryGetProperty("CustomBlocks", out _) ? item.GetProperty("CustomBlocks").EnumerateArray().Select(x => 
                     GetCustomBlockProvider(x.GetString() ?? throw new Exception("CustomBlocks not a string"))
                     ).ToList() 
-                    : new List<ArticleProvider>()
+                    : new List<ArticleProvider>(),
+                item.TryGetProperty("Skip", out _) ? item.GetProperty("Skip").GetInt32() : 0
             );
         }
     }
@@ -52,7 +53,7 @@ public class AlterationScript {
         }
     }
 
-    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations, List<ArticleProvider> customBlocks)
+    public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations, List<ArticleProvider> customBlocks, int skip)
     {
         string warning = ValidateSource(type, source);
         if (warning != ""){
@@ -72,7 +73,7 @@ public class AlterationScript {
                 AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name,customBlocks);
                 break;
             case AlterType.Folder:
-                AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name,customBlocks);
+                AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name,customBlocks,skip);
                 break;
             case AlterType.FullFolder:
                 AutoAlteration.AlterAll(alterations.ToList(),source,destination,name,customBlocks);

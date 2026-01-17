@@ -2,8 +2,9 @@ using System.IO.Pipes;
 using System.Reflection;
 
 public class AutoAlteration {
-    public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null) {
+    public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null, int skip = 0) {
         foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
+            if (skip > 0) {skip--; continue;};
             try {
                 AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name,customBlocks);
             } catch (Exception ex) {
