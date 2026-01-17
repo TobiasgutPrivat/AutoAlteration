@@ -8,6 +8,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
     internal override List<CustomBlockAlteration> customBlockAlts => [SurfaceAlt];
     public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [sceneryAlteration] : [];
     public List<string> VanillaSurfaces => ["Grass","Dirt","Plastic","Ice","Tech"];
+    public List<string> TMNFExceptions => ["StadiumFabric"];
 
     public override void Run(Inventory inventory, Map map) {
         if (light) {
@@ -24,7 +25,8 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
             // map.stagedBlocks.ForEach(x => x.IsAir = false);
             map.PlaceStagedBlocks(false);
         } else {
-            inventory.Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
+            Inventory exceptions = [.. TMNFExceptions.SelectMany(x => inventory.SelectWord(x).Select("Air"))];
+            (inventory/exceptions).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
             // inventory.Edit().AddKeyword([$"{Surface}Surface","Middle"]));
             map.PlaceStagedBlocks(false);
         }

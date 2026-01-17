@@ -23,23 +23,14 @@ public abstract class Alteration {
         foreach (ArticleProvider provider in articleProviders)
         {
             AlterationConfig.Keywords.AddRange(provider.GetAdditionalKeywords());
-            inventory |= [.. provider.GetArticles()];
-            foreach (CustomBlockAlteration alteration in customBlockAlts)
-            {
-                AlterationConfig.Keywords.Add(alteration.Name);
-                inventory |= [.. provider.GetAlteredArticles(alteration)];
-            }
+            inventory |= [.. provider.GetArticles(customBlockAlts)];
         }
 
         //Map specific custom blocks
         if (map.embeddedBlocks.Count != 0)
         {
             EmbeddedProvider embeddedProvider = new(map);
-            Inventory embeddedArticles = [.. embeddedProvider.GetArticles()];
-            // foreach (CustomBlockAlteration customBlockAlteration in customBlockAlts) //not yet working
-            // {
-            //     inventory |= [.. embeddedProvider.GetAlteredArticles(customBlockAlteration)];
-            // }
+            Inventory embeddedArticles = [.. embeddedProvider.GetArticles()]; // TODO add customblockAlts (currently corrupting altered reembedded blocks)
             foreach (ArticleProvider articleProvider in articleProviders)
             {
                 articleProvider.EmbeddedChanges(embeddedArticles);

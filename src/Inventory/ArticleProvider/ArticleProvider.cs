@@ -2,14 +2,28 @@
 public class ArticleProvider(string? subFolder = null)
 {
     protected virtual string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, subFolder!); }
-    private List<Article>? articles = null;
-    public List<Article> GetArticles() //TODO maybe merge with GetAlteredArticles?
+    private Dictionary<string, List<Article>> articleDict = [];
+    public List<Article> GetArticles(List<CustomBlockAlteration>? customBlockAlterations = null) //TODO maybe merge with GetAlteredArticles?
     {
-        if (articles == null) {
+        customBlockAlterations ??= [];
+        string key;
+        if (customBlockAlterations.Count == 0) {
+            key = "";
+        } else {
+            key = customBlockAlterations?.Select(x => x.GetType().Name).Aggregate((a, b) => a + ";" + b) ?? "";
+        }
+
+        if (articleDict.TryGetValue(key, out List<Article>? articles) && articles != null) {
+            return articles;
+        } else {
             articles = GenerateArticles();
+            foreach (CustomBlockAlteration customBlockAlteration in customBlockAlterations!) {
+                articles.AddRange(GetAlteredArticles(customBlockAlteration));
+            }
             InventoryChanges([.. articles]);
+            articleDict[key] = articles;
+            return articles;
         } 
-        return articles;
     }
 
     protected virtual List<Article> GenerateArticles() {
@@ -29,7 +43,7 @@ public class ArticleProvider(string? subFolder = null)
     }
 
     // base implementation alters and returns Customblocks from origin folder
-    public virtual List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration)
+    protected virtual List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration)
     {
         string Name = customBlockAlteration.GetType().Name;
         string folder = Path.Combine(AlterationConfig.CacheFolder, subFolder! , Name);
@@ -43,7 +57,7 @@ public class ArticleProvider(string? subFolder = null)
             AutoAlteration.AlterAll(customBlockAlteration, GetOrigin(), folder + "Temp", Name);
             Directory.Move(folder + "Temp", folder);
         }
-        Inventory alteredArticles = [];
+        List<Article> alteredArticles = [];
 
         alteredArticles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(x.Replace(folder + "\\", ""), BlockType.CustomBlock, x)));
@@ -51,8 +65,8 @@ public class ArticleProvider(string? subFolder = null)
         alteredArticles.AddRange(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(x.Replace(folder + "\\", ""), BlockType.CustomItem, x)));
 
-        InventoryChanges(alteredArticles);
-        return alteredArticles.ToList();
+        // InventoryChanges(alteredArticles);
+        return alteredArticles;
     }
 
     protected virtual void InventoryChanges(Inventory inventory) { }

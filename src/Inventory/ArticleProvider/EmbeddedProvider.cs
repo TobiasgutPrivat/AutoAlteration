@@ -2,7 +2,7 @@ class EmbeddedProvider(Map map) : ArticleProvider()
 {
     protected override string GetOrigin() { return Path.Join(Path.GetTempPath(), "AutoAlteration"); }
 
-    public override List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration) {
+    protected override List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration) {
         // cleanup previous
         string Name = customBlockAlteration.GetType().Name;
         string folder = Path.Combine(AlterationConfig.CacheFolder, Name);

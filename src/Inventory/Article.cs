@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using GBX.NET;
 
 public class Article {
@@ -87,7 +88,6 @@ public class Article {
         if (splits[0].StartsWith("NC2_")) splits = splits[1..];//remove NC2_*
         splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
 
-
         //Name
         string name = splits.Last(); // the filename/blockname
         name = name.Replace(".Block.Gbx", "", StringComparison.OrdinalIgnoreCase).Replace(".Item.gbx", "", StringComparison.OrdinalIgnoreCase); // remove file ending if present
@@ -107,7 +107,12 @@ public class Article {
             Keywords.Add("To");
             nameSplits.AddRange(ToSplits);
         } else {
-            nameSplits = name.Split("_").ToList();
+            if (Regex.IsMatch(name, "_\\d_\\d")) { // for NC2 naming convention
+                nameSplits = [Regex.Replace(name, "_\\d_\\d",""), Regex.Match(name, "_\\d_\\d").Captures[0].Value];
+                nameLength += 2; // account for underscores
+            } else {
+                nameSplits = name.Split("_").ToList();
+            }
         }
 
         //CustomblockSets, could have issues if set is part of toKeywords

@@ -6,7 +6,6 @@ public class CustomSurfaceAlteration(string Surface, string RoadSurface, CPlugSu
     ,"Editors\\MeshEditorMedia\\Materials\\Concrete"]; // Special surfaces, maybe add more later
     public static List<string> EditPhysicsOnly = ["Stadium256\\Media\\Material_BlockCustom\\WarpGlass"];
 
-
     public override bool Run(CustomBlock customBlock)
     {
         bool altered = false;
