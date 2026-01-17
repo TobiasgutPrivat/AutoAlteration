@@ -30,9 +30,8 @@ public class Map
   { 
     string folder = Path.GetDirectoryName(path) ?? throw new Exception("Invalid Path");
     NewMapUid();
-    RemoveAuthor(); //TODO test if causes crashes
+    RemoveAuthor();
     map.RemovePassword();
-    RemoveUnusedEmbedded();
     if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
     gbx.Save(path);
   }
@@ -117,28 +116,6 @@ public class Map
       x.ExtractToFile(filePath, true);
     });
     return;
-  }
-
-  public void RemoveUnusedEmbedded()
-  {
-    HashSet<string> used = [];
-    foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id.Contains("_CustomBlock", StringComparison.OrdinalIgnoreCase)))
-    {
-      used.Add(ctnBlock.BlockModel.Id.Replace("_CustomBlock", "", StringComparison.OrdinalIgnoreCase));
-    }
-    foreach (var ctnItem in map.GetAnchoredObjects().Where(x => x.ItemModel.Id.Contains(".Item.Gbx", StringComparison.OrdinalIgnoreCase)))
-    {
-      used.Add(ctnItem.ItemModel.Id);
-    }
-
-    map.UpdateEmbeddedZipData((ZipArchive zipArchive) =>
-    {
-      zipArchive.Entries.ToList().ForEach(x => {
-        if (!used.Contains(x.FullName.Replace("/", "\\").Replace("Items\\", "").Replace("Blocks\\", ""), StringComparer.OrdinalIgnoreCase)){
-          x.Delete();
-        }
-      });
-    });
   }
   #endregion
 
