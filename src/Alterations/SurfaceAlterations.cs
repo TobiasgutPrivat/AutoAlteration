@@ -25,6 +25,8 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
             // map.stagedBlocks.ForEach(x => x.IsAir = false);
             map.PlaceStagedBlocks(false);
         } else {
+            Inventory Platform = inventory.Select("Platform").Any(VanillaSurfaces); //temp
+            Platform.Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(Surface).Replace(inventory, map); //temp
             Inventory exceptions = [.. TMNFExceptions.SelectMany(x => inventory.SelectWord(x).Any(["Air","Ground"]))];
             (inventory/exceptions).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
             // inventory.Edit().AddKeyword([$"{Surface}Surface","Middle"]));
