@@ -41,7 +41,7 @@ public class Replay
             stream.CopyToAsync(replayfs).GetAwaiter().GetResult();
             replayfs.Close();
             //Load Replay
-            Gbx<CGameCtnGhost> replayGbx = Gbx.Parse<CGameCtnGhost>(replayPath); ;
+            Gbx<CGameCtnGhost> replayGbx = Gbx.Parse<CGameCtnGhost>(replayPath);
             WRGhost = replayGbx.Node;
             //clear
             File.Delete(replayPath);

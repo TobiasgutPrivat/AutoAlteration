@@ -426,8 +426,8 @@ public class STTF : Alteration {
     public override bool Complete => true;
 
     public override void Run(Inventory inventory, Map map){
-        map.Delete(inventory.Select("Checkpoint").Any(["Ring","Gate"]));
         inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").Replace(inventory, map);
+        map.Delete(inventory.Select("Checkpoint"));// rest of cps
         map.PlaceStagedBlocks();
     }
 }

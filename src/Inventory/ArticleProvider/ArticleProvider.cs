@@ -34,10 +34,10 @@ public class ArticleProvider(string? subFolder = null)
         }
         List<Article> articles = [];
         articles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
-            new Article(x.Replace(folder + "\\", ""), BlockType.CustomBlock, x)));
+            new Article(Path.GetRelativePath(folder, x), BlockType.CustomBlock, x)));
 
         articles.AddRange(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
-            new Article(x.Replace(folder + "\\", ""), BlockType.CustomItem, x)));
+            new Article(Path.GetRelativePath(folder, x), BlockType.CustomItem, x)));
 
         return articles;
     }
