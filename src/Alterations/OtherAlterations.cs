@@ -1,6 +1,7 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
 using GBX.NET.Engines.GameData;
+using GBX.NET.Engines.Scene;
 
 public class AirMode: Alteration {
     public override string Description => "Turn all Blocks to Air-Mode, should not change anything";
@@ -513,14 +514,43 @@ public class WRTrace : Alteration {
     
     public override void Run(Inventory inventory, Map map){
         Replay? replay = map.GetWRReplay();
-        if (replay == null || replay.Positions == null || replay.Positions.Count == 0){
+        List<Position>? positions = replay?.Positions;
+        if (replay == null || positions == null || positions.Count == 0){
             return;
         }
-        // List<CPlugEntRecordData.EntRecordListElem>? entries = ghost.RecordData?.EntList
-        //     .Where(x => x.Samples.Count > 20 && x.Samples.First() is CSceneVehicleVis.EntRecordDelta).ToList(); //20 is an aproximate to not select incomplete entries
-        // List<Position> positions = entries?.SelectMany(entry => entry.Samples.Where(sample => sample is CSceneVehicleVis.EntRecordDelta).Cast<CSceneVehicleVis.EntRecordDelta>())
-        //     .Select(sample => new Position(sample.Position, new Vec3(sample.PitchYawRoll.Y, sample.PitchYawRoll.X, sample.PitchYawRoll.Z))).ToList() ?? [];
-        // List<CPlugEntRecordData.EntRecordDelta> samples = entry?.Samples.Where(sample => sample is CPlugEntRecordData.EntRecordDelta).Cast<CPlugEntRecordData.EntRecordDelta>().ToList() ?? [];
+
+        // cut out respawns
+        int respawnIndex;
+        while (true) {
+            respawnIndex = 0;
+            for (int i = 1; i < positions.Count; i++)
+            {
+                Position prev = positions[i-1];
+                Position current = positions[i];
+                if (prev != null && current != null) {
+                    Vec3 diffrence = current.coords - prev.coords;
+                    double distance = Math.Sqrt(diffrence.X * diffrence.X + diffrence.Y * diffrence.Y + diffrence.Z * diffrence.Z);
+                    if (distance > 100) { //100 is an aproximate threshold, adjust as needed
+                        respawnIndex = i;
+                    }
+                }
+            }
+            if (respawnIndex == 0) break; //no respawn found, exit loop
+            int closestIndex = 0; // offset relative to previous segment
+            double closestDistance = double.MaxValue;
+            int index = 0;
+            for (int i = 1; i < respawnIndex-10; i++) {
+                var distance = getDistance(positions[respawnIndex], positions[i]);
+                if (distance < closestDistance) {
+                    closestDistance = distance;  
+                    closestIndex = index;
+                }
+                index++;
+                //cut out from closestIndex to respawnIndex
+            }
+            positions.RemoveRange(closestIndex, respawnIndex - closestIndex);
+        }
+
         Article stadiumCar = inventory.GetArticle("StadiumCar.Item.Gbx");
         if (map.embeddedBlocks.All(x => x.Key != stadiumCar.Name))
         {
@@ -532,6 +562,11 @@ public class WRTrace : Alteration {
             Position position = replay.Positions[i];
             CGameCtnAnchoredObject item = map.map.PlaceAnchoredObject(new Ident("StadiumCar.Item.Gbx", new Id(26), "Nadeo"), position.coords, position.YawPitchRoll);
         }
+    }
+    
+    float getDistance(Position a, Position b) {
+        Vec3 diffrence = b.coords - a.coords;
+        return (float)Math.Sqrt(diffrence.X * diffrence.X + diffrence.Y * diffrence.Y + diffrence.Z * diffrence.Z);
     }
 }
 
