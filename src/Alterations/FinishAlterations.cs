@@ -74,7 +74,18 @@ public class Inclined : Alteration {
 
 //puzzle (manual)
 
-//TODO reverse, (custom)blocks
+public class Reverse : Alteration {
+    public override string Description => "swaps start and finish";
+    public override bool Published => true;
+    public override bool LikeAN => false;
+    public override bool Complete => true;
+
+    public override void Run(Inventory inventory, Map map){
+        inventory.Select("MapStart").Edit().RemoveKeyword("MapStart").AddKeyword("Finish").Replace(inventory, map);
+        inventory.Select("Finish").Edit().RemoveKeyword("Finish").AddKeyword("MapStart").Replace(inventory, map);
+        map.PlaceStagedBlocks();
+    }
+}
 
 //TODO Roofing, (Macro)block
 

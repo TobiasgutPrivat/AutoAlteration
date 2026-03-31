@@ -1,5 +1,6 @@
 class EffectUtils {
     public static List<string> AllEffects = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette","Fragile","NoSteering","SlowMotion","NoBrake","Cruise","Reset","NoEngine"];
+    public static List<string> AllBoosters = ["Boost","Boost2","Turbo","Turbo2","TurboRoulette"];
 }
 
 public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool oriented = false): Alteration {
@@ -209,11 +210,11 @@ public class RedEffects: Alteration {
 public class RngBooster: Alteration {
     public override string Description => "replaces all Effects with RNG Turbo";
     public override bool Published => true;
-    public override bool LikeAN => true;
+    public override bool LikeAN => false;
     public override bool Complete => true;
 
     public override void Run(Inventory inventory, Map map){
-        inventory.Any(EffectUtils.AllEffects).Edit().RemoveKeyword(EffectUtils.AllEffects).AddKeyword("TurboRoulette").Replace(inventory, map);
+        inventory.Any(EffectUtils.AllBoosters).Edit().RemoveKeyword(EffectUtils.AllBoosters).AddKeyword("TurboRoulette").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 /// <summary>
 /// Provides vanilla articles based on json data files.
 /// </summary>
-class VanillaArticleProvider() : ArticleProvider("Vanilla")
+class VanillaArticleProvider() : ArticleProvider("VanillaItems")
 {
     private static readonly float PI = (float)Math.PI;
     

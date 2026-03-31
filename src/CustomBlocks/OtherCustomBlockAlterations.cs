@@ -15,7 +15,8 @@ public class ResizeBlock(float factor) : CustomBlockAlteration
         }
         else if (customBlock.Type == BlockType.Item)
         {
-            //TODO
+            // CGameCommonItemEntityModelEdition Item = (CGameCommonItemEntityModelEdition)customBlock.customBlock.EntityModelEdition; 
+            
         }
         foreach (CPlugCrystal.Layer layer in customBlock.MeshCrystals.SelectMany(x => x.Layers))
         {

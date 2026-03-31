@@ -1,7 +1,6 @@
+using System.Globalization;
 using GBX.NET;
 using GBX.NET.Engines.Game;
-using GBX.NET.Engines.GameData;
-using GBX.NET.Engines.Scene;
 
 public class AirMode: Alteration {
     public override string Description => "Turn all Blocks to Air-Mode, should not change anything";
@@ -144,7 +143,20 @@ public class Checkpointnt: CPEffect { //only blocks Checkpoints
     }
 }
 
-//TODO Cleaned (custom)block
+public class Cleaned: Alteration {
+    public override string Description => "Removes all Effect blocks";
+    public override bool Published => false;
+    public override bool LikeAN => false;
+    public override bool Complete => false;
+
+    public override void Run(Inventory inventory, Map map){
+        inventory.Select(BlockType.Block).Any(EffectUtils.AllEffects).Edit()
+            .RemoveKeyword(EffectUtils.AllEffects).Replace(inventory, map);
+        map.Delete(inventory.Select(BlockType.Item).Any(EffectUtils.AllEffects));
+        //TODO water, ...
+        map.PlaceStagedBlocks();
+    }
+}
 
 //TODO color-combined (multiple) Maps
 
@@ -249,12 +261,11 @@ public class Earthquake : Alteration {
 public class Fast: Alteration { //TODO Wall and tilted platform (check Inventory)
     public override string Description => "Replaces all checkpoints with red Turbo";
     public override bool Published => true;
-    public override bool LikeAN => true;
+    public override bool LikeAN => false;
     public override bool Complete => true;
 
     public override void Run(Inventory inventory, Map map){
-        inventory.Select(BlockType.Block).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Turbo2").Replace(inventory, map);
-        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword(["Checkpoint","Left","Right","Center"]).AddKeyword("Turbo2").Replace(inventory, map);
+        inventory.Any(EffectUtils.AllBoosters).Edit().RemoveKeyword(EffectUtils.AllBoosters).AddKeyword("Turbo2").Replace(inventory, map);
         map.PlaceStagedBlocks();
     }
 }
@@ -655,5 +666,45 @@ public class Gaps : Alteration {
             x.position.coords = new Vec3(x.position.coords.X * 17/16, x.position.coords.Y * 17/16, x.position.coords.Z * 17/16)
         );
         map.PlaceStagedBlocks();
+    }
+}
+
+class RandomAlts(int alts = 5) : Alteration {
+    public override string Description => "Applies random alterations to the map (designed for tmnf rn)";
+    public override bool Published => true;
+    public override bool LikeAN => true;
+    public override bool Complete => false;
+
+    public override void Run(Inventory inventory, Map map){
+        Random rand = new();
+        // only usually playable are used
+        List<List<Alteration>> categories = [ //categorizes into conflicting alterations
+            //order matters
+            [new RandomHoles(), new Holes(), new WRTrace(), new Earthquake(), new Reverse()], //other
+            [new Grass(),new Dirt(),new Ice(),new Plastic(),new Road(),new Magnet(),new Wood()], //block type
+            [new OneBack(), new OneDown(), new OneForward(), new OneLeft(), new OneRight(), new OneUP()], //fin placement
+            [new CPFull(), new CPLink(), new CPsRotated(), new CPLess(), new CPBoost(), new Checkpointnt(), new STTF()], //checkpoint changes
+            [new Boosterless(), new AntiBooster(), new RngBooster(), new Fast(), new Broken(), new NoEffect(), new SpeedLimit()], //effect changes
+            // [new Mini(), new SuperSized()], //block size changes //TODO fix those for TMNF Items
+            [new Flipped(), new FlippedYellowReactorDown(), new Tilted()], //blocks positions
+            [new Fragile(), new Cruise(), new FreeWheel(), new NoBrake(), new Yeet(), new YeetDown(), new NoSteer(), new Glider(), new SlowMo(), new Inclined()], //add effects
+            [new Stadium(), new Snow(), new Desert(), new Rally()] //car changes
+        ];
+
+        List<List<Alteration>> chosenCategories = [];
+
+        //select five random categories
+        for (int i = 0; i < alts; i++){
+            chosenCategories.Add(categories[rand.Next(categories.Count)]);
+            categories.Remove(chosenCategories.Last());
+        }
+
+        // order matters, so apply in order of categories
+        chosenCategories = chosenCategories.OrderBy(x => categories.IndexOf(x)).ToList();
+
+        foreach (List<Alteration> category in chosenCategories){
+            Alteration alt = category[rand.Next(category.Count)];
+            alt.Run(inventory, map);
+        }
     }
 }
