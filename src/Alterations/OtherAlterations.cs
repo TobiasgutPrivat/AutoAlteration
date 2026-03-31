@@ -669,11 +669,12 @@ public class Gaps : Alteration {
     }
 }
 
-class RandomAlts(int alts = 5) : Alteration {
+class RandomAlts : Alteration {
     public override string Description => "Applies random alterations to the map (designed for tmnf rn)";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => false;
+    static int alts = 5;
 
     public override void Run(Inventory inventory, Map map){
         Random rand = new();
@@ -695,11 +696,10 @@ class RandomAlts(int alts = 5) : Alteration {
 
         //select five random categories
         for (int i = 0; i < alts; i++){
-            chosenCategories.Add(categories[rand.Next(categories.Count)]);
-            categories.Remove(chosenCategories.Last());
+            chosenCategories.Add(categories.Except(chosenCategories).ToList()[rand.Next(categories.Except(chosenCategories).Count())]);
         }
 
-        // order matters, so apply in order of categories
+        // order categories by original list
         chosenCategories = chosenCategories.OrderBy(x => categories.IndexOf(x)).ToList();
 
         foreach (List<Alteration> category in chosenCategories){
