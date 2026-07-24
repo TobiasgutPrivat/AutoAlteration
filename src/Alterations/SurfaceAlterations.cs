@@ -53,7 +53,7 @@ public class Grass : Surface {
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
-    public Grass() : base(new GrassSurface(), "Grass", false, new GrassScenery()) { }
+    public Grass() : base(new GrassSurface(), "Grass", false, null) { }
 }
 
 public class Ice : Surface {

@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using GBX.NET;
 using Newtonsoft.Json;
 
@@ -207,7 +208,7 @@ class VanillaArticleProvider() : ArticleProvider("VanillaItems")
     protected override void InventoryChanges(Inventory inventory){
         //Some modifications for better Keyword indexing
         // Danger: does change naming of Articles, can cause compatibility issues and confusion
-        inventory.Select(BlockType.Block).Select("Gate").ToList()
+        inventory.SelectWord("GateCheckpoint").Select(x => Regex.IsMatch(x.Name,@"GateCheckpoint(?!\d+m)")).ToList()
             .ForEach(a => {a.Keywords.Remove("Gate"); a.Keywords.Add("Ring");});
         inventory.Select("Special").ToList()
             .ForEach(a => a.Keywords.Remove("Special"));

@@ -4,21 +4,25 @@ Auto Alterations provides Functionality to automaticly create Trackmania Map-Alt
 
 This Project is based on the GBX.NET Framework from BigBang (Nationsconverter Guy).
 
-Contribution to the repository is very welcome, feel free to create pull requests.
+If you have questions/ideas etc. or want to help please contact me on Discord <strong>(Tobias2g#5288)</strong>
 
-If you encounter problems or you have some questions/ideas etc. please contact me on Discord <strong>(Tobias2g#5288)</strong>
-
-[Guide to implementing Alterations](https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing)
+[Guide to implementing Alterations (partially outdated)](https://docs.google.com/document/d/1h8qPXhsJ8d_mmbTFmXU-r2CUU0RKPhpXaWtdgJrJLeM/edit?usp=sharing)
 
 # How to use
 
-UI-App recommended for normal use (not always up to date)
+This is a C# Console App and i use VS-Code to run the program directly from source code.
 
-[Download](https://1drv.ms/u/c/bf971998d3da6c52/Ec43uQOtQZdInmv-en32fmAB_-tn0nyNPD2hQr8z4424sw?e=ttExio)
+These Ressources might help you to set it up:
 
-Also Alteration Scripts can be defined using json files. [Example](https://1drv.ms/u/c/bf971998d3da6c52/EQbNHWn08upIkWh903vYe6YBgC39OcYKtmoFAoxtys3Pmg?e=289yQq)
+- Git in VS-Code: https://code.visualstudio.com/docs/sourcecontrol/quickstart
+- C# in VS-Code: https://code.visualstudio.com/docs/csharp/get-started
+- Fork github repository (for contribution): https://docs.github.com/en/pull-requests/how-tos/work-with-forks/fork-a-repo
 
-To have more control, or to develop some stuff you need to setup the full Project (see Setup Project)
+<!--
+There can be an issue with nuget source.
+In that case make sure you have correct package source using:
+> dotnet nuget add source https://api.nuget.org/v3/index.json
+-->
 
 ## Available Alterations
 
@@ -159,8 +163,7 @@ Has to follow json formatting rules
 
 ## Known Issues
 
-- The position of Items which are snapped onto something are read incorrectly, resulting in small offsets.
-- Some Map Templates have different height offset when transforming to freeblock mode
+- Offset in height since Vista update
 
 ## Contribution
 
@@ -201,19 +204,6 @@ If this Project gets changes, the UI-App needs to be updated to get those change
 8. open AutoAlterationUI/installer/installer.iss
 9. build installer
 10. publish installer from installer/output/
-
-## Setup Project
-
-1. Install git if you haven't: https://git-scm.com/downloads
-2. Install Dotnet 8.0 sdk if you haven't: https://dotnet.microsoft.com/en-us/download/dotnet/8.0 (make sure nuget is available)
-3. Clone this GitHub Repository into any Folder. You can use this Command in cmd:
-   > git clone https://github.com/TobiasgutPrivat/AutoAlteration.git /{path/to/your/directory}
-
-<!--
-There can be an issue with nuget source.
-In that case make sure you have correct package source using:
-> dotnet nuget add source https://api.nuget.org/v3/index.json
--->
 
 ## RoadMap
 - Refactoring

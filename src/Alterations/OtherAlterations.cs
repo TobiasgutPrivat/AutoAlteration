@@ -426,7 +426,7 @@ public class SuperSized : Alteration{
     public override void Run(Inventory inventory, Map map){
         inventory.Edit().AddKeyword("SupersizedBlock").Replace(inventory, map);
         map.Delete(inventory);
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3((x.position.coords.X - (32 * 24)) * factor, x.position.coords.Y * factor + 500, (x.position.coords.Z - (32 * 24)) * factor));
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3((x.position.coords.X - 12 * 32) * factor, x.position.coords.Y * factor + 500, (x.position.coords.Z - 12 * 32) * factor));
         map.PlaceStagedBlocks();
     }
 }
@@ -634,7 +634,7 @@ public class Mini : Alteration {
     public override void Run(Inventory inventory, Map map){
         inventory.Edit().AddKeyword("MiniBlock").Replace(inventory, map);
         map.Delete(inventory);
-        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3(x.position.coords.X / 2, x.position.coords.Y / 2 + 4, x.position.coords.Z / 2));//4 is offset for normal stadium
+        map.stagedBlocks.ForEach(x => x.position.coords = new Vec3((x.position.coords.X - 12 * 32) / 2, x.position.coords.Y / 2 + 4, (x.position.coords.Z - 12 * 32) / 2));//4 is offset for normal stadium
         map.PlaceStagedBlocks();
     }
 }
