@@ -185,7 +185,6 @@ public class Map
   public void Move(Inventory inventory, MoveChain moveChain) =>
     inventory.ToList().ForEach(a => Move(a, moveChain));
 
-  // All placed blocks and items of an article, with the article's MoveChain applied (semantic position)
   public List<Block> GetBlocks(Article article){
     string articleName = article.Name;
     if (article.Type == BlockType.CustomBlock) articleName += "_CustomBlock";

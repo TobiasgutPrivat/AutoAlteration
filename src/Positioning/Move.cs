@@ -20,7 +20,6 @@ public class Offset: Move{
     }
 }
 
-// Moves along the map axes, independent of the rotation of the position
 public class Translate: Move{
     public Translate(Vec3 vector){
         this.vector = vector;
