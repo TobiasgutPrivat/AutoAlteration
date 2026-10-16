@@ -120,15 +120,13 @@ public class Flags : Alteration {
     internal override List<ArticleProvider> customBlocks => [new ArticleProvider("Flags\\")];
 
     public override void Run(Inventory inventory, Map map){
-        var sttf = new STTF();
-        sttf.Run(inventory, map);
-
+        new STTF().Run(inventory, map);
         map.Delete(inventory.Any(["Finish","Multilap"]));
 
         foreach (string size in new[] { "8m", "16m" }) {
             Article flag = inventory.GetArticle($"Flag{size}");
             Article trigger = inventory.GetArticle($"ClothFinishTriggerFlag{size}.Item.Gbx");
-            map.PlaceRelative(flag, trigger); // the trigger uses the exact pose of its flag
+            map.PlaceRelative(flag, trigger);
         }
 
         map.stagedBlocks.ForEach(b => {
@@ -139,16 +137,13 @@ public class Flags : Alteration {
         map.PlaceStagedBlocks();
     }
 
-    // The chunks are needed for the property to get serialized (same layout as the editor writes)
     private static CGameWaypointSpecialProperty GoalProperty() {
         CGameWaypointSpecialProperty property = new() { Tag = "Goal", Order = 0 };
         property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
         return property;
     }
 
-    // The editor stores the grid cell of an item, in a flag (255) is unset which the game doesn't count as a finish
     private static Byte3 UnitCoord(Vec3 position, Map map) {
-        // y coordinate of the ground, measured on maps made in the editor
         int groundHeight = map.map.Collection.ToString() switch {
             "RedIsland" or "WhiteShore" => 15,
             "BlueBay" or "GreenCoast" => 5,

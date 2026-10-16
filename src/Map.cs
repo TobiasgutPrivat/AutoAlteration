@@ -85,8 +85,6 @@ public class Map
     });
   }
 
-  private void EmbedItem(string name, string path) => EmbedBlock("Items/" + name, path);
-
   public Dictionary<string,BlockType> GetEmbeddedBlocks(){
     if (map.EmbeddedZipData != null && map.EmbeddedZipData.Length > 0) {
       ZipArchive zipArchive = map.OpenReadEmbeddedZipData();
@@ -247,7 +245,7 @@ public class Map
         break;
       case BlockType.CustomItem:
         if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-          EmbedItem(block.name, block.article.Path);
+          EmbedBlock("Items/" + block.name, block.article.Path);
           embeddedBlocks.Add(block.name, block.blockType);
         }
         break;

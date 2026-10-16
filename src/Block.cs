@@ -211,7 +211,9 @@ public class Block
     private Ident ReadItemIdent()
     {
         using FileStream stream = File.OpenRead(article.Path);
-        Ident header = Gbx.ParseHeaderNode(stream) is CGameItemModel model && model.Ident is Ident ident ? ident : throw new Exception($"No ident in header of {article.Path}");
+        if (Gbx.ParseHeaderNode(stream) is not CGameItemModel { Ident: Ident header }) {
+            throw new Exception($"No ident in header of {article.Path}");
+        }
         return new Ident(name, header.Collection, header.Author);
     }
 
