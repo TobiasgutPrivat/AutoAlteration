@@ -117,6 +117,7 @@ public class Flags : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
+    // Custom items are placed with the ident (collection included) of their own file and embedded as is,
     internal override List<ArticleProvider> customBlocks => [new ArticleProvider("Flags\\")];
 
     public override void Run(Inventory inventory, Map map){

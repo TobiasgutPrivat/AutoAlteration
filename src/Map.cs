@@ -4,7 +4,7 @@ using GBX.NET.Engines.GameData;
 using GBX.NET.Serialization.Chunking;
 using ManiaAPI.NadeoAPI;
 using System.IO.Compression;
-using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 public class Map
 {
@@ -56,8 +56,12 @@ public class Map
 
   private static string UnvalidatedXml(string xml)
   {
-    xml = Regex.Replace(xml, "validated=\"\\d\"", "validated=\"0\"");
-    return Regex.Replace(xml, "(bronze|silver|gold|authortime)=\"-?\\d+\"", "$1=\"-1\"");
+    XElement header = XElement.Parse(xml);
+    header.Element("desc")?.SetAttributeValue("validated", "0");
+    foreach (string time in new[] { "bronze", "silver", "gold", "authortime" }) {
+      header.Element("times")?.SetAttributeValue(time, "-1");
+    }
+    return header.ToString(SaveOptions.DisableFormatting);
   }
 
   private void NewMapUid()
