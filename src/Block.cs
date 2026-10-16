@@ -208,9 +208,18 @@ public class Block
         article.MoveChain.Apply(position, article);
     }
 
+    private Ident ReadItemIdent()
+    {
+        using FileStream stream = File.OpenRead(article.Path);
+        Ident header = Gbx.ParseHeaderNode(stream) is CGameItemModel model && model.Ident is Ident ident ? ident : throw new Exception($"No ident in header of {article.Path}");
+        return new Ident(name, header.Collection, header.Author);
+    }
+
     private void PlaceItemInMap(CGameCtnChallenge map)
     {
-        CGameCtnAnchoredObject item = map.PlaceAnchoredObject(new Ident(name, new Id(26), "Nadeo"), position.coords, position.YawPitchRoll);
+        // Embedded items are placed with the ident from their own file header, vanilla items with Nadeo
+        Ident ident = blockType == BlockType.CustomItem ? ReadItemIdent() : new Ident(name, new Id(26), "Nadeo");
+        CGameCtnAnchoredObject item = map.PlaceAnchoredObject(ident, position.coords, position.YawPitchRoll);
         // item.SnappedOnItem = SnappedOnItem;
         // item.SnappedOnBlock = SnappedOnBlock;
         // item.PlacedOnItem = PlacedOnItem;

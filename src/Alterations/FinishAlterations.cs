@@ -1,3 +1,6 @@
+using GBX.NET;
+using GBX.NET.Engines.GameData;
+
 public class MoveFinish(MoveChain move): Alteration {
     public override string Description => "Moves the Finish to a new position";
     public override bool Published => true;
@@ -105,6 +108,57 @@ public class ThereAndBack : Alteration {
         map.map.IsLapRace = true;
         map.map.NbLaps = 1;
         map.PlaceStagedBlocks();
+    }
+}
+
+public class Flags : Alteration {
+    public override string Description => "removes all finishes, adds finish triggers to all the flags (excluding their poles) on the map";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
+    internal override List<ArticleProvider> customBlocks => [new ArticleProvider("Flags\\")];
+
+    public override void Run(Inventory inventory, Map map){
+        var sttf = new STTF();
+        sttf.Run(inventory, map);
+
+        map.Delete(inventory.Any(["Finish","Multilap"]));
+
+        foreach (string size in new[] { "8m", "16m" }) {
+            Article flag = inventory.GetArticle($"Flag{size}");
+            Article trigger = inventory.GetArticle($"ClothFinishTriggerFlag{size}.Item.Gbx");
+            map.PlaceRelative(flag, trigger); // the trigger uses the exact pose of its flag
+        }
+
+        map.stagedBlocks.ForEach(b => {
+            b.WaypointSpecialProperty = GoalProperty();
+            b.color = DifficultyColor.Default;
+            b.BlockUnitCoord = UnitCoord(b.position.coords, map);
+        });
+        map.PlaceStagedBlocks();
+    }
+
+    // The chunks are needed for the property to get serialized (same layout as the editor writes)
+    private static CGameWaypointSpecialProperty GoalProperty() {
+        CGameWaypointSpecialProperty property = new() { Tag = "Goal", Order = 0 };
+        property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
+        return property;
+    }
+
+    // The editor stores the grid cell of an item, in a flag (255) is unset which the game doesn't count as a finish
+    private static Byte3 UnitCoord(Vec3 position, Map map) {
+        // y coordinate of the ground, measured on maps made in the editor
+        int groundHeight = map.map.Collection.ToString() switch {
+            "RedIsland" or "WhiteShore" => 15,
+            "BlueBay" or "GreenCoast" => 5,
+            _ => map.map.DecoBaseHeightOffset
+        };
+        return new Byte3(
+            (byte)Math.Floor(position.X / 32),
+            (byte)(Math.Floor(position.Y / 8) + groundHeight),
+            (byte)Math.Floor(position.Z / 32)
+        );
     }
 }
 
