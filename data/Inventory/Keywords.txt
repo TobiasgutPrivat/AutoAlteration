@@ -204,6 +204,7 @@ Lamp2
 Lamp
 Fall
 Flag
+ClothFinishTrigger
 Gate
 With
 Show

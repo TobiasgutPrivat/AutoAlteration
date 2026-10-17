@@ -117,19 +117,18 @@ public class Flags : Alteration {
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    // Custom items are placed with the ident (collection included) of their own file and embedded as is,
+    public override List<Alteration> AlterationsBefore => [new STTF()];
+
     internal override List<ArticleProvider> customBlocks => [new ArticleProvider("Flags\\")];
 
     public override void Run(Inventory inventory, Map map){
-        new STTF().Run(inventory, map);
-        map.Delete(inventory.Any(["Finish","Multilap"]));
-
-        foreach (string size in new[] { "8m", "16m" }) {
-            Article flag = inventory.GetArticle($"Flag{size}");
-            Article trigger = inventory.GetArticle($"ClothFinishTriggerFlag{size}.Item.Gbx");
-            map.PlaceRelative(flag, trigger);
-        }
-
+        map.Delete(inventory.Any(["Finish"]));
+        inventory
+            .Select("Flag")
+            .Any(["8m", "16m"])
+            .Edit()
+            .AddKeyword("ClothFinishTrigger")
+            .PlaceRelative(inventory, map);
         map.stagedBlocks.ForEach(b => {
             b.WaypointSpecialProperty = GoalProperty();
             b.color = DifficultyColor.Default;
@@ -139,13 +138,13 @@ public class Flags : Alteration {
     }
 
     private static CGameWaypointSpecialProperty GoalProperty() {
-        CGameWaypointSpecialProperty property = new() { Tag = "Goal", Order = 0 };
+        var property = new CGameWaypointSpecialProperty() { Tag = "Goal", Order = 0 };
         property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
         return property;
     }
 
     private static Byte3 UnitCoord(Vec3 position, Map map) {
-        int groundHeight = map.map.Collection.ToString() switch {
+        var groundHeight = map.map.Collection.ToString() switch {
             "RedIsland" or "WhiteShore" => 15,
             "BlueBay" or "GreenCoast" => 5,
             _ => map.map.DecoBaseHeightOffset
