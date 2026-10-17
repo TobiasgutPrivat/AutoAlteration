@@ -114,31 +114,32 @@ public class STTC : Alteration
 {
     public override string Description => "sttf + moves center to absolute center of the environment";
     public override bool Published => false;
-    public override bool LikeAN => false;
+    public override bool LikeAN => true;
     public override bool Complete => true;
 
+    public override List<Alteration> AlterationsBefore => [new STTF()];
+
     public override void Run(Inventory inventory, Map map){
-        new STTF().Run(inventory, map);
-
-        Inventory finishArticles = inventory.Any(["Finish","Multilap"]);
-        List<Block> finishes = finishArticles.SelectMany(map.GetBlocks).ToList();
+        var finishArticles = inventory.Any(["Finish"]);
+        var finishes = finishArticles.SelectMany(map.GetBlocks).ToList();
         if (finishes.Count == 0) return;
-
-        Vec3 offset = MapCenter(map) - BoundsCenter(finishes);
+        var offset = MapCenter(map) - BoundsCenter(finishes);
         map.Move(finishArticles, new Translate(offset));
         map.PlaceStagedBlocks();
     }
 
     // The point shared by the 4 middle blocks (24 / 32 blocks of 32 units), y is ignored
+    
+    
     private static Vec3 MapCenter(Map map) {
-        bool isStadium = map.map.Collection?.ToString().StartsWith("Stadium", StringComparison.OrdinalIgnoreCase) ?? true;
-        float center = (isStadium ? 24 : 32) * 32;
+        var isStadium = map.map.Collection?.ToString().StartsWith("Stadium", StringComparison.OrdinalIgnoreCase) ?? true;
+        var center = (isStadium ? 24 : 32) * 32;
         return new Vec3(center, 0, center);
     }
 
     // Center of the x/z bounding box around all finishes, y is ignored
     private static Vec3 BoundsCenter(List<Block> blocks) {
-        List<Vec3> points = blocks.SelectMany(Footprint).ToList();
+        var points = blocks.SelectMany(Footprint).ToList();
         return new Vec3(
             (points.Min(p => p.X) + points.Max(p => p.X)) / 2,
             0,
@@ -151,9 +152,9 @@ public class STTC : Alteration
         if (block.blockType is BlockType.Item or BlockType.CustomItem) {
             return [block.position.coords];
         }
-        float width = block.article.Width * 32;
-        float height = block.article.Height * 8;
-        float length = block.article.Length * 32;
+        var width = block.article.Width * 32;
+        var height = block.article.Height * 8;
+        var length = block.article.Length * 32;
         return new[] { 0f, width }
             .SelectMany(x => new[] { 0f, height }.SelectMany(y => new[] { 0f, length }.Select(z => new Vec3(x, y, z))))
             .Select(corner => {
