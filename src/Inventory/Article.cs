@@ -66,7 +66,10 @@ public class Article {
         };
 
     private Ident ReadItemIdent() {
-        using FileStream stream = File.OpenRead(Path);
+        if (string.IsNullOrEmpty(Path) || !File.Exists(Path)) {
+            throw new InvalidOperationException($"Cannot read item ident of {Name}: file '{Path}' not found");
+        }
+        using var stream = File.OpenRead(Path);
         if (Gbx.ParseHeaderNode(stream) is not CGameItemModel { Ident: Ident ident }) {
             throw new Exception($"No ident in header of {Path}");
         }
