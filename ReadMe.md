@@ -71,6 +71,7 @@ Hover over Alterations to see Description
 - <span title="moves the Finish one Tile to the right">OneRight</span>
 - <span title="moves the Finish two Tiles up">TwoUP</span>
 - <span title="tilt's the start and finish down">Inclined\*</span>
+- <span title="removes the finishes, adds finish trigger to each flag">Flags</span>
 
 <strong>Surface Alterations</strong>
 
