@@ -214,6 +214,22 @@ public class Block
         return new Ident(name, header.Collection, header.Author);
     }
 
+    // The unit coord of an item must follow its final position, the one read from the original item is stale after moving/replacing
+    private Byte3 GetUnitCoord(CGameCtnChallenge map)
+    {
+        int groundHeight = map.Collection.ToString() switch
+        {
+            "RedIsland" or "WhiteShore" => 15,
+            "BlueBay" or "GreenCoast" => 5,
+            _ => map.DecoBaseHeightOffset
+        };
+        return new Byte3(
+            (byte)Math.Floor(position.coords.X / 32),
+            (byte)(Math.Floor(position.coords.Y / 8) + groundHeight),
+            (byte)Math.Floor(position.coords.Z / 32)
+        );
+    }
+
     private void PlaceItemInMap(CGameCtnChallenge map)
     {
         // Embedded items are placed with the ident from their own file header, vanilla items with Nadeo
@@ -223,7 +239,7 @@ public class Block
         // item.SnappedOnBlock = SnappedOnBlock;
         // item.PlacedOnItem = PlacedOnItem;
         // item.PivotPosition = PivotPosition;
-        item.BlockUnitCoord = BlockUnitCoord;
+        item.BlockUnitCoord = GetUnitCoord(map);
         item.MacroblockReference = MacroblockReference;
         item.WaypointSpecialProperty = WaypointSpecialProperty;
         item.Color = color;

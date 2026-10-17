@@ -132,7 +132,6 @@ public class Flags : Alteration {
         map.stagedBlocks.ForEach(b => {
             b.WaypointSpecialProperty = GoalProperty();
             b.color = DifficultyColor.Default;
-            b.BlockUnitCoord = UnitCoord(b.position.coords, map);
         });
         map.PlaceStagedBlocks();
     }
@@ -141,19 +140,6 @@ public class Flags : Alteration {
         var property = new CGameWaypointSpecialProperty() { Tag = "Goal", Order = 0 };
         property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
         return property;
-    }
-
-    private static Byte3 UnitCoord(Vec3 position, Map map) {
-        var groundHeight = map.map.Collection.ToString() switch {
-            "RedIsland" or "WhiteShore" => 15,
-            "BlueBay" or "GreenCoast" => 5,
-            _ => map.map.DecoBaseHeightOffset
-        };
-        return new Byte3(
-            (byte)Math.Floor(position.X / 32),
-            (byte)(Math.Floor(position.Y / 8) + groundHeight),
-            (byte)Math.Floor(position.Z / 32)
-        );
     }
 }
 
