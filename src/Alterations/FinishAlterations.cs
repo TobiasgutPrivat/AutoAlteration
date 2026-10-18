@@ -182,7 +182,7 @@ public class Flags : Alteration {
             .Select("Flag")
             .Any(["8m", "16m"])
             .Edit()
-            .AddKeyword("ClothFinishTrigger")
+            .AddKeyword("Finish")
             .PlaceRelative(inventory, map);
         map.stagedBlocks.ForEach(b => {
             b.WaypointSpecialProperty = GoalProperty();
