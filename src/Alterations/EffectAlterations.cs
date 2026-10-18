@@ -48,17 +48,13 @@ public class CPEffect(string effect = "", MoveChain? moveChain = null, bool orie
     private void PlaceOnCheckpointGateItems(Inventory inventory, Map map)
     {
         void Place(string gate, string width) => PlaceOnGateItem(inventory, map, gate, width, Chain);
-
-        Place("GateCheckpointLeft8m", "8");
-        Place("GateCheckpointRight8m", "8");
-        Place("GateCheckpointCenter8mv2", "8");
-        Place("GateCheckpointLeft16m", "16");
-        Place("GateCheckpointRight16m", "16");
-        Place("GateCheckpointCenter16mv2", "16");
+        foreach (string size in new[] { "8", "16", "32" })
+        {
+            Place($"GateCheckpointLeft{size}m", size);
+            Place($"GateCheckpointRight{size}m", size);
+            Place($"GateCheckpointCenter{size}mv2", size);
+        }
         Place("GateCheckpointCenter24m", "24");
-        Place("GateCheckpointLeft32m", "32");
-        Place("GateCheckpointRight32m", "32");
-        Place("GateCheckpointCenter32mv2", "32");
     }
 
     private void PlaceRingsOnCheckpointBlocks(Inventory inventory, Map map)
@@ -114,9 +110,12 @@ public class StartEffect(string effect = "", MoveChain? moveChain = null, bool o
     {
         MoveChain onTheSpawn = [new Offset(0, 0, -10), .. Chain];
         void Place(string gate, string width) => PlaceOnGateItem(inventory, map, gate, width, onTheSpawn);
-        Place("GateStartLeft8m", "8");   Place("GateStartRight8m", "8");   Place("GateStartCenter8m", "8");
-        Place("GateStartLeft16m", "16"); Place("GateStartRight16m", "16"); Place("GateStartCenter16m", "16");
-        Place("GateStartLeft32m", "32"); Place("GateStartRight32m", "32"); Place("GateStartCenter32m", "32");
+        foreach (string size in new[] { "8", "16", "32" })
+        {
+            Place($"GateStartLeft{size}m", size);
+            Place($"GateStartRight{size}m", size);
+            Place($"GateStartCenter{size}m", size);
+        }
     }
 }
 
