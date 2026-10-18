@@ -204,14 +204,12 @@ Lamp2
 Lamp
 Fall
 Flag
-ClothFinishTrigger
 Stand
 CornerOut
 CornerIn
 DiagIn
 DiagOut
 OnDecoWall
-FinishTrigger
 Gate
 With
 Show
