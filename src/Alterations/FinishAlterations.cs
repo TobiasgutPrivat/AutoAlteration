@@ -1,3 +1,5 @@
+using GBX.NET;
+
 public class MoveFinish(MoveChain move): Alteration {
     public override string Description => "Moves the Finish to a new position";
     public override bool Published => true;
@@ -105,6 +107,61 @@ public class ThereAndBack : Alteration {
         map.map.IsLapRace = true;
         map.map.NbLaps = 1;
         map.PlaceStagedBlocks();
+    }
+}
+
+public class STTC : Alteration
+{
+    public override string Description => "sttf + moves center to absolute center of the environment";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
+    public override List<Alteration> AlterationsBefore => [new STTF()];
+
+    public override void Run(Inventory inventory, Map map){
+        var finishArticles = inventory.Any(["Finish"]);
+        var finishes = finishArticles.SelectMany(map.GetBlocks).ToList();
+        if (finishes.Count == 0) return;
+        var offset = MapCenter(map) - BoundsCenter(finishes);
+        map.Move(finishArticles, new Translate(offset));
+        map.PlaceStagedBlocks();
+    }
+
+    // The point shared by the 4 middle blocks (24 / 32 blocks of 32 units), y is ignored
+    
+    
+    private static Vec3 MapCenter(Map map) {
+        var isStadium = map.map.Collection?.ToString().StartsWith("Stadium", StringComparison.OrdinalIgnoreCase) ?? true;
+        var center = (isStadium ? 24 : 32) * 32;
+        return new Vec3(center, 0, center);
+    }
+
+    // Center of the x/z bounding box around all finishes, y is ignored
+    private static Vec3 BoundsCenter(List<Block> blocks) {
+        var points = blocks.SelectMany(Footprint).ToList();
+        return new Vec3(
+            (points.Min(p => p.X) + points.Max(p => p.X)) / 2,
+            0,
+            (points.Min(p => p.Z) + points.Max(p => p.Z)) / 2
+        );
+    }
+
+    // Corners of a block's box (rotation included, so a block laid flat uses its height), items only have their origin
+    private static IEnumerable<Vec3> Footprint(Block block) {
+        if (block.blockType is BlockType.Item or BlockType.CustomItem) {
+            return [block.position.coords];
+        }
+        var width = block.article.Width * 32;
+        var height = block.article.Height * 8;
+        var length = block.article.Length * 32;
+        return new[] { 0f, width }
+            .SelectMany(x => new[] { 0f, height }.SelectMany(y => new[] { 0f, length }.Select(z => new Vec3(x, y, z))))
+            .Select(corner => {
+                Position position = new(block.position.coords, block.position.YawPitchRoll);
+                position.Move(corner);
+                return position.coords;
+            });
     }
 }
 

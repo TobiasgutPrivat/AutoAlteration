@@ -20,6 +20,15 @@ public class Offset: Move{
     }
 }
 
+public class Translate: Move{
+    public Translate(Vec3 vector){
+        this.vector = vector;
+    }
+    public override void Apply(Position position, Article article){
+        position.coords += vector;
+    }
+}
+
 public class Rotate: Move{
     public Rotate(Vec3 vector)
     {
