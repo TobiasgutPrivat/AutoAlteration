@@ -1,4 +1,7 @@
 using GBX.NET;
+using GBX.NET.Engines.GameData;
+
+using GBX.NET;
 
 public class MoveFinish(MoveChain move): Alteration {
     public override string Description => "Moves the Finish to a new position";
@@ -129,8 +132,6 @@ public class STTC : Alteration
     }
 
     // The point shared by the 4 middle blocks (24 / 32 blocks of 32 units), y is ignored
-    
-    
     private static Vec3 MapCenter(Map map) {
         var isStadium = map.map.Collection?.ToString().StartsWith("Stadium", StringComparison.OrdinalIgnoreCase) ?? true;
         var center = (isStadium ? 24 : 32) * 32;
@@ -162,6 +163,38 @@ public class STTC : Alteration
                 position.Move(corner);
                 return position.coords;
             });
+    }
+}
+
+public class Flags : Alteration {
+    public override string Description => "removes all finishes, adds finish triggers to all the flags (excluding their poles) on the map";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+
+    public override List<Alteration> AlterationsBefore => [new STTF()];
+
+    internal override List<ArticleProvider> customBlocks => [new ArticleProvider("Flags\\")];
+
+    public override void Run(Inventory inventory, Map map){
+        map.Delete(inventory.Any(["Finish"]));
+        inventory
+            .Select("Flag")
+            .Any(["8m", "16m"])
+            .Edit()
+            .AddKeyword("Finish")
+            .PlaceRelative(inventory, map);
+        map.stagedBlocks.ForEach(b => {
+            b.WaypointSpecialProperty = GoalProperty();
+            b.color = DifficultyColor.Default;
+        });
+        map.PlaceStagedBlocks();
+    }
+
+    private static CGameWaypointSpecialProperty GoalProperty() {
+        var property = new CGameWaypointSpecialProperty() { Tag = "Goal", Order = 0 };
+        property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
+        return property;
     }
 }
 

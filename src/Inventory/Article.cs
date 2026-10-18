@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using GBX.NET;
+using GBX.NET.Engines.GameData;
 
 public class Article {
     public string Name = "";
@@ -11,6 +12,9 @@ public class Article {
     public int Length = 1;
     public int Height = 1;
     public string Path = "";
+    private Ident? itemIdent;
+    // the ident stored in the header of the item file, only read when needed
+    public Ident GetItemIdent() => itemIdent ??= ReadItemIdent();
     // public bool DefaultRotation;
     public Move? DefaultRotation;
 
@@ -60,6 +64,17 @@ public class Article {
             Path = Path,
             DefaultRotation = DefaultRotation
         };
+
+    private Ident ReadItemIdent() {
+        if (string.IsNullOrEmpty(Path) || !File.Exists(Path)) {
+            throw new InvalidOperationException($"Cannot read item ident of {Name}: file '{Path}' not found");
+        }
+        using var stream = File.OpenRead(Path);
+        if (Gbx.ParseHeaderNode(stream) is not CGameItemModel { Ident: Ident ident }) {
+            throw new Exception($"No ident in header of {Path}");
+        }
+        return ident;
+    }
 
     public bool HasKeyword(string keyword) =>
         Keywords.Contains(keyword) || ToShapes.Contains(keyword);

@@ -1,8 +1,10 @@
 using GBX.NET;
 using GBX.NET.Engines.Game;
+using GBX.NET.Engines.GameData;
 using GBX.NET.Serialization.Chunking;
 using ManiaAPI.NadeoAPI;
 using System.IO.Compression;
+using System.Xml.Linq;
 
 public class Map
 {
@@ -37,16 +39,29 @@ public class Map
   }
 
   private void RemoveAuthor(){
-    map.AuthorTime = TmEssentials.TimeInt32.MaxValue;
-    map.GoldTime = TmEssentials.TimeInt32.MaxValue;
-    map.SilverTime = TmEssentials.TimeInt32.MaxValue;
-    map.BronzeTime = TmEssentials.TimeInt32.MaxValue;
+    TmEssentials.TimeInt32 unvalidated = new(-1);
+    map.AuthorTime = unvalidated;
+    map.GoldTime = unvalidated;
+    map.SilverTime = unvalidated;
+    map.BronzeTime = unvalidated;
+    if (map.ChallengeParameters != null) map.ChallengeParameters.RaceValidateGhost = null;
+    if (map.Xml != null) map.Xml = UnvalidatedXml(map.Xml);
     map.AuthorScore = 0;
     map.AuthorExtraInfo = null;
     map.AuthorLogin = "";
     map.AuthorNickname = null;
     map.AuthorVersion = 0;
     map.AuthorZone = null;
+  }
+
+  private static string UnvalidatedXml(string xml)
+  {
+    XElement header = XElement.Parse(xml);
+    header.Element("desc")?.SetAttributeValue("validated", "0");
+    foreach (string time in new[] { "bronze", "silver", "gold", "authortime" }) {
+      header.Element("times")?.SetAttributeValue(time, "-1");
+    }
+    return header.ToString(SaveOptions.DisableFormatting);
   }
 
   private void NewMapUid()
@@ -246,7 +261,7 @@ public class Map
         break;
       case BlockType.CustomItem:
         if(!embeddedBlocks.Any(x => x.Key == block.name && x.Value == block.blockType)){
-          EmbedBlock("Items/" + block.name,block.article.Path);
+          EmbedBlock("Items/" + block.name, block.article.Path);
           embeddedBlocks.Add(block.name, block.blockType);
         }
         break;
