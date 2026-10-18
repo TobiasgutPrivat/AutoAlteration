@@ -10,8 +10,15 @@ public abstract class WaypointEffect(string effect, MoveChain? moveChain, bool o
     protected bool Oriented => oriented;
     protected MoveChain Chain => moveChain ??= [];
 
-    protected Article Ring(Inventory inventory) =>
-        inventory.GetArticle("GateSpecial" + effect + (oriented ? "Oriented" : ""));
+    protected Article Ring(Inventory inventory)
+    {
+        var plain = "GateSpecial" + effect;
+        var orientedName = plain + "Oriented";
+        var wanted = oriented ? orientedName : plain;
+
+        var other = oriented ? plain : orientedName;
+        return inventory.Any(a => a.Name == wanted) ? inventory.GetArticle(wanted) : inventory.GetArticle(other);
+    }
 
     protected Article Gate(Inventory inventory, string width) =>
         inventory.GetArticle("GateSpecial" + width + "m" + effect);
