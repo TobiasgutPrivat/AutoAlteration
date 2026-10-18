@@ -184,14 +184,14 @@ public class Map
     Delete(oldArticle);
   }
 
-  public void Replace(Article oldArticle, Article article, MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
-    PlaceRelative(oldArticle, article,moveChain, blockCondition);
-    Delete(oldArticle);
+  public void Replace(Article oldArticle, Article article, MoveChain? moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
+    PlaceRelative(oldArticle, article, moveChain, blockCondition);
+    Delete(oldArticle, blockCondition: blockCondition);
   }
-  
-  public void Replace(Inventory inventory, Article article, MoveChain ?moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
-    PlaceRelative(inventory, article,moveChain, blockCondition);
-    Delete(inventory);
+
+  public void Replace(Inventory inventory, Article article, MoveChain? moveChain = null, Predicate<CGameCtnBlock>? blockCondition = null){
+    PlaceRelative(inventory, article, moveChain, blockCondition);
+    inventory.ToList().ForEach(a => Delete(a, blockCondition: blockCondition));
   }
 
   public void Move(Article article, MoveChain moveChain) =>
@@ -212,12 +212,13 @@ public class Map
     return blocks;
   }
 
-  public void Delete(Article Block, bool includePillars = false){
+  public void Delete(Article Block, bool includePillars = false, Predicate<CGameCtnBlock>? blockCondition = null){
     string ArticleName = Block.Name;
     if (Block.Type == BlockType.CustomBlock) ArticleName = Block.Name + "_CustomBlock";
-    ArticleName = ArticleName.Replace("/","\\");
-    List<CGameCtnBlock> deleted = map.Blocks?.Where(block => block.BlockModel.Id == ArticleName).ToList() ?? [];
-    map.Blocks = map.Blocks?.Where(block => block.BlockModel.Id != ArticleName).ToList();
+    ArticleName = ArticleName.Replace("/", "\\");
+    bool Doomed(CGameCtnBlock block) => block.BlockModel.Id == ArticleName && (blockCondition == null || blockCondition(block));
+    List<CGameCtnBlock> deleted = map.Blocks?.Where(Doomed).ToList() ?? [];
+    map.Blocks = map.Blocks?.Where(block => !Doomed(block)).ToList();
     if (includePillars){
       deleted.ForEach(x => {
         if (!x.IsFree && !x.IsGround){
@@ -231,7 +232,6 @@ public class Map
         }
       });
     };
-
     map.AnchoredObjects = map.AnchoredObjects?.Where(block => block.ItemModel.Id != ArticleName).ToList();
   }
   public void Delete(Inventory inventory, bool includePillars = false){

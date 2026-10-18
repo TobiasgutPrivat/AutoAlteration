@@ -1,3 +1,6 @@
+using GBX.NET.Engines.GameData;
+using GBX.NET.Engines.Plug;
+
 public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool light = false, Alteration? sceneryAlteration = null) : Alteration
 {
     // light and Heavy SurfaceAlterations base blocks from HeavyWood (in CustomBlocks/HeavySurface/)
@@ -6,7 +9,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
     public override bool LikeAN => false;
     public override bool Complete => false;
 
-    internal override List<CustomBlockAlteration> customBlockAlts => [SurfaceAlt];
+    internal override List<CustomBlockAlteration> customBlockAlts => [SurfaceAlt, new DeckOf(SurfaceAlt)];
     public override List<Alteration> AlterationsBefore => sceneryAlteration != null ? [sceneryAlteration] : [];
     public List<string> VanillaSurfaces => ["Grass", "Dirt", "Plastic", "Ice", "Tech"];
     public List<string> TMNFExceptions => ["StadiumFabric"];
@@ -44,10 +47,18 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
                 var deckItem = inventory.AlignArticle(deck);
                 if (deckItem != null) map.PlaceRelative(inventory.GetArticle(variant), deckItem, [new Offset(0, 0.02f, 0)]);
             }
-            (inventory / exceptions / inventory.Select("VistaVariant")).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
-            (inventory / exceptions).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
-            // inventory.Edit().AddKeyword([$"{Surface}Surface","Middle"]));
+            var waypoints = inventory.Any(["MapStart", "Checkpoint", "Finish", "Multilap"]);
+            var drivable = inventory / exceptions / inventory.Select("VistaVariant");
+
+            // air placements: the block becomes the surface item
+            drivable.Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map, blockCondition: b => !b.IsGround);
+
+            // ground placements: the block stays (it carves the terrain), the surface item goes on its deck 2 cm up —
+            // plain pieces get the normal item, waypoint pieces the waypoint-less deck (the kept block is the waypoint)
+            (drivable / waypoints).Edit().AddKeyword($"{Surface}Surface").PlaceRelative(inventory, map, [new Offset(0, 0.02f, 0)], blockCondition: b => b.IsGround);
+            (waypoints / (waypoints / drivable)).Edit().AddKeyword($"{Surface}SurfaceDeck").PlaceRelative(inventory, map, [new Offset(0, 0.02f, 0)], blockCondition: b => b.IsGround);
             map.PlaceStagedBlocks(false);
+
         }
     }
 }
@@ -69,6 +80,17 @@ public class Grass : Surface
     public override bool LikeAN => true;
     public override bool Complete => false;
     public Grass() : base(new GrassSurface(), "Grass", false, null) { }
+}
+
+public class DeckOf(CustomBlockAlteration inner) : CustomBlockAlteration {
+    public CustomBlockAlteration Inner => inner;
+    public override string Name => inner.GetType().Name + "Deck";
+    public override bool Run(CustomBlock customBlock) {
+        if (customBlock.customBlock.WaypointType == CGameItemModel.EWaypointType.None) return false;
+        customBlock.customBlock.WaypointType = CGameItemModel.EWaypointType.None;
+        inner.Run(customBlock);
+        return true;
+    }
 }
 
 public class Ice : Surface
