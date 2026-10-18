@@ -22,41 +22,58 @@ public class StartEffect(string Effect = "",MoveChain ?moveChain = null, bool or
     }
 }
 
-public class CPEffect(string Effect = "",MoveChain ?moveChain = null, bool oriented = false, bool includeStart = true): Alteration {
+public class CPEffect(string effect = "", MoveChain? moveChain = null, bool oriented = false, bool includeStart = true) : Alteration {
     public override string Description => "places an Effect on every Checkpoint";
-    public override void Run(Inventory inventory, Map map) {
-        if (Effect == "") throw new Exception("Not intended to be used without Effect");
-        moveChain ??= [];
-        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") : inventory.GetArticle("GateSpecial" + Effect);
-        inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(inventory, map,moveChain);
 
+    // The checkpoint gate ITEMS and their arch width. Every gate (checkpoint and special) is an arch centred on its
+    // origin — "Left"/"Right" only add a wall post inside the arch — so the effect gate of the same width sits at the
+    // checkpoint's own pose, offset 0.
+    private static readonly (string cp, string width)[] CheckpointGateItems = [
+        ("GateCheckpointCenter8m", "8"),  ("GateCheckpointCenter8mv2", "8"),
+        ("GateCheckpointCenter16m", "16"), ("GateCheckpointCenter16mv2", "16"),
+        ("GateCheckpointCenter24m", "24"),
+        ("GateCheckpointCenter32m", "32"), ("GateCheckpointCenter32mv2", "32"),
+        ("GateCheckpointLeft8m", "8"),  ("GateCheckpointLeft16m", "16"),  ("GateCheckpointLeft32m", "32"),
+        ("GateCheckpointRight8m", "8"), ("GateCheckpointRight16m", "16"), ("GateCheckpointRight32m", "32"),
+    ];
+
+    public override void Run(Inventory inventory, Map map) {
+        if (effect == "") throw new Exception("Not intended to be used without Effect");
+        moveChain ??= [];
+
+        // ---- item gates: GateCheckpoint<Side><w>m[v2] -> GateSpecial<w>m<effect> at the same pose (+ moveChain)
+        foreach (var (cp, width) in CheckpointGateItems) {
+            try {
+                map.PlaceRelative(inventory.GetArticle(cp), inventory.GetArticle("GateSpecial" + width + "m" + effect), moveChain);
+            } catch (Exception) {
+                // a name this inventory does not carry: nothing to place for it
+            }
+        }
+        // an effect gate is not a waypoint: don't let it inherit the checkpoint's Checkpoint node
+        map.stagedBlocks.ForEach(b => b.WaypointSpecialProperty = null);
+        map.PlaceStagedBlocks();
+
+        // ---- blocks: as before
+        Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + effect + "Oriented") : inventory.GetArticle("GateSpecial" + effect);
+        inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(effect).PlaceRelative(inventory, map, moveChain);
         inventory.Export("temp");
-        Inventory triggers = inventory.Select("CheckpointTrigger") | inventory.Select("MultilapTrigger)");
+        Inventory triggers = inventory.Select("CheckpointTrigger") | inventory.Select("MultilapTrigger");
         triggers.Export("temp");
         Inventory withWall = triggers.Select("WithWall");
         map.PlaceRelative((triggers / withWall).Not("Ring"), GateSpecial, [new Offset(-16, -16, -16), .. moveChain]);
-        Article GateSpecial32 = inventory.GetArticle("GateSpecial32m" + Effect);
-        map.PlaceRelative(withWall.Select("Left"), GateSpecial32,[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
-        map.PlaceRelative(withWall.Select("Left"), GateSpecial32,[new Offset(6,12,0), new Rotate(0,0,PI*-0.5f), ..moveChain]);
-        map.PlaceRelative(withWall.Select("Right"), GateSpecial32,[new Offset(0,7,0), new Rotate(0,0,PI), ..moveChain]);
-        map.PlaceRelative(withWall.Select("Right"), GateSpecial32,[new Offset(-6,12,0), new Rotate(0,0,PI*0.5f), ..moveChain]);
-        map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial,moveChain);
-
-        //Thread of Ariadne CP's
-        // Inventory stripeCPs = inventory.SelectWord("CP-stripe");
-        // Inventory X2stripeCPs = stripeCPs.SelectWord("-x2");
-        // Inventory X1stripeCPs = stripeCPs/X2stripeCPs;
-        // Inventory bankedL = stripeCPs.SelectWord("banked-L");
-        // Inventory bankedR = stripeCPs.SelectWord("banked-R");
-
-        // map.PlaceRelative(X1stripeCPs, GateSpecial32,[..moveChain]);
-
+        Article GateSpecial32 = inventory.GetArticle("GateSpecial32m" + effect);
+        map.PlaceRelative(withWall.Select("Left"), GateSpecial32, [new Offset(0, 7, 0), new Rotate(0, 0, PI), .. moveChain]);
+        map.PlaceRelative(withWall.Select("Left"), GateSpecial32, [new Offset(6, 12, 0), new Rotate(0, 0, PI * -0.5f), .. moveChain]);
+        map.PlaceRelative(withWall.Select("Right"), GateSpecial32, [new Offset(0, 7, 0), new Rotate(0, 0, PI), .. moveChain]);
+        map.PlaceRelative(withWall.Select("Right"), GateSpecial32, [new Offset(-6, 12, 0), new Rotate(0, 0, PI * 0.5f), .. moveChain]);
+        map.PlaceRelative(inventory.GetArticle("GateCheckpoint"), GateSpecial, moveChain);
         map.PlaceStagedBlocks();
         if (includeStart) {
-            new StartEffect(Effect,moveChain,oriented).Run(map);
+            new StartEffect(effect, moveChain, oriented).Run(map);
         }
     }
 }
+
 public class Cruise: CPEffect {
     public override string Description => "places Cruise Effect on every Checkpoint (small offset to avoid skip)";
     public override bool Published => true;

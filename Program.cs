@@ -6,7 +6,7 @@ AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
 
-string from = "C:\\Users\\hugok\\Documents\\Trackmania\\Maps\\Campaigns\\Fall 2026\\Fall 2026 - 01_(361913).Map.Gbx";
-string to = "C:\\Users\\hugok\\Documents\\Trackmania\\Maps\\Campaigns\\Fall 2026\\Fall 2026 - 01_(361913).Map Manslaughter.Gbx";
-AutoAlteration.AlterFile(new Manslaughter(), from, to, "Manslaughter");
+string from = "C:\\Users\\hugok\\Documents\\Trackmania\\Maps\\My Maps\\gate-test.Map.Gbx";
+string to = "C:\\Users\\hugok\\Documents\\Trackmania\\Maps\\My Maps\\gate-test Free Wheel.Gbx";
+AutoAlteration.AlterFile(new FreeWheel(), from, to, "Free Wheel");
     
