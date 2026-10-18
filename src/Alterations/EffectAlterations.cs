@@ -167,9 +167,10 @@ public class Glider() : CPEffect
 
     public override void Run(Inventory inventory, Map map)
     {
-        new CPEffect("Boost").Run(inventory, map);
-        new CPEffect("NoEngine", [new Offset(0, 0, 1)], includeStart: false).Run(inventory, map);
-        new StartEffect("NoEngine", [new Offset(0, 0, 3)]).Run(inventory, map);
+        new CPEffect("Boost", [new Offset(0, 0, 1)], includeStart: false).Run(inventory, map);
+        new CPEffect("NoEngine", [new Offset(0, 0, 2)], includeStart: false).Run(inventory, map);
+        new StartEffect("Boost", [new Offset(0, 0, 1)]).Run(inventory, map);
+        new StartEffect("NoEngine", [new Offset(0, 0, 2)]).Run(inventory, map);
     }
 }
 
