@@ -198,4 +198,39 @@ public class Flags : Alteration {
     }
 }
 
+
+public class Manslaughter : Alteration
+{
+    public override string Description => "removes all finishes, adds finish triggers to all the spectator stands (seating only)";
+    public override bool Published => false;
+    public override bool LikeAN => true;
+    public override bool Complete => true;
+    public override List<Alteration> AlterationsBefore => [new STTF()];
+    internal override List<ArticleProvider> customBlocks => [new ArticleProvider("Stands\\")];
+
+    private static readonly List<string> Shapes = ["Straight", "CornerOut", "CornerIn", "DiagIn", "DiagOut"];
+
+    public override void Run(Inventory inventory, Map map){
+        map.Delete(inventory.Any(["Finish"]));
+        inventory
+            .Select(BlockType.Block).Select("Stand")
+            .Any(Shapes)
+            .Edit()
+            .RemoveKeyword("OnDecoWall")
+            .AddKeyword("Finish")
+            .PlaceRelative(inventory, map);
+        map.stagedBlocks.ForEach(b => {
+            b.WaypointSpecialProperty = GoalProperty();
+            b.color = DifficultyColor.Default;
+        });
+        map.PlaceStagedBlocks();
+    }
+
+    private static CGameWaypointSpecialProperty GoalProperty() {
+        var property = new CGameWaypointSpecialProperty() { Tag = "Goal", Order = 0 };
+        property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
+        return property;
+    }
+}
+
 //yep tree puzzle (manual)

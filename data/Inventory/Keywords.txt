@@ -66,7 +66,6 @@ Cypress
 CurveIn
 NoBrake
 Penalty
-DiagOut
 DeadEnd
 Lampion
 UBottomX2
@@ -120,7 +119,6 @@ Cactus
 Temple
 Pillar
 Cherry
-DiagIn
 Mirror
 Frozen
 Slope1
@@ -204,6 +202,12 @@ Lamp2
 Lamp
 Fall
 Flag
+Stand
+CornerOut
+CornerIn
+DiagIn
+DiagOut
+OnDecoWall
 Gate
 With
 Show
