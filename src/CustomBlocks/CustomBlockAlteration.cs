@@ -33,7 +33,7 @@ public class CustomBlockAlteration {
 class MaterialInfo : CustomBlockAlteration {
     public static Dictionary<string, CPlugSurface.MaterialId> materials = [];
     public static Dictionary<CPlugSurface.MaterialId, string> SurfacePhysicIds = [];
-    public static Dictionary<CPlugMaterialUserInst.GameplayId, string> SurfaceGameplayIds = [];
+    public static Dictionary<CPlugSurface.GameplayId, string> SurfaceGameplayIds = [];
 
     public override bool Run(CustomBlock customBlock) {
         customBlock.MeshCrystals.ForEach(x => {

@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="GBX.NET" Version="2.4.3" />
     <PackageReference Include="GBX.NET.LZO" Version="2.1.4" />
+    <ProjectReference Include="..\gbx-net\Src\GBX.NET\GBX.NET.csproj" />
     <PackageReference Include="GBX.NET.ZLib" Version="1.1.2" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
