@@ -217,7 +217,7 @@ public class Manslaughter : Alteration
             .Any(Shapes)
             .Edit()
             .RemoveKeyword("OnDecoWall")
-            .AddKeyword("FinishTrigger")
+            .AddKeyword("Finish")
             .PlaceRelative(inventory, map);
         map.stagedBlocks.ForEach(b => {
             b.WaypointSpecialProperty = GoalProperty();
