@@ -200,6 +200,18 @@ public class Map
   public void Move(Inventory inventory, MoveChain moveChain) =>
     inventory.ToList().ForEach(a => Move(a, moveChain));
 
+  public List<Block> GetBlocks(Article article){
+    string articleName = article.Name;
+    if (article.Type == BlockType.CustomBlock) articleName += "_CustomBlock";
+    articleName = articleName.Replace("/", "\\");
+
+    List<Block> blocks = map.GetBlocks().Where(x => x.BlockModel.Id == articleName)
+      .Select(x => new Block(x, article, FreeBlockHeightOffset)).ToList();
+    blocks.AddRange(map.GetAnchoredObjects().Where(x => x.ItemModel.Id == articleName)
+      .Select(x => new Block(x, article)));
+    return blocks;
+  }
+
   public void Delete(Article Block, bool includePillars = false){
     string ArticleName = Block.Name;
     if (Block.Type == BlockType.CustomBlock) ArticleName = Block.Name + "_CustomBlock";
