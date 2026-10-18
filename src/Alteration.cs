@@ -19,7 +19,7 @@ public abstract class Alteration {
             alteration.Run(map);
         }
         Inventory inventory = [];
-        List<ArticleProvider> articleProviders = [AlterationConfig.VanillaArticles, .. this.customBlocks, .. customBlocks ?? []];
+        List<ArticleProvider> articleProviders = [AlterationConfig.VanillaArticles, AlterationConfig.VistaArticles, .. this.customBlocks, .. customBlocks ?? []];
         foreach (ArticleProvider provider in articleProviders)
         {
             AlterationConfig.Keywords.AddRange(provider.GetAdditionalKeywords());

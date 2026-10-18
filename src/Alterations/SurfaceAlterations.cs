@@ -34,6 +34,18 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
             Inventory Platform = inventory.Select("Platform").Any(VanillaSurfaces); //temp
             Platform.Edit().RemoveKeyword(VanillaSurfaces).AddKeyword(Surface).Replace(inventory, map); //temp
             Inventory exceptions = [.. TMNFExceptions.SelectMany(x => inventory.SelectWord(x).Any(["Air", "Ground"]))];
+
+            // terrain-integrated vista blocks: the block stays (it IS the terrain), the base block's surface item goes on its deck
+            foreach (var (variant, baseName) in VistaArticleProvider.BaseOf)
+            {
+                if (!inventory.Any(a => a.Name == variant)) continue;
+                var deck = inventory.GetArticle(baseName).CloneArticle();
+                deck.Keywords.Add($"{Surface}Surface");
+                var deckItem = inventory.AlignArticle(deck);
+                if (deckItem != null) map.PlaceRelative(inventory.GetArticle(variant), deckItem, [new Offset(0, 0.02f, 0)]);
+            }
+            (inventory / exceptions / inventory.Select("VistaVariant")).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
+            
             (inventory / exceptions).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
             // inventory.Edit().AddKeyword([$"{Surface}Surface","Middle"]));
             map.PlaceStagedBlocks(false);
