@@ -12,7 +12,6 @@ class VistaArticleProvider() : ArticleProvider("VistaVariants")
 {
     private const float PI = (float)Math.PI;
 
-    // (variant block, Stadium base block, dx, dy, dz, yawDeg, sizeX, sizeY, sizeZ)
     private static readonly (string Variant, string Base, float Dx, float Dy, float Dz, float YawDeg, int SizeX, int SizeY, int SizeZ)[] Variants = [
         ("PlatformTechBaseOnGrassCliff4", "PlatformTechBase", 0f, 32f, 0f, 0f, 1, 5, 1),  // used 8×
         ("PlatformTechBaseOnGrassCliff8", "PlatformTechBase", 0f, 64f, 0f, 0f, 1, 9, 1),  // used 8×
@@ -66,11 +65,8 @@ class VistaArticleProvider() : ArticleProvider("VistaVariants")
         ("RoadTechStraightOnLandHill6", "RoadTechStraight", 0f, 48f, 0f, 0f, 1, 7, 1),  // used 1×
     ];
 
-    /// variant block name → the Stadium base block whose surface item belongs on its deck
     public static readonly IReadOnlyDictionary<string, string> BaseOf = Variants.ToDictionary(v => v.Variant, v => v.Base);
 
-    // The variants are vanilla blocks: there is no folder of files behind them and no altered block set to generate
-    // (the surface items for their decks are the vanilla provider's). So no origin folder, and nothing per alteration.
     protected override List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration) => [];
 
     public override List<string> GetAdditionalKeywords() => ["VistaVariant"];
@@ -80,7 +76,6 @@ class VistaArticleProvider() : ArticleProvider("VistaVariants")
         List<Article> articles = [];
         foreach (var (variant, baseName, dx, dy, dz, yawDeg, sizeX, sizeY, sizeZ) in Variants)
         {
-            // the base block's keywords come from the same tokenizer every vanilla article uses
             var baseArticle = new Article(sizeY, sizeX, sizeZ, BlockType.Block, baseName);
             MoveChain toDeck = yawDeg == 0
                 ? [new Offset(dx, dy, dz)]

@@ -45,7 +45,6 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
                 if (deckItem != null) map.PlaceRelative(inventory.GetArticle(variant), deckItem, [new Offset(0, 0.02f, 0)]);
             }
             (inventory / exceptions / inventory.Select("VistaVariant")).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
-            
             (inventory / exceptions).Edit().AddKeyword($"{Surface}Surface").Replace(inventory, map);
             // inventory.Edit().AddKeyword([$"{Surface}Surface","Middle"]));
             map.PlaceStagedBlocks(false);
