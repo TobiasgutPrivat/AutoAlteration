@@ -132,8 +132,6 @@ public class STTC : Alteration
     }
 
     // The point shared by the 4 middle blocks (24 / 32 blocks of 32 units), y is ignored
-    
-    
     private static Vec3 MapCenter(Map map) {
         var isStadium = map.map.Collection?.ToString().StartsWith("Stadium", StringComparison.OrdinalIgnoreCase) ?? true;
         var center = (isStadium ? 24 : 32) * 32;
