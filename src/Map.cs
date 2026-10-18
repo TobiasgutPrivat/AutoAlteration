@@ -139,7 +139,7 @@ public class Map
     if (newInventory.Count == 0) return;
     Random rand = new();
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == atBlock.Name)){
-      Block block = new Block(ctnBlock, atBlock, FreeBlockHeightOffset);
+      Block block = new Block(ctnBlock, atBlock, map);
       block.Move(moveChain);
       block.SetArticle(newInventory.ToList()[rand.Next(newInventory.Count)]);
       stagedBlocks.Add(block);
@@ -160,7 +160,7 @@ public class Map
     foreach (var ctnBlock in map.GetBlocks().Where(x => x.BlockModel.Id == ArticleName))
     {
       if (blockCondition != null && !blockCondition(ctnBlock)) continue;
-      Block block = new Block(ctnBlock, atArticle, FreeBlockHeightOffset);
+      Block block = new Block(ctnBlock, atArticle, map);
       block.Move(moveChain);
       block.SetArticle(newArticle);
       stagedBlocks.Add(block);
@@ -206,7 +206,7 @@ public class Map
     articleName = articleName.Replace("/", "\\");
 
     List<Block> blocks = map.GetBlocks().Where(x => x.BlockModel.Id == articleName)
-      .Select(x => new Block(x, article, FreeBlockHeightOffset)).ToList();
+      .Select(x => new Block(x, article, map)).ToList();
     blocks.AddRange(map.GetAnchoredObjects().Where(x => x.ItemModel.Id == articleName)
       .Select(x => new Block(x, article)));
     return blocks;
@@ -280,7 +280,7 @@ public class Map
   public void StageAll(Inventory inventory, MoveChain ?moveChain = null){
     stagedBlocks.AddRange(map.Blocks?.Select(x => {
       Article article = inventory.GetArticle(x.BlockModel.Id.Replace("_CustomBlock","", StringComparison.OrdinalIgnoreCase));
-      Block block = new Block(x, article, FreeBlockHeightOffset);
+      Block block = new Block(x, article, map);
       block.Move(moveChain);
       return block;
     }) ?? []);

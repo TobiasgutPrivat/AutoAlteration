@@ -65,7 +65,7 @@ public class Block
     }
 
     #region Blocks
-    public Block(CGameCtnBlock block, Article article, int freeBlockHeightOffset)
+    public Block(CGameCtnBlock block, Article article, CGameCtnChallenge map)
     {
         color = block.Color;
         IsFree = block.IsFree;
@@ -77,7 +77,7 @@ public class Block
         Skin = block.Skin;
         IsAir = block.Bit21;
         WaypointSpecialProperty = block.WaypointSpecialProperty;
-        position = GetBlockPosition(block, article, freeBlockHeightOffset);
+        position = GetBlockPosition(block, article, map);
 
         if (block.Author is null || !block.Author.Contains("AutoAltTag"))
         {
@@ -91,7 +91,7 @@ public class Block
     }
 
 
-    public static Position GetBlockPosition(CGameCtnBlock block, Article article, int freeBlockHeightOffset)
+    public static Position GetBlockPosition(CGameCtnBlock block, Article article, CGameCtnChallenge map)
     {
         if (block.IsFree)
         {
@@ -99,7 +99,7 @@ public class Block
         }
         else
         {
-            Position position = new Position(new Vec3(block.Coord.X * 32, block.Coord.Y * 8 - freeBlockHeightOffset, block.Coord.Z * 32));
+            Position position = new Position(new Vec3(block.Coord.X * 32, block.Coord.Y * 8 - GroundRow(map) * 8, block.Coord.Z * 32));
             position.AddPosition(GetDirectionOffset(block, article));
             return position;
         }
@@ -157,7 +157,7 @@ public class Block
 
             block.Coord = new Int3(
                 (int)(position.coords.X + offset.X) / 32,
-                (int)(position.coords.Y + offset.Y + map.DecoBaseHeightOffset * 8) / 8,
+                (int)(position.coords.Y + offset.Y + GroundRow(map) * 8) / 8,
                 (int)(position.coords.Z + offset.Z) / 32
                 );
             block.IsGhost = IsGhost;
@@ -214,21 +214,21 @@ public class Block
         return new Ident(name, header.Collection, header.Author);
     }
 
-    // The unit coord of an item must follow its final position, the one read from the original item is stale after moving/replacing
     private Byte3 GetUnitCoord(CGameCtnChallenge map)
     {
-        int groundHeight = map.Collection.ToString() switch
-        {
-            "RedIsland" or "WhiteShore" => 15,
-            "BlueBay" or "GreenCoast" => 5,
-            _ => map.DecoBaseHeightOffset
-        };
         return new Byte3(
             (byte)Math.Floor(position.coords.X / 32),
-            (byte)(Math.Floor(position.coords.Y / 8) + groundHeight),
+            (byte)(Math.Floor(position.coords.Y / 8) + GroundRow(map)),
             (byte)Math.Floor(position.coords.Z / 32)
         );
     }
+
+    public static int GroundRow(CGameCtnChallenge map) => map.Collection.ToString() switch
+    {
+        "RedIsland" or "WhiteShore" => 15,
+        "BlueBay" or "GreenCoast" => 5,
+        _ => map.DecoBaseHeightOffset   // Stadium: 8
+    };
 
     private void PlaceItemInMap(CGameCtnChallenge map)
     {
