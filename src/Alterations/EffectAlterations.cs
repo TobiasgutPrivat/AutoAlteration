@@ -49,10 +49,16 @@ public class CPEffect(string effect = "", MoveChain? moveChain = null, bool orie
     {
         void Place(string gate, string width) => PlaceOnGateItem(inventory, map, gate, width, Chain);
 
-        Place("GateCheckpointLeft8m", "8");   Place("GateCheckpointRight8m", "8");   Place("GateCheckpointCenter8mv2", "8");
-        Place("GateCheckpointLeft16m", "16"); Place("GateCheckpointRight16m", "16"); Place("GateCheckpointCenter16mv2", "16");
+        Place("GateCheckpointLeft8m", "8");
+        Place("GateCheckpointRight8m", "8");
+        Place("GateCheckpointCenter8mv2", "8");
+        Place("GateCheckpointLeft16m", "16");
+        Place("GateCheckpointRight16m", "16");
+        Place("GateCheckpointCenter16mv2", "16");
         Place("GateCheckpointCenter24m", "24");
-        Place("GateCheckpointLeft32m", "32"); Place("GateCheckpointRight32m", "32"); Place("GateCheckpointCenter32mv2", "32");
+        Place("GateCheckpointLeft32m", "32");
+        Place("GateCheckpointRight32m", "32");
+        Place("GateCheckpointCenter32mv2", "32");
     }
 
     private void PlaceRingsOnCheckpointBlocks(Inventory inventory, Map map)
@@ -146,9 +152,10 @@ public class FreeWheel() : CPEffect
 
     public override void Run(Inventory inventory, Map map)
     {
-        new CPEffect("Turbo").Run(inventory, map);
-        new CPEffect("NoEngine", [new Offset(0, 0, 1)], includeStart: false).Run(inventory, map);
-        new StartEffect("NoEngine", [new Offset(0, 0, 3)]).Run(inventory, map);
+        new CPEffect("Turbo", [new Offset(0, 0, 1)], includeStart: false).Run(inventory, map);
+        new CPEffect("NoEngine", [new Offset(0, 0, 2)], includeStart: false).Run(inventory, map);
+        new StartEffect("Turbo", [new Offset(0, 0, 1)]).Run(inventory, map);
+        new StartEffect("NoEngine", [new Offset(0, 0, 2)]).Run(inventory, map);
     }
 }
 
