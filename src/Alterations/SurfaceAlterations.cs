@@ -49,7 +49,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
             // ground placements: the block stays (it carves the terrain), the surface item goes on its deck 2 cm up —
             // plain pieces get the normal item, waypoint pieces the waypoint-less deck (the kept block is the waypoint)
             (drivable / waypoints).Edit().AddKeyword($"{Surface}Surface").PlaceRelative(inventory, map, [new Offset(0, 0.02f, 0)], blockCondition: b => b.IsGround);
-            (waypoints / (waypoints / drivable)).Edit().AddKeyword($"{Surface}SurfaceDeck").PlaceRelative(inventory, map, [new Offset(0, 0.02f, 0)], blockCondition: b => b.IsGround);
+            (waypoints / (waypoints / drivable)).Edit().AddKeyword([$"{Surface}Surface", "Deck"]).PlaceRelative(inventory, map, [new Offset(0, 0.02f, 0)], blockCondition: b => b.IsGround);
             map.PlaceStagedBlocks(false);
 
         }
