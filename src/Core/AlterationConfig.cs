@@ -15,7 +15,12 @@ public class AlterationConfig {
     public static List<string> Keywords = [];
     public static List<string> ToKeywords = [];
     public static List<string> CustomBlockAlts = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CustomBlockAlteration))).Select(t => t.Name).ToList();
-    internal static readonly StadiumArticleProvider VanillaArticles = new();
+    internal static readonly BlueBayArticleProvider BlueBayArticleProvider = new();
+    internal static readonly GreenCoastArticleProvider GreenCoastArticleProvider = new();
+    internal static readonly RedIslandArticleProvider RedIslandArticleProvider = new();
+    internal static readonly StadiumArticleProvider StadiumArticleProvider = new();
+    internal static readonly WhiteShoreArticleProvider WhiteShoreArticleProvider = new();
+
     public static int mapCount = 0;
 
     public static void Load() {

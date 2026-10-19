@@ -14,12 +14,20 @@ public abstract class Alteration {
     public abstract void Run(Inventory inventory, Map map);
     public void Run(Map map, List<ArticleProvider>? customBlocks = null)
     {
-        foreach (Alteration alteration in AlterationsBefore)
+        ArticleProvider collectionArticleProvider = map.map.GetEnvironment() switch
         {
-            alteration.Run(map);
-        }
+            "Stadium" => AlterationConfig.StadiumArticleProvider,
+            "BlueBay" => AlterationConfig.BlueBayArticleProvider,
+            "GreenCoast" => AlterationConfig.GreenCoastArticleProvider,
+            "RedIsland" => AlterationConfig.RedIslandArticleProvider,
+            "WhiteShore" => AlterationConfig.WhiteShoreArticleProvider,
+            _ => AlterationConfig.StadiumArticleProvider
+        };
+        
+        Console.WriteLine($"Using collection article provider: {collectionArticleProvider.GetType().Name}");
+
         Inventory inventory = [];
-        List<ArticleProvider> articleProviders = [AlterationConfig.VanillaArticles, .. this.customBlocks, .. customBlocks ?? []];
+        List<ArticleProvider> articleProviders = [collectionArticleProvider, .. this.customBlocks, .. customBlocks ?? []];
         foreach (ArticleProvider provider in articleProviders)
         {
             AlterationConfig.Keywords.AddRange(provider.GetAdditionalKeywords());
@@ -40,6 +48,12 @@ public abstract class Alteration {
 
         //logging
         if (AlterationConfig.devMode) inventory.Export(Name);
+
+        foreach (Alteration alteration in AlterationsBefore)
+        {
+            alteration.Run(inventory, map);
+        }
+
         
         //Run alteration
         inventory.Export("temp");
