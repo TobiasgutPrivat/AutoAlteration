@@ -5,7 +5,6 @@ abstract class CollectionArticleProvider(Collection collection) : ArticleProvide
 {
     private readonly string collectionPath = Path.Combine(
         AlterationConfig.DataFolder,
-        "Data",
         "Inventory",
         "Collections",
         collection.ToString()
