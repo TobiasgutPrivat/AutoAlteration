@@ -1,18 +1,14 @@
-using System.Text.RegularExpressions;
 using GBX.NET;
 using Newtonsoft.Json;
 
-/// <summary>
-/// Provides vanilla articles based on json data files.
-/// </summary>
-class VanillaArticleProvider() : ArticleProvider("VanillaItems")
+class StadiumArticleProvider() : ArticleProvider(Collection.Stadium, "VanillaItems")
 {
     private static readonly float PI = (float)Math.PI;
     
     protected override List<Article> GenerateArticles()
     {
-        string BlockJson = File.ReadAllText(AlterationConfig.BlockDataPath);
-        string ItemJson = File.ReadAllText(AlterationConfig.ItemDataPath);
+        var blockJson = File.ReadAllText(BlocksPath);
+        var itemJson = File.ReadAllText(ItemPath);
         // expected json Format:
         // [
         //     {
@@ -27,11 +23,11 @@ class VanillaArticleProvider() : ArticleProvider("VanillaItems")
         //     ...
         // ]
 
-        BlockJson = BlockDataCorrections(BlockJson);
-        ItemJson = ItemDataCorrections(ItemJson);
+        blockJson = BlockDataCorrections(blockJson);
+        itemJson = ItemDataCorrections(itemJson);
 
-        dynamic[]? BlockJsonArray = JsonConvert.DeserializeObject<dynamic[]>(BlockJson) ?? [];
-        dynamic[]? ItemJsonArray = JsonConvert.DeserializeObject<dynamic[]>(ItemJson) ?? [];
+        dynamic[]? BlockJsonArray = JsonConvert.DeserializeObject<dynamic[]>(blockJson) ?? [];
+        dynamic[]? ItemJsonArray = JsonConvert.DeserializeObject<dynamic[]>(itemJson) ?? [];
 
         var jsonArray = BlockJsonArray.Concat(ItemJsonArray);
         Dictionary<string, Article> articleDict = [];
