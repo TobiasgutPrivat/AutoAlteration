@@ -1,11 +1,3 @@
-/// <summary>
-/// The vista environments' terrain-integrated block variants (RedIsland, BlueBay, GreenCoast, WhiteShore): one block that
-/// carries a cliff/hill AND a Stadium base block on top ("RoadTechStraightOnDirtCliff4"). The game builds each by embedding
-/// the base block's prefab inside the terrain prefab, so the deck IS the base block's geometry at a fixed pose in the
-/// variant's frame. Data only: (variant, base block, dx, dy, dz, yawDeg, sizeX, sizeY, sizeZ) — metres in the variant's
-/// local frame at dir 0, yaw in degrees, size in cells. Measured on the vista packs 2026-10-18; the 50 variants the
-/// Fall 2026 campaign uses (VISTA-ALL.tsv has all 491).
-/// </summary>
 public static class VistaVariants
 {
     public static readonly (string Variant, string Base, float Dx, float Dy, float Dz, float YawDeg, int SizeX, int SizeY, int SizeZ)[] Table = [
