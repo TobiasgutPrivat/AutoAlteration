@@ -1,8 +1,6 @@
 using GBX.NET;
 using GBX.NET.Engines.GameData;
 
-using GBX.NET;
-
 public class MoveFinish(MoveChain move) : Alteration
 {
     public override string Description => "Moves the Finish to a new position";

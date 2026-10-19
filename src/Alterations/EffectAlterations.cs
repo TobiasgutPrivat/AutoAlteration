@@ -17,7 +17,10 @@ public class StartEffect(string Effect = "", MoveChain? moveChain = null, bool o
         map.PlaceRelative((start / startRoadBump / startRoadIce).Not("Water"), GateSpecial, [new Offset(0, -16, 0), .. moveChain]);
         map.PlaceRelative(startRoadIce, GateSpecial, [new Offset(0, -8, -2), .. moveChain]);
         map.PlaceRelative(startRoadBump, GateSpecial, [new Offset(0, -16, 2), .. moveChain]);
-        map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial, [new Offset(0, -16, -2), .. moveChain]);
+        if (inventory.Any(["RoadWaterStart"]).Count > 0)
+        {
+            map.PlaceRelative(inventory.GetArticle("RoadWaterStart"), GateSpecial, [new Offset(0, -16, -2), .. moveChain]);
+        }
         inventory.Select(BlockType.Item).Select("MapStart").Select("Gate").Edit()
             .AddKeyword(Effect).RemoveKeyword(["MapStart", "Left", "Right", "Center"]).PlaceRelative(inventory, map, [new Offset(0, 0, -10), .. moveChain]);
         map.PlaceStagedBlocks();
@@ -33,7 +36,6 @@ public class CPEffect(string Effect = "", MoveChain? moveChain = null, bool orie
         moveChain ??= [];
         Article GateSpecial = oriented ? inventory.GetArticle("GateSpecial" + Effect + "Oriented") : inventory.GetArticle("GateSpecial" + Effect);
         inventory.Select(BlockType.Item).Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").RemoveKeyword(["Left", "Right", "Center"]).AddKeyword(Effect).PlaceRelative(inventory, map, moveChain);
-
         inventory.Export("temp");
         Inventory triggers = inventory.Select("CheckpointTrigger") | inventory.Select("MultilapTrigger)");
         triggers.Export("temp");
