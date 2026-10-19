@@ -10,7 +10,7 @@ public class ArticleProvider(string? subFolder = null)
         if (customBlockAlterations.Count == 0) {
             key = "";
         } else {
-            key = customBlockAlterations?.Select(x => x.GetType().Name).Aggregate((a, b) => a + ";" + b) ?? "";
+            key = customBlockAlterations?.Select(x => x.Name).Aggregate((a, b) => a + ";" + b) ?? "";
         }
 
         if (articleDict.TryGetValue(key, out List<Article>? articles) && articles != null) {
@@ -45,11 +45,11 @@ public class ArticleProvider(string? subFolder = null)
     // base implementation alters and returns Customblocks from origin folder
     protected virtual List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration)
     {
-        string Name = customBlockAlteration.GetType().Name;
+        string Name = customBlockAlteration.Name;
         string folder = Path.Combine(AlterationConfig.CacheFolder, subFolder! , Name);
         if (!Directory.Exists(folder))
         {
-            Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");
+            Console.WriteLine("Generating " + customBlockAlteration.Name + " block set...");
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder + "Temp");//Tempfolder used in case something goes wrong

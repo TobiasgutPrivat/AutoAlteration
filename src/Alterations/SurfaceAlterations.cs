@@ -57,6 +57,17 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
     }
 }
 
+public class DeckOf(CustomBlockAlteration inner) : CustomBlockAlteration {
+    public CustomBlockAlteration Inner => inner;
+    public override string Name => inner.GetType().Name + "Deck";
+    public override bool Run(CustomBlock customBlock) {
+        if (customBlock.customBlock.WaypointType == CGameItemModel.EWaypointType.None) return false;
+        customBlock.customBlock.WaypointType = CGameItemModel.EWaypointType.None;
+        inner.Run(customBlock);
+        return true;
+    }
+}
+
 public class Dirt : Surface
 {
     public override string Description => "replaces all drivable surfaces with Dirt";
@@ -74,17 +85,6 @@ public class Grass : Surface
     public override bool LikeAN => true;
     public override bool Complete => false;
     public Grass() : base(new GrassSurface(), "Grass", false, null) { }
-}
-
-public class DeckOf(CustomBlockAlteration inner) : CustomBlockAlteration {
-    public CustomBlockAlteration Inner => inner;
-    public override string Name => inner.GetType().Name + "Deck";
-    public override bool Run(CustomBlock customBlock) {
-        if (customBlock.customBlock.WaypointType == CGameItemModel.EWaypointType.None) return false;
-        customBlock.customBlock.WaypointType = CGameItemModel.EWaypointType.None;
-        inner.Run(customBlock);
-        return true;
-    }
 }
 
 public class Ice : Surface
