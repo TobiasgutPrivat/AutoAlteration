@@ -16,7 +16,7 @@ public class ArticleProvider(string? subFolder = null)
         {
             articles.AddRange(GetAlteredArticles(customBlockAlteration));
         }
-        InventoryChanges([.. articles]);
+        PerformInventoryChanges([.. articles]);
         articleDict[key] = articles;
         return articles;
     }
@@ -60,7 +60,7 @@ public class ArticleProvider(string? subFolder = null)
         return alteredArticles;
     }
 
-    protected virtual void InventoryChanges(Inventory inventory) { }
+    protected virtual void PerformInventoryChanges(Inventory inventory) { }
     public virtual void EmbeddedChanges(Inventory inventory) { }
     public virtual List<string> GetAdditionalKeywords() { return []; }
 }
