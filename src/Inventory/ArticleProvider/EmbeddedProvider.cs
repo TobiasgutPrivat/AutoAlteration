@@ -1,4 +1,4 @@
-class EmbeddedProvider(Map map) : ArticleProvider()
+class EmbeddedProvider(Map map) : ArticleProvider
 {
     protected override string GetOrigin() { return Path.Join(Path.GetTempPath(), "AutoAlteration"); }
 

@@ -1,56 +1,35 @@
 
-public class ArticleProvider(Collection collection, string? subFolder)
+public class ArticleProvider(string? subFolder = null)
 {
     private string SubFolder { get; } = subFolder ?? "";
-    protected string BlocksPath = Path.Combine(AlterationConfig.DataFolder, "Inventory", "Collections", collection.ToString(), "BlockData.json");
-    protected string ItemPath = Path.Combine(AlterationConfig.DataFolder, "Inventory", "Collections", collection.ToString(), "ItemData.json");
-
     protected virtual string GetOrigin() { return Path.Combine(AlterationConfig.CustomBlocksFolder, SubFolder); }
     private Dictionary<string, List<Article>> articleDict = [];
     public List<Article> GetArticles(List<CustomBlockAlteration>? customBlockAlterations = null) //TODO maybe merge with GetAlteredArticles?
     {
         customBlockAlterations ??= [];
-        string key;
-        if (customBlockAlterations.Count == 0)
-        {
-            key = "";
-        }
-        else
-        {
-            key = customBlockAlterations?.Select(x => x.GetType().Name).Aggregate((a, b) => a + ";" + b) ?? "";
-        }
+        var key = customBlockAlterations.Count == 0 ? "" : customBlockAlterations?.Select(x => x.GetType().Name).Aggregate((a, b) => a + ";" + b) ?? "";
 
-        if (articleDict.TryGetValue(key, out List<Article>? articles) && articles != null)
+        if (articleDict.TryGetValue(key, out List<Article>? articles) && articles != null) return articles;
+
+        articles = GenerateArticles();
+        foreach (CustomBlockAlteration customBlockAlteration in customBlockAlterations!)
         {
-            return articles;
+            articles.AddRange(GetAlteredArticles(customBlockAlteration));
         }
-        else
-        {
-            articles = GenerateArticles();
-            foreach (CustomBlockAlteration customBlockAlteration in customBlockAlterations!)
-            {
-                articles.AddRange(GetAlteredArticles(customBlockAlteration));
-            }
-            InventoryChanges([.. articles]);
-            articleDict[key] = articles;
-            return articles;
-        }
+        InventoryChanges([.. articles]);
+        articleDict[key] = articles;
+        return articles;
     }
 
     protected virtual List<Article> GenerateArticles()
     {
         string folder = GetOrigin();
-        if (!Directory.Exists(folder))
-        {
-            return [];
-        }
+        if (!Directory.Exists(folder)) return [];
         List<Article> articles = [];
         articles.AddRange(Directory.GetFiles(folder, "*.Block.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(Path.GetRelativePath(folder, x), BlockType.CustomBlock, x)));
-
         articles.AddRange(Directory.GetFiles(folder, "*.Item.Gbx", SearchOption.AllDirectories).ToList().Select(x =>
             new Article(Path.GetRelativePath(folder, x), BlockType.CustomItem, x)));
-
         return articles;
     }
 
@@ -58,7 +37,7 @@ public class ArticleProvider(Collection collection, string? subFolder)
     protected virtual List<Article> GetAlteredArticles(CustomBlockAlteration customBlockAlteration)
     {
         string Name = customBlockAlteration.GetType().Name;
-        string folder = Path.Combine(AlterationConfig.CacheFolder, subFolder!, Name);
+        string folder = Path.Combine(AlterationConfig.CacheFolder, SubFolder, Name);
         if (!Directory.Exists(folder))
         {
             Console.WriteLine("Generating " + customBlockAlteration.GetType().Name + " block set...");

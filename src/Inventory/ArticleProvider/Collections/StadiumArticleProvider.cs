@@ -1,14 +1,14 @@
 using GBX.NET;
 using Newtonsoft.Json;
 
-class StadiumArticleProvider() : ArticleProvider(Collection.Stadium, "VanillaItems")
+class StadiumArticleProvider() : ArticleProvider("VanillaItems")
 {
     private static readonly float PI = (float)Math.PI;
     
     protected override List<Article> GenerateArticles()
     {
-        var blockJson = File.ReadAllText(BlocksPath);
-        var itemJson = File.ReadAllText(ItemPath);
+        var blockJson = File.ReadAllText(Path.Combine(AlterationConfig.DataFolder, "Inventory", "Collections", "Stadium", "BlockData.json"));
+        var itemJson = File.ReadAllText(Path.Combine(AlterationConfig.DataFolder, "Inventory", "Collections", "Stadium", "ItemData.json"));
         // expected json Format:
         // [
         //     {
