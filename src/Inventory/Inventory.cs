@@ -47,7 +47,7 @@ public class Inventory : HashSet<Article> { // represents all available articles
             name = name.Split(':')[1]; //in case the name is given as club:Name
         }
         IEnumerable<Article> match = this.Where(a => a.Name == name);
-        if (match.Count() == 0) {
+        if (!match.Any()) {
             throw new Exception("No article with name: " + name);
         }
         return match.First();
