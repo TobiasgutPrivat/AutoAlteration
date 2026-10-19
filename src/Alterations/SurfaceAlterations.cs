@@ -16,7 +16,6 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
 
     public override void Run(Inventory inventory, Map map)
     {
-        Console.WriteLine(inventory.Count(a => a.Keywords.Contains("GrassSurfaceDeck")));
         if (light)
         {
             if (!VanillaSurfaces.Contains(Surface))
