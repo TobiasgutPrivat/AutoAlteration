@@ -57,6 +57,13 @@ class VanillaArticleProvider() : ArticleProvider("VanillaItems")
             }
 
         }
+        // vista terrain-integrated variants: a vanilla block whose deck is a Stadium base block at a fixed pose
+        foreach (var (Variant, Base, Dx, Dy, Dz, YawDeg, SizeX, SizeY, SizeZ) in VistaVariants.Table)
+        {
+            if (!articleDict.TryGetValue(Base, out var baseArticle)) continue;
+            MoveChain toDeck = YawDeg == 0 ? [new Offset(Dx, Dy, Dz)] : [new Offset(Dx, Dy, Dz), new Rotate(YawDeg * PI / 180f, 0, 0)];
+            articleDict[Variant] = new Article(Variant, BlockType.Block, [.. baseArticle.Keywords, "VistaVariant"], baseArticle.ToShapes, toDeck, length: SizeZ, width: SizeX, height: SizeY);
+        }
         List<Article> articles = [.. articleDict.Values];
         Inventory inventory = [.. articles];
         articles.AddRange(CreateCheckpointTriggers(inventory));
@@ -233,5 +240,15 @@ class VanillaArticleProvider() : ArticleProvider("VanillaItems")
             .ToList().ForEach(a => a.Keywords.Remove("StraightX2"));
         inventory.Select("Checkpoint").Edit().RemoveKeyword("Checkpoint").AddKeyword("Base").Align(inventory).getAligned()
             .ToList().ForEach(a => a.Keywords.Remove("Base"));
+
+        // vista variants mirror their base block's final keywords (after every normalisation above)
+        foreach (var (Variant, Base, Dx, Dy, Dz, YawDeg, SizeX, SizeY, SizeZ) in VistaVariants.Table)
+        {
+            var variant = inventory.FirstOrDefault(a => a.Name == Variant);
+            var baseArticle = inventory.FirstOrDefault(a => a.Name == Base);
+            if (variant == null || baseArticle == null) continue;
+            variant.Keywords = [.. baseArticle.Keywords, "VistaVariant"];
+            variant.ToShapes = [.. baseArticle.ToShapes];
+        }
     }
 }

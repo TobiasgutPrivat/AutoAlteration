@@ -16,6 +16,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
 
     public override void Run(Inventory inventory, Map map)
     {
+        Console.WriteLine(inventory.Count(a => a.Keywords.Contains("GrassSurfaceDeck")));
         if (light)
         {
             if (!VanillaSurfaces.Contains(Surface))
@@ -39,14 +40,7 @@ public class Surface(CustomSurfaceAlteration SurfaceAlt, string Surface, bool li
             Inventory exceptions = [.. TMNFExceptions.SelectMany(x => inventory.SelectWord(x).Any(["Air", "Ground"]))];
 
             // terrain-integrated vista blocks: the block stays (it IS the terrain), the base block's surface item goes on its deck
-            foreach (var (variant, baseName) in VistaArticleProvider.BaseOf)
-            {
-                if (!inventory.Any(a => a.Name == variant)) continue;
-                var deck = inventory.GetArticle(baseName).CloneArticle();
-                deck.Keywords.Add($"{Surface}Surface");
-                var deckItem = inventory.AlignArticle(deck);
-                if (deckItem != null) map.PlaceRelative(inventory.GetArticle(variant), deckItem, [new Offset(0, 0.02f, 0)]);
-            }
+            inventory.Select("VistaVariant").Edit().RemoveKeyword("VistaVariant").AddKeyword($"{Surface}Surface").PlaceRelative(inventory, map, [new Offset(0, 0.02f, 0)]);
             var waypoints = inventory.Any(["MapStart", "Checkpoint", "Finish", "Multilap"]);
             var drivable = inventory / exceptions / inventory.Select("VistaVariant");
 

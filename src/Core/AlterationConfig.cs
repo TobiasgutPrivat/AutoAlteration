@@ -16,7 +16,6 @@ public class AlterationConfig {
     public static List<string> ToKeywords = [];
     public static List<string> CustomBlockAlts = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CustomBlockAlteration))).Select(t => t.Name).ToList();
     internal static readonly VanillaArticleProvider VanillaArticles = new();
-    internal static readonly VistaArticleProvider VistaArticles = new();
     public static int mapCount = 0;
 
     public static void Load() {
