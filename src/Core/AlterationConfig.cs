@@ -27,7 +27,7 @@ public class AlterationConfig {
         Gbx.LZO = new MiniLZO();
         Gbx.ZLib = new ZLib();
         if (devMode) {
-            DataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data");
+            DataFolder = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "data"));
         }else {
             DataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "AutoAlteration", "data");
         }

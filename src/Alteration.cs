@@ -16,16 +16,14 @@ public abstract class Alteration {
     {
         ArticleProvider collectionArticleProvider = map.map.GetEnvironment() switch
         {
-            "Stadium" => AlterationConfig.StadiumArticleProvider,
             "BlueBay" => AlterationConfig.BlueBayArticleProvider,
             "GreenCoast" => AlterationConfig.GreenCoastArticleProvider,
             "RedIsland" => AlterationConfig.RedIslandArticleProvider,
+            "Stadium" => AlterationConfig.StadiumArticleProvider,
             "WhiteShore" => AlterationConfig.WhiteShoreArticleProvider,
-            _ => AlterationConfig.StadiumArticleProvider
+            _ => throw new NotSupportedException($"Environment '{map.map.GetEnvironment()}' is not supported")
         };
         
-        Console.WriteLine($"Using collection article provider: {collectionArticleProvider.GetType().Name}");
-
         Inventory inventory = [];
         List<ArticleProvider> articleProviders = [collectionArticleProvider, .. this.customBlocks, .. customBlocks ?? []];
         foreach (ArticleProvider provider in articleProviders)

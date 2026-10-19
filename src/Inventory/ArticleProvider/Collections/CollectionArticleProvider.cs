@@ -3,15 +3,16 @@ using Newtonsoft.Json;
 
 abstract class CollectionArticleProvider(Collection collection) : ArticleProvider("VanillaItems")
 {
-    private readonly string collectionPath = Path.Combine(
-        AlterationConfig.DataFolder,
-        "Inventory",
-        "Collections",
-        collection.ToString()
-    );
 
     protected override List<Article> GenerateArticles()
     {
+        var collectionPath = Path.Combine(
+            AlterationConfig.DataFolder,
+            "Inventory",
+            "Collections",
+            collection.ToString()
+        );
+
         var blockJson = File.ReadAllText(Path.Combine(collectionPath, "BlockData.json"));
         var itemJson = File.ReadAllText(Path.Combine(collectionPath, "ItemData.json"));
 
