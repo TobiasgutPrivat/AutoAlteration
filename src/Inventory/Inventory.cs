@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 
-public class Inventory : HashSet<Article> { // represents all available articles which can be placed in a map
+public class Inventory : HashSet<Article>
+{ // represents all available articles which can be placed in a map
     public Inventory() : base() { }
     public Inventory(IEnumerable<Article> collection) : base(collection) { }
-    public Dictionary<string,Inventory> cachedInventories = [];
+    public Dictionary<string, Inventory> cachedInventories = [];
 
     public Inventory Select(BlockType blockType) =>
         [.. this.Where(a => a.Type == blockType)];
@@ -15,7 +16,7 @@ public class Inventory : HashSet<Article> { // represents all available articles
 
     public Inventory Select(string keyword) =>
         [.. this.Where(a => a.Keywords.Contains(keyword))];
-        
+
     public Inventory SelectWord(string word) =>
         [.. this.Where(a => a.Name.Contains(word))];
 
@@ -36,74 +37,93 @@ public class Inventory : HashSet<Article> { // represents all available articles
     public static Inventory operator /(Inventory a, Inventory b) =>
         [.. a.Except(b)];
 
-    public void AddRange(IEnumerable<Article> articles) {
-        foreach (Article article in articles) {
+    public void AddRange(IEnumerable<Article> articles)
+    {
+        foreach (Article article in articles)
+        {
             this.Add(article);
         }
     }
 
-    public Article GetArticle(string name) {
-        if (name.Contains(':')) {
+    public Article GetArticle(string name)
+    {
+        if (name.Contains(':'))
+        {
             name = name.Split(':')[1]; //in case the name is given as club:Name
         }
         IEnumerable<Article> match = this.Where(a => a.Name == name);
-        if (!match.Any()) {
+        if (!match.Any())
+        {
             throw new Exception("No article with name: " + name);
         }
         return match.First();
     }
 
-    public Inventory GetArticles(SList<string> names) {
+    public Inventory GetArticles(SList<string> names)
+    {
         List<Article> result = [];
         IEnumerable<Article> articles = this.Where(a => names.Contains(a.Name));
         // take the first match for each name (might have duplicates)
-        foreach (string name in names) {
+        foreach (string name in names)
+        {
             IEnumerable<Article> match = articles.Where(a => a.Name == name).ToList();
-            if (match.Any()) {
+            if (match.Any())
+            {
                 result.Add(match.First());
             }
         }
         return [.. result];
     }
 
-    public Article? AlignArticle(Article article) {
+    public Article? AlignArticle(Article article)
+    {
         List<Article> matchArticles = this.Where(article.Match).ToList();
-        if (matchArticles.Count > 1) {
+        if (matchArticles.Count > 1)
+        {
             Console.WriteLine("More than one found article with keywords: " + article.KeywordString() + "\nFound Articles: " + string.Join(", ", matchArticles.Select(a => a.Name).ToArray()));
             return null;
-        } else if (matchArticles.Count == 1) {
+        }
+        else if (matchArticles.Count == 1)
+        {
             return matchArticles.First();
         }
         return null;
     }
 
-    public Inventory AlignMultiple(Article article, List<string> addKeywords) {
+    public Inventory AlignMultiple(Article article, List<string> addKeywords)
+    {
         List<Article> articles = [];
-        addKeywords.ForEach(k => {
+        addKeywords.ForEach(k =>
+        {
             Article clonedArticle = article.CloneArticle();
             clonedArticle.Keywords.Add(k);
-            Article ?Match = AlignArticle(clonedArticle);
-            if (Match != null) {
+            Article? Match = AlignArticle(clonedArticle);
+            if (Match != null)
+            {
                 articles.Add(Match);
             }
         });
         return [.. articles];
     }
 
-    public KeywordEdit Edit(){
+    public KeywordEdit Edit()
+    {
         List<Article> articleClone = this.Select(a => a.CloneArticle()).ToList();
         return new KeywordEdit(articleClone);
     }
 
     #region Development
-    public Inventory Export(string Name) {
+    public Inventory Export(string Name)
+    {
         Directory.CreateDirectory(Path.Combine(AlterationConfig.devPath, "Inventory"));
         File.WriteAllText(Path.Combine(AlterationConfig.devPath, "Inventory", "Inventory" + Name + ".json"), JsonConvert.SerializeObject(this, Formatting.Indented));
         return this;
     }
-    
-    public Inventory Print() {
-        this.ToList().ForEach(article => {
+
+    public Inventory Print()
+    {
+        this.ToList().ForEach(article =>
+        {
             Console.WriteLine(article.Name + ": " + article.KeywordString());
         });
         return this;

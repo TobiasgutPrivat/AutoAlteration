@@ -1,4 +1,5 @@
-public abstract class Alteration {
+public abstract class Alteration
+{
     public virtual string Name => GetType().Name; // Alteration Name
     public virtual string Description => "No description given"; // Alteration Description
     public virtual bool Published => false; // Alteration is published in Auto Alteration -> determines if shown in UI-App
@@ -10,7 +11,7 @@ public abstract class Alteration {
     internal virtual List<ArticleProvider> customBlocks { get; } = [];
 
     public const float PI = (float)Math.PI;
-    
+
     public abstract void Run(Inventory inventory, Map map);
     public void Run(Map map, List<ArticleProvider>? customBlocks = null)
     {
@@ -23,7 +24,7 @@ public abstract class Alteration {
             "WhiteShore" => AlterationConfig.WhiteShoreArticleProvider,
             _ => throw new NotSupportedException($"Environment '{map.map.GetEnvironment()}' is not supported")
         };
-        
+
         Inventory inventory = [];
         List<ArticleProvider> articleProviders = [collectionArticleProvider, .. this.customBlocks, .. customBlocks ?? []];
         foreach (ArticleProvider provider in articleProviders)
@@ -52,12 +53,12 @@ public abstract class Alteration {
             alteration.Run(inventory, map);
         }
 
-        
+
         //Run alteration
         inventory.Export("temp");
         Run(inventory, map);
         AlterationConfig.mapCount++;
-            
+
         //cleanup
         if (map.embeddedBlocks.Count != 0)
         {

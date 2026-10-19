@@ -8,34 +8,43 @@ public abstract class Move
     public abstract void Apply(Position position, Article article);
 }
 
-public class Offset: Move{
-    public Offset(Vec3 vector){
+public class Offset : Move
+{
+    public Offset(Vec3 vector)
+    {
         this.vector = vector;
     }
-    public Offset(float x, float y, float z) {
-        this.vector = new Vec3(x,y,z);
+    public Offset(float x, float y, float z)
+    {
+        this.vector = new Vec3(x, y, z);
     }
-    public override void Apply(Position position, Article article){
+    public override void Apply(Position position, Article article)
+    {
         position.Move(vector);
     }
 }
 
-public class Translate: Move{
-    public Translate(Vec3 vector){
+public class Translate : Move
+{
+    public Translate(Vec3 vector)
+    {
         this.vector = vector;
     }
-    public override void Apply(Position position, Article article){
+    public override void Apply(Position position, Article article)
+    {
         position.coords += vector;
     }
 }
 
-public class Rotate: Move{
+public class Rotate : Move
+{
     public Rotate(Vec3 vector)
     {
         this.vector = vector;
     }
-    public Rotate(float x, float y, float z) {
-        this.vector = new Vec3(x,y,z);
+    public Rotate(float x, float y, float z)
+    {
+        this.vector = new Vec3(x, y, z);
     }
     public override void Apply(Position position, Article? article = null)
     {
@@ -48,13 +57,15 @@ public class Rotate: Move{
     }
 }
 
-public class RotateMid: Move{
+public class RotateMid : Move
+{
     public RotateMid(Vec3 vector)
     {
         this.vector = vector;
     }
-    public RotateMid(float x, float y, float z) {
-        this.vector = new Vec3(x,y,z);
+    public RotateMid(float x, float y, float z)
+    {
+        this.vector = new Vec3(x, y, z);
     }
 
     public override void Apply(Position position, Article article)
@@ -65,15 +76,18 @@ public class RotateMid: Move{
     }
 }
 
-public class RotateCenter: Move{
+public class RotateCenter : Move
+{
     public RotateCenter(Vec3 vector)
     {
         this.vector = vector;
     }
-    public RotateCenter(float x, float y, float z) {
-        this.vector = new Vec3(x,y,z);
+    public RotateCenter(float x, float y, float z)
+    {
+        this.vector = new Vec3(x, y, z);
     }
-    public override void Apply(Position position, Article article){
+    public override void Apply(Position position, Article article)
+    {
         Vec3 Offset = new(768 - position.coords.X, 120 - position.coords.Y, 768 - position.coords.Z);
         Vec3 rotation = position.YawPitchRoll;
         // position.Rotate(-rotation);

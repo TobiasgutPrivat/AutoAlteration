@@ -2,28 +2,33 @@ using GBX.NET;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.LinearAlgebra.Double;
 
-public class Position {
+public class Position
+{
     public Vec3 coords;
     public Vec3 YawPitchRoll;
-    public static Position Zero = new (Vec3.Zero,Vec3.Zero);
+    public static Position Zero = new(Vec3.Zero, Vec3.Zero);
 
-    public Position( Vec3 ?coords){
+    public Position(Vec3? coords)
+    {
         this.coords = coords ?? Vec3.Zero;
         this.YawPitchRoll = Vec3.Zero;
     }
 
-    public Position(Vec3 ?coords, Vec3 ?YawPitchRoll){
+    public Position(Vec3? coords, Vec3? YawPitchRoll)
+    {
         this.coords = coords ?? Vec3.Zero;
         this.YawPitchRoll = YawPitchRoll ?? Vec3.Zero;
     }
 
-    public Position AddPosition(Position position){
+    public Position AddPosition(Position position)
+    {
         Move(position.coords);
         Rotate(position.YawPitchRoll);
         return this;
     }
-    
-    public void Move(Vec3 offset){
+
+    public void Move(Vec3 offset)
+    {
         double Yaw = YawPitchRoll.X;
         double Roll = YawPitchRoll.Z;
         double Pitch = YawPitchRoll.Y;
@@ -50,24 +55,27 @@ public class Position {
         coords += new Vec3((float)x3, (float)y3, (float)z3);
     }
 
-    public void Rotate(Vec3 rotation) {
+    public void Rotate(Vec3 rotation)
+    {
         //Trackmania does like ZXY in https://dugas.ch/transform_viewer/index.html
         Matrix<double> rotationMatrix = CreateZXYMatrix(YawPitchRoll);
         Matrix<double> byrotationMatrix = CreateZXYMatrix(rotation);
-                  
+
         rotationMatrix *= byrotationMatrix;
 
         YawPitchRoll = GetEulerZXY(rotationMatrix);
     }
 
-    private static Vec3 GetEulerZXY(Matrix<double> rotationMatrix) {
+    private static Vec3 GetEulerZXY(Matrix<double> rotationMatrix)
+    {
         double extractedRoll = Math.Asin(rotationMatrix[2, 1]);
         double extractedPitch = Math.Atan2(-rotationMatrix[2, 0], rotationMatrix[2, 2]);
         double extractedYaw = Math.Atan2(-rotationMatrix[0, 1], rotationMatrix[1, 1]);
         return new Vec3((float)extractedYaw, (float)extractedPitch, (float)extractedRoll);
     }
 
-    private static Matrix<double> CreateZXYMatrix(Vec3 rotation) {
+    private static Matrix<double> CreateZXYMatrix(Vec3 rotation)
+    {
         double Yaw = rotation.X;
         double Roll = rotation.Z;
         double Pitch = rotation.Y;

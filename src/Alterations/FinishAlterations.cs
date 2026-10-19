@@ -3,51 +3,60 @@ using GBX.NET.Engines.GameData;
 
 using GBX.NET;
 
-public class MoveFinish(MoveChain move): Alteration {
+public class MoveFinish(MoveChain move) : Alteration
+{
     public override string Description => "Moves the Finish to a new position";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true;
 
-    public override void Run(Inventory inventory, Map map){
-        map.Move(inventory.Any(["Finish","Multilap"]), move);
+    public override void Run(Inventory inventory, Map map)
+    {
+        map.Move(inventory.Any(["Finish", "Multilap"]), move);
         map.PlaceStagedBlocks();
     }
 }
-public class OneBack: MoveFinish {
+public class OneBack : MoveFinish
+{
     public override string Description => "moves the Finish one Tile back";
 
-    public OneBack(): base(new Offset(0,0,32)) { }
+    public OneBack() : base(new Offset(0, 0, 32)) { }
 }
 
-public class OneForward: MoveFinish {
+public class OneForward : MoveFinish
+{
     public override string Description => "moves the Finish one Tile forward";
-    public OneForward(): base(new Offset(0,0,-32)) { }
+    public OneForward() : base(new Offset(0, 0, -32)) { }
 }
 
-public class OneDown: MoveFinish {
+public class OneDown : MoveFinish
+{
     public override string Description => "moves the Finish one Tile down";
-    public OneDown(): base(new Offset(0,-8,0)) { }
+    public OneDown() : base(new Offset(0, -8, 0)) { }
 }
 
-public class OneLeft: MoveFinish {
+public class OneLeft : MoveFinish
+{
     public override string Description => "moves the Finish one Tile to the left";
-    public OneLeft(): base(new Offset(32,0,0)) { }
+    public OneLeft() : base(new Offset(32, 0, 0)) { }
 }
 
-public class OneRight: MoveFinish {
+public class OneRight : MoveFinish
+{
     public override string Description => "moves the Finish one Tile to the right";
-    public OneRight(): base(new Offset(-32,0,0)) { }
+    public OneRight() : base(new Offset(-32, 0, 0)) { }
 }
 
-public class OneUP: MoveFinish {
+public class OneUP : MoveFinish
+{
     public override string Description => "moves the Finish one Tile up";
-    public OneUP(): base(new Offset(0,8,0)) { }
+    public OneUP() : base(new Offset(0, 8, 0)) { }
 }
 
-public class TwoUP: MoveFinish {
+public class TwoUP : MoveFinish
+{
     public override string Description => "moves the Finish two Tiles up";
-    public TwoUP(): base(new Offset(0,16,0)) { }
+    public TwoUP() : base(new Offset(0, 16, 0)) { }
 }
 
 //better reverse (manual)
@@ -58,15 +67,17 @@ public class TwoUP: MoveFinish {
 
 //TODO Ground-Clippers, Pillars at y=0 get (custom) finishblock
 
-public class Inclined : Alteration {
+public class Inclined : Alteration
+{
     public override string Description => "tilt's the start and finish down";
     public override bool Published => true;
     public override bool LikeAN => false;
     public override bool Complete => true;
 
-    public override void Run(Inventory inventory, Map map){
-        inventory.Select(["MapStart","Multilap","Finish"]).Edit().PlaceRelative(inventory, map,new Rotate(0,0.2f*PI,0));
-        map.Delete(inventory.Select("MapStart"),true);
+    public override void Run(Inventory inventory, Map map)
+    {
+        inventory.Select(["MapStart", "Multilap", "Finish"]).Edit().PlaceRelative(inventory, map, new Rotate(0, 0.2f * PI, 0));
+        map.Delete(inventory.Select("MapStart"), true);
         map.PlaceStagedBlocks();
     }
 }
@@ -79,13 +90,15 @@ public class Inclined : Alteration {
 
 //puzzle (manual)
 
-public class Reverse : Alteration {
+public class Reverse : Alteration
+{
     public override string Description => "swaps start and finish";
     public override bool Published => true;
     public override bool LikeAN => false;
     public override bool Complete => true;
 
-    public override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map)
+    {
         inventory.Select("MapStart").Edit().RemoveKeyword("MapStart").AddKeyword("Finish").Replace(inventory, map);
         inventory.Select("Finish").Edit().RemoveKeyword("Finish").AddKeyword("MapStart").Replace(inventory, map);
         map.PlaceStagedBlocks();
@@ -98,13 +111,15 @@ public class Reverse : Alteration {
 
 //TODO sky is the finish (Macro)block
 
-public class ThereAndBack : Alteration {
+public class ThereAndBack : Alteration
+{
     public override string Description => "replaces Start with Multilap and Finish with Checkpoint";
     public override bool Published => false;
     public override bool LikeAN => true;
     public override bool Complete => false;
 
-    public override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map)
+    {
         inventory.Select("Finish").Edit().RemoveKeyword("Finish").AddKeyword("Checkpoint").Replace(inventory, map);//TODO (Custom)blocks (No removekeyword)
         inventory.Select("MapStart").Edit().RemoveKeyword("MapStart").AddKeyword("Multilap").Replace(inventory, map);//TODO (Custom)blocks
         map.map.IsLapRace = true;
@@ -122,7 +137,8 @@ public class STTC : Alteration
 
     public override List<Alteration> AlterationsBefore => [new STTF()];
 
-    public override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map)
+    {
         var finishArticles = inventory.Any(["Finish"]);
         var finishes = finishArticles.SelectMany(map.GetBlocks).ToList();
         if (finishes.Count == 0) return;
@@ -132,14 +148,16 @@ public class STTC : Alteration
     }
 
     // The point shared by the 4 middle blocks (24 / 32 blocks of 32 units), y is ignored
-    private static Vec3 MapCenter(Map map) {
+    private static Vec3 MapCenter(Map map)
+    {
         var isStadium = map.map.Collection?.ToString().StartsWith("Stadium", StringComparison.OrdinalIgnoreCase) ?? true;
         var center = (isStadium ? 24 : 32) * 32;
         return new Vec3(center, 0, center);
     }
 
     // Center of the x/z bounding box around all finishes, y is ignored
-    private static Vec3 BoundsCenter(List<Block> blocks) {
+    private static Vec3 BoundsCenter(List<Block> blocks)
+    {
         var points = blocks.SelectMany(Footprint).ToList();
         return new Vec3(
             (points.Min(p => p.X) + points.Max(p => p.X)) / 2,
@@ -149,8 +167,10 @@ public class STTC : Alteration
     }
 
     // Corners of a block's box (rotation included, so a block laid flat uses its height), items only have their origin
-    private static IEnumerable<Vec3> Footprint(Block block) {
-        if (block.blockType is BlockType.Item or BlockType.CustomItem) {
+    private static IEnumerable<Vec3> Footprint(Block block)
+    {
+        if (block.blockType is BlockType.Item or BlockType.CustomItem)
+        {
             return [block.position.coords];
         }
         var width = block.article.Width * 32;
@@ -158,7 +178,8 @@ public class STTC : Alteration
         var length = block.article.Length * 32;
         return new[] { 0f, width }
             .SelectMany(x => new[] { 0f, height }.SelectMany(y => new[] { 0f, length }.Select(z => new Vec3(x, y, z))))
-            .Select(corner => {
+            .Select(corner =>
+            {
                 Position position = new(block.position.coords, block.position.YawPitchRoll);
                 position.Move(corner);
                 return position.coords;
@@ -166,7 +187,8 @@ public class STTC : Alteration
     }
 }
 
-public class Flags : Alteration {
+public class Flags : Alteration
+{
     public override string Description => "removes all finishes, adds finish triggers to all the flags (excluding their poles) on the map";
     public override bool Published => false;
     public override bool LikeAN => true;
@@ -176,7 +198,8 @@ public class Flags : Alteration {
 
     internal override List<ArticleProvider> customBlocks => [new ArticleProvider("Flags\\")];
 
-    public override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map)
+    {
         map.Delete(inventory.Any(["Finish"]));
         inventory
             .Select("Flag")
@@ -184,14 +207,16 @@ public class Flags : Alteration {
             .Edit()
             .AddKeyword("Finish")
             .PlaceRelative(inventory, map);
-        map.stagedBlocks.ForEach(b => {
+        map.stagedBlocks.ForEach(b =>
+        {
             b.WaypointSpecialProperty = GoalProperty();
             b.color = DifficultyColor.Default;
         });
         map.PlaceStagedBlocks();
     }
 
-    private static CGameWaypointSpecialProperty GoalProperty() {
+    private static CGameWaypointSpecialProperty GoalProperty()
+    {
         var property = new CGameWaypointSpecialProperty() { Tag = "Goal", Order = 0 };
         property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
         return property;
@@ -210,7 +235,8 @@ public class Manslaughter : Alteration
 
     private static readonly List<string> Shapes = ["Straight", "CornerOut", "CornerIn", "DiagIn", "DiagOut"];
 
-    public override void Run(Inventory inventory, Map map){
+    public override void Run(Inventory inventory, Map map)
+    {
         map.Delete(inventory.Any(["Finish"]));
         inventory
             .Select(BlockType.Block).Select("Stand")
@@ -219,14 +245,16 @@ public class Manslaughter : Alteration
             .RemoveKeyword("OnDecoWall")
             .AddKeyword("Finish")
             .PlaceRelative(inventory, map);
-        map.stagedBlocks.ForEach(b => {
+        map.stagedBlocks.ForEach(b =>
+        {
             b.WaypointSpecialProperty = GoalProperty();
             b.color = DifficultyColor.Default;
         });
         map.PlaceStagedBlocks();
     }
 
-    private static CGameWaypointSpecialProperty GoalProperty() {
+    private static CGameWaypointSpecialProperty GoalProperty()
+    {
         var property = new CGameWaypointSpecialProperty() { Tag = "Goal", Order = 0 };
         property.Chunks.Create<CGameWaypointSpecialProperty.Chunk2E009000>().Version = 2;
         return property;

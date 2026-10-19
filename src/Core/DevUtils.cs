@@ -9,13 +9,17 @@ using GBX.NET.ZLib;
 using ManiaAPI.NadeoAPI;
 using Newtonsoft.Json;
 
-class DevUtils{
-    public static void transferMapUids(string sourceFolder, string destinationFolder) {
+class DevUtils
+{
+    public static void transferMapUids(string sourceFolder, string destinationFolder)
+    {
         List<string> sourcefiles = Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly).ToList();
         List<string> destinationFiles = Directory.GetFiles(destinationFolder, "*.map.gbx", SearchOption.TopDirectoryOnly).ToList();
-        foreach (string sourceFile in sourcefiles) {
+        foreach (string sourceFile in sourcefiles)
+        {
             string? match = destinationFiles.Find(file => Path.GetFileNameWithoutExtension(file) == Path.GetFileNameWithoutExtension(sourceFile));
-            if (match != null) {
+            if (match != null)
+            {
                 Map sourceMap = new Map(sourceFile);
                 Map destinationMap = new Map(match);
                 destinationMap.map.MapUid = sourceMap.map.MapUid;
@@ -25,38 +29,44 @@ class DevUtils{
         }
     }
 
-    public static void ResaveBlock(string BlockPath) {
+    public static void ResaveBlock(string BlockPath)
+    {
         Gbx.LZO = new MiniLZO();
         Gbx.ZLib = new ZLib();
         CGameItemModel customBlock = Gbx.Parse<CGameItemModel>(BlockPath);
         customBlock.Save(BlockPath + "resaved.block.gbx");
     }
 
-    public static void LogMaterialInfo(string Folder) {
+    public static void LogMaterialInfo(string Folder)
+    {
         // string sourceFolder = Path.Combine(AltertionConfig.DataFolder, "CustomBlocks/Vanilla");
-        string destinationFolder = Path.Combine(AlterationConfig.DataFolder, "CustomBlocks","MaterialInfo");
+        string destinationFolder = Path.Combine(AlterationConfig.DataFolder, "CustomBlocks", "MaterialInfo");
         AutoAlteration.AlterAll([new MaterialInfo()], Folder, destinationFolder, "MaterialInfo");
         File.WriteAllText(Path.Combine(AlterationConfig.devPath, "SurfacePhysicIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfacePhysicIds));
         File.WriteAllText(Path.Combine(AlterationConfig.devPath, "SurfaceGameplayIds.json"), JsonConvert.SerializeObject(MaterialInfo.SurfaceGameplayIds));
         File.WriteAllText(Path.Combine(AlterationConfig.devPath, "Materials.json"), JsonConvert.SerializeObject(MaterialInfo.materials));
     }
 
-    public static void NonColidableFix() {
+    public static void NonColidableFix()
+    {
         foreach (string file in Directory.GetFiles(Path.Join(AlterationConfig.CustomBlocksFolder, "Vanilla"), "*", SearchOption.AllDirectories))
         {
             Gbx.LZO = new MiniLZO();
             // Gbx.ZLib = new ZLib();
             CustomBlock customBlock = new(file);
             bool changed = false;
-            customBlock.MeshCrystals.ForEach(x => {
+            customBlock.MeshCrystals.ForEach(x =>
+            {
                 //if there are no collidable layers, make first one collidable
-                if (!x.Layers.Any(y => y.GetType() == typeof(CPlugCrystal.GeometryLayer) && ((CPlugCrystal.GeometryLayer)y).Collidable)){ 
+                if (!x.Layers.Any(y => y.GetType() == typeof(CPlugCrystal.GeometryLayer) && ((CPlugCrystal.GeometryLayer)y).Collidable))
+                {
                     CPlugCrystal.GeometryLayer layer = (CPlugCrystal.GeometryLayer)x.Layers.Where(y => y.GetType() == typeof(CPlugCrystal.GeometryLayer)).First();
                     layer.Collidable = true;
                     changed = true;
                 }
             });
-            if (changed){
+            if (changed)
+            {
                 customBlock.Save(file);
             }
         }
@@ -81,7 +91,8 @@ class DevUtils{
             string? category = null;
             foreach (KeyValuePair<string, List<Alteration>> pair in AlterationCategories)
             {
-                if (pair.Value.Select(x => x.GetType()).Contains(alteration.GetType())){
+                if (pair.Value.Select(x => x.GetType()).Contains(alteration.GetType()))
+                {
                     category = pair.Key;
                     break;
                 }
@@ -94,7 +105,7 @@ class DevUtils{
             }
 
             value.Add(
-                "- <span title=\"" + alteration.Description + "\">"+alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") + (!alteration.Complete ? "/": "") +"</span>"
+                "- <span title=\"" + alteration.Description + "\">" + alteration.GetType().Name + (!alteration.LikeAN ? "*" : "") + (!alteration.Complete ? "/" : "") + "</span>"
             );
         }
         string text = "";
@@ -106,24 +117,28 @@ class DevUtils{
         File.WriteAllText(Path.Combine(AlterationConfig.devPath, "AlterationList.md"), text);
     }
 
-    public static void generateLightSurfaceBlocks() {
+    public static void generateLightSurfaceBlocks()
+    {
         AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Join(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Join(AlterationConfig.CustomBlocksFolder, "LightSurface"), "");
     }
 
-    public static void renameMaps(string folder,string remove,string add) {
+    public static void renameMaps(string folder, string remove, string add)
+    {
         List<string> sourcefiles = Directory.GetFiles(folder, "*.map.gbx", SearchOption.TopDirectoryOnly).ToList();
-        foreach (string sourceFile in sourcefiles) {
+        foreach (string sourceFile in sourcefiles)
+        {
             Map map = new Map(sourceFile);
             string name = map.map.MapName;
             name = name.Replace(remove, add);
             map.map.MapName = name;
             map.Save(sourceFile.Replace(remove, add));
         }
-        
+
     }
 }
 
-class CustomBlockAirTest : Alteration {
+class CustomBlockAirTest : Alteration
+{
     // int id = 1000000; 
     //known options: 1000, 1000000, 1001000, 1002000
     // 100100 is good for most to have correct model, (Exception ex. dirtroad curve2)
@@ -135,13 +150,13 @@ class CustomBlockAirTest : Alteration {
     public override void Run(Inventory inventory, Map map)
     {
         Inventory platform = inventory.Select("Platform");
-        platform.Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).PlaceRelative(inventory,map,new Offset(new Vec3(0,100,0)));
-        (inventory/platform).Edit().AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(inventory,map,new Offset(new Vec3(0,100,0)));
+        platform.Edit().RemoveKeyword(["Grass", "Dirt", "Plastic", "Ice", "Tech"]).AddKeyword(["Plastic", "WoodSurfaceHeavy"]).PlaceRelative(inventory, map, new Offset(new Vec3(0, 100, 0)));
+        (inventory / platform).Edit().AddKeyword(["WoodSurfaceHeavy"]).PlaceRelative(inventory, map, new Offset(new Vec3(0, 100, 0)));
         map.stagedBlocks.ForEach(block => block.IsAir = false);
         map.PlaceStagedBlocks(false);
         // turns out to be not in air mode and not wood
-        platform.Edit().RemoveKeyword(["Grass","Dirt","Plastic","Ice","Tech"]).AddKeyword(["Plastic","WoodSurfaceHeavy"]).Replace(inventory,map);
-        (inventory/platform).Edit().AddKeyword(["WoodSurfaceHeavy"]).Replace(inventory,map);
+        platform.Edit().RemoveKeyword(["Grass", "Dirt", "Plastic", "Ice", "Tech"]).AddKeyword(["Plastic", "WoodSurfaceHeavy"]).Replace(inventory, map);
+        (inventory / platform).Edit().AddKeyword(["WoodSurfaceHeavy"]).Replace(inventory, map);
         map.stagedBlocks.ForEach(block => block.IsAir = true);
         // map.stagedBlocks.ForEach(block => block. = false);
         map.PlaceStagedBlocks(false);
@@ -151,7 +166,8 @@ class CustomBlockAirTest : Alteration {
     }
 }
 
-class Replace : Alteration {
+class Replace : Alteration
+{
     public override void Run(Inventory inventory, Map map)
     {
         map.StageAll(inventory);
@@ -159,21 +175,24 @@ class Replace : Alteration {
     }
 }
 
-class Test : Alteration {
+class Test : Alteration
+{
     public override void Run(Inventory inventory, Map map)
     {
-        inventory.Edit().Replace(inventory,map,new Offset(16,0,0));//Test if Rotation is before or after Move
+        inventory.Edit().Replace(inventory, map, new Offset(16, 0, 0));//Test if Rotation is before or after Move
         map.PlaceStagedBlocks();
     }
 }
 
-class Nothing : Alteration {
+class Nothing : Alteration
+{
     public override void Run(Inventory inventory, Map map)
     {
     }
 }
 
-class NothingBlock : CustomBlockAlteration {
+class NothingBlock : CustomBlockAlteration
+{
     public override bool Run(CustomBlock customBlock) { return true; }
 }
 

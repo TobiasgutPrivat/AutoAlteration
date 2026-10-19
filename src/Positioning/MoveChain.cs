@@ -1,9 +1,12 @@
-public class MoveChain : List<Move> {
+public class MoveChain : List<Move>
+{
     public MoveChain() { }
 
-    public void Apply(Position position,Article article){
-        foreach(Move move in this){
-            move.Apply(position,article);
+    public void Apply(Position position, Article article)
+    {
+        foreach (Move move in this)
+        {
+            move.Apply(position, article);
         }
     }
 

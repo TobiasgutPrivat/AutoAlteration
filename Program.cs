@@ -1,7 +1,7 @@
 ﻿//Initial load
 
 AlterationConfig.devMode = true;
-AlterationConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..","data","dev");
+AlterationConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"../../..", "data", "dev");
 AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //

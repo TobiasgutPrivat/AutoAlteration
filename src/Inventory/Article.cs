@@ -2,7 +2,8 @@ using System.Text.RegularExpressions;
 using GBX.NET;
 using GBX.NET.Engines.GameData;
 
-public class Article {
+public class Article
+{
     public string Name = "";
     public MoveChain MoveChain = []; //Move to come from the Models Coords to the semanticly intended Coords
     public BlockType Type;
@@ -31,8 +32,9 @@ public class Article {
         Width = width;
         Height = height;
     }
-    
-    public Article(int Height, int Width, int Length, BlockType Type, string Name){
+
+    public Article(int Height, int Width, int Length, BlockType Type, string Name)
+    {
         this.Name = Name;
         LoadKeywords();
         this.Type = Type;
@@ -41,7 +43,8 @@ public class Article {
         this.Height = Height;
     }
 
-    public Article(string name,BlockType type, string Path){
+    public Article(string name, BlockType type, string Path)
+    {
         Name = name;
         this.Path = Path;
         LoadKeywords();
@@ -59,18 +62,22 @@ public class Article {
     }
 
     public Article CloneArticle() =>
-        new(Name,Type,Keywords.ToList(),ToShapes.ToList(),[.. MoveChain],Length,Width){
+        new(Name, Type, Keywords.ToList(), ToShapes.ToList(), [.. MoveChain], Length, Width)
+        {
             Height = Height,
             Path = Path,
             DefaultRotation = DefaultRotation
         };
 
-    private Ident ReadItemIdent() {
-        if (string.IsNullOrEmpty(Path) || !File.Exists(Path)) {
+    private Ident ReadItemIdent()
+    {
+        if (string.IsNullOrEmpty(Path) || !File.Exists(Path))
+        {
             throw new InvalidOperationException($"Cannot read item ident of {Name}: file '{Path}' not found");
         }
         using var stream = File.OpenRead(Path);
-        if (Gbx.ParseHeaderNode(stream) is not CGameItemModel { Ident: Ident ident }) {
+        if (Gbx.ParseHeaderNode(stream) is not CGameItemModel { Ident: Ident ident })
+        {
             throw new Exception($"No ident in header of {Path}");
         }
         return ident;
@@ -79,17 +86,23 @@ public class Article {
     public bool HasKeyword(string keyword) =>
         Keywords.Contains(keyword) || ToShapes.Contains(keyword);
 
-    public bool Match(Article article) {
-        if (Keywords.Count != article.Keywords.Count || ToShapes.Count != article.ToShapes.Count) {
+    public bool Match(Article article)
+    {
+        if (Keywords.Count != article.Keywords.Count || ToShapes.Count != article.ToShapes.Count)
+        {
             return false;
         }
-        foreach (var keyword in Keywords) {
-            if (Keywords.Count(k => k == keyword) != article.Keywords.Count(k => k == keyword)) {
+        foreach (var keyword in Keywords)
+        {
+            if (Keywords.Count(k => k == keyword) != article.Keywords.Count(k => k == keyword))
+            {
                 return false;
             }
         }
-        foreach (var toShape in ToShapes) {
-            if (ToShapes.Count(k => k == toShape) != article.ToShapes.Count(k => k == toShape)) {
+        foreach (var toShape in ToShapes)
+        {
+            if (ToShapes.Count(k => k == toShape) != article.ToShapes.Count(k => k == toShape))
+            {
                 return false;
             }
         }
@@ -97,9 +110,10 @@ public class Article {
     }
 
     #region LoadKeywords
-    public void LoadKeywords() {
+    public void LoadKeywords()
+    {
         //Path
-        string[] splits = Name.Split(["/", "\\"],StringSplitOptions.RemoveEmptyEntries); // seperate Foldernames
+        string[] splits = Name.Split(["/", "\\"], StringSplitOptions.RemoveEmptyEntries); // seperate Foldernames
         if (splits[0].StartsWith("NC2_")) splits = splits[1..];//remove NC2_*
         splits[..^1].ToList().ForEach(Keywords.Add); // Folders as Keywords
 
@@ -112,7 +126,8 @@ public class Article {
         //ToKeywords
         int toPos = GetToPos(name) ?? -1; // Extract ToKeywords (mostly shapes) to avoid naming conflicts
 
-        if (toPos != -1) {
+        if (toPos != -1)
+        {
             string ToString = name[(toPos + 2)..];
             nameSplits.AddRange(name[..toPos].Split("_"));
 
@@ -121,50 +136,67 @@ public class Article {
             SplitByKeywords(ToSplits, AlterationConfig.ToKeywords, ToShapes);
             Keywords.Add("To");
             nameSplits.AddRange(ToSplits);
-        } else {
-            if (Regex.IsMatch(name, "_\\d_\\d")) { // for NC2 naming convention
-                nameSplits = [Regex.Replace(name, "_\\d_\\d",""), Regex.Match(name, "_\\d_\\d").Captures[0].Value];
+        }
+        else
+        {
+            if (Regex.IsMatch(name, "_\\d_\\d"))
+            { // for NC2 naming convention
+                nameSplits = [Regex.Replace(name, "_\\d_\\d", ""), Regex.Match(name, "_\\d_\\d").Captures[0].Value];
                 nameLength += 2; // account for underscores
-            } else {
+            }
+            else
+            {
                 nameSplits = name.Split("_").ToList();
             }
         }
 
         //CustomblockSets, could have issues if set is part of toKeywords
         SplitByKeywords(nameSplits, AlterationConfig.CustomBlockAlts, Keywords);
-        
+
         //Keywords
         SplitByKeywords(nameSplits, AlterationConfig.Keywords, Keywords);
 
         Keywords.AddRange(nameSplits);
-        
-        if (nameLength != Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length)) {
+
+        if (nameLength != Keywords.Sum(k => k.Length) + ToShapes.Sum(k => k.Length))
+        {
             Console.WriteLine($"Name {Name} is not fully covered by keywords. keywords: " + KeywordString());
         }
     }
 
-    private static void SplitByKeywords(List<string> splits, IEnumerable<string> keywords, List<string> collection) {
-        foreach (var keyword in keywords) {
-            while (splits.Any(split => split.Contains(keyword))) { //also
-                splits.Where(split => split.Contains(keyword)).ToList().ForEach(split => {
-                        int count = split.Split(keyword, StringSplitOptions.None).Length - 1;
-                        collection.AddRange(Enumerable.Repeat(keyword, count));
-                        splits.Remove(split); //replace split with itself splitted by the keyword
-                        splits.AddRange(split.Split(keyword, StringSplitOptions.RemoveEmptyEntries));
-                    });
+    private static void SplitByKeywords(List<string> splits, IEnumerable<string> keywords, List<string> collection)
+    {
+        foreach (var keyword in keywords)
+        {
+            while (splits.Any(split => split.Contains(keyword)))
+            { //also
+                splits.Where(split => split.Contains(keyword)).ToList().ForEach(split =>
+                {
+                    int count = split.Split(keyword, StringSplitOptions.None).Length - 1;
+                    collection.AddRange(Enumerable.Repeat(keyword, count));
+                    splits.Remove(split); //replace split with itself splitted by the keyword
+                    splits.AddRange(split.Split(keyword, StringSplitOptions.RemoveEmptyEntries));
+                });
             }
         }
     }
 
-    public int? GetToPos(string name) {
-        if(name.Contains("To")){
+    public int? GetToPos(string name)
+    {
+        if (name.Contains("To"))
+        {
             int toPos = name.IndexOf("To"); //check if "to" is not part of another keyword
-            if (AlterationConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k))) {
+            if (AlterationConfig.Keywords.Where(k => k.Contains("To")).Any(k => name[toPos..].StartsWith(k)))
+            {
                 return GetToPos(name[(toPos + 2)..]) + toPos + 2;
-            } else {
+            }
+            else
+            {
                 return toPos;
             }
-        }else {
+        }
+        else
+        {
             return null;
         }
     }
