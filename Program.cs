@@ -5,8 +5,14 @@ AlterationConfig.devPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @
 AlterationConfig.Load();
 
 // ----------- Code for Execution (change for your use) ----------- //
+//TODO test edited Alterations
+new AlterationScript("Campaign.json").RunConfig();
 
-string from = "C:\\Users\\hugok\\Documents\\Trackmania\\Maps\\Campaigns\\Fall 2026\\Fall 2026 - 01_(361913).Map.Gbx";
-string to = "C:\\Users\\hugok\\Documents\\Trackmania\\Maps\\Campaigns\\Fall 2026\\Fall 2026 - 01_(361913).Map Manslaughter.Gbx";
-AutoAlteration.AlterFile(new Manslaughter(), from, to, "Manslaughter");
-    
+// direct Alteration
+// string from = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBase.Block.Gbx";
+// string to = "C:/Users/Tobias/Documents/Trackmania2020/Blocks/PlatformPlasticBaseSuperSized.Block.Gbx";
+// AutoAlteration.AlterFile(new Wood(), from, to, "SuperSized");
+
+// LightSurface Template
+// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine("C:/Users/Tobias/Documents/Trackmania2020/Blocks", "LightSurface"), "");
+// AutoAlteration.AlterAll(new LightSurfaceBlock(), Path.Combine(AlterationConfig.CustomBlocksFolder, "HeavySurface"), Path.Combine(AlterationConfig.CustomBlocksFolder, "LightSurface"), "");
