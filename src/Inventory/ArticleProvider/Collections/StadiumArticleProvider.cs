@@ -1,0 +1,1 @@
+class StadiumArticleProvider() : CollectionArticleProvider(Collection.Stadium);

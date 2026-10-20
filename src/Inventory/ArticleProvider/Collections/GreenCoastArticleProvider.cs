@@ -1,0 +1,1 @@
+class GreenCoastArticleProvider() : CollectionArticleProvider(Collection.GreenCoast);

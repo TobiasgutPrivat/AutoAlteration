@@ -8,8 +8,9 @@ public class Replay
 {
     private CGameCtnGhost? WRGhost;
     public List<Position>? Positions = [];
-    
-    public Replay(CGameCtnChallenge map) {
+
+    public Replay(CGameCtnChallenge map)
+    {
         // authorize
         NadeoLiveServices nls = new();
         nls.AuthorizeAsync("AutoAlteration", "D),i8Fo_=/O9a*YU", AuthorizationMethod.DedicatedServer).GetAwaiter().GetResult();

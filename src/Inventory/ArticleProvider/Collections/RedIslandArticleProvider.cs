@@ -1,0 +1,1 @@
+class RedIslandArticleProvider() : CollectionArticleProvider(Collection.RedIsland);

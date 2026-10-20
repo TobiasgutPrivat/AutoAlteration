@@ -1,4 +1,5 @@
-public abstract class Alteration {
+public abstract class Alteration
+{
     public virtual string Name => GetType().Name; // Alteration Name
     public virtual string Description => "No description given"; // Alteration Description
     public virtual bool Published => false; // Alteration is published in Auto Alteration -> determines if shown in UI-App
@@ -10,16 +11,22 @@ public abstract class Alteration {
     internal virtual List<ArticleProvider> customBlocks { get; } = [];
 
     public const float PI = (float)Math.PI;
-    
+
     public abstract void Run(Inventory inventory, Map map);
     public void Run(Map map, List<ArticleProvider>? customBlocks = null)
     {
-        foreach (Alteration alteration in AlterationsBefore)
+        ArticleProvider collectionArticleProvider = map.map.GetEnvironment() switch
         {
-            alteration.Run(map);
-        }
+            "BlueBay" => AlterationConfig.BlueBayArticleProvider,
+            "GreenCoast" => AlterationConfig.GreenCoastArticleProvider,
+            "RedIsland" => AlterationConfig.RedIslandArticleProvider,
+            "Stadium" => AlterationConfig.StadiumArticleProvider,
+            "WhiteShore" => AlterationConfig.WhiteShoreArticleProvider,
+            _ => throw new NotSupportedException($"Environment '{map.map.GetEnvironment()}' is not supported")
+        };
+
         Inventory inventory = [];
-        List<ArticleProvider> articleProviders = [AlterationConfig.VanillaArticles, .. this.customBlocks, .. customBlocks ?? []];
+        List<ArticleProvider> articleProviders = [collectionArticleProvider, .. this.customBlocks, .. customBlocks ?? []];
         foreach (ArticleProvider provider in articleProviders)
         {
             AlterationConfig.Keywords.AddRange(provider.GetAdditionalKeywords());
@@ -40,12 +47,18 @@ public abstract class Alteration {
 
         //logging
         if (AlterationConfig.devMode) inventory.Export(Name);
-        
+
+        foreach (Alteration alteration in AlterationsBefore)
+        {
+            alteration.Run(inventory, map);
+        }
+
+
         //Run alteration
         inventory.Export("temp");
         Run(inventory, map);
         AlterationConfig.mapCount++;
-            
+
         //cleanup
         if (map.embeddedBlocks.Count != 0)
         {

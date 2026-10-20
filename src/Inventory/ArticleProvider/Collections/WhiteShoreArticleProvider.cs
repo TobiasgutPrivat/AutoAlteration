@@ -1,0 +1,1 @@
+class WhiteShoreArticleProvider() : CollectionArticleProvider(Collection.WhiteShore);

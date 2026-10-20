@@ -16,7 +16,7 @@ public class ResizeBlock(float factor) : CustomBlockAlteration
         else if (customBlock.Type == BlockType.Item)
         {
             // CGameCommonItemEntityModelEdition Item = (CGameCommonItemEntityModelEdition)customBlock.customBlock.EntityModelEdition; 
-            
+
         }
         foreach (CPlugCrystal.Layer layer in customBlock.MeshCrystals.SelectMany(x => x.Layers))
         {
@@ -30,7 +30,7 @@ public class ResizeBlock(float factor) : CustomBlockAlteration
             }
             if (layer is CPlugCrystal.SpawnPositionLayer spawnPositionLayer)
             {
-                    spawnPositionLayer.SpawnPosition = new Vec3(spawnPositionLayer.SpawnPosition.X * factor, spawnPositionLayer.SpawnPosition.Y * factor, spawnPositionLayer.SpawnPosition.Z * factor);
+                spawnPositionLayer.SpawnPosition = new Vec3(spawnPositionLayer.SpawnPosition.X * factor, spawnPositionLayer.SpawnPosition.Y * factor, spawnPositionLayer.SpawnPosition.Z * factor);
             }
         }
         return true;
@@ -40,8 +40,10 @@ public class ResizeBlock(float factor) : CustomBlockAlteration
 public class SupersizedBlock(float factor = 2) : ResizeBlock(factor) { }
 public class MiniBlock(float factor = 0.5f) : ResizeBlock(factor) { }
 
-public class InvisibleBlock : CustomBlockAlteration {
-    public override bool Run(CustomBlock customBlock) {
+public class InvisibleBlock : CustomBlockAlteration
+{
+    public override bool Run(CustomBlock customBlock)
+    {
         foreach (CPlugCrystal MeshCrystal in customBlock.MeshCrystals)
         {
             // make invisible

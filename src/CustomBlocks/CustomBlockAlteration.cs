@@ -1,14 +1,16 @@
 using GBX.NET;
 using GBX.NET.Engines.Plug;
 
-public class CustomBlockAlteration {
-    public virtual string Description { get{ return "No description given";} }
-    public virtual bool Published { get{ return false;} }
+public class CustomBlockAlteration
+{
+    public virtual string Description { get { return "No description given"; } }
+    public virtual bool Published { get { return false; } }
     public virtual bool HasFlaws { get { return true; } }
     public virtual string Name { get { return GetType().Name; } }
-    public virtual bool Run(CustomBlock customBlock) {return false;}
+    public virtual bool Run(CustomBlock customBlock) { return false; }
 
-    public static Vec3 GetTopMiddle(CPlugCrystal.Crystal mesh) {
+    public static Vec3 GetTopMiddle(CPlugCrystal.Crystal mesh)
+    {
         float top = mesh.Positions.Max(x => x.Y);
         float Right = mesh.Positions.Min(x => x.X);
         float Left = mesh.Positions.Max(x => x.X);
@@ -30,40 +32,52 @@ public class CustomBlockAlteration {
 }
 
 
-class MaterialInfo : CustomBlockAlteration {
+class MaterialInfo : CustomBlockAlteration
+{
     public static Dictionary<string, CPlugSurface.MaterialId> materials = [];
     public static Dictionary<CPlugSurface.MaterialId, string> SurfacePhysicIds = [];
     public static Dictionary<CPlugMaterialUserInst.GameplayId, string> SurfaceGameplayIds = [];
 
-    public override bool Run(CustomBlock customBlock) {
-        customBlock.MeshCrystals.ForEach(x => {
-            x.Materials.ToList().ForEach(y => {
-                if (!materials.ContainsKey(GetMaterialLink(y))) {
-                    materials.Add(GetMaterialLink(y),GetMaterialUserInst(y).SurfacePhysicId);
+    public override bool Run(CustomBlock customBlock)
+    {
+        customBlock.MeshCrystals.ForEach(x =>
+        {
+            x.Materials.ToList().ForEach(y =>
+            {
+                if (!materials.ContainsKey(GetMaterialLink(y)))
+                {
+                    materials.Add(GetMaterialLink(y), GetMaterialUserInst(y).SurfacePhysicId);
                     Console.WriteLine(GetMaterialLink(y));
                 }
-                if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(y).SurfacePhysicId)) {
-                    SurfacePhysicIds.Add(GetMaterialUserInst(y).SurfacePhysicId,GetMaterialLink(y));
+                if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(y).SurfacePhysicId))
+                {
+                    SurfacePhysicIds.Add(GetMaterialUserInst(y).SurfacePhysicId, GetMaterialLink(y));
                     Console.WriteLine(GetMaterialUserInst(y).SurfacePhysicId);
                 }
-                if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(y).SurfaceGameplayId)) {
-                    SurfaceGameplayIds.Add(GetMaterialUserInst(y).SurfaceGameplayId,GetMaterialLink(y));
+                if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(y).SurfaceGameplayId))
+                {
+                    SurfaceGameplayIds.Add(GetMaterialUserInst(y).SurfaceGameplayId, GetMaterialLink(y));
                     Console.WriteLine(GetMaterialUserInst(y).SurfaceGameplayId);
                 }
             });
         });
-        foreach (CPlugCrystal.GeometryLayer layer in customBlock.MeshCrystals.SelectMany(x => x.Layers).Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).Cast<CPlugCrystal.GeometryLayer>()) {
-            layer?.Crystal?.Faces.ToList().ForEach(x => {
-                if (!materials.ContainsKey(GetMaterialLink(x))) {
-                    materials.Add(GetMaterialLink(x),GetMaterialUserInst(x).SurfacePhysicId);
+        foreach (CPlugCrystal.GeometryLayer layer in customBlock.MeshCrystals.SelectMany(x => x.Layers).Where(x => x.GetType() == typeof(CPlugCrystal.GeometryLayer)).Cast<CPlugCrystal.GeometryLayer>())
+        {
+            layer?.Crystal?.Faces.ToList().ForEach(x =>
+            {
+                if (!materials.ContainsKey(GetMaterialLink(x)))
+                {
+                    materials.Add(GetMaterialLink(x), GetMaterialUserInst(x).SurfacePhysicId);
                     Console.WriteLine(GetMaterialLink(x));
                 }
-                if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(x).SurfacePhysicId)) {
-                    SurfacePhysicIds.Add(GetMaterialUserInst(x).SurfacePhysicId,GetMaterialLink(x));
+                if (!SurfacePhysicIds.ContainsKey(GetMaterialUserInst(x).SurfacePhysicId))
+                {
+                    SurfacePhysicIds.Add(GetMaterialUserInst(x).SurfacePhysicId, GetMaterialLink(x));
                     Console.WriteLine(GetMaterialUserInst(x).SurfacePhysicId);
                 }
-                if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(x).SurfaceGameplayId)) {
-                    SurfaceGameplayIds.Add(GetMaterialUserInst(x).SurfaceGameplayId,GetMaterialLink(x));
+                if (!SurfaceGameplayIds.ContainsKey(GetMaterialUserInst(x).SurfaceGameplayId))
+                {
+                    SurfaceGameplayIds.Add(GetMaterialUserInst(x).SurfaceGameplayId, GetMaterialLink(x));
                     Console.WriteLine(GetMaterialUserInst(x).SurfaceGameplayId);
                 }
             });

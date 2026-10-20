@@ -1,18 +1,23 @@
 using System.Text.Json;
 using System.Reflection;
 
-public class AlterationScript {
+public class AlterationScript
+{
     public string filePath = "";
 
-    public AlterationScript(string filePath){
+    public AlterationScript(string filePath)
+    {
         this.filePath = filePath;
     }
 
-    public void RunConfig(){
-        if (!filePath.Contains(':')){
-            filePath = Path.Combine(AlterationConfig.ApplicationDataFolder,"scripts", filePath);
+    public void RunConfig()
+    {
+        if (!filePath.Contains(':'))
+        {
+            filePath = Path.Combine(AlterationConfig.ApplicationDataFolder, "scripts", filePath);
         }
-        if (!File.Exists(filePath)){
+        if (!File.Exists(filePath))
+        {
             throw new Exception("Alteration Script " + filePath + " not found");
         }
         foreach (JsonElement item in JsonDocument.Parse(File.ReadAllText(filePath)).RootElement.EnumerateArray())
@@ -22,33 +27,39 @@ public class AlterationScript {
                 item.GetProperty("Source").GetString() ?? throw new Exception("Source not found"),
                 item.GetProperty("Destination").GetString() ?? throw new Exception("Destination not found"),
                 item.GetProperty("Name").GetString() ?? "",
-                item.GetProperty("Alterations").EnumerateArray().Select(x => 
+                item.GetProperty("Alterations").EnumerateArray().Select(x =>
                     GetAlteration(x.GetString() ?? throw new Exception("Alteration not a string"))
                     ).ToList(),
-                item.TryGetProperty("CustomBlocks", out _) ? item.GetProperty("CustomBlocks").EnumerateArray().Select(x => 
+                item.TryGetProperty("CustomBlocks", out _) ? item.GetProperty("CustomBlocks").EnumerateArray().Select(x =>
                     GetCustomBlockProvider(x.GetString() ?? throw new Exception("CustomBlocks not a string"))
-                    ).ToList() 
+                    ).ToList()
                     : new List<ArticleProvider>(),
                 item.TryGetProperty("Skip", out _) ? item.GetProperty("Skip").GetInt32() : 0
             );
         }
     }
 
-    private Alteration GetAlteration(string name){
+    private Alteration GetAlteration(string name)
+    {
         List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
         List<Type> alterations = types.Where(t => t.Name == name && t.IsSubclassOf(typeof(Alteration))).ToList();
-        if (alterations.Count > 0){
-            return (Alteration) (Activator.CreateInstance(alterations.First())?? throw new Exception("Alteration couldnt be instantiated"));
+        if (alterations.Count > 0)
+        {
+            return (Alteration)(Activator.CreateInstance(alterations.First()) ?? throw new Exception("Alteration couldnt be instantiated"));
         }
         throw new Exception("Alteration " + name + " not found");
     }
 
-    private ArticleProvider GetCustomBlockProvider(string name){
+    private ArticleProvider GetCustomBlockProvider(string name)
+    {
         List<Type> types = Assembly.GetExecutingAssembly().GetTypes().ToList();
         List<Type> providers = types.Where(t => t.Name == name && t.IsSubclassOf(typeof(ArticleProvider))).ToList();
-        if (providers.Count > 0){
-            return (ArticleProvider) (Activator.CreateInstance(providers.First())?? throw new Exception("CustomBlockProvider couldnt be instantiated"));
-        } else {
+        if (providers.Count > 0)
+        {
+            return (ArticleProvider)(Activator.CreateInstance(providers.First()) ?? throw new Exception("CustomBlockProvider couldnt be instantiated"));
+        }
+        else
+        {
             return new ArticleProvider(name); //Customblocks from named Folder
         }
     }
@@ -56,11 +67,13 @@ public class AlterationScript {
     public static void RunAlteration(AlterType type, string source, string destination, string name, List<Alteration> alterations, List<ArticleProvider> customBlocks, int skip)
     {
         string warning = ValidateSource(type, source);
-        if (warning != ""){
+        if (warning != "")
+        {
             throw new Exception("Source " + warning);
         }
         warning = ValidateDestination(destination);
-        if (warning != ""){
+        if (warning != "")
+        {
             throw new Exception("Destination " + warning);
         }
         Console.WriteLine("\nAlter " + type.ToString() + ": " + source);
@@ -68,15 +81,16 @@ public class AlterationScript {
         Console.WriteLine("As " + name);
         Console.WriteLine("Alterations:");
         Console.WriteLine(" " + string.Join("\n", alterations.Select(x => x.GetType().ToString())));
-        switch (type){
-            case AlterType.File: 
-                AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"),name,customBlocks);
+        switch (type)
+        {
+            case AlterType.File:
+                AutoAlteration.AlterFile(alterations.ToList(), source, Path.Combine(destination, Path.GetFileName(source)[..^8] + " " + name + ".Map.Gbx"), name, customBlocks);
                 break;
             case AlterType.Folder:
-                AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name,customBlocks,skip);
+                AutoAlteration.AlterFolder(alterations.ToList(), source, destination, name, customBlocks, skip);
                 break;
             case AlterType.FullFolder:
-                AutoAlteration.AlterAll(alterations.ToList(),source,destination,name,customBlocks);
+                AutoAlteration.AlterAll(alterations.ToList(), source, destination, name, customBlocks);
                 break;
         }
     }
@@ -84,11 +98,13 @@ public class AlterationScript {
     public static void RunAlteration(AlterType type, string source, string destination, string name, List<CustomBlockAlteration> alterations)
     {
         string warning = ValidateSource(type, source);
-        if (warning != ""){
+        if (warning != "")
+        {
             throw new Exception("Source " + warning);
         }
         warning = ValidateDestination(destination);
-        if (warning != ""){
+        if (warning != "")
+        {
             throw new Exception("Destination " + warning);
         }
         Console.WriteLine("Alter " + type.ToString() + ": " + source);
@@ -96,59 +112,78 @@ public class AlterationScript {
         Console.WriteLine("As " + name);
         Console.WriteLine("Alterations:");
         Console.WriteLine(string.Join("\n", alterations.Select(x => x.GetType().ToString())));
-        switch (type){
-            case AlterType.File: 
-                if (source.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
-                    AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^9] + " " + name + ".Item.Gbx"),name);
-                } else if (source.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase)){
-                    AutoAlteration.AlterFile(alterations.ToList(),source,Path.Combine(destination, Path.GetFileName(source)[..^10] + " " + name + ".Block.Gbx"),name);
-                } else {
+        switch (type)
+        {
+            case AlterType.File:
+                if (source.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase))
+                {
+                    AutoAlteration.AlterFile(alterations.ToList(), source, Path.Combine(destination, Path.GetFileName(source)[..^9] + " " + name + ".Item.Gbx"), name);
+                }
+                else if (source.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase))
+                {
+                    AutoAlteration.AlterFile(alterations.ToList(), source, Path.Combine(destination, Path.GetFileName(source)[..^10] + " " + name + ".Block.Gbx"), name);
+                }
+                else
+                {
                     throw new Exception("Invalid Filetype");
                 }
                 break;
             case AlterType.Folder:
-                AutoAlteration.AlterFolder(alterations.ToList(),source,destination,name);
+                AutoAlteration.AlterFolder(alterations.ToList(), source, destination, name);
                 break;
             case AlterType.FullFolder:
-                AutoAlteration.AlterAll(alterations.ToList(),source,destination,name);
+                AutoAlteration.AlterAll(alterations.ToList(), source, destination, name);
                 break;
         }
     }
-    
+
     private static string ValidateSource(AlterType Type, string path)
     {
-		if (path is null || path == ""){
+        if (path is null || path == "")
+        {
             return "Path missing";
-		}
-        if (Type != AlterType.File) {
-            if (!Directory.Exists(Path.GetFullPath(path))) {
+        }
+        if (Type != AlterType.File)
+        {
+            if (!Directory.Exists(Path.GetFullPath(path)))
+            {
                 return "Folder doesn't Exist";
             }
-        } else {
-            try {
-                if (!File.Exists(Path.GetFullPath(path))) {
+        }
+        else
+        {
+            try
+            {
+                if (!File.Exists(Path.GetFullPath(path)))
+                {
                     return "File doesn't Exist";
-                };
-            } catch{
+                }
+                ;
+            }
+            catch
+            {
                 return "File doesn't Exist";
             }
         }
-        return "";     
+        return "";
     }
 
     private static string ValidateDestination(string path)
     {
-		if (path is null || path == ""){
+        if (path is null || path == "")
+        {
             return "Path missing";
-		}
-        if (!Path.IsPathFullyQualified(Path.GetFullPath(path))){
+        }
+        if (!Path.IsPathFullyQualified(Path.GetFullPath(path)))
+        {
             return "Invalid Path";
         }
-        if (path.Contains('.')) {
+        if (path.Contains('.'))
+        {
             return "Not a Folder Path";
-        }       
-        return "";     
-    }   
+        }
+        return "";
+    }
 }
 
 public enum AlterType

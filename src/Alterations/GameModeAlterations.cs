@@ -1,30 +1,36 @@
 using GBX.NET.Engines.Game;
 
-public class GameMode(string mode) : Alteration {
+public class GameMode(string mode) : Alteration
+{
     public override string Description => $"sets Map to {mode}Mode";
     public override bool Published => true;
     public override bool LikeAN => true;
     public override bool Complete => true; //untested
 
-    public override void Run(Inventory inventory, Map map) {
+    public override void Run(Inventory inventory, Map map)
+    {
         map.map.MapType = "TrackMania\\" + mode;
-        map.map.ChallengeParameters ??= new ();
+        map.map.ChallengeParameters ??= new();
         map.map.ChallengeParameters.MapType = "TrackMania\\" + mode;
     }
 }
-public class Race : GameMode {
+public class Race : GameMode
+{
     public Race() : base("TM_Race") { }
 }
 
-public class Stunt : GameMode {
+public class Stunt : GameMode
+{
     public Stunt() : base("TM_Stunt") { }
 }
 
-public class Platform : GameMode {
+public class Platform : GameMode
+{
     public Platform() : base("TM_Platform") { }
 }
 
-public class Secret : GameMode {
+public class Secret : GameMode
+{
     public override bool Published => false;
     public override bool Complete => false; //type doesn't exist
     public Secret() : base("TM_Secret") { }

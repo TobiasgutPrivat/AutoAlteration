@@ -1,0 +1,1 @@
+class BlueBayArticleProvider() : CollectionArticleProvider(Collection.BlueBay);

@@ -1,13 +1,20 @@
 using System.IO.Pipes;
 using System.Reflection;
 
-public class AutoAlteration {
-    public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null, int skip = 0) {
-        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly)){
-            if (skip > 0) {skip--; continue;};
-            try {
-                AlterFile(alterations,mapFile,Path.Combine(destinationFolder,Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"),Name,customBlocks);
-            } catch (Exception ex) {
+public class AutoAlteration
+{
+    public static void AlterFolder(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null, int skip = 0)
+    {
+        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.map.gbx", SearchOption.TopDirectoryOnly))
+        {
+            if (skip > 0) { skip--; continue; }
+            ;
+            try
+            {
+                AlterFile(alterations, mapFile, Path.Combine(destinationFolder, Path.GetFileName(mapFile)[..^8] + " " + Name + ".map.gbx"), Name, customBlocks);
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine($"Error altering {mapFile}:");
                 Console.WriteLine(ex.Message);
                 Console.WriteLine(ex.StackTrace);
@@ -15,31 +22,37 @@ public class AutoAlteration {
             }
         }
     }
-    public static void AlterFolder(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {
-        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.item.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name,skipUnchanged);
+    public static void AlterFolder(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true)
+    {
+        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.item.gbx", SearchOption.TopDirectoryOnly))
+        {
+            AlterFile(alterations, mapFile, GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)), Name), Name, skipUnchanged);
         }
-        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.block.gbx", SearchOption.TopDirectoryOnly)){
-            AlterFile(alterations,mapFile,GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)),Name),Name,skipUnchanged);
+        foreach (string mapFile in Directory.GetFiles(sourceFolder, "*.block.gbx", SearchOption.TopDirectoryOnly))
+        {
+            AlterFile(alterations, mapFile, GetNewCustomBlockName(Path.Combine(destinationFolder, Path.GetFileName(mapFile)), Name), Name, skipUnchanged);
         }
     }
 
-    public static void AlterAll(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null) {
-        AlterFolder(alterations,sourceFolder,destinationFolder + " " + Name,Name,customBlocks);
+    public static void AlterAll(SList<Alteration> alterations, string sourceFolder, string destinationFolder, string Name, List<ArticleProvider>? customBlocks = null)
+    {
+        AlterFolder(alterations, sourceFolder, destinationFolder + " " + Name, Name, customBlocks);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder + " " + Name, Path.GetFileName(Directory)),Name,customBlocks);
+            AlterAll(alterations, Directory, Path.Combine(destinationFolder + " " + Name, Path.GetFileName(Directory)), Name, customBlocks);
         }
     }
-    public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true) {
-        AlterFolder(alterations,sourceFolder,destinationFolder,Name,skipUnchanged);
+    public static void AlterAll(SList<CustomBlockAlteration> alterations, string sourceFolder, string destinationFolder, string Name, bool skipUnchanged = true)
+    {
+        AlterFolder(alterations, sourceFolder, destinationFolder, Name, skipUnchanged);
         foreach (string Directory in Directory.GetDirectories(sourceFolder, "*", SearchOption.TopDirectoryOnly))
         {
-            AlterAll(alterations,Directory,Path.Combine(destinationFolder, Path.GetFileName(Directory)),Name,skipUnchanged);
+            AlterAll(alterations, Directory, Path.Combine(destinationFolder, Path.GetFileName(Directory)), Name, skipUnchanged);
         }
     }
-    
-    public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name, List<ArticleProvider>? customBlocks = null) {
+
+    public static void AlterFile(SList<Alteration> alterations, string sourceFile, string destinationFile, string Name, List<ArticleProvider>? customBlocks = null)
+    {
         Map map = new Map(sourceFile);
         foreach (Alteration alteration in alterations)
         {
@@ -50,42 +63,58 @@ public class AutoAlteration {
         Console.WriteLine(destinationFile);
     }
 
-    public static void AlterFile(SList<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name, bool skipUnchanged = true) {
-        List<string> Corrupted = ["RoadTechCurve5.Block.Gbx","Crystal\\Classic\\MM\\Stadium\\RoadMain\\Hazards\\StadiumBump1\\Air_0_0.Item.Gbx"];
-        if (Corrupted.Any(x => sourceFile.EndsWith(x))) {
+    public static void AlterFile(SList<CustomBlockAlteration> alterations, string sourceFile, string destinationFile, string Name, bool skipUnchanged = true)
+    {
+        List<string> Corrupted = ["RoadTechCurve5.Block.Gbx", "Crystal\\Classic\\MM\\Stadium\\RoadMain\\Hazards\\StadiumBump1\\Air_0_0.Item.Gbx"];
+        if (Corrupted.Any(x => sourceFile.EndsWith(x)))
+        {
             Console.WriteLine("Skipped Corrupted File " + sourceFile);
             return;
         }
         CustomBlock customBlock;
-        try {
+        try
+        {
             customBlock = new CustomBlock(sourceFile);
-        } catch {
+        }
+        catch
+        {
             Console.WriteLine("Load Error " + sourceFile);
             return;
         }
-        if (alterations.Select(x => x.Run(customBlock)).Any(x => x) || !skipUnchanged){ //Skip unchanged in back to avoid skipping alteration
+        if (alterations.Select(x => x.Run(customBlock)).Any(x => x) || !skipUnchanged)
+        { //Skip unchanged in back to avoid skipping alteration
             customBlock.Name += Name;
             customBlock.customBlock.Name = customBlock.Name;
             customBlock.Save(destinationFile);
             Console.WriteLine(destinationFile);
-        } else {
+        }
+        else
+        {
             Console.WriteLine(customBlock.Name + " unchanged");
-        };
+        }
+        ;
     }
 
-    private static string GetNewCustomBlockName(string path, string name){
+    private static string GetNewCustomBlockName(string path, string name)
+    {
         string folder = Path.GetDirectoryName(path) ?? throw new Exception("Invalid Path");
-        if (path.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase)){
+        if (path.Contains(".item.gbx", StringComparison.OrdinalIgnoreCase))
+        {
             return Path.Combine(folder, Path.GetFileName(path)[..^9] + name + path[^9..]);
-        } else if (path.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase)){
+        }
+        else if (path.Contains(".block.gbx", StringComparison.OrdinalIgnoreCase))
+        {
             return Path.Combine(folder, Path.GetFileName(path)[..^10] + name + path[^10..]);
-        } else {
+        }
+        else
+        {
             Console.WriteLine("Invalid Filetype");
             return "";
         }
     }
 
-    public static List<Alteration> GetImplementedAlterations() {
+    public static List<Alteration> GetImplementedAlterations()
+    {
         return Assembly.GetAssembly(typeof(Alteration))?.GetExportedTypes()
             //get all classes that are subclasses of Alteration
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(Alteration)))
@@ -99,7 +128,8 @@ public class AutoAlteration {
             .OrderBy(x => x.GetType().Name)
             .ToList() ?? [];
     }
-    public static List<CustomBlockAlteration> GetImplementedBlockAlterations() {
+    public static List<CustomBlockAlteration> GetImplementedBlockAlterations()
+    {
         return Assembly.GetAssembly(typeof(Alteration))?.GetExportedTypes()
             .Where(t => t.IsClass && !t.IsAbstract && t.IsSubclassOf(typeof(CustomBlockAlteration)))
             .Select(t => Activator.CreateInstance(t) as CustomBlockAlteration)
